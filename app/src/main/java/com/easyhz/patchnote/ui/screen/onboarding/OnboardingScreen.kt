@@ -11,10 +11,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.easyhz.patchnote.R
+import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.button.MainButton
 import com.easyhz.patchnote.core.designSystem.component.onboarding.OnboardingInformation
 import com.easyhz.patchnote.core.designSystem.component.onboarding.OnboardingInformationType
+import com.easyhz.patchnote.ui.screen.onboarding.contract.OnboardingIntent
+import com.easyhz.patchnote.ui.screen.onboarding.contract.OnboardingSideEffect
 import com.easyhz.patchnote.ui.theme.Bold34
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.SemiBold20
@@ -22,6 +26,7 @@ import com.easyhz.patchnote.ui.theme.SemiBold20
 @Composable
 fun OnboardingScreen(
     modifier: Modifier = Modifier,
+    viewModel: OnboardingViewModel = hiltViewModel(),
     navigateToSign: () -> Unit
 ) {
     Scaffold(
@@ -29,14 +34,12 @@ fun OnboardingScreen(
             MainButton(
                 modifier = Modifier.padding(vertical = 12.dp, horizontal = 20.dp).fillMaxWidth(),
                 text = stringResource(id = R.string.onboarding_button_start),
-                onClick = {
-
-                }
+                onClick = { viewModel.postIntent(OnboardingIntent.NavigateToSign) }
             )
         }
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding).padding(horizontal = 28.dp).padding(top = 100.dp),
+            modifier = modifier.padding(innerPadding).padding(horizontal = 28.dp).padding(top = 100.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(76.dp)
         ) {
@@ -65,5 +68,12 @@ fun OnboardingScreen(
                 }
             }
         }
+    }
+
+    viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
+        when(sideEffect) {
+            is OnboardingSideEffect.NavigateToSign -> navigateToSign()
+        }
+
     }
 }
