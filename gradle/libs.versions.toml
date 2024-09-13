@@ -20,6 +20,7 @@ firebaseBom = "33.2.0"
 firebaseFirestoreKtx = "25.1.0"
 playServicesAuth = "21.2.0"
 google-services = "4.4.1"
+serialization = "1.6.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -49,6 +50,7 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx"}
 gms-play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth"}
 google-services = { module = "com.google.gms:google-services", version.ref = "google-services" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
