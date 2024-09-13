@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.gms)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
@@ -100,4 +102,6 @@ dependencies {
     implementation(libs.firebase.storage.ktx)
     implementation(libs.firebase.auth.ktx)
     implementation(libs.gms.play.services.auth)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
 }
