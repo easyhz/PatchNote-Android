@@ -20,3 +20,6 @@ val SubText = Color(0xFF717171)
 
 @Stable
 val PlaceholderText = Color(0xFFA8A8AA)
+
+@Stable
+val Caption = Color(0xFF575757)

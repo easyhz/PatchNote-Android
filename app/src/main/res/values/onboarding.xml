@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onboarding_title">패치노트</string>
+    <string name="onboarding_subtitle">쉽고 빠른 하자 공유</string>
+
+    <string name="onboarding_receipt_title">접수</string>
+    <string name="onboarding_receipt_content">손쉽게 하자를 접수해요</string>
+
+    <string name="onboarding_search_title">검색</string>
+    <string name="onboarding_search_content">검색을 통해 하자를 빠르게 확인해요</string>
+
+    <string name="onboarding_success_title">완료</string>
+    <string name="onboarding_success_content">완료 여부를 빠르게 업데이트해요</string>
+
+    <string name="onboarding_button_start">시작하기</string>
+
+</resources>
