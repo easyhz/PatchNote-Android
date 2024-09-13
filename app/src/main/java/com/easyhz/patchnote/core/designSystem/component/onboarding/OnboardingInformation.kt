@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.core.designSystem.onboarding
+package com.easyhz.patchnote.core.designSystem.component.onboarding
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

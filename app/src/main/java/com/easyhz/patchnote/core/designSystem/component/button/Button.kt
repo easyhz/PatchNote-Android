@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.core.designSystem.button
+package com.easyhz.patchnote.core.designSystem.component.button
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -12,9 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.easyhz.patchnote.R
-import com.easyhz.patchnote.core.designSystem.button.MainButton
-import com.easyhz.patchnote.core.designSystem.onboarding.OnboardingInformation
-import com.easyhz.patchnote.core.designSystem.onboarding.OnboardingInformationType
+import com.easyhz.patchnote.core.designSystem.component.button.MainButton
+import com.easyhz.patchnote.core.designSystem.component.onboarding.OnboardingInformation
+import com.easyhz.patchnote.core.designSystem.component.onboarding.OnboardingInformationType
 import com.easyhz.patchnote.ui.theme.Bold34
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.SemiBold20
