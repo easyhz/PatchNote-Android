@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 fun PatchNoteTheme(
     content: @Composable () -> Unit
 ) {
-
     MaterialTheme(
         content = content
     )
