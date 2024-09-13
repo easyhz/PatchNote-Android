@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.designSystem.util.button
+package com.easyhz.patchnote.core.designSystem.util.button
 
 import androidx.compose.ui.graphics.Color
 import com.easyhz.patchnote.ui.theme.MainBackground

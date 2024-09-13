@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.analytics
+package com.easyhz.patchnote.core.analytics
 
 import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics
