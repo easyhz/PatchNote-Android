@@ -90,7 +90,7 @@ private fun TextFieldContainerContent(
     innerTextField: @Composable () -> Unit
 ) {
     Box(
-        modifier = modifier.fillMaxWidth().background(SubBackground).clip(RoundedCornerShape(4.dp)).padding(horizontal = 12.dp),
+        modifier = modifier.fillMaxWidth().clip(RoundedCornerShape(4.dp)).background(SubBackground).padding(horizontal = 12.dp),
         contentAlignment = Alignment.CenterStart
     ) {
         innerTextField()
