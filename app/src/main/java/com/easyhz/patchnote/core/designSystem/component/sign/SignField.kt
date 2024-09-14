@@ -31,6 +31,7 @@ fun SignField(
     placeholder: String,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+     enabledButton: Boolean,
     onClick: () -> Unit
 ) {
     Column(
@@ -62,6 +63,7 @@ fun SignField(
             MainButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.sign_button),
+                enabled = enabledButton,
                 onClick = onClick
             )
         }
@@ -78,6 +80,7 @@ private fun SignFieldPreview() {
         value = "",
         placeholder = "전화번호 입력",
         onValueChange = {},
+        enabledButton = false
     ) {
 
     }
