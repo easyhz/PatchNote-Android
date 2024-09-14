@@ -4,4 +4,5 @@ import com.easyhz.patchnote.core.common.base.UiSideEffect
 
 sealed class PhoneSideEffect: UiSideEffect() {
     data object NavigateToUp: PhoneSideEffect()
+    data class NavigateToSignVerification(val verificationId: String): PhoneSideEffect()
 }
