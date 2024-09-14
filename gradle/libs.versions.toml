@@ -5,9 +5,11 @@ coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+kotlinxCoroutinesTest = "1.7.3"
 lifecycleRuntimeKtx = "2.8.5"
 activityCompose = "1.9.2"
 composeBom = "2024.09.01"
+mockk = "1.13.7"
 navigation = "2.8.0"
 javaxInject = "1"
 hilt = "2.51.1"
@@ -50,7 +52,9 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx"}
 gms-play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth"}
 google-services = { module = "com.google.gms:google-services", version.ref = "google-services" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
