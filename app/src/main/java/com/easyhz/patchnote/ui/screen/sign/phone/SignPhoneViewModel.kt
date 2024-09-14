@@ -39,7 +39,7 @@ class SignPhoneViewModel @Inject constructor(
         val param = RequestVerificationCodeParam(currentState.phoneText, activity)
         requestVerificationCodeUseCase(param).onSuccess { response ->
             when(response) {
-                is RequestVerificationCodeResponse.Success -> {
+                is RequestVerificationCodeResponse.ReturnUid -> {
                     println("자동 성공")
                 }
                 is RequestVerificationCodeResponse.ReturnCodeSent -> {

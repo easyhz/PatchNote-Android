@@ -1,6 +1,5 @@
-package com.easyhz.patchnote.ui.screen.sign.phone
+package com.easyhz.patchnote.ui.screen.sign.vericiation
 
-import android.app.Activity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Scaffold
@@ -8,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -19,18 +17,18 @@ import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.sign.SignField
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
-import com.easyhz.patchnote.ui.screen.sign.phone.contract.PhoneIntent
-import com.easyhz.patchnote.ui.screen.sign.phone.contract.PhoneSideEffect
+import com.easyhz.patchnote.ui.screen.sign.vericiation.contract.VerificationIntent
+import com.easyhz.patchnote.ui.screen.sign.vericiation.contract.VerificationSideEffect
 import com.easyhz.patchnote.ui.theme.MainText
 
 @Composable
-fun SignPhoneScreen(
+fun SignVerificationScreen(
     modifier: Modifier = Modifier,
-    viewModel: SignPhoneViewModel = hiltViewModel(),
+    viewModel: SignVerificationViewModel = hiltViewModel(),
+    verificationId: String,
     navigateToUp: () -> Unit,
-    navigateToVerificationId: (String) -> Unit
+    navigateToName: () -> Unit
 ) {
-    val activity = LocalContext.current as Activity
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     Scaffold(
         modifier = modifier,
@@ -40,29 +38,29 @@ fun SignPhoneScreen(
                     iconId = R.drawable.ic_arrow_left_leading,
                     iconAlignment = Alignment.CenterStart,
                     tint = MainText,
-                    onClick = { viewModel.postIntent(PhoneIntent.NavigateToUp) }
+                    onClick = { viewModel.postIntent(VerificationIntent.NavigateToUp) }
                 )
             )
         }
     ) { innerPadding ->
         SignField(
             modifier = Modifier.padding(innerPadding).padding(vertical = 24.dp, horizontal = 20.dp),
-            title = stringResource(R.string.sign_phone_title),
-            subTitle = stringResource(R.string.sign_phone_subTitle),
-            value = uiState.phoneText,
-            placeholder = stringResource(R.string.sign_phone_placeholder),
+            title = stringResource(R.string.sign_verification_title),
+            subTitle = stringResource(R.string.sign_verification_subTitle),
+            value = uiState.codeText,
+            placeholder = stringResource(R.string.sign_verification_placeholder),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-            onValueChange = { viewModel.postIntent(PhoneIntent.ChangePhoneText(it)) },
+            onValueChange = { viewModel.postIntent(VerificationIntent.ChangeVerificationCodeText(it)) },
             enabledButton = uiState.enabledButton,
         ) {
-            viewModel.postIntent(PhoneIntent.RequestVerificationCode(activity = activity))
+            viewModel.postIntent(VerificationIntent.RequestVerification(verificationId))
         }
     }
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {
-            is PhoneSideEffect.NavigateToUp -> navigateToUp()
-            is PhoneSideEffect.NavigateToSignVerification -> { navigateToVerificationId(sideEffect.verificationId) }
+            is VerificationSideEffect.NavigateToUp -> { navigateToUp() }
+            is VerificationSideEffect.NavigateToName -> { navigateToName() }
         }
 
     }
