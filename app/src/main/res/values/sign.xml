@@ -10,4 +10,8 @@
     <string name="sign_verification_subTitle">입력한 번호로 인증번호가 발송되었어요</string>
     <string name="sign_verification_placeholder">인증번호를 입력해주세요</string>
 
+    <string name="sign_name_title">이름(실명)을 입력해주세요.</string>
+    <string name="sign_name_subTitle">사용자를 식별하기 위해 이름을 사용합니다</string>
+    <string name="sign_name_placeholder">이름을 입력해주세요</string>
+
 </resources>

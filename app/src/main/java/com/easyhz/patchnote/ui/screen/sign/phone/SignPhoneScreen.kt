@@ -28,7 +28,7 @@ fun SignPhoneScreen(
     modifier: Modifier = Modifier,
     viewModel: SignPhoneViewModel = hiltViewModel(),
     navigateToUp: () -> Unit,
-    navigateToVerificationId: (String) -> Unit
+    navigateToVerificationId: (String, String) -> Unit
 ) {
     val activity = LocalContext.current as Activity
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -62,7 +62,7 @@ fun SignPhoneScreen(
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {
             is PhoneSideEffect.NavigateToUp -> navigateToUp()
-            is PhoneSideEffect.NavigateToSignVerification -> { navigateToVerificationId(sideEffect.verificationId) }
+            is PhoneSideEffect.NavigateToSignVerification -> { navigateToVerificationId(sideEffect.verificationId, sideEffect.phoneNumber) }
         }
 
     }

@@ -4,5 +4,5 @@ import com.easyhz.patchnote.core.common.base.UiSideEffect
 
 sealed class VerificationSideEffect: UiSideEffect() {
     data object NavigateToUp: VerificationSideEffect()
-    data object NavigateToName: VerificationSideEffect()
+    data class NavigateToName(val uid: String, val phoneNumber: String): VerificationSideEffect()
 }

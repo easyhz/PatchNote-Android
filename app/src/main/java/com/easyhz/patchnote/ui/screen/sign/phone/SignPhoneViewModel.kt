@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.data.model.sign.param.RequestVerificationCodeParam
 import com.easyhz.patchnote.data.model.sign.response.RequestVerificationCodeResponse
-import com.easyhz.patchnote.domain.usecase.RequestVerificationCodeUseCase
+import com.easyhz.patchnote.domain.usecase.sign.RequestVerificationCodeUseCase
 import com.easyhz.patchnote.ui.screen.sign.phone.contract.PhoneIntent
 import com.easyhz.patchnote.ui.screen.sign.phone.contract.PhoneSideEffect
 import com.easyhz.patchnote.ui.screen.sign.phone.contract.PhoneState
@@ -43,7 +43,7 @@ class SignPhoneViewModel @Inject constructor(
                     println("자동 성공")
                 }
                 is RequestVerificationCodeResponse.ReturnCodeSent -> {
-                    postSideEffect { PhoneSideEffect.NavigateToSignVerification(response.verificationId) }
+                    postSideEffect { PhoneSideEffect.NavigateToSignVerification(response.verificationId, response.phoneNumber) }
                 }
             }
         }.onFailure {

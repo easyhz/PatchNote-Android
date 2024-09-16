@@ -3,7 +3,7 @@ package com.easyhz.patchnote.ui.screen.sign.vericiation
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.data.model.sign.param.SignInWithPhoneParam
-import com.easyhz.patchnote.domain.usecase.SignInWithPhoneUseCase
+import com.easyhz.patchnote.domain.usecase.sign.SignInWithPhoneUseCase
 import com.easyhz.patchnote.ui.screen.sign.vericiation.contract.VerificationIntent
 import com.easyhz.patchnote.ui.screen.sign.vericiation.contract.VerificationSideEffect
 import com.easyhz.patchnote.ui.screen.sign.vericiation.contract.VerificationState
@@ -21,7 +21,7 @@ class SignVerificationViewModel @Inject constructor(
         when(intent) {
             is VerificationIntent.ChangeVerificationCodeText -> { changeVerificationCodeText(intent.text) }
             is VerificationIntent.NavigateToUp -> { navigateToUp() }
-            is VerificationIntent.RequestVerification -> { requestVerification(intent.verificationId) }
+            is VerificationIntent.RequestVerification -> { requestVerification(intent.verificationId, intent.phoneNumber) }
         }
     }
 
@@ -33,10 +33,10 @@ class SignVerificationViewModel @Inject constructor(
         postSideEffect { VerificationSideEffect.NavigateToUp }
     }
 
-    private fun requestVerification(verificationId: String) = viewModelScope.launch {
+    private fun requestVerification(verificationId: String, phoneNumber: String) = viewModelScope.launch {
         val param = SignInWithPhoneParam(verificationId, currentState.codeText)
         signInWithPhoneUseCase.invoke(param).onSuccess {
-            println(">>> 성공 $it")
+            postSideEffect { VerificationSideEffect.NavigateToName(it, phoneNumber) }
         }.onFailure {
             println(">>> 실패 $it")
         }

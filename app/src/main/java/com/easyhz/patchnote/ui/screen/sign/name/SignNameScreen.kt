@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.ui.screen.sign.vericiation
+package com.easyhz.patchnote.ui.screen.sign.name
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,18 +17,18 @@ import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.sign.SignField
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
-import com.easyhz.patchnote.ui.screen.sign.vericiation.contract.VerificationIntent
-import com.easyhz.patchnote.ui.screen.sign.vericiation.contract.VerificationSideEffect
+import com.easyhz.patchnote.ui.screen.sign.name.contract.NameIntent
+import com.easyhz.patchnote.ui.screen.sign.name.contract.NameSideEffect
 import com.easyhz.patchnote.ui.theme.MainText
 
 @Composable
-fun SignVerificationScreen(
+fun SignNameScreen(
     modifier: Modifier = Modifier,
-    viewModel: SignVerificationViewModel = hiltViewModel(),
-    verificationId: String,
+    viewModel: SignNameViewModel = hiltViewModel(),
+    uid: String,
     phoneNumber: String,
     navigateToUp: () -> Unit,
-    navigateToName: (uid: String, phoneNumber: String) -> Unit
+    navigateToHome: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     Scaffold(
@@ -39,30 +39,29 @@ fun SignVerificationScreen(
                     iconId = R.drawable.ic_arrow_left_leading,
                     iconAlignment = Alignment.CenterStart,
                     tint = MainText,
-                    onClick = { viewModel.postIntent(VerificationIntent.NavigateToUp) }
+                    onClick = { viewModel.postIntent(NameIntent.NavigateToUp) }
                 )
             )
         }
     ) { innerPadding ->
         SignField(
             modifier = Modifier.padding(innerPadding).padding(vertical = 24.dp, horizontal = 20.dp),
-            title = stringResource(R.string.sign_verification_title),
-            subTitle = stringResource(R.string.sign_verification_subTitle),
-            value = uiState.codeText,
-            placeholder = stringResource(R.string.sign_verification_placeholder),
+            title = stringResource(R.string.sign_name_title),
+            subTitle = stringResource(R.string.sign_name_subTitle),
+            value = uiState.nameText,
+            placeholder = stringResource(R.string.sign_name_placeholder),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-            onValueChange = { viewModel.postIntent(VerificationIntent.ChangeVerificationCodeText(it)) },
+            onValueChange = { viewModel.postIntent(NameIntent.ChangeNameText(it)) },
             enabledButton = uiState.enabledButton,
         ) {
-            viewModel.postIntent(VerificationIntent.RequestVerification(verificationId, phoneNumber))
+            viewModel.postIntent(NameIntent.SaveUser(uid, phoneNumber))
         }
     }
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {
-            is VerificationSideEffect.NavigateToUp -> { navigateToUp() }
-            is VerificationSideEffect.NavigateToName -> { navigateToName(sideEffect.uid, sideEffect.phoneNumber) }
+            is NameSideEffect.NavigateToUp -> navigateToUp()
+            is NameSideEffect.NavigateToHome -> { }
         }
-
     }
 }
