@@ -1,14 +1,12 @@
 package com.easyhz.patchnote.ui.screen.sign.name
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -50,7 +48,6 @@ fun SignNameScreen(
             subTitle = stringResource(R.string.sign_name_subTitle),
             value = uiState.nameText,
             placeholder = stringResource(R.string.sign_name_placeholder),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             onValueChange = { viewModel.postIntent(NameIntent.ChangeNameText(it)) },
             enabledButton = uiState.enabledButton,
         ) {
