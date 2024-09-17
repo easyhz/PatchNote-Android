@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.easyhz.patchnote.core.designSystem.util.transition.SlideDirection
 import com.easyhz.patchnote.core.designSystem.util.transition.enterSlide
 import com.easyhz.patchnote.core.designSystem.util.transition.exitSlide
+import com.easyhz.patchnote.ui.navigation.home.homeGraph
 import com.easyhz.patchnote.ui.navigation.onboarding.Onboarding
 import com.easyhz.patchnote.ui.navigation.onboarding.onboardingGraph
 import com.easyhz.patchnote.ui.navigation.sign.signGraph
@@ -28,6 +29,7 @@ fun PatchNoteApp() {
         ) {
             onboardingGraph(navController)
             signGraph(navController)
+            homeGraph(navController)
         }
     }
 }

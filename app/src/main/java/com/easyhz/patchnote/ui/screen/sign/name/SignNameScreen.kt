@@ -58,7 +58,7 @@ fun SignNameScreen(
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {
             is NameSideEffect.NavigateToUp -> navigateToUp()
-            is NameSideEffect.NavigateToHome -> { }
+            is NameSideEffect.NavigateToHome -> { navigateToHome() }
         }
     }
 }

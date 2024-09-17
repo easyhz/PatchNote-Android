@@ -4,7 +4,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import androidx.navigation.navOptions
 import androidx.navigation.toRoute
+import com.easyhz.patchnote.ui.navigation.home.navigateToHome
 import com.easyhz.patchnote.ui.screen.sign.name.SignNameScreen
 import com.easyhz.patchnote.ui.screen.sign.phone.SignPhoneScreen
 import com.easyhz.patchnote.ui.screen.sign.vericiation.SignVerificationScreen
@@ -34,11 +36,14 @@ internal fun NavGraphBuilder.signGraph(
 
         composable<Sign.Name> {
             val args = it.toRoute<Sign.Name>()
+            val navOptions = navOptions {
+                popUpTo(navController.graph.id) { inclusive = true }
+            }
             SignNameScreen(
                 uid = args.uid,
                 phoneNumber = args.phoneNumber,
                 navigateToUp = navController::navigateUp,
-                navigateToHome = { }
+                navigateToHome = { navController.navigateToHome(navOptions) }
             )
         }
     }
