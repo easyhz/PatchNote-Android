@@ -4,7 +4,7 @@
 
     <string name="sign_phone_title">전화번호를 입력해주세요.</string>
     <string name="sign_phone_subTitle">로그인을 위해 전화번호가 필요해요</string>
-    <string name="sign_phone_placeholder">\'-\'를 제외한 전화번호를 입력해주세요</string>
+    <string name="sign_phone_placeholder">\'-\' 를 제외한 전화번호를 입력해주세요</string>
 
     <string name="sign_verification_title">인증번호를 입력해주세요.</string>
     <string name="sign_verification_subTitle">입력한 번호로 인증번호가 발송되었어요</string>
