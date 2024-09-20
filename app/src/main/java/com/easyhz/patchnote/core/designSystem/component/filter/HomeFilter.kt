@@ -46,7 +46,7 @@ fun HomeFilter(
                 )
             }
         }
-        items(items) {
+        items(items, key = { it }) {
             FilterChip(
                 modifier = Modifier.height(28.dp),
                 text = it,

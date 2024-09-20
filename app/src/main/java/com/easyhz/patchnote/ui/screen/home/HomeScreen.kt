@@ -48,6 +48,7 @@ fun HomeScreen(
             modifier = Modifier.padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
+            // Key 설정
             items(10) {
                 HomeCard(
                     modifier = Modifier.fillMaxWidth(),

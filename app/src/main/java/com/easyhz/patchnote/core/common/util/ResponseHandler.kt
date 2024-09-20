@@ -4,12 +4,32 @@ import android.util.Log
 import com.easyhz.patchnote.core.common.error.AppError
 import com.easyhz.patchnote.core.common.error.getErrorByCode
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 const val TAG = "ResponseHandler"
+
+/**
+ * collection 에서 원하는 document 를 받는 함수
+ *
+ * @param execute [DocumentSnapshot] 파이어스토어 쿼리문이 들어옴.
+ */
+internal suspend inline fun <reified T> documentHandler(
+    dispatcher: CoroutineDispatcher,
+    crossinline execute: () -> Task<DocumentSnapshot>
+): Result<T> = withContext(dispatcher) {
+    runCatching {
+        val result = execute().await().toObject(T::class.java)
+        result ?: throw AppError.NoResultError
+    }.fold(
+        onSuccess = {  Result.success(it) },
+        onFailure = { e -> handleException(e, "document") }
+    )
+}
 
 /**
  * collection 에 document 이름을 지정하고 저장하는 함수

@@ -5,9 +5,9 @@ import com.google.firebase.firestore.PropertyName
 
 data class SaveUserRequest(
     @PropertyName("id")
-    val id: String,
+    val id: String = "",
     @PropertyName("name")
-    val name: String,
+    val name: String = "",
     @PropertyName("phone")
-    val phone: String,
+    val phone: String = "",
 )
