@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,6 +16,7 @@ import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.button.MainButton
 import com.easyhz.patchnote.core.designSystem.component.onboarding.OnboardingInformation
 import com.easyhz.patchnote.core.designSystem.component.onboarding.OnboardingInformationType
+import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.ui.screen.onboarding.contract.OnboardingIntent
 import com.easyhz.patchnote.ui.screen.onboarding.contract.OnboardingSideEffect
 import com.easyhz.patchnote.ui.theme.Bold34
@@ -29,7 +29,7 @@ fun OnboardingScreen(
     viewModel: OnboardingViewModel = hiltViewModel(),
     navigateToSign: () -> Unit
 ) {
-    Scaffold(
+    PatchNoteScaffold(
         bottomBar = {
             MainButton(
                 modifier = Modifier.padding(vertical = 12.dp, horizontal = 20.dp).fillMaxWidth(),

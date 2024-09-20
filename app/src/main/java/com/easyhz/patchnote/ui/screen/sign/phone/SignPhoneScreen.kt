@@ -3,7 +3,6 @@ package com.easyhz.patchnote.ui.screen.sign.phone
 import android.app.Activity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -16,6 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
+import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.core.designSystem.component.sign.SignField
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
@@ -32,7 +32,7 @@ fun SignPhoneScreen(
 ) {
     val activity = LocalContext.current as Activity
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    Scaffold(
+    PatchNoteScaffold(
         modifier = modifier,
         topBar = {
             TopBar(
