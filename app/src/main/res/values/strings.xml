@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PatchNote</string>
+    <string name="app_name_ko">패치노트</string>
 </resources>
