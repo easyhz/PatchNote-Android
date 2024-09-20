@@ -34,7 +34,7 @@ fun SignNameScreen(
         topBar = {
             TopBar(
                 left = TopBarType.TopBarIconButton(
-                    iconId = R.drawable.ic_arrow_left_leading,
+                    iconId = R.drawable.ic_arrow_leading,
                     iconAlignment = Alignment.CenterStart,
                     tint = MainText,
                     onClick = { viewModel.postIntent(NameIntent.NavigateToUp) }
@@ -43,7 +43,9 @@ fun SignNameScreen(
         }
     ) { innerPadding ->
         SignField(
-            modifier = Modifier.padding(innerPadding).padding(vertical = 24.dp, horizontal = 20.dp),
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(vertical = 24.dp, horizontal = 20.dp),
             title = stringResource(R.string.sign_name_title),
             subTitle = stringResource(R.string.sign_name_subTitle),
             value = uiState.nameText,

@@ -37,7 +37,7 @@ fun SignPhoneScreen(
         topBar = {
             TopBar(
                 left = TopBarType.TopBarIconButton(
-                    iconId = R.drawable.ic_arrow_left_leading,
+                    iconId = R.drawable.ic_arrow_leading,
                     iconAlignment = Alignment.CenterStart,
                     tint = MainText,
                     onClick = { viewModel.postIntent(PhoneIntent.NavigateToUp) }
