@@ -17,7 +17,10 @@ class DataManagementViewModel @Inject constructor(
     initialState = DataState.init()
 ) {
     override fun handleIntent(intent: DataIntent) {
-        TODO("Not yet implemented")
+        when(intent) {
+            is DataIntent.DeleteCategoryValue -> { deleteCategoryValue(intent.categoryIndex, intent.index) }
+            is DataIntent.HideDeleteDialog -> { hideDeleteDialog() }
+        }
     }
 
     init {
@@ -30,5 +33,14 @@ class DataManagementViewModel @Inject constructor(
         }.onFailure {
             println("실패 >>> $it")
         }
+    }
+
+    private fun deleteCategoryValue(categoryIndex: Int, index: Int) {
+        val deleteItem = currentState.category[categoryIndex].values[index]
+        reduce { copy(isShowDeleteDialog = true, deleteItem = deleteItem) }
+    }
+
+    private fun hideDeleteDialog() {
+        reduce { copy(isShowDeleteDialog = false, deleteItem = "") }
     }
 }

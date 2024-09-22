@@ -2,4 +2,8 @@
 <resources>
     <string name="data_management_title">데이터 관리</string>
     <string name="data_management_delete">삭제</string>
+    <string name="data_management_delete_dialog_title">%1s 삭제할까요?</string>
+    <string name="data_management_delete_dialog_content">삭제된 데이터는 복구할 수 없습니다.</string>
+    <string name="data_management_delete_dialog_positive_button">삭제</string>
+    <string name="data_management_delete_dialog_negative_button">취소</string>
 </resources>

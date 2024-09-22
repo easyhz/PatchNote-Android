@@ -5,14 +5,19 @@ import com.easyhz.patchnote.R
 
 enum class CategoryType(
     @StringRes val nameId: Int,
+    val alias: String,
 ){
     SITE(
-        nameId = R.string.category_site
+        nameId = R.string.category_site,
+        alias = "site"
     ), SPACE(
-        nameId = R.string.category_space
+        nameId = R.string.category_space,
+        alias = "space"
     ), PART(
-        nameId = R.string.category_part
+        nameId = R.string.category_part,
+        alias = "part"
     ), WORK_TYPE(
-        nameId = R.string.category_work_type
+        nameId = R.string.category_work_type,
+        alias = "workType"
     )
 }

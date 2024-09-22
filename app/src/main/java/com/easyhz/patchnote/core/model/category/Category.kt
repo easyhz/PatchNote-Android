@@ -1,7 +1,7 @@
 package com.easyhz.patchnote.core.model.category
 
 sealed class Category(
-    val name: CategoryType,
+    val type: CategoryType,
     open val values: List<String>
 ) {
     data class Site(override val values: List<String>) : Category(CategoryType.SITE, values)

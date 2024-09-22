@@ -23,3 +23,6 @@ val PlaceholderText = Color(0xFFA8A8AA)
 
 @Stable
 val Caption = Color(0xFF575757)
+
+@Stable
+val Red = Color(0xFFFF4242)

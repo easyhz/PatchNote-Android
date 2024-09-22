@@ -8,11 +8,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +30,7 @@ import com.easyhz.patchnote.ui.theme.SubText
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.categorySection(
     category: Category,
+    onClick: (index: Int) -> Unit
 ) {
     stickyHeader {
         Box(
@@ -39,14 +38,14 @@ fun LazyListScope.categorySection(
             contentAlignment = Alignment.CenterStart
         ) {
             Text(
-                text = stringResource(id = category.name.nameId),
+                text = stringResource(id = category.type.nameId),
                 style = SemiBold18
             )
         }
     }
     itemsIndexed(category.values) { index, item ->
         Row(
-            modifier = Modifier.fillMaxWidth().clickable { println(index) }.padding(horizontal = 20.dp),
+            modifier = Modifier.fillMaxWidth().clickable { onClick(index) }.padding(horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(20.dp)
         ) {
@@ -68,7 +67,9 @@ fun LazyListScope.categorySection(
 @Composable
 private fun CategorySectionPreview() {
     LazyColumn {
-        categorySection(category = Category.Site(listOf("site1", "site2", "site3")))
+        categorySection(category = Category.Site(listOf("site1", "site2", "site3"))) {
+
+        }
     }
 
 }
