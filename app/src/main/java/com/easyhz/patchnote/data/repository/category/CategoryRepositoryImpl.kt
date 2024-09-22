@@ -11,4 +11,8 @@ class CategoryRepositoryImpl @Inject constructor(
     override suspend fun fetchCategory(): Result<List<Category>> {
         return categoryDataSource.fetchCategory().map { it.toModel() }
     }
+
+    override suspend fun deleteCategory(category: String, index: Int): Result<Unit> {
+        return categoryDataSource.deleteCategory(category, index)
+    }
 }

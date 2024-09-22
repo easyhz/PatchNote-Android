@@ -2,6 +2,8 @@ package com.easyhz.patchnote.ui.screen.dataManagement
 
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
+import com.easyhz.patchnote.core.model.category.DeleteCategory
+import com.easyhz.patchnote.domain.usecase.category.DeleteCategoryUseCase
 import com.easyhz.patchnote.domain.usecase.category.FetchCategoryUseCase
 import com.easyhz.patchnote.ui.screen.dataManagement.contract.DataIntent
 import com.easyhz.patchnote.ui.screen.dataManagement.contract.DataSideEffect
@@ -12,14 +14,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DataManagementViewModel @Inject constructor(
-    private val fetchCategoryUseCase: FetchCategoryUseCase
-): BaseViewModel<DataState, DataIntent, DataSideEffect>(
+    private val fetchCategoryUseCase: FetchCategoryUseCase,
+    private val deleteCategoryUseCase: DeleteCategoryUseCase
+) : BaseViewModel<DataState, DataIntent, DataSideEffect>(
     initialState = DataState.init()
 ) {
     override fun handleIntent(intent: DataIntent) {
-        when(intent) {
+        when (intent) {
             is DataIntent.DeleteCategoryValue -> { deleteCategoryValue(intent.categoryIndex, intent.index) }
             is DataIntent.HideDeleteDialog -> { hideDeleteDialog() }
+            is DataIntent.ClickPositiveButton -> { deleteCategory() }
         }
     }
 
@@ -35,12 +39,46 @@ class DataManagementViewModel @Inject constructor(
         }
     }
 
+    private fun deleteCategory() = viewModelScope.launch {
+        val category = currentState.deleteCategory
+        val index = currentState.deleteCategoryItemIndex
+        if (category.isNullOrBlank() || index == null) return@launch
+        val param = DeleteCategory(
+            category = category,
+            index = index
+        )
+
+        deleteCategoryUseCase.invoke(param).onSuccess {
+            println(">> 성공")
+        }.onFailure {
+            println(">> 실패 $it")
+        }.also {
+            hideDeleteDialog()
+            fetchCategory()
+        }
+    }
+
     private fun deleteCategoryValue(categoryIndex: Int, index: Int) {
-        val deleteItem = currentState.category[categoryIndex].values[index]
-        reduce { copy(isShowDeleteDialog = true, deleteItem = deleteItem) }
+        val deleteCategory = currentState.category[categoryIndex]
+        val deleteItem = deleteCategory.values[index]
+        reduce {
+            copy(
+                isShowDeleteDialog = true,
+                deleteItem = deleteItem,
+                deleteCategory = deleteCategory.type.alias,
+                deleteCategoryItemIndex = index
+            )
+        }
     }
 
     private fun hideDeleteDialog() {
-        reduce { copy(isShowDeleteDialog = false, deleteItem = "") }
+        reduce {
+            copy(
+                isShowDeleteDialog = false,
+                deleteItem = "",
+                deleteCategory = null,
+                deleteCategoryItemIndex = null
+            )
+        }
     }
 }

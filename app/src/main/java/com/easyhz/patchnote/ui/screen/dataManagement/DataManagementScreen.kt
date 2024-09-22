@@ -53,7 +53,7 @@ fun DataManagementScreen(
         }
     ) { innerPadding ->
         LazyColumn(
-            modifier = modifier.padding(innerPadding)
+            modifier = modifier.padding(innerPadding).padding(top = 12.dp)
         ) {
             uiState.category.forEachIndexed { categoryIndex, category ->
                 categorySection(category = category) { index ->
@@ -70,7 +70,7 @@ fun DataManagementScreen(
                     text = stringResource(R.string.data_management_delete_dialog_positive_button),
                     style = SemiBold18.copy(color = Color.White),
                     backgroundColor = Red,
-                    onClick = {}
+                    onClick = { viewModel.postIntent(DataIntent.ClickPositiveButton) }
                 ),
                 negativeButton = BasicDialogButton(
                     text = stringResource(R.string.data_management_delete_dialog_negative_button),

@@ -7,12 +7,16 @@ data class DataState(
     val category: List<Category>,
     val isShowDeleteDialog: Boolean,
     val deleteItem: String,
+    val deleteCategory: String?,
+    val deleteCategoryItemIndex: Int?
 ): UiState() {
     companion object {
         fun init() = DataState(
             category = emptyList(),
             isShowDeleteDialog = false,
-            deleteItem = ""
+            deleteItem = "",
+            deleteCategory = null,
+            deleteCategoryItemIndex = null
         )
     }
 }
