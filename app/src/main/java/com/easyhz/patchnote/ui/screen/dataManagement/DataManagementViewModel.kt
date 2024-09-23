@@ -22,6 +22,8 @@ class DataManagementViewModel @Inject constructor(
     override fun handleIntent(intent: DataIntent) {
         when (intent) {
             is DataIntent.DeleteCategoryValue -> { deleteCategoryValue(intent.categoryIndex, intent.index) }
+            is DataIntent.NavigateToDataEntry -> { navigateToDataEntry() }
+            is DataIntent.NavigateToUp -> { navigateToUp() }
             is DataIntent.HideDeleteDialog -> { hideDeleteDialog() }
             is DataIntent.ClickPositiveButton -> { deleteCategory() }
         }
@@ -69,6 +71,14 @@ class DataManagementViewModel @Inject constructor(
                 deleteCategoryItemIndex = index
             )
         }
+    }
+
+    private fun navigateToDataEntry() {
+        postSideEffect { DataSideEffect.NavigateToDataEntry }
+    }
+
+    private fun navigateToUp() {
+        postSideEffect { DataSideEffect.NavigateToUp }
     }
 
     private fun hideDeleteDialog() {

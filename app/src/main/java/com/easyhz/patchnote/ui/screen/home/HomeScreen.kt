@@ -17,13 +17,14 @@ import com.easyhz.patchnote.core.model.home.DefectItem
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    navigateToDataManagement: () -> Unit
 ) {
     PatchNoteScaffold(
         modifier = modifier,
         topBar = {
             Column {
                 HomeTopBar {
-
+                    navigateToDataManagement()
                 }
                 HomeFilter(
                     items = emptyList()

@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.easyhz.patchnote.R
+import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.category.categorySection
 import com.easyhz.patchnote.core.designSystem.component.dialog.BasicDialog
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
@@ -20,6 +21,7 @@ import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
 import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
 import com.easyhz.patchnote.ui.screen.dataManagement.contract.DataIntent
+import com.easyhz.patchnote.ui.screen.dataManagement.contract.DataSideEffect
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Red
 import com.easyhz.patchnote.ui.theme.SemiBold18
@@ -29,6 +31,7 @@ import com.easyhz.patchnote.ui.theme.SubBackground
 fun DataManagementScreen(
     modifier: Modifier = Modifier,
     viewModel: DataManagementViewModel = hiltViewModel(),
+    navigateToDataEntry: () -> Unit,
     navigateToUp: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -39,7 +42,7 @@ fun DataManagementScreen(
                     iconId = R.drawable.ic_arrow_leading,
                     iconAlignment = Alignment.CenterStart,
                     tint = MainText,
-                    onClick = { }
+                    onClick = { viewModel.postIntent(DataIntent.NavigateToUp) }
                 ),
                 title = TopBarType.TopBarTitle(
                     stringId = R.string.data_management_title
@@ -48,7 +51,7 @@ fun DataManagementScreen(
                     iconId = R.drawable.ic_add_trailing,
                     iconAlignment = Alignment.CenterEnd,
                     tint = MainText,
-                    onClick = { }
+                    onClick = { viewModel.postIntent(DataIntent.NavigateToDataEntry) }
                 ),
             )
         }
@@ -81,10 +84,16 @@ fun DataManagementScreen(
             )
         }
     }
+    viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
+        when(sideEffect) {
+            is DataSideEffect.NavigateToDataEntry -> navigateToDataEntry()
+            is DataSideEffect.NavigateToUp -> navigateToUp()
+        }
+    }
 }
 
 @Preview
 @Composable
 private fun DataManagementScreenPreview() {
-    DataManagementScreen {  }
+    DataManagementScreen(navigateToDataEntry = { }) {  }
 }

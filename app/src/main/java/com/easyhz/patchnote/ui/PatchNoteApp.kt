@@ -9,8 +9,8 @@ import androidx.navigation.compose.rememberNavController
 import com.easyhz.patchnote.core.designSystem.util.transition.SlideDirection
 import com.easyhz.patchnote.core.designSystem.util.transition.enterSlide
 import com.easyhz.patchnote.core.designSystem.util.transition.exitSlide
-import com.easyhz.patchnote.ui.navigation.dataManagement.DataManagement
 import com.easyhz.patchnote.ui.navigation.dataManagement.dataManagementGraph
+import com.easyhz.patchnote.ui.navigation.home.Home
 import com.easyhz.patchnote.ui.navigation.home.homeGraph
 import com.easyhz.patchnote.ui.navigation.onboarding.onboardingGraph
 import com.easyhz.patchnote.ui.navigation.sign.signGraph
@@ -21,7 +21,7 @@ fun PatchNoteApp() {
     NavHost(
         modifier = Modifier.statusBarsPadding().systemBarsPadding(),
         navController = navController,
-        startDestination = DataManagement,
+        startDestination = Home,
         enterTransition = { enterSlide(SlideDirection.Start) },
         exitTransition = { exitSlide(SlideDirection.Start) },
         popEnterTransition = { enterSlide(SlideDirection.End) },
