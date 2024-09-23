@@ -1,5 +1,6 @@
 package com.easyhz.patchnote.ui.screen.dataManagement
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
@@ -61,7 +62,8 @@ fun DataManagementScreen(
         }
     ) { innerPadding ->
         LazyColumn(
-            modifier = modifier.padding(innerPadding).padding(top = 8.dp)
+            modifier = modifier.padding(innerPadding),
+            contentPadding = PaddingValues(vertical = 8.dp)
         ) {
             uiState.category.forEachIndexed { categoryIndex, category ->
                 categorySection(category = category) { index ->
