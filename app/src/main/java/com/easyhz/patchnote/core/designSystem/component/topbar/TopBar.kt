@@ -99,6 +99,12 @@ private fun TopBarPreview() {
             iconAlignment = Alignment.CenterStart,
             tint = MainText,
             onClick = { }
+        ),
+        right = TopBarType.TopBarTextButton(
+            stringId = R.string.category_site,
+            textAlignment = Alignment.CenterEnd,
+            textColor = MainText,
+            onClick = { }
         )
     )
 }
