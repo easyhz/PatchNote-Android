@@ -26,6 +26,7 @@ class DataManagementViewModel @Inject constructor(
             is DataIntent.NavigateToUp -> { navigateToUp() }
             is DataIntent.HideDeleteDialog -> { hideDeleteDialog() }
             is DataIntent.ClickPositiveButton -> { deleteCategory() }
+            is DataIntent.OnResume -> { fetchCategory() }
         }
     }
 

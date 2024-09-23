@@ -8,4 +8,5 @@ sealed class DataIntent: UiIntent() {
     data object NavigateToUp: DataIntent()
     data object ClickPositiveButton: DataIntent()
     data object HideDeleteDialog: DataIntent()
+    data object OnResume: DataIntent()
 }

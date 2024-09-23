@@ -9,8 +9,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -32,6 +35,8 @@ fun DataEntryScreen(
     navigateToUp: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
     PatchNoteScaffold(
         topBar = {
             TopBar(
@@ -48,7 +53,7 @@ fun DataEntryScreen(
                     stringId = R.string.data_entry_save,
                     textAlignment = Alignment.CenterEnd,
                     textColor = Primary,
-                    onClick = { }
+                    onClick = { viewModel.postIntent(DataEntryIntent.UpdateDataEntryItem) }
                 ),
             )
         }
@@ -73,6 +78,10 @@ fun DataEntryScreen(
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is DataEntrySideEffect.NavigateToUp -> navigateToUp()
+            is DataEntrySideEffect.HideKeyboard -> {
+                focusManager.clearFocus()
+                viewModel.postIntent(DataEntryIntent.NavigateToUp)
+            }
         }
     }
 }

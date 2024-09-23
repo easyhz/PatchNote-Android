@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.easyhz.patchnote.R
+import com.easyhz.patchnote.core.common.util.LifecycleEffect
 import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.category.categorySection
 import com.easyhz.patchnote.core.designSystem.component.dialog.BasicDialog
@@ -35,6 +36,9 @@ fun DataManagementScreen(
     navigateToUp: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    LifecycleEffect(
+        onResume = { viewModel.postIntent(DataIntent.OnResume) }
+    )
     PatchNoteScaffold(
         topBar = {
             TopBar(
