@@ -33,7 +33,9 @@ internal fun NavGraphBuilder.dataManagementGraph(
         popEnterTransition = { enterSlide(SlideDirection.Down) },
         popExitTransition = { exitSlide(SlideDirection.Down) }
     ) {
-        DataEntryScreen {  }
+        DataEntryScreen(
+            navigateToUp = navController::navigateUp
+        )
     }
 }
 

@@ -39,7 +39,7 @@ fun DataEntryScreen(
                     iconId = R.drawable.ic_close_leading,
                     iconAlignment = Alignment.CenterStart,
                     tint = MainText,
-                    onClick = { }
+                    onClick = { viewModel.postIntent(DataEntryIntent.NavigateToUp) }
                 ),
                 title = TopBarType.TopBarTitle(
                     stringId = R.string.data_entry_title
@@ -48,14 +48,14 @@ fun DataEntryScreen(
                     stringId = R.string.data_entry_save,
                     textAlignment = Alignment.CenterEnd,
                     textColor = Primary,
-                    onClick = { viewModel.postIntent(DataEntryIntent.NavigateToUp) }
+                    onClick = { }
                 ),
             )
         }
     ) { innerPadding ->
         LazyColumn(
             modifier = modifier.padding(innerPadding).fillMaxSize(),
-            contentPadding = PaddingValues(horizontal = 20.dp),
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             itemsIndexed(uiState.dataEntryList, key = { _, item -> item.id }) { index, dataEntryItem ->
