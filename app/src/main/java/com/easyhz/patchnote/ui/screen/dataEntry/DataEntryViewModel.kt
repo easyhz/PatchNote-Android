@@ -20,6 +20,7 @@ class DataEntryViewModel @Inject constructor(
             is DataEntryIntent.SelectDataEntryItemCategoryType -> { changeDataEntryItemCategoryType(intent.index, intent.categoryType) }
             is DataEntryIntent.ChangeDataEntryItemValue -> { changeDataEntryItemValue(intent.index, intent.value) }
             is DataEntryIntent.DeleteDataEntryItem -> { deleteDataEntryItem(intent.index) }
+            is DataEntryIntent.NavigateToUp -> { navigateToUp() }
         }
     }
 
@@ -33,5 +34,9 @@ class DataEntryViewModel @Inject constructor(
 
     private fun deleteDataEntryItem(index: Int) {
         reduce { copy(dataEntryList = dataEntryList.filterIndexed { i, _ -> i != index }.toMutableList()) }
+    }
+
+    private fun navigateToUp() {
+        postSideEffect { DataEntrySideEffect.NavigateToUp }
     }
 }

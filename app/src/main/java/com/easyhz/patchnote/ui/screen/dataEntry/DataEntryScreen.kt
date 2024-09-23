@@ -15,11 +15,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.easyhz.patchnote.R
+import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.category.CategoryEntryField
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
 import com.easyhz.patchnote.ui.screen.dataEntry.contract.DataEntryIntent
+import com.easyhz.patchnote.ui.screen.dataEntry.contract.DataEntrySideEffect
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Primary
 
@@ -46,7 +48,7 @@ fun DataEntryScreen(
                     stringId = R.string.data_entry_save,
                     textAlignment = Alignment.CenterEnd,
                     textColor = Primary,
-                    onClick = { }
+                    onClick = { viewModel.postIntent(DataEntryIntent.NavigateToUp) }
                 ),
             )
         }
@@ -65,6 +67,12 @@ fun DataEntryScreen(
                     onValueChange = { viewModel.postIntent(DataEntryIntent.ChangeDataEntryItemValue(index, it)) }
                 ) { viewModel.postIntent(DataEntryIntent.DeleteDataEntryItem(index)) }
             }
+        }
+    }
+
+    viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is DataEntrySideEffect.NavigateToUp -> navigateToUp()
         }
     }
 }

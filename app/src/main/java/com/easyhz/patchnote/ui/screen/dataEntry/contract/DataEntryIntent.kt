@@ -7,4 +7,5 @@ sealed class DataEntryIntent: UiIntent() {
     data class SelectDataEntryItemCategoryType(val index: Int, val categoryType: CategoryType): DataEntryIntent()
     data class ChangeDataEntryItemValue(val index: Int, val value: String): DataEntryIntent()
     data class DeleteDataEntryItem(val index: Int): DataEntryIntent()
+    data object NavigateToUp: DataEntryIntent()
 }
