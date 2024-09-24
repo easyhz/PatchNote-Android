@@ -1,5 +1,6 @@
 package com.easyhz.patchnote.ui.screen.dataEntry
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.model.category.CategoryType
@@ -37,6 +38,7 @@ class DataEntryViewModel @Inject constructor(
     }
 
     private fun deleteDataEntryItem(index: Int) {
+        if (currentState.dataEntryList.size == 1) return
         reduce { copy(dataEntryList = dataEntryList.filterIndexed { i, _ -> i != index }.toMutableList()) }
     }
 
@@ -46,10 +48,11 @@ class DataEntryViewModel @Inject constructor(
 
     private fun updateCategory() = viewModelScope.launch {
         val param = currentState.dataEntryList.filter { it.value.isNotBlank() }
+        if (param.isEmpty()) return@launch
         updateCategoryUseCase.invoke(param).onSuccess {
             hideKeyboard()
         }.onFailure {
-            println("실패 $it")
+            Log.e(this.javaClass.name, "updateCategory : ${it.message}")
         }
 
     }

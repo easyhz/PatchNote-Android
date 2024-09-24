@@ -3,16 +3,17 @@ package com.easyhz.patchnote.ui.screen.dataEntry
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,7 +36,6 @@ fun DataEntryScreen(
     navigateToUp: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     PatchNoteScaffold(
         topBar = {
@@ -69,9 +69,17 @@ fun DataEntryScreen(
                     selectedCategoryType = dataEntryItem.categoryType,
                     onSelected = { viewModel.postIntent(DataEntryIntent.SelectDataEntryItemCategoryType(index, it)) },
                     value = dataEntryItem.value,
-                    onValueChange = { viewModel.postIntent(DataEntryIntent.ChangeDataEntryItemValue(index, it)) }
-                ) { viewModel.postIntent(DataEntryIntent.DeleteDataEntryItem(index)) }
+                    onValueChange = { viewModel.postIntent(DataEntryIntent.ChangeDataEntryItemValue(index, it)) },
+                    onClickDelete = { viewModel.postIntent(DataEntryIntent.DeleteDataEntryItem(index)) },
+                ) {
+                    if (index == uiState.dataEntryList.size - 1) {
+                        focusManager.clearFocus()
+                    } else {
+                        focusManager.moveFocus(FocusDirection.Down)
+                    }
+                }
             }
+            item { Spacer(Modifier.imePadding()) }
         }
     }
 
