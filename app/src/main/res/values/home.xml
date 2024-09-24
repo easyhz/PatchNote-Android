@@ -4,4 +4,6 @@
     <string name="home_defect_empty">등록된 하자가 없습니다.</string>
     <string name="home_defect_building_unit_format">%1s동 %2s호</string>
 
+    <string name="home_floating_action_button">접수</string>
+
 </resources>

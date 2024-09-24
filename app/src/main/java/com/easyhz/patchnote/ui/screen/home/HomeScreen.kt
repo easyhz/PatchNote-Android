@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.easyhz.patchnote.core.designSystem.component.button.HomeFloatingActionButton
 import com.easyhz.patchnote.core.designSystem.component.card.HomeCard
 import com.easyhz.patchnote.core.designSystem.component.filter.HomeFilter
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
@@ -32,6 +33,9 @@ fun HomeScreen(
 
                 }
             }
+        },
+        floatingActionButton = {
+            HomeFloatingActionButton() { }
         }
     ) { innerPadding ->
 //        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
