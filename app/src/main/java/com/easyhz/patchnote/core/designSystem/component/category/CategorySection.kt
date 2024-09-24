@@ -43,6 +43,18 @@ fun LazyListScope.categorySection(
             )
         }
     }
+    if(category.values.isEmpty()) {
+        item {
+            Box(Modifier.fillMaxWidth().height(150.dp)) {
+                Text(
+                    text = stringResource(R.string.data_management_no_data, stringResource(id = category.type.nameId)),
+                    style = SemiBold16,
+                    color = SubText,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        }
+    }
     itemsIndexed(category.values) { index, item ->
         Row(
             modifier = Modifier.fillMaxWidth().clickable { onClick(index) }.padding(horizontal = 20.dp),
