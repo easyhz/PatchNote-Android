@@ -17,4 +17,9 @@ sealed class Category(
             is WorkType -> this.copy(values = newValues)
         }
     }
+
+}
+
+fun List<Category>.getValue(categoryType: CategoryType): Category? {
+    return this.firstOrNull { it.type == categoryType }
 }

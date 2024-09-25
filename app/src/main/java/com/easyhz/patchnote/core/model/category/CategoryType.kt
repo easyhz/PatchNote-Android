@@ -1,6 +1,7 @@
 package com.easyhz.patchnote.core.model.category
 
 import androidx.annotation.StringRes
+import androidx.compose.ui.text.input.TextFieldValue
 import com.easyhz.patchnote.R
 
 enum class CategoryType(
@@ -30,11 +31,11 @@ enum class CategoryType(
         alias = "workType"
     );
     companion object{
-        fun toLinkedHashMap(): LinkedHashMap<CategoryType, String> {
-            return LinkedHashMap(entries.associateWith { "" })
+        fun toLinkedHashMapTextFieldValue(): LinkedHashMap<CategoryType, TextFieldValue> {
+            return LinkedHashMap(entries.associateWith { TextFieldValue("") })
         }
 
-        fun toMap(): Map<CategoryType, List<String>> {
+        fun toMapListString(): Map<CategoryType, List<String>> {
             return entries.associateWith { emptyList() }
         }
     }

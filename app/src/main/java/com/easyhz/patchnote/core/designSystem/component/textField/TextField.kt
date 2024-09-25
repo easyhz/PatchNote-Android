@@ -11,7 +11,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.easyhz.patchnote.core.designSystem.util.textField.TextFieldType
 import com.easyhz.patchnote.core.designSystem.util.textField.getTextFieldState
 import com.easyhz.patchnote.ui.theme.Medium18
 
@@ -27,7 +26,6 @@ fun BaseTextField(
     isFilled: Boolean,
     minLines: Int = 1,
     spacing: Dp = 12.dp,
-    textFieldType: TextFieldType,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -48,7 +46,6 @@ fun BaseTextField(
             TextFieldContainer(
                 modifier = containerModifier,
                 state = state,
-                textFieldType = textFieldType,
                 title = title,
                 placeholder = placeholder,
                 innerTextField = innerTextField,
@@ -69,6 +66,5 @@ private fun BaseTextFieldPrev() {
         placeholder = "제목을 입력하세요",
         singleLine = true,
         isFilled = false,
-        textFieldType = TextFieldType.Default
     )
 }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="defect_entry_title">하자 접수</string>
+    <string name="defect_entry_receipt">접수</string>
+    <string name="defect_entry_placeholder">%1s 입력하세요</string>
+</resources>

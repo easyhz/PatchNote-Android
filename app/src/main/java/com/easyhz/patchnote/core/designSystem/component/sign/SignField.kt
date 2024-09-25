@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.designSystem.component.button.MainButton
 import com.easyhz.patchnote.core.designSystem.component.textField.BaseTextField
-import com.easyhz.patchnote.core.designSystem.util.textField.TextFieldType
 import com.easyhz.patchnote.ui.theme.Bold20
 import com.easyhz.patchnote.ui.theme.Caption
 import com.easyhz.patchnote.ui.theme.MainText
@@ -56,7 +55,6 @@ fun SignField(
                 placeholder = placeholder,
                 singleLine = true,
                 isFilled = false,
-                textFieldType = TextFieldType.Default,
                 keyboardOptions = keyboardOptions,
                 keyboardActions = keyboardActions
             )

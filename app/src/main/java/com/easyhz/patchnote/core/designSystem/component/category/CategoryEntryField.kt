@@ -19,14 +19,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.easyhz.patchnote.R
+import com.easyhz.patchnote.core.common.util.getPostposition
 import com.easyhz.patchnote.core.designSystem.component.dropDown.CategoryDropDown
 import com.easyhz.patchnote.core.designSystem.component.textField.BaseTextField
 import com.easyhz.patchnote.core.designSystem.util.extension.noRippleClickable
-import com.easyhz.patchnote.core.designSystem.util.textField.TextFieldType
 import com.easyhz.patchnote.core.model.category.CategoryType
 import com.easyhz.patchnote.ui.theme.Regular14
 import com.easyhz.patchnote.ui.theme.SubText
-import java.util.Locale
 
 @Composable
 fun CategoryEntryField(
@@ -38,8 +37,7 @@ fun CategoryEntryField(
     onClickDelete: () -> Unit,
     onNext: () -> Unit
 ) {
-    val currentLocale = Locale.getDefault()
-    val postposition = getPostposition(currentLocale.language, selectedCategoryType)
+    val postposition = getPostposition(selectedCategoryType)
 
     Column(
         modifier = modifier,
@@ -74,7 +72,6 @@ fun CategoryEntryField(
             placeholder = getPlaceholderText(selectedCategoryType, postposition),
             singleLine = true,
             isFilled = false,
-            textFieldType = TextFieldType.Default,
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Next
             ),
@@ -83,16 +80,6 @@ fun CategoryEntryField(
             )
         )
     }
-}
-
-
-private fun getPostposition(language: String, selectedCategoryType: CategoryType): String {
-    return if (language == "ko") {
-        when (selectedCategoryType) {
-            CategoryType.PART -> "를"
-            else -> "을"
-        }
-    } else ""
 }
 
 @Composable
