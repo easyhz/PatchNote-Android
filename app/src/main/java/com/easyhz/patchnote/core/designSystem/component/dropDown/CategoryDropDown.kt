@@ -61,7 +61,7 @@ fun CategoryDropDown(
             expanded = isDropDownMenuExpanded,
             onDismissRequest = { isDropDownMenuExpanded = false }
         ) {
-            CategoryType.entries.forEach {
+            CategoryType.entries.filter { it.enabledEntry }.forEach {
                 DropdownMenuItem(
                     text = {
                         Text(
