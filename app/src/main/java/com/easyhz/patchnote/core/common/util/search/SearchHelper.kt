@@ -14,6 +14,7 @@ object SearchHelper {
      * @return 검색어를 포함하는 아이템들
      */
     fun search(query: String, items: List<String>): List<String> {
+        if (query.isBlank()) return items
         if (items.isEmpty()) return emptyList()
         val queryJamo = query.flatMap { char ->
             decomposeKorean(char).toList().filterNotNull()

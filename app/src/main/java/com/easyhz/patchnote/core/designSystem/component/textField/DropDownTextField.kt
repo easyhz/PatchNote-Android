@@ -20,7 +20,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.focus.FocusState
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,6 +47,7 @@ fun DropDownTextField(
     isFilled: Boolean,
     minLines: Int = 1,
     spacing: Dp = 12.dp,
+    onFocusChanged: (FocusState) -> Unit = {},
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -72,7 +74,8 @@ fun DropDownTextField(
                 onValueChange = { onValueChange(it) },
                 modifier = modifier
                     .fillMaxWidth()
-                    .onFocusEvent {
+                    .onFocusChanged {
+                        onFocusChanged(it)
                         isExpanded = it.isFocused
                     }
                     .menuAnchor(MenuAnchorType.PrimaryEditable),

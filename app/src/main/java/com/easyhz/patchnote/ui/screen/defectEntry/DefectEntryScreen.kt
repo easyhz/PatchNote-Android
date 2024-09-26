@@ -89,6 +89,14 @@ fun DefectEntryScreen(
                             )
                         )
                     },
+                    onFocusChanged = {
+                        viewModel.postIntent(
+                            DefectEntryIntent.ChangeFocusState(
+                                categoryType = category,
+                                focusState = it
+                            )
+                        )
+                    },
                     onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 )
             }

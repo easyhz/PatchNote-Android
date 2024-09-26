@@ -7,6 +7,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusState
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -27,6 +29,7 @@ fun BaseTextField(
     minLines: Int = 1,
     spacing: Dp = 12.dp,
     visualTransformation: VisualTransformation = VisualTransformation.None,
+    onFocusChanged: (FocusState) -> Unit = {},
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
@@ -35,7 +38,8 @@ fun BaseTextField(
         value = value,
         onValueChange = { onValueChange(it) },
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .onFocusChanged { onFocusChanged(it) },
         textStyle = Medium18,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,

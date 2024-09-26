@@ -5,6 +5,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -24,7 +25,8 @@ fun DefectCategoryField(
     category: CategoryType,
     dropDownList: List<String>,
     onClickDropDownList: (String) -> Unit,
-    onNext: () -> Unit
+    onFocusChanged: (FocusState) -> Unit,
+    onNext: () -> Unit,
 ) {
     val postposition = getPostposition(category)
     when(category) {
@@ -42,6 +44,7 @@ fun DefectCategoryField(
                 ),
                 singleLine = true,
                 isFilled = false,
+                onFocusChanged = onFocusChanged,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next,
@@ -65,6 +68,7 @@ fun DefectCategoryField(
                 ),
                 singleLine = true,
                 isFilled = false,
+                onFocusChanged = onFocusChanged,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Next,
                 ),

@@ -1,5 +1,6 @@
 package com.easyhz.patchnote.ui.screen.defectEntry
 
+import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
@@ -26,6 +27,7 @@ class DefectEntryViewModel @Inject constructor(
         when(intent) {
             is DefectEntryIntent.ChangeEntryValueTextValue -> { onChangeEntryValueTextValue(intent.categoryType, intent.value) }
             is DefectEntryIntent.ClickCategoryDropDown -> { onClickCategoryDropDown(intent.categoryType, intent.value) }
+            is DefectEntryIntent.ChangeFocusState -> { onChangeFocusState(intent.categoryType, intent.focusState) }
         }
     }
 
@@ -61,5 +63,13 @@ class DefectEntryViewModel @Inject constructor(
         val items = currentState.category.getValue(categoryType)?.values ?: emptyList()
         val searchResult = SearchHelper.search(value, items)
         reduce { updateSearchCategory(categoryType, searchResult) }
+    }
+
+    private fun onChangeFocusState(categoryType: CategoryType, focusState: FocusState) {
+        if (focusState.isFocused) return
+        if (categoryType == CategoryType.BUILDING || categoryType == CategoryType.UNIT) return
+        val isExistCategoryList = currentState.category.getValue(categoryType)?.values?.contains(currentState.entryItem[categoryType]?.text)
+        if (isExistCategoryList == true) return
+        reduce { updateEntryItemValue(categoryType, TextFieldValue("")) }
     }
 }
