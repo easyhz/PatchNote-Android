@@ -107,4 +107,7 @@ dependencies {
     implementation(libs.gms.play.services.auth)
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
+
+    // glide
+    implementation(libs.glide)
 }
