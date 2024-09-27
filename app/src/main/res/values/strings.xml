@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">PatchNote</string>
     <string name="app_name_ko">패치노트</string>
+
+    <string name="gallery">앨범에서 추가</string>
+    <string name="camera">카메라에서 추가</string>
 </resources>

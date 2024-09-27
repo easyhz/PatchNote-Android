@@ -1,5 +1,6 @@
 package com.easyhz.patchnote.ui.screen.defectEntry.component
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -30,53 +31,55 @@ fun DefectCategoryField(
     onNext: () -> Unit,
 ) {
     val postposition = getPostposition(category)
-    when(category) {
-        CategoryType.BUILDING, CategoryType.UNIT -> {
-            BaseTextField(
-                containerModifier = modifier.height(40.dp),
-                value = value.text,
-                onValueChange = {
-                    onValueChange(TextFieldValue(it))
-                },
-                title = stringResource(id = category.nameId),
-                placeholder = stringResource(
-                    id = R.string.defect_entry_placeholder,
-                    (stringResource(id = category.nameId) + postposition)
-                ),
-                singleLine = true,
-                isFilled = false,
-                onFocusChanged = onFocusChanged,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next,
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { onNext() }
+    Box(modifier = modifier) {
+        when(category) {
+            CategoryType.BUILDING, CategoryType.UNIT -> {
+                BaseTextField(
+                    containerModifier = Modifier.height(40.dp),
+                    value = value.text,
+                    onValueChange = {
+                        onValueChange(TextFieldValue(it))
+                    },
+                    title = stringResource(id = category.nameId),
+                    placeholder = stringResource(
+                        id = R.string.defect_entry_placeholder,
+                        (stringResource(id = category.nameId) + postposition)
+                    ),
+                    singleLine = true,
+                    isFilled = false,
+                    onFocusChanged = onFocusChanged,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { onNext() }
+                    )
                 )
-            )
-        }
-        else -> {
-            DropDownTextField(
-                containerModifier = modifier.height(40.dp),
-                value = value,
-                onValueChange =  onValueChange,
-                dropDownList = dropDownList,
-                onClickDropDown = onClickDropDownList,
-                title = stringResource(id = category.nameId),
-                placeholder = stringResource(
-                    id = R.string.defect_entry_placeholder,
-                    (stringResource(id = category.nameId) + postposition)
-                ),
-                singleLine = true,
-                isFilled = false,
-                onFocusChanged = onFocusChanged,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Next,
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { onNext() }
+            }
+            else -> {
+                DropDownTextField(
+                    containerModifier = Modifier.height(40.dp),
+                    value = value,
+                    onValueChange =  onValueChange,
+                    dropDownList = dropDownList,
+                    onClickDropDown = onClickDropDownList,
+                    title = stringResource(id = category.nameId),
+                    placeholder = stringResource(
+                        id = R.string.defect_entry_placeholder,
+                        (stringResource(id = category.nameId) + postposition)
+                    ),
+                    singleLine = true,
+                    isFilled = false,
+                    onFocusChanged = onFocusChanged,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Next,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { onNext() }
+                    )
                 )
-            )
+            }
         }
     }
 }

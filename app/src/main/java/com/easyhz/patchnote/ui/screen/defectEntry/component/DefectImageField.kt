@@ -1,11 +1,15 @@
 package com.easyhz.patchnote.ui.screen.defectEntry.component
 
-import android.net.Uri
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -33,6 +37,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.designSystem.util.extension.noRippleClickable
+import com.easyhz.patchnote.core.model.image.DefectImage
 import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.PlaceholderText
 import com.easyhz.patchnote.ui.theme.SemiBold18
@@ -41,16 +46,16 @@ import com.easyhz.patchnote.ui.theme.SubBackground
 @Composable
 fun DefectImageField(
     modifier: Modifier = Modifier,
-    images: List<Uri>,
+    images: List<DefectImage>,
     onClickAdd: () -> Unit,
-    onClickDelete: (Uri) -> Unit,
+    onClickDelete: (DefectImage) -> Unit,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -65,30 +70,45 @@ fun DefectImageField(
                 contentDescription = "add",
             )
         }
-
-        if (images.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(SubBackground)
-                    .noRippleClickable { onClickAdd() },
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.defect_entry_image_placeholder),
-                    style = SemiBold18,
-                    color = PlaceholderText
-                )
+        AnimatedContent(
+            targetState = images.isEmpty(), label = "imageField",
+            transitionSpec = {
+                fadeIn() togetherWith fadeOut()
             }
-        } else {
-            LazyRow {
-                items(images) { item ->
-                    ImageItem(
-                        imageUrl = item,
-                        onClickDelete = { onClickDelete(item) }
-                    )
+        ) { isEmpty ->
+            when(isEmpty) {
+                true -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(120.dp)
+                            .padding(horizontal = 20.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(SubBackground)
+                            .noRippleClickable { onClickAdd() },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.defect_entry_image_placeholder),
+                            style = SemiBold18,
+                            color = PlaceholderText
+                        )
+                    }
+                }
+                false -> {
+                    LazyRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentPadding = PaddingValues(horizontal = 20.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(images, key = { it.id }) { item ->
+                            ImageItem(
+                                modifier = Modifier.animateItem(),
+                                image = item,
+                                onClickDelete = { onClickDelete(item) }
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -99,7 +119,7 @@ fun DefectImageField(
 @Composable
 private fun ImageItem(
     modifier: Modifier = Modifier,
-    imageUrl: Uri,
+    image: DefectImage,
     onClickDelete: () -> Unit
 ) {
     Box(
@@ -110,7 +130,7 @@ private fun ImageItem(
     ) {
         GlideImage(
             modifier = Modifier.size(120.dp),
-            model = imageUrl,
+            model = image.uri,
             contentDescription = null,
             loading = placeholder(ColorPainter(SubBackground)),
             failure = placeholder(ColorPainter(SubBackground)),
