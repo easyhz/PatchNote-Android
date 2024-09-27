@@ -28,6 +28,7 @@ class DefectEntryViewModel @Inject constructor(
             is DefectEntryIntent.ChangeEntryValueTextValue -> { onChangeEntryValueTextValue(intent.categoryType, intent.value) }
             is DefectEntryIntent.ClickCategoryDropDown -> { onClickCategoryDropDown(intent.categoryType, intent.value) }
             is DefectEntryIntent.ChangeFocusState -> { onChangeFocusState(intent.categoryType, intent.focusState) }
+            is DefectEntryIntent.ChangeEntryContent -> { reduce { copy(entryContent = intent.value) } }
         }
     }
 

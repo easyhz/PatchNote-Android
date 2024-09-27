@@ -8,12 +8,14 @@ import com.easyhz.patchnote.core.model.category.CategoryType
 
 data class DefectEntryState(
     val entryItem: LinkedHashMap<CategoryType, TextFieldValue>,
+    val entryContent: String,
     val searchCategory: Map<CategoryType, List<String>>,
     val category: List<Category>,
 ) : UiState() {
     companion object {
         fun init() = DefectEntryState(
             entryItem = CategoryType.toLinkedHashMapTextFieldValue(),
+            entryContent = "",
             searchCategory = CategoryType.toMapListString(),
             category = emptyList()
         )

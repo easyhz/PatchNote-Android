@@ -10,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.util.getPostposition
@@ -78,4 +79,19 @@ fun DefectCategoryField(
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun DefectCategoryFieldPreview() {
+    DefectCategoryField(
+        value = TextFieldValue(),
+        onValueChange = {},
+        category = CategoryType.BUILDING,
+        dropDownList = emptyList(),
+        onClickDropDownList = {},
+        onFocusChanged = {},
+        onNext = {}
+    )
+
 }

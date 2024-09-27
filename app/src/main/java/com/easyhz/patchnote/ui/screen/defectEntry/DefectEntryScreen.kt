@@ -2,6 +2,7 @@ package com.easyhz.patchnote.ui.screen.defectEntry
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -22,6 +23,8 @@ import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
 import com.easyhz.patchnote.core.designSystem.util.extension.noRippleClickable
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
 import com.easyhz.patchnote.ui.screen.defectEntry.component.DefectCategoryField
+import com.easyhz.patchnote.ui.screen.defectEntry.component.DefectContentField
+import com.easyhz.patchnote.ui.screen.defectEntry.component.DefectImageField
 import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntryIntent
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Primary
@@ -63,7 +66,6 @@ fun DefectEntryScreen(
                     focusManager.clearFocus()
                 }
                 .padding(innerPadding)
-                .imePadding()
                 .verticalScroll(scrollState)
                 .padding(horizontal = 20.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -100,6 +102,20 @@ fun DefectEntryScreen(
                     onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 )
             }
+            DefectContentField(
+                modifier = Modifier,
+                value = uiState.entryContent,
+                onValueChange = {
+                    viewModel.postIntent(DefectEntryIntent.ChangeEntryContent(it))
+                },
+                onNext = { focusManager.moveFocus(FocusDirection.Down) }
+            )
+            DefectImageField(
+                images = emptyList(),
+                onClickAdd = {},
+                onClickDelete = { }
+            )
+            Spacer(modifier = Modifier.imePadding())
         }
     }
 }
