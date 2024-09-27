@@ -51,6 +51,7 @@ class DefectEntryViewModel @Inject constructor(
         fetchCategory()
     }
 
+    /* fetchCategory */
     private fun fetchCategory() = viewModelScope.launch {
         fetchCategoryUseCase.invoke(Unit).onSuccess {
             reduce { copy(category = it) }
@@ -62,6 +63,7 @@ class DefectEntryViewModel @Inject constructor(
         }
     }
 
+    /* [CategoryType] 의 텍스트 필드 값 변경 */
     private fun onChangeEntryValueTextValue(categoryType: CategoryType, value: TextFieldValue) {
         val filterValue = when(categoryType) {
             CategoryType.BUILDING, CategoryType.UNIT -> TextFieldValue(value.text.filter { it.isDigit() })
@@ -71,16 +73,19 @@ class DefectEntryViewModel @Inject constructor(
         searchCategory(categoryType, value.text)
     }
 
+    /* 드롭다운 항목 클릭 */
     private fun onClickCategoryDropDown(categoryType: CategoryType, value: String) {
         reduce { updateEntryItemValue(categoryType, TextFieldValue(value), isSelected = true) }
     }
 
+    /* 카테고리 자동 완성 검색 */
     private fun searchCategory(categoryType: CategoryType, value: String) {
         val items = currentState.category.getValue(categoryType)?.values ?: emptyList()
         val searchResult = SearchHelper.search(value, items)
         reduce { updateSearchCategory(categoryType, searchResult) }
     }
 
+    /* 포커스 해지 되면 등록된 카테고리에 있는지 확인 후 없으면 빈칸으로 리셋 */
     private fun onChangeFocusState(categoryType: CategoryType, focusState: FocusState) {
         if (focusState.isFocused) return
         if (categoryType == CategoryType.BUILDING || categoryType == CategoryType.UNIT) return
@@ -89,10 +94,12 @@ class DefectEntryViewModel @Inject constructor(
         reduce { updateEntryItemValue(categoryType, TextFieldValue("")) }
     }
 
+    /* 이미지 바텀시트 상태 변경 */
     private fun changeStateImageBottomSheet(isShow: Boolean) {
         reduce { copy(isShowImageBottomSheet = isShow) }
     }
 
+    /* 이미지 바텀시트 클릭 */
     private fun onClickImageBottomSheet(imageBottomSheetType: ImageBottomSheetType) {
         when(imageBottomSheetType) {
             ImageBottomSheetType.GALLERY -> { launchGallery() }
@@ -100,10 +107,12 @@ class DefectEntryViewModel @Inject constructor(
         }
     }
 
+    /* 갤러리 실행 */
     private fun launchGallery() {
         postSideEffect { DefectEntrySideEffect.NavigateToGallery }
     }
 
+    /* 카메라 실행 : uri 생성 */
     private fun launchCamera() = viewModelScope.launch {
         getTakePictureUriUseCase.invoke(Unit)
             .onSuccess {
@@ -115,15 +124,18 @@ class DefectEntryViewModel @Inject constructor(
             }
     }
 
+    /* 이미지 업데이트 */
     private fun updateEntryImages(newImages: List<Uri>) {
         reduce { updateImages(newImages.toDefectImages()) }
     }
 
+    /* 찍은 사진 추가 */
     private fun updateTakePicture(isUsed: Boolean) {
         if (!isUsed) return
         reduce { updateImages(newImages = listOf(takePictureUri.value).toDefectImages()) }
     }
 
+    /* 이미지 삭제 */
     private fun deleteEntryImage(image: DefectImage) {
         reduce { deleteImage(image) }
     }
