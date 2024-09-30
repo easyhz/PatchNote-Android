@@ -110,4 +110,8 @@ dependencies {
 
     // glide
     implementation(libs.glide)
+
+    // datastore
+    implementation(libs.androidx.datastore)
+    implementation(libs.androidx.datastore.core)
 }
