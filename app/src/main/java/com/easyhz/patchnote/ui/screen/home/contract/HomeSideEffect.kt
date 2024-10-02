@@ -1,0 +1,6 @@
+package com.easyhz.patchnote.ui.screen.home.contract
+
+import com.easyhz.patchnote.core.common.base.UiSideEffect
+
+sealed class HomeSideEffect: UiSideEffect() {
+}

@@ -1,7 +1,7 @@
 package com.easyhz.patchnote.core.model.defect
 
 import android.net.Uri
-import com.easyhz.patchnote.data.model.defect.data.ImageSize
+import com.easyhz.patchnote.core.model.image.ImageSize
 
 data class EntryDefect(
     val id: String,

@@ -6,11 +6,31 @@ import com.easyhz.patchnote.core.common.error.getErrorByCode
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 const val TAG = "ResponseHandler"
+
+
+/**
+ * collection 에서 원하는 document array를 받는 함수
+ *
+ * @param execute [QuerySnapshot] 파이어스토어 쿼리문이 들어옴.
+ */
+internal suspend inline fun < reified T: Any> fetchHandler(
+    dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    crossinline execute: () -> Task<QuerySnapshot>
+): Result<List<T>> = withContext(dispatcher) {
+    runCatching {
+        execute().await().toObjects(T::class.java)
+    }.fold(
+        onSuccess = { Result.success(it) },
+        onFailure = { e -> handleException(e, "collection") }
+    )
+}
 
 /**
  * collection 에서 원하는 document 를 받는 함수

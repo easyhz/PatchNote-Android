@@ -7,7 +7,7 @@ import android.net.Uri
 import androidx.core.content.FileProvider
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.constant.CacheDirectory
-import com.easyhz.patchnote.data.model.defect.data.ImageSize
+import com.easyhz.patchnote.core.model.image.ImageSize
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream

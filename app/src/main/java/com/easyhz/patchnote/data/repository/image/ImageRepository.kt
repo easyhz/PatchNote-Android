@@ -1,7 +1,7 @@
 package com.easyhz.patchnote.data.repository.image
 
 import android.net.Uri
-import com.easyhz.patchnote.data.model.defect.data.ImageSize
+import com.easyhz.patchnote.core.model.image.ImageSize
 
 interface ImageRepository {
     suspend fun getTakePictureUri(): Result<Uri>

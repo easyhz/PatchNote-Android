@@ -23,19 +23,19 @@ import com.google.firebase.firestore.PropertyName
  * @property afterDescription 처리 완료 설명
  * @property afterImageSizes 처리 완료 이미지 사이즈
  * @property afterImageUrls 처리 완료 이미지 URL
- * @property completionDate 처리 완료 날짜
  * @property requesterId 접수자 id
- * @property requesterDate 접수일
  * @property requesterName 접수자 이름
  * @property requesterPhone 접수자 전화번호
  * @property workerId 처리자 id
  * @property workerName 처리자 이름
  * @property workerPhone 처리자 전화번호
+ * @property requesterDate 접수일
+ * @property completionDate 처리 완료 날짜
  */
 data class DefectData(
     @PropertyName("id")
     val id: String = "",
-    @PropertyName("requestDate")
+    @PropertyName("site")
     val site: String = "",
     @PropertyName("building")
     val building: String = "",
@@ -55,24 +55,20 @@ data class DefectData(
     @PropertyName("beforeDescription")
     val beforeDescription: String = "",
     @PropertyName("beforeImageSizes")
-    val beforeImageSizes: List<ImageSize> = emptyList(),
+    val beforeImageSizes: List<ImageSizeData> = emptyList(),
     @get:PropertyName("beforeImageURLs")
     @set:PropertyName("beforeImageURLs")
     var beforeImageUrls: List<String> = emptyList(),
     @PropertyName("afterDescription")
     val afterDescription: String = "",
     @PropertyName("afterImageSizes")
-    val afterImageSizes: List<ImageSize> = emptyList(),
+    val afterImageSizes: List<ImageSizeData> = emptyList(),
     @get:PropertyName("afterImageURLs")
     @set:PropertyName("afterImageURLs")
     var afterImageUrls: List<String> = emptyList(),
-    @PropertyName("completionDate")
-    val completionDate: Timestamp? = null,
     @get:PropertyName("requesterID")
     @set:PropertyName("requesterID")
     var requesterId: String = "",
-    @PropertyName("requesterDate")
-    val requesterDate: Timestamp = Timestamp.now(),
     @PropertyName("requesterName")
     val requesterName: String = "",
     @PropertyName("requesterPhone")
@@ -84,4 +80,8 @@ data class DefectData(
     val workerName: String? = null,
     @PropertyName("workerPhone")
     val workerPhone: String? = null,
+    @PropertyName("requesterDate")
+    val requesterDate: Timestamp = Timestamp.now(),
+    @PropertyName("completionDate")
+    val completionDate: Timestamp? = null,
 )

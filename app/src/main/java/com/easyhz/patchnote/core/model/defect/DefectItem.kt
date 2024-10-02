@@ -1,0 +1,56 @@
+package com.easyhz.patchnote.core.model.defect
+
+import com.easyhz.patchnote.core.model.image.ImageSize
+
+/**
+ * 하자 데이터
+ *
+ * @property id 하자 id
+ * @property site 현장
+ * @property building 동
+ * @property unit 호수
+ * @property space 공간
+ * @property part 부위
+ * @property workType 공종
+ * @property progress 하자 처리 단계
+ * @property thumbnailUrl 썸네일 URL
+ * @property beforeDescription 접수 설명
+ * @property beforeImageSizes 접수 이미지 사이즈
+ * @property beforeImageUrls 접수 이미지 URL
+ * @property afterDescription 처리 완료 설명
+ * @property afterImageSizes 처리 완료 이미지 사이즈
+ * @property afterImageUrls 처리 완료 이미지 URL
+ * @property requesterId 접수자 id
+ * @property requesterName 접수자 이름
+ * @property requesterPhone 접수자 전화번호
+ * @property workerId 처리자 id
+ * @property workerName 처리자 이름
+ * @property workerPhone 처리자 전화번호
+ * @property requesterDate 접수일
+ * @property completionDate 처리 완료 날짜
+ */
+data class DefectItem(
+    val id: String,
+    val site: String,
+    val building: String,
+    val unit: String,
+    val space: String,
+    val part: String,
+    val workType: String,
+    val progress: DefectProgress,
+    val thumbnailUrl: String,
+    val beforeDescription: String,
+    val beforeImageSizes: List<ImageSize>,
+    val beforeImageUrls: List<String>,
+    val afterDescription: String,
+    val afterImageSizes: List<ImageSize>,
+    val afterImageUrls: List<String>,
+    val requesterId: String,
+    val requesterName: String,
+    val requesterPhone: String,
+    val workerId: String?,
+    val workerName: String?,
+    val workerPhone: String?,
+    val requesterDate: String,
+    val completionDate: String?,
+)

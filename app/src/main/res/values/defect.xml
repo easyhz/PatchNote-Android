@@ -9,4 +9,5 @@
     <string name="defect_entry_image_placeholder">사진을 추가해주세요</string>
 
     <string name="defect_entry_receipt_success">하자 접수가 완료되었습니다.</string>
+    <string name="defect_done">완료</string>
 </resources>
