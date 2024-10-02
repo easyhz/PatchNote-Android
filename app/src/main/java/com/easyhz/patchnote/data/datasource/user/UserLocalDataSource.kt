@@ -1,8 +1,8 @@
 package com.easyhz.patchnote.data.datasource.user
 
-import com.easyhz.patchnote.data.model.sign.request.SaveUserRequest
+import com.easyhz.patchnote.core.model.user.User
 
 interface UserLocalDataSource {
-    suspend fun updateUser(user: SaveUserRequest): Unit
-    suspend fun getUser(): Result<SaveUserRequest>
+    suspend fun updateUser(user: User): Unit
+    suspend fun getUser(): Result<User>
 }

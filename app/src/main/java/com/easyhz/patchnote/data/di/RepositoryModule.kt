@@ -2,6 +2,8 @@ package com.easyhz.patchnote.data.di
 
 import com.easyhz.patchnote.data.repository.category.CategoryRepository
 import com.easyhz.patchnote.data.repository.category.CategoryRepositoryImpl
+import com.easyhz.patchnote.data.repository.defect.DefectRepository
+import com.easyhz.patchnote.data.repository.defect.DefectRepositoryImpl
 import com.easyhz.patchnote.data.repository.image.ImageRepository
 import com.easyhz.patchnote.data.repository.image.ImageRepositoryImpl
 import com.easyhz.patchnote.data.repository.sign.SignRepository
@@ -36,4 +38,9 @@ interface RepositoryModule {
     fun bindImageRepository(
         imageRepositoryImpl: ImageRepositoryImpl
     ): ImageRepository
+
+    @Binds
+    fun bindDefectRepository(
+        defectRepositoryImpl: DefectRepositoryImpl
+    ): DefectRepository
 }

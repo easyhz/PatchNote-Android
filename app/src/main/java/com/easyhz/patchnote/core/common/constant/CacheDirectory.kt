@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.data.constant
+package com.easyhz.patchnote.core.common.constant
 
 object CacheDirectory {
     const val CAMERA_IMAGES = "camera_images"

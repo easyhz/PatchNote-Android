@@ -6,13 +6,16 @@ import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
+import com.easyhz.patchnote.core.common.util.Generate
 import com.easyhz.patchnote.core.common.util.search.SearchHelper
 import com.easyhz.patchnote.core.designSystem.component.bottomSheet.ImageBottomSheetType
 import com.easyhz.patchnote.core.model.category.CategoryType
 import com.easyhz.patchnote.core.model.category.getValue
+import com.easyhz.patchnote.core.model.defect.EntryDefectParam
 import com.easyhz.patchnote.core.model.image.DefectImage
 import com.easyhz.patchnote.core.model.image.toDefectImages
 import com.easyhz.patchnote.domain.usecase.category.FetchCategoryUseCase
+import com.easyhz.patchnote.domain.usecase.defect.CreateDefectUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetTakePictureUriUseCase
 import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntryIntent
 import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntrySideEffect
@@ -28,7 +31,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DefectEntryViewModel @Inject constructor(
     private val fetchCategoryUseCase: FetchCategoryUseCase,
-    private val getTakePictureUriUseCase: GetTakePictureUriUseCase
+    private val getTakePictureUriUseCase: GetTakePictureUriUseCase,
+    private val createDefectUseCase: CreateDefectUseCase
 ): BaseViewModel<DefectEntryState, DefectEntryIntent, DefectEntrySideEffect>(
     initialState = DefectEntryState.init()
 ) {
@@ -44,6 +48,7 @@ class DefectEntryViewModel @Inject constructor(
             is DefectEntryIntent.PickImages -> { updateEntryImages(intent.images) }
             is DefectEntryIntent.TakePicture -> { updateTakePicture(intent.isUsed) }
             is DefectEntryIntent.DeleteImage -> { deleteEntryImage(intent.image) }
+            is DefectEntryIntent.ClickReceipt -> { createDefect() }
         }
     }
 
@@ -138,5 +143,27 @@ class DefectEntryViewModel @Inject constructor(
     /* 이미지 삭제 */
     private fun deleteEntryImage(image: DefectImage) {
         reduce { deleteImage(image) }
+    }
+
+    /* 하자 등록 */
+    private fun createDefect() = viewModelScope.launch {
+        val param = EntryDefectParam(
+            id = Generate.randomUUID(),
+            site = currentState.entryItem[CategoryType.SITE]?.text.orEmpty(),
+            building = currentState.entryItem[CategoryType.BUILDING]?.text.orEmpty(),
+            unit = currentState.entryItem[CategoryType.UNIT]?.text.orEmpty(),
+            space = currentState.entryItem[CategoryType.SPACE]?.text.orEmpty(),
+            part = currentState.entryItem[CategoryType.PART]?.text.orEmpty(),
+            workType = currentState.entryItem[CategoryType.WORK_TYPE]?.text.orEmpty(),
+            beforeDescription = currentState.entryContent,
+            beforeImageUris = currentState.images.map { it.uri }
+        )
+        createDefectUseCase.invoke(param)
+            .onSuccess {
+                println(">> 성공 : $it")
+            }
+            .onFailure {
+                println(">> 실패 : $it")
+            }
     }
 }

@@ -18,4 +18,5 @@ sealed class DefectEntryIntent: UiIntent() {
     data class PickImages(val images: List<Uri>) : DefectEntryIntent()
     data class TakePicture(val isUsed: Boolean) : DefectEntryIntent()
     data class DeleteImage(val image: DefectImage) : DefectEntryIntent()
+    data object ClickReceipt: DefectEntryIntent()
 }

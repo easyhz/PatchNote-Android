@@ -6,8 +6,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
+import com.easyhz.patchnote.core.model.user.User
 import com.easyhz.patchnote.data.di.config.UserKey
-import com.easyhz.patchnote.data.model.sign.request.SaveUserRequest
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -21,7 +21,7 @@ class UserLocalDataSourceImpl @Inject constructor(
     private val userName = stringPreferencesKey(UserKey.USER_NAME.key)
     private val userPhone = stringPreferencesKey(UserKey.USER_PHONE.key)
 
-    override suspend fun updateUser(user: SaveUserRequest): Unit = withContext(dispatcher) {
+    override suspend fun updateUser(user: User): Unit = withContext(dispatcher) {
         dataStore.edit { preferences ->
             preferences[userId] = user.id
             preferences[userName] = user.name
@@ -29,10 +29,10 @@ class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUser(): Result<SaveUserRequest> = withContext(dispatcher) {
+    override suspend fun getUser(): Result<User> = withContext(dispatcher) {
         runCatching {
             val preferences = dataStore.data.first()
-            return@runCatching SaveUserRequest(
+            return@runCatching User(
                 id = preferences[userId] ?: throw generateNullException(UserKey.USER_ID),
                 name = preferences[userName] ?: throw generateNullException(UserKey.USER_NAME),
                 phone = preferences[userPhone] ?: throw generateNullException(UserKey.USER_PHONE)

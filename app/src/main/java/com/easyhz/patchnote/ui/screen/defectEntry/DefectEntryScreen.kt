@@ -73,7 +73,7 @@ fun DefectEntryScreen(
                     stringId = R.string.defect_entry_receipt,
                     textAlignment = Alignment.CenterEnd,
                     textColor = Primary,
-                    onClick = { }
+                    onClick = { viewModel.postIntent(DefectEntryIntent.ClickReceipt) }
                 ),
             )
         }

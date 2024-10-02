@@ -2,7 +2,7 @@ package com.easyhz.patchnote.ui.screen.sign.name
 
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
-import com.easyhz.patchnote.data.model.sign.request.SaveUserRequest
+import com.easyhz.patchnote.core.model.user.User
 import com.easyhz.patchnote.domain.usecase.sign.SaveUserUseCase
 import com.easyhz.patchnote.ui.screen.sign.name.contract.NameIntent
 import com.easyhz.patchnote.ui.screen.sign.name.contract.NameSideEffect
@@ -34,14 +34,13 @@ class SignNameViewModel @Inject constructor(
     }
 
     private fun saveUser(uid: String, phoneNumber: String) = viewModelScope.launch {
-        val userRequest = SaveUserRequest(
+        val userRequest = User(
             id = uid,
             name = currentState.nameText,
             phone = phoneNumber
         )
         saveUserUseCase.invoke(userRequest).onSuccess {
             postSideEffect { NameSideEffect.NavigateToHome }
-            println("성공")
         }.onFailure {
             println(">> 실패 $it")
         }

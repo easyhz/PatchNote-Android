@@ -4,8 +4,8 @@ import android.app.Activity
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
 import com.easyhz.patchnote.core.common.util.setHandler
+import com.easyhz.patchnote.core.common.constant.Collection.USERS
 import com.easyhz.patchnote.data.model.sign.request.SaveUserRequest
-import com.easyhz.patchnote.data.util.Collections.USERS
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential

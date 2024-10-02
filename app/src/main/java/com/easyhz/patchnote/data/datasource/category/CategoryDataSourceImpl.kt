@@ -5,9 +5,9 @@ import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
 import com.easyhz.patchnote.core.common.util.documentHandler
 import com.easyhz.patchnote.core.common.util.setHandler
 import com.easyhz.patchnote.core.model.dataEntry.DataEntryItem
+import com.easyhz.patchnote.core.common.constant.Collection.CATEGORY
+import com.easyhz.patchnote.core.common.constant.Field.CATEGORY_DATA
 import com.easyhz.patchnote.data.model.category.response.CategoryResponse
-import com.easyhz.patchnote.data.util.Collections.CATEGORY
-import com.easyhz.patchnote.data.util.Fields.CATEGORY_DATA
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
