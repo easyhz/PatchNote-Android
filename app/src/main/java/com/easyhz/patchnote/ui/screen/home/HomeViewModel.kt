@@ -20,7 +20,10 @@ class HomeViewModel @Inject constructor(
     private val tag = "HomeViewModel"
 
     override fun handleIntent(intent: HomeIntent) {
-        TODO("Not yet implemented")
+        when(intent) {
+            is HomeIntent.NavigateToDataManagement -> navigateToDataManagement()
+            is HomeIntent.NavigateToDefectEntry -> navigateToDefectEntry()
+        }
     }
 
     init {
@@ -34,5 +37,15 @@ class HomeViewModel @Inject constructor(
         }.onFailure {
             Log.e(tag, "fetchCategory : $it")
         }
+    }
+
+    /* 데이터 관리 화면 이동 */
+    private fun navigateToDataManagement() {
+        postSideEffect { HomeSideEffect.NavigateToDataManagement }
+    }
+
+    /* 하자 등록 화면 이동 */
+    private fun navigateToDefectEntry() {
+        postSideEffect { HomeSideEffect.NavigateToDefectEntry }
     }
 }

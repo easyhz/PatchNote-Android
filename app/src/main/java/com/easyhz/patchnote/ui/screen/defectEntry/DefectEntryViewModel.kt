@@ -167,6 +167,7 @@ class DefectEntryViewModel @Inject constructor(
 
     /* 하자 등록 */
     private fun createDefect() = viewModelScope.launch {
+        clearFocus()
         if (!isValidDefect()) return@launch
         val param = EntryDefectParam(
             id = Generate.randomUUID(),
@@ -181,7 +182,7 @@ class DefectEntryViewModel @Inject constructor(
         )
         createDefectUseCase.invoke(param)
             .onSuccess {
-                navigateUp()
+                navigateHome()
             }
             .onFailure {
                 Log.e(tag, "createDefect : $it")
@@ -210,6 +211,18 @@ class DefectEntryViewModel @Inject constructor(
 
     /* 뒤로가기 */
     private fun navigateUp() {
+        clearFocus()
         postSideEffect { DefectEntrySideEffect.NavigateToUp }
+    }
+
+    /* 홈으로 */
+    private fun navigateHome() {
+        clearFocus()
+        postSideEffect { DefectEntrySideEffect.NavigateToHome }
+    }
+
+    /* 포커스 해제 */
+    private fun clearFocus() {
+        postSideEffect { DefectEntrySideEffect.ClearFocus }
     }
 }

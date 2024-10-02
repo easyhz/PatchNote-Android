@@ -42,7 +42,8 @@ import com.easyhz.patchnote.ui.theme.Primary
 fun DefectEntryScreen(
     modifier: Modifier = Modifier,
     viewModel: DefectEntryViewModel = hiltViewModel(),
-    navigateToUp: () -> Unit
+    navigateToUp: () -> Unit,
+    navigateToHome: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
@@ -153,6 +154,9 @@ fun DefectEntryScreen(
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {
+            is DefectEntrySideEffect.ClearFocus -> {
+                focusManager.clearFocus()
+            }
             is DefectEntrySideEffect.NavigateToGallery -> {
                 galleryLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
@@ -161,6 +165,9 @@ fun DefectEntryScreen(
             }
             is DefectEntrySideEffect.NavigateToUp -> {
                 navigateToUp()
+            }
+            is DefectEntrySideEffect.NavigateToHome -> {
+                navigateToHome()
             }
             is DefectEntrySideEffect.ShowSnackBar -> {
                 snackBarHost.showSnackbar(
