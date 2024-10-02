@@ -29,3 +29,6 @@ val Red = Color(0xFFFF4242)
 
 @Stable
 val DimColor = Color(0xFF000000).copy(0.4f)
+
+@Stable
+val Grey900 = Color(0xFF212121)

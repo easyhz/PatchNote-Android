@@ -6,4 +6,6 @@
     <string name="category_space">공간</string>
     <string name="category_part">부위</string>
     <string name="category_work_type">공종</string>
+
+    <string name="category_empty">%1s 입력해 주세요.</string>
 </resources>

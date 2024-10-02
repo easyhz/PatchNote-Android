@@ -1,5 +1,7 @@
 package com.easyhz.patchnote.core.common.base
 
+import android.content.Context
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -62,4 +64,14 @@ abstract class BaseViewModel<State: UiState, Intent: UiIntent, SideEffect: UiSid
      * [SideEffect] 설정
      */
     fun postSideEffect(builder: () -> SideEffect) = viewModelScope.launch { _sideEffect.emit(builder()) }
+
+    fun showSnackBar(
+        context: Context,
+        @StringRes value: Int,
+        vararg formatArgs: Any,
+        sideEffect: (String) -> SideEffect
+    ) {
+        val snackBarString = context.getString(value, *formatArgs)
+        postSideEffect { sideEffect(snackBarString) }
+    }
 }

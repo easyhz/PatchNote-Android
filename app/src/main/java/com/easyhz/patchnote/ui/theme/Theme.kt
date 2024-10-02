@@ -2,11 +2,14 @@ package com.easyhz.patchnote.ui.theme
 
 import android.app.Activity
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
+
+val LocalSnackBarHostState = staticCompositionLocalOf { SnackbarHostState() }
 
 @Composable
 fun PatchNoteTheme(

@@ -7,4 +7,5 @@ sealed class DefectEntrySideEffect: UiSideEffect() {
     data object NavigateToGallery: DefectEntrySideEffect()
     data class NavigateToCamera(val uri: Uri): DefectEntrySideEffect()
     data object NavigateToUp: DefectEntrySideEffect()
+    data class ShowSnackBar(val value: String): DefectEntrySideEffect()
 }

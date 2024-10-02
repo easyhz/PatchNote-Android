@@ -33,6 +33,7 @@ import com.easyhz.patchnote.ui.screen.defectEntry.component.DefectContentField
 import com.easyhz.patchnote.ui.screen.defectEntry.component.DefectImageField
 import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntryIntent
 import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntrySideEffect
+import com.easyhz.patchnote.ui.theme.LocalSnackBarHostState
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Primary
 
@@ -46,6 +47,7 @@ fun DefectEntryScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
+    val snackBarHost = LocalSnackBarHostState.current
     val galleryLauncher =
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.PickMultipleVisualMedia(10),
@@ -159,6 +161,12 @@ fun DefectEntryScreen(
             }
             is DefectEntrySideEffect.NavigateToUp -> {
                 navigateToUp()
+            }
+            is DefectEntrySideEffect.ShowSnackBar -> {
+                snackBarHost.showSnackbar(
+                    message = sideEffect.value,
+                    withDismissAction = true
+                )
             }
         }
     }

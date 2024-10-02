@@ -1,12 +1,17 @@
 package com.easyhz.patchnote.ui.screen.defectEntry
 
+import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
+import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.base.BaseViewModel
+import com.easyhz.patchnote.core.common.error.handleError
 import com.easyhz.patchnote.core.common.util.Generate
+import com.easyhz.patchnote.core.common.util.getPostposition
 import com.easyhz.patchnote.core.common.util.search.SearchHelper
 import com.easyhz.patchnote.core.designSystem.component.bottomSheet.ImageBottomSheetType
 import com.easyhz.patchnote.core.model.category.CategoryType
@@ -25,18 +30,22 @@ import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntryState.Comp
 import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntryState.Companion.updateImages
 import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntryState.Companion.updateSearchCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DefectEntryViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val fetchCategoryUseCase: FetchCategoryUseCase,
     private val getTakePictureUriUseCase: GetTakePictureUriUseCase,
     private val createDefectUseCase: CreateDefectUseCase
 ): BaseViewModel<DefectEntryState, DefectEntryIntent, DefectEntrySideEffect>(
     initialState = DefectEntryState.init()
 ) {
+    private val tag = "DefectEntryViewModel"
     private var takePictureUri = mutableStateOf(Uri.EMPTY)
+
     override fun handleIntent(intent: DefectEntryIntent) {
         when(intent) {
             is DefectEntryIntent.ChangeEntryValueTextValue -> { onChangeEntryValueTextValue(intent.categoryType, intent.value) }
@@ -65,7 +74,10 @@ class DefectEntryViewModel @Inject constructor(
                 searchCategory(it.type, "")
             }
         }.onFailure {
-            println(">> 실패 : $it")
+            Log.e(tag, "fetchCategory : $it")
+            showSnackBar(context, it.handleError()) { value ->
+                DefectEntrySideEffect.ShowSnackBar(value)
+            }
         }
     }
 
@@ -94,10 +106,14 @@ class DefectEntryViewModel @Inject constructor(
     /* 포커스 해지 되면 등록된 카테고리에 있는지 확인 후 없으면 빈칸으로 리셋 */
     private fun onChangeFocusState(categoryType: CategoryType, focusState: FocusState) {
         if (focusState.isFocused) return
-        if (categoryType == CategoryType.BUILDING || categoryType == CategoryType.UNIT) return
-        val isExistCategoryList = currentState.category.getValue(categoryType)?.values?.contains(currentState.entryItem[categoryType]?.text)
-        if (isExistCategoryList == true) return
+        if (isExistCategoryList(categoryType)) return
         reduce { updateEntryItemValue(categoryType, TextFieldValue("")) }
+    }
+
+    /* 카테고리에 있는지 확인 */
+    private fun isExistCategoryList(categoryType: CategoryType): Boolean {
+        if (categoryType == CategoryType.BUILDING || categoryType == CategoryType.UNIT) return true
+        return currentState.category.getValue(categoryType)?.values?.contains(currentState.entryItem[categoryType]?.text) == true
     }
 
     /* 이미지 바텀시트 상태 변경 */
@@ -126,7 +142,10 @@ class DefectEntryViewModel @Inject constructor(
                 postSideEffect { DefectEntrySideEffect.NavigateToCamera(it) }
             }
             .onFailure {
-                println(">> 실패 : $it")
+                Log.e(tag, "launchCamera : $it")
+                showSnackBar(context, it.handleError()) { value ->
+                    DefectEntrySideEffect.ShowSnackBar(value)
+                }
             }
     }
 
@@ -148,6 +167,7 @@ class DefectEntryViewModel @Inject constructor(
 
     /* 하자 등록 */
     private fun createDefect() = viewModelScope.launch {
+        if (!isValidDefect()) return@launch
         val param = EntryDefectParam(
             id = Generate.randomUUID(),
             site = currentState.entryItem[CategoryType.SITE]?.text.orEmpty(),
@@ -164,8 +184,28 @@ class DefectEntryViewModel @Inject constructor(
                 navigateUp()
             }
             .onFailure {
-                println(">> 실패 : $it")
+                Log.e(tag, "createDefect : $it")
+                showSnackBar(context, it.handleError()) { value ->
+                    DefectEntrySideEffect.ShowSnackBar(value)
+                }
             }
+    }
+
+    /* 하자 등록 유효성 검사 */
+    private fun isValidDefect(): Boolean {
+        val invalidEntry = currentState.entryItem.entries
+            .firstOrNull { (type, value) -> value.text.isBlank() || !isExistCategoryList(type) }
+        invalidEntry?.let { (type, _) ->
+            val valueString = context.getString(type.nameId) + getPostposition(type)
+            showSnackBar(
+                context = context,
+                value = R.string.category_empty,
+                valueString
+            ) { DefectEntrySideEffect.ShowSnackBar(it) }
+            return false
+        }
+
+        return true
     }
 
     /* 뒤로가기 */
