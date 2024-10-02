@@ -1,8 +1,5 @@
 package com.easyhz.patchnote.ui.navigation.defect
 
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -15,10 +12,10 @@ internal fun NavGraphBuilder.defectGraph(
     navController: NavController
 ) {
     composable<DefectEntry>(
-        enterTransition = { enterSlide(SlideDirection.Start) },
-        exitTransition = { fadeOut(animationSpec = tween(300)) },
-        popEnterTransition = { fadeIn(animationSpec = tween(300)) },
-        popExitTransition = { exitSlide(SlideDirection.End) }
+        enterTransition = { enterSlide(SlideDirection.Up) },
+        exitTransition = { exitSlide(SlideDirection.Up) },
+        popEnterTransition = { enterSlide(SlideDirection.Down) },
+        popExitTransition = { exitSlide(SlideDirection.Down) }
     ) {
         DefectEntryScreen(
             navigateToUp = navController::navigateUp
