@@ -67,7 +67,7 @@ data class DefectData(
     @set:PropertyName("afterImageURLs")
     var afterImageUrls: List<String> = emptyList(),
     @PropertyName("completionDate")
-    val completionDate: Timestamp = Timestamp.now(),
+    val completionDate: Timestamp? = null,
     @get:PropertyName("requesterID")
     @set:PropertyName("requesterID")
     var requesterId: String = "",
@@ -79,9 +79,9 @@ data class DefectData(
     val requesterPhone: String = "",
     @get:PropertyName("workerID")
     @set:PropertyName("workerID")
-    var workerId: String = "",
+    var workerId: String? = null,
     @PropertyName("workerName")
-    val workerName: String = "",
+    val workerName: String? = null,
     @PropertyName("workerPhone")
-    val workerPhone: String = ""
+    val workerPhone: String? = null,
 )
