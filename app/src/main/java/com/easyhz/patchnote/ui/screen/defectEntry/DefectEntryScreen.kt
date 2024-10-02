@@ -64,7 +64,7 @@ fun DefectEntryScreen(
                     iconId = R.drawable.ic_close_leading,
                     iconAlignment = Alignment.CenterStart,
                     tint = MainText,
-                    onClick = { }
+                    onClick = { viewModel.postIntent(DefectEntryIntent.NavigateToUp) }
                 ),
                 title = TopBarType.TopBarTitle(
                     stringId = R.string.defect_entry_title
@@ -156,6 +156,9 @@ fun DefectEntryScreen(
             }
             is DefectEntrySideEffect.NavigateToCamera -> {
                 cameraLauncher.launch(sideEffect.uri)
+            }
+            is DefectEntrySideEffect.NavigateToUp -> {
+                navigateToUp()
             }
         }
     }

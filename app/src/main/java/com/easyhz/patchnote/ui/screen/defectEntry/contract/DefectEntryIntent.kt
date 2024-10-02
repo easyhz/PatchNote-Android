@@ -19,4 +19,5 @@ sealed class DefectEntryIntent: UiIntent() {
     data class TakePicture(val isUsed: Boolean) : DefectEntryIntent()
     data class DeleteImage(val image: DefectImage) : DefectEntryIntent()
     data object ClickReceipt: DefectEntryIntent()
+    data object NavigateToUp: DefectEntryIntent()
 }

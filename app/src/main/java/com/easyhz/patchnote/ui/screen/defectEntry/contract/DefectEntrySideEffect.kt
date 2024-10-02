@@ -6,4 +6,5 @@ import com.easyhz.patchnote.core.common.base.UiSideEffect
 sealed class DefectEntrySideEffect: UiSideEffect() {
     data object NavigateToGallery: DefectEntrySideEffect()
     data class NavigateToCamera(val uri: Uri): DefectEntrySideEffect()
+    data object NavigateToUp: DefectEntrySideEffect()
 }

@@ -49,6 +49,7 @@ class DefectEntryViewModel @Inject constructor(
             is DefectEntryIntent.TakePicture -> { updateTakePicture(intent.isUsed) }
             is DefectEntryIntent.DeleteImage -> { deleteEntryImage(intent.image) }
             is DefectEntryIntent.ClickReceipt -> { createDefect() }
+            is DefectEntryIntent.NavigateToUp -> { navigateUp() }
         }
     }
 
@@ -160,10 +161,15 @@ class DefectEntryViewModel @Inject constructor(
         )
         createDefectUseCase.invoke(param)
             .onSuccess {
-                println(">> 성공 : $it")
+                navigateUp()
             }
             .onFailure {
                 println(">> 실패 : $it")
             }
+    }
+
+    /* 뒤로가기 */
+    private fun navigateUp() {
+        postSideEffect { DefectEntrySideEffect.NavigateToUp }
     }
 }

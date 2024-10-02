@@ -18,7 +18,8 @@ import com.easyhz.patchnote.core.model.home.DefectItem
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    navigateToDataManagement: () -> Unit
+    navigateToDataManagement: () -> Unit,
+    navigateToDefectEntry: () -> Unit
 ) {
     PatchNoteScaffold(
         modifier = modifier,
@@ -35,7 +36,7 @@ fun HomeScreen(
             }
         },
         floatingActionButton = {
-            HomeFloatingActionButton() { }
+            HomeFloatingActionButton { navigateToDefectEntry() }
         }
     ) { innerPadding ->
 //        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

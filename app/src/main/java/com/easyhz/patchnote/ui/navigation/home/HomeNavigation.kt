@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.easyhz.patchnote.ui.navigation.dataManagement.navigateToDataManagement
+import com.easyhz.patchnote.ui.navigation.defect.navigateToDefectEntry
 import com.easyhz.patchnote.ui.screen.home.HomeScreen
 
 internal fun NavGraphBuilder.homeGraph(
@@ -12,7 +13,8 @@ internal fun NavGraphBuilder.homeGraph(
 ) {
     composable<Home> {
         HomeScreen(
-            navigateToDataManagement = navController::navigateToDataManagement
+            navigateToDataManagement = navController::navigateToDataManagement,
+            navigateToDefectEntry = navController::navigateToDefectEntry
         )
     }
 }
