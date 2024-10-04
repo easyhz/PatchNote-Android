@@ -22,7 +22,7 @@ fun EntryDefect.toData(): DefectData = DefectData(
     beforeImageSizes = beforeImageSizes.map { it.toData() },
     beforeImageUrls = beforeImageUrls,
     requesterId = requesterId,
-    requesterDate = Timestamp.now(),
+    requestDate = Timestamp.now(),
     requesterName = requesterName,
     requesterPhone = requesterPhone,
 )
@@ -49,6 +49,6 @@ fun DefectData.toModel(): DefectItem = DefectItem(
     afterDescription = afterDescription,
     afterImageSizes = afterImageSizes.map { it.toModel() },
     afterImageUrls = afterImageUrls,
-    requesterDate = DateFormatUtil.formatTimestampToDateString(requesterDate),
+    requestDate = DateFormatUtil.formatTimestampToDateString(requestDate),
     completionDate = DateFormatUtil.formatTimestampToDateNullString(completionDate),
 )

@@ -82,7 +82,7 @@ fun HomeCard(
                     color = MainText
                 )
                 Text(
-                    text = defectItem.requesterDate,
+                    text = defectItem.requestDate,
                     style = Regular14,
                     color = SubText
                 )
@@ -166,7 +166,7 @@ private fun HomeCardPreview() {
             part = "part",
             workType = "workType",
             progress = DefectProgress.REQUESTED,
-            requesterDate = "2021-10-01",
+            requestDate = "2021-10-01",
             beforeDescription = "description",
             afterDescription = "",
             afterImageUrls = emptyList(),

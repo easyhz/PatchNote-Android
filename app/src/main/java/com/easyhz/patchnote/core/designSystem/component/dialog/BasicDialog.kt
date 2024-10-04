@@ -125,7 +125,7 @@ private fun DialogButtonPreview() {
 //    device = "spec:shape=Normal,width=240,height=640, unit=dp, dpi= 480"
 )
 @Composable
-fun MDSModalPreview() {
+fun BasicDialogPreview() {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {

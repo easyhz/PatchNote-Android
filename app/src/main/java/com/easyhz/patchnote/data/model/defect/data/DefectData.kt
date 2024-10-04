@@ -29,7 +29,7 @@ import com.google.firebase.firestore.PropertyName
  * @property workerId 처리자 id
  * @property workerName 처리자 이름
  * @property workerPhone 처리자 전화번호
- * @property requesterDate 접수일
+ * @property requestDate 접수일
  * @property completionDate 처리 완료 날짜
  */
 data class DefectData(
@@ -80,8 +80,8 @@ data class DefectData(
     val workerName: String? = null,
     @PropertyName("workerPhone")
     val workerPhone: String? = null,
-    @PropertyName("requesterDate")
-    val requesterDate: Timestamp = Timestamp.now(),
+    @PropertyName("requestDate")
+    val requestDate: Timestamp = Timestamp.now(),
     @PropertyName("completionDate")
     val completionDate: Timestamp? = null,
 )
