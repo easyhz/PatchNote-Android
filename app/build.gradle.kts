@@ -114,4 +114,7 @@ dependencies {
     // datastore
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.datastore.core)
+
+    // lottie
+    implementation(libs.lottie)
 }
