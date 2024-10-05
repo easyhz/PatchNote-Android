@@ -16,13 +16,11 @@ import com.easyhz.patchnote.ui.screen.defect.contract.DefectState
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectState.Companion.updateEntryItemValue
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectState.Companion.updateSearchCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DefectViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val fetchCategoryUseCase: FetchCategoryUseCase,
 ): BaseViewModel<DefectState, DefectIntent, DefectSideEffect>(
     initialState = DefectState.init()

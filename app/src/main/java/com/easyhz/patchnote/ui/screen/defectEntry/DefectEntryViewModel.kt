@@ -16,7 +16,6 @@ import com.easyhz.patchnote.core.model.category.CategoryType
 import com.easyhz.patchnote.core.model.defect.EntryDefectParam
 import com.easyhz.patchnote.core.model.image.DefectImage
 import com.easyhz.patchnote.core.model.image.toDefectImages
-import com.easyhz.patchnote.domain.usecase.category.FetchCategoryUseCase
 import com.easyhz.patchnote.domain.usecase.defect.CreateDefectUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetTakePictureUriUseCase
 import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntryIntent
