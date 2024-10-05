@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
+import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.PlaceholderText
 import com.easyhz.patchnote.ui.theme.Red
@@ -35,14 +36,15 @@ import com.easyhz.patchnote.ui.theme.SubBackground
 fun BasicDialog(
     modifier: Modifier = Modifier,
     title: String,
-    content: String,
-    positiveButton: BasicDialogButton,
-    negativeButton: BasicDialogButton,
-    onDismissRequest: () -> Unit = negativeButton.onClick
+    content: String?,
+    positiveButton: BasicDialogButton?,
+    negativeButton: BasicDialogButton?,
+    onDismissRequest: () -> Unit = negativeButton?.onClick ?: { }
 ) {
     val innerPadding = 12.dp
     val buttonMinWidth = 132.dp
     val buttonSpacing = 12.dp
+    val columSpace = if(content == null) 32.dp else 24.dp
 
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -53,10 +55,10 @@ fun BasicDialog(
                 .widthIn(max = innerPadding * 2 + buttonMinWidth * 2 + buttonSpacing + 32.dp)
                 .padding(horizontal = 20.dp)
                 .clip(RoundedCornerShape(12.dp))
-                .background(Color.White)
+                .background(MainBackground)
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+            verticalArrangement = Arrangement.spacedBy(columSpace)
         ) {
             Text(
                 modifier = Modifier.padding(top = 20.dp),
@@ -65,23 +67,29 @@ fun BasicDialog(
                 style = SemiBold20,
                 color = MainText
             )
-            Text(
-                text = content,
-                textAlign = TextAlign.Center,
-                style = SemiBold16,
-                color = PlaceholderText
-            )
+            content?.let {
+                Text(
+                    text = it,
+                    textAlign = TextAlign.Center,
+                    style = SemiBold16,
+                    color = PlaceholderText
+                )
+            }
             Row(
                 horizontalArrangement = Arrangement.spacedBy(buttonSpacing)
             ) {
-                DialogButton(
-                    modifier = Modifier.widthIn(min = buttonMinWidth).weight(1f),
-                    dialogButton = negativeButton
-                )
-                DialogButton(
-                    modifier = Modifier.widthIn(min = buttonMinWidth).weight(1f),
-                    dialogButton = positiveButton
-                )
+                negativeButton?.let {
+                    DialogButton(
+                        modifier = Modifier.widthIn(min = buttonMinWidth).weight(1f),
+                        dialogButton = it
+                    )
+                }
+                positiveButton?.let {
+                    DialogButton(
+                        modifier = Modifier.widthIn(min = buttonMinWidth).weight(1f),
+                        dialogButton = it
+                    )
+                }
             }
         }
     }
@@ -143,6 +151,27 @@ fun BasicDialogPreview() {
                 backgroundColor = SubBackground,
                 onClick = {}
             )
+        )
+    }
+}
+@Preview(
+    showBackground = true,
+)
+@Composable
+fun BasicDialogPreview2() {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        BasicDialog(
+            title = "하자 접수에 실패했습니다",
+            content = null,
+            positiveButton = BasicDialogButton(
+                text = "삭제",
+                style = SemiBold18.copy(color = Color.White),
+                backgroundColor = Red,
+                onClick = {}
+            ),
+            negativeButton = null
         )
     }
 }
