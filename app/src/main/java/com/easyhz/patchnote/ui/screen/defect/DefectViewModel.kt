@@ -1,6 +1,5 @@
 package com.easyhz.patchnote.ui.screen.defect
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.text.input.TextFieldValue
