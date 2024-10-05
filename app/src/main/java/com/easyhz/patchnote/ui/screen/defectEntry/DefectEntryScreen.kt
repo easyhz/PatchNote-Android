@@ -28,6 +28,9 @@ import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffo
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
 import com.easyhz.patchnote.core.designSystem.util.extension.noRippleClickable
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
+import com.easyhz.patchnote.ui.screen.defect.DefectViewModel
+import com.easyhz.patchnote.ui.screen.defect.contract.DefectIntent
+import com.easyhz.patchnote.ui.screen.defect.contract.DefectSideEffect
 import com.easyhz.patchnote.ui.screen.defectEntry.component.DefectCategoryField
 import com.easyhz.patchnote.ui.screen.defectEntry.component.DefectContentField
 import com.easyhz.patchnote.ui.screen.defectEntry.component.DefectImageField
@@ -42,10 +45,12 @@ import com.easyhz.patchnote.ui.theme.Primary
 fun DefectEntryScreen(
     modifier: Modifier = Modifier,
     viewModel: DefectEntryViewModel = hiltViewModel(),
+    defectViewModel: DefectViewModel = hiltViewModel(),
     navigateToUp: () -> Unit,
     navigateToHome: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val defectState by defectViewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
     val snackBarHost = LocalSnackBarHostState.current
@@ -76,7 +81,7 @@ fun DefectEntryScreen(
                     stringId = R.string.defect_entry_receipt,
                     textAlignment = Alignment.CenterEnd,
                     textColor = Primary,
-                    onClick = { viewModel.postIntent(DefectEntryIntent.ClickReceipt) }
+                    onClick = { defectViewModel.postIntent(DefectIntent.ValidateEntryItem) }
                 ),
             )
         }
@@ -92,31 +97,31 @@ fun DefectEntryScreen(
                 .padding(vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            uiState.entryItem.forEach { (category, value) ->
+            defectState.entryItem.forEach { (category, value) ->
                 DefectCategoryField(
                     modifier = Modifier.padding(horizontal = 20.dp),
                     value = value,
                     onValueChange = {
-                        viewModel.postIntent(
-                            DefectEntryIntent.ChangeEntryValueTextValue(
+                        defectViewModel.postIntent(
+                            DefectIntent.ChangeEntryValueTextValue(
                                 categoryType = category,
                                 value = it
                             )
                         )
                     },
                     category = category,
-                    dropDownList = uiState.searchCategory.getOrDefault(category, emptyList()),
+                    dropDownList = defectState.searchCategory.getOrDefault(category, emptyList()),
                     onClickDropDownList = {
-                        viewModel.postIntent(
-                            DefectEntryIntent.ClickCategoryDropDown(
+                        defectViewModel.postIntent(
+                            DefectIntent.ClickCategoryDropDown(
                                 categoryType = category,
                                 value = it
                             )
                         )
                     },
                     onFocusChanged = {
-                        viewModel.postIntent(
-                            DefectEntryIntent.ChangeFocusState(
+                        defectViewModel.postIntent(
+                            DefectIntent.ChangeFocusState(
                                 categoryType = category,
                                 focusState = it
                             )
@@ -174,6 +179,14 @@ fun DefectEntryScreen(
                     message = sideEffect.value,
                     withDismissAction = true
                 )
+            }
+        }
+    }
+
+    defectViewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
+        when(sideEffect) {
+            is DefectSideEffect.ValidateEntryItem -> {
+                viewModel.postIntent(DefectEntryIntent.ClickReceipt(defectState.entryItem, sideEffect.invalidEntry))
             }
         }
     }
