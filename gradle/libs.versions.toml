@@ -26,6 +26,7 @@ serialization = "1.6.3"
 glide = "1.0.0-beta01"
 androidxDataStore = "1.1.1"
 lottie = "6.4.0"
+desugaring = "2.1.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -62,6 +63,7 @@ glide = { group = "com.github.bumptech.glide", name = "compose", version.ref = "
 androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDataStore" }
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "androidxDataStore" }
 lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie"}
+desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugaring" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
