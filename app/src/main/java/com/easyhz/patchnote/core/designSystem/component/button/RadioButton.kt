@@ -5,7 +5,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
@@ -20,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.easyhz.patchnote.core.designSystem.component.textField.TextFieldContainerTitle
 import com.easyhz.patchnote.core.designSystem.util.button.RadioInterface
 import com.easyhz.patchnote.core.designSystem.util.extension.noRippleClickable
 import com.easyhz.patchnote.core.model.filter.FilterProgress
@@ -28,33 +33,46 @@ import com.easyhz.patchnote.ui.theme.Medium16
 import com.easyhz.patchnote.ui.theme.Primary
 import com.easyhz.patchnote.ui.theme.UnselectedColor
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun <T> BasicRadioButton(
     modifier: Modifier = Modifier,
-    items: List<T>,
+    title: String? = null,
+    items: Array<T>,
     selected: Int,
     onClick: (Int) -> Unit,
 ) where T: RadioInterface {
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        items.forEachIndexed { index, info ->
-            Row(
-                modifier = Modifier.noRippleClickable { onClick(index) },
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                PatchNoteRadioButton(
-                    selected = index == selected,
-                    onClick = { onClick(index) },
-                )
-                Text(
-                    text = stringResource(id = info.titleId),
-                    style = Medium16,
-                    color = MainText
-                )
+        title?.let {
+            TextFieldContainerTitle(
+                title = title,
+            )
+        }
+        FlowRow(
+            modifier = Modifier.padding(vertical = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items.forEachIndexed { index, info ->
+                Row(
+                    modifier = Modifier.noRippleClickable { onClick(index) },
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    PatchNoteRadioButton(
+                        selected = index == selected,
+                        onClick = { onClick(index) },
+                    )
+                    Text(
+                        text = stringResource(id = info.titleId),
+                        style = Medium16,
+                        color = MainText
+                    )
+                }
             }
         }
     }
@@ -83,7 +101,9 @@ fun PatchNoteRadioButton(
 private fun BasicRadioButtonPreview() {
     var state by remember { mutableIntStateOf(0) }
     BasicRadioButton(
-        items = FilterProgress.entries,
+        modifier = Modifier.fillMaxWidth(),
+        title = "완료여부",
+        items = enumValues<FilterProgress>(),
         selected = state,
         onClick = {
             state = it
