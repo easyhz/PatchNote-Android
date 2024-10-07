@@ -3,7 +3,9 @@ package com.easyhz.patchnote.ui.screen.defectEntry
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.R
@@ -40,6 +42,7 @@ class DefectEntryViewModel @Inject constructor(
 ) {
     private val tag = "DefectEntryViewModel"
     private var takePictureUri = mutableStateOf(Uri.EMPTY)
+    private var hasUploadHistory by mutableStateOf(false)
 
     override fun handleIntent(intent: DefectEntryIntent) {
         when(intent) {
@@ -50,7 +53,7 @@ class DefectEntryViewModel @Inject constructor(
             is DefectEntryIntent.TakePicture -> { updateTakePicture(intent.isUsed) }
             is DefectEntryIntent.DeleteImage -> { deleteEntryImage(intent.image) }
             is DefectEntryIntent.ClickReceipt -> { createDefect(intent.entryItem, intent.invalidEntry) }
-            is DefectEntryIntent.NavigateToUp -> { navigateUp() }
+            is DefectEntryIntent.NavigateToUp -> { handleNavigateToUp() }
             is DefectEntryIntent.ShowError -> { setDialog(intent.message) }
             is DefectEntryIntent.SetLoading -> { setLoading(intent.isLoading) }
         }
@@ -128,6 +131,7 @@ class DefectEntryViewModel @Inject constructor(
                         action = DialogAction.CLEAR
                     )
                 )
+                hasUploadHistory = true
             }
             .onFailure {
                 Log.e(tag, "createDefect : $it")
@@ -158,15 +162,20 @@ class DefectEntryViewModel @Inject constructor(
         return true
     }
 
+    /* 뒤로가기 핸들 */
+    private fun handleNavigateToUp() {
+        clearFocus()
+        if (hasUploadHistory) navigateHome()
+        else navigateUp()
+    }
+
     /* 뒤로가기 */
     private fun navigateUp() {
-        clearFocus()
         postSideEffect { DefectEntrySideEffect.NavigateToUp }
     }
 
     /* 홈으로 */
     private fun navigateHome() {
-        clearFocus()
         postSideEffect { DefectEntrySideEffect.NavigateToHome }
     }
 
