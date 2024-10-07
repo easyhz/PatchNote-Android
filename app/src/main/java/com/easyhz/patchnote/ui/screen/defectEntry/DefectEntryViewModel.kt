@@ -14,6 +14,8 @@ import com.easyhz.patchnote.core.common.util.getPostposition
 import com.easyhz.patchnote.core.designSystem.component.bottomSheet.ImageBottomSheetType
 import com.easyhz.patchnote.core.model.category.CategoryType
 import com.easyhz.patchnote.core.model.defect.EntryDefectParam
+import com.easyhz.patchnote.core.model.error.ErrorAction
+import com.easyhz.patchnote.core.model.error.ErrorMessage
 import com.easyhz.patchnote.core.model.image.DefectImage
 import com.easyhz.patchnote.core.model.image.toDefectImages
 import com.easyhz.patchnote.domain.usecase.defect.CreateDefectUseCase
@@ -25,6 +27,7 @@ import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntryState.Comp
 import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntryState.Companion.updateImages
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -49,6 +52,7 @@ class DefectEntryViewModel @Inject constructor(
             is DefectEntryIntent.DeleteImage -> { deleteEntryImage(intent.image) }
             is DefectEntryIntent.ClickReceipt -> { createDefect(intent.entryItem, intent.invalidEntry) }
             is DefectEntryIntent.NavigateToUp -> { navigateUp() }
+            is DefectEntryIntent.ShowError -> { setDialog(intent.message) }
         }
     }
 
@@ -79,9 +83,7 @@ class DefectEntryViewModel @Inject constructor(
             }
             .onFailure {
                 Log.e(tag, "launchCamera : $it")
-                showSnackBar(context, it.handleError()) { value ->
-                    DefectEntrySideEffect.ShowSnackBar(value)
-                }
+                setDialog(ErrorMessage(title = context.getString(it.handleError())))
             }
     }
 
@@ -122,9 +124,7 @@ class DefectEntryViewModel @Inject constructor(
             }
             .onFailure {
                 Log.e(tag, "createDefect : $it")
-                showSnackBar(context, it.handleError()) { value ->
-                    DefectEntrySideEffect.ShowSnackBar(value)
-                }
+                setDialog(ErrorMessage(title = context.getString(R.string.error_create_defect_failure)))
             }
     }
 
@@ -132,11 +132,9 @@ class DefectEntryViewModel @Inject constructor(
     private fun isValidDefect(invalidEntry: CategoryType?): Boolean {
         invalidEntry?.let { type ->
             val valueString = context.getString(type.nameId) + getPostposition(type)
-            showSnackBar(
-                context = context,
-                value = R.string.category_empty,
-                valueString
-            ) { DefectEntrySideEffect.ShowSnackBar(it) }
+            setDialog(
+                ErrorMessage(title = context.getString(R.string.category_empty, valueString))
+            )
             return false
         }
 
@@ -158,5 +156,17 @@ class DefectEntryViewModel @Inject constructor(
     /* 포커스 해제 */
     private fun clearFocus() {
         postSideEffect { DefectEntrySideEffect.ClearFocus }
+    }
+
+    /* 에러 다이얼로그 */
+    private fun setDialog(message: ErrorMessage?) {
+        val action = message?.let { null } ?: currentState.errorMessage?.action
+        reduce { copy(errorMessage = message) }
+        action?.let {
+            when(it) {
+                ErrorAction.NAVIGATE_UP -> navigateUp()
+                else -> { }
+            }
+        }
     }
 }

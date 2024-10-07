@@ -1,13 +1,17 @@
 package com.easyhz.patchnote.ui.screen.defect
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
+import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.util.search.SearchHelper
 import com.easyhz.patchnote.core.model.category.CategoryType
 import com.easyhz.patchnote.core.model.category.getValue
+import com.easyhz.patchnote.core.model.error.ErrorAction
+import com.easyhz.patchnote.core.model.error.ErrorMessage
 import com.easyhz.patchnote.domain.usecase.category.FetchCategoryUseCase
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectIntent
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectSideEffect
@@ -15,11 +19,14 @@ import com.easyhz.patchnote.ui.screen.defect.contract.DefectState
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectState.Companion.updateEntryItemValue
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectState.Companion.updateSearchCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DefectViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val fetchCategoryUseCase: FetchCategoryUseCase,
 ): BaseViewModel<DefectState, DefectIntent, DefectSideEffect>(
     initialState = DefectState.init()
@@ -58,6 +65,13 @@ class DefectViewModel @Inject constructor(
             }
         }.onFailure {
             Log.e(tag, "fetchCategory : $it")
+            delay(700)
+            val message = ErrorMessage(
+                title = context.getString(R.string.error_fetch_category_title),
+                message = context.getString(R.string.error_fetch_category_message),
+                action = ErrorAction.NAVIGATE_UP
+            )
+            sendError(message = message)
         }
     }
 
@@ -106,5 +120,10 @@ class DefectViewModel @Inject constructor(
     /* 유효 여부 */
     private fun sendValid(invalidEntry: CategoryType?) {
         postSideEffect { DefectSideEffect.ValidateEntryItem(invalidEntry) }
+    }
+
+    /* error */
+    private fun sendError(message: ErrorMessage) {
+        postSideEffect { DefectSideEffect.SendError(message) }
     }
 }

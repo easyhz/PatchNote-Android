@@ -39,7 +39,7 @@ fun BasicDialog(
     content: String?,
     positiveButton: BasicDialogButton?,
     negativeButton: BasicDialogButton?,
-    onDismissRequest: () -> Unit = negativeButton?.onClick ?: { }
+    onDismissRequest: () -> Unit = negativeButton?.onClick ?: positiveButton?.onClick ?: { }
 ) {
     val innerPadding = 12.dp
     val buttonMinWidth = 132.dp
