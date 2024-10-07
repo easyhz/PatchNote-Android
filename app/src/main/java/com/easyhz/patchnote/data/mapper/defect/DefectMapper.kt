@@ -25,6 +25,7 @@ fun EntryDefect.toData(): DefectData = DefectData(
     requestDate = Timestamp.now(),
     requesterName = requesterName,
     requesterPhone = requesterPhone,
+    search = this.exportSearch()
 )
 
 fun DefectData.toModel(): DefectItem = DefectItem(
@@ -51,4 +52,5 @@ fun DefectData.toModel(): DefectItem = DefectItem(
     afterImageUrls = afterImageUrls,
     requestDate = DateFormatUtil.formatTimestampToDateString(requestDate),
     completionDate = DateFormatUtil.formatTimestampToDateNullString(completionDate),
+    search = search
 )

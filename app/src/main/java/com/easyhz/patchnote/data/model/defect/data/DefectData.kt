@@ -31,6 +31,7 @@ import com.google.firebase.firestore.PropertyName
  * @property workerPhone 처리자 전화번호
  * @property requestDate 접수일
  * @property completionDate 처리 완료 날짜
+ * @property search 필터 쿼리를 위한 서치 필드 ( 검색 항목 리스트 )
  */
 data class DefectData(
     @PropertyName("id")
@@ -84,4 +85,6 @@ data class DefectData(
     val requestDate: Timestamp = Timestamp.now(),
     @PropertyName("completionDate")
     val completionDate: Timestamp? = null,
+    @PropertyName("search")
+    val search: List<String> = emptyList()
 )

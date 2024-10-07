@@ -180,7 +180,8 @@ private fun HomeCardPreview() {
             thumbnailUrl = "",
             beforeImageSizes = emptyList(),
             afterImageSizes = emptyList(),
-            requesterId = ""
+            requesterId = "",
+            search = emptyList()
         )
     )
 

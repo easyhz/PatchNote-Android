@@ -18,7 +18,21 @@ data class EntryDefect(
     val requesterId: String,
     val requesterName: String,
     val requesterPhone: String,
-)
+) {
+
+    fun exportSearch(): List<String> {
+        return listOf(
+            "site=$site",
+            "building=$building",
+            "unit=$unit",
+            "space=$space",
+            "part=$part",
+            "workType=$workType",
+            "requesterName=$requesterName",
+        )
+    }
+
+}
 
 data class EntryDefectParam(
     val id: String,

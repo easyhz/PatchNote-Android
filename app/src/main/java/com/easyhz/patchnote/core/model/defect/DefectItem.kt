@@ -28,6 +28,7 @@ import com.easyhz.patchnote.core.model.image.ImageSize
  * @property workerPhone 처리자 전화번호
  * @property requestDate 접수일
  * @property completionDate 처리 완료 날짜
+ * @property search 필터 쿼리를 위한 서치 필드 ( 검색 항목 리스트 )
  */
 data class DefectItem(
     val id: String,
@@ -53,4 +54,5 @@ data class DefectItem(
     val workerPhone: String?,
     val requestDate: String,
     val completionDate: String?,
+    val search: List<String>
 )
