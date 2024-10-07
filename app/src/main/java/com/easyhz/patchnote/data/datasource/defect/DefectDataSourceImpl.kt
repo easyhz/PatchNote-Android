@@ -1,11 +1,11 @@
 package com.easyhz.patchnote.data.datasource.defect
 
-import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
-import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
-import com.easyhz.patchnote.core.common.util.setHandler
 import com.easyhz.patchnote.core.common.constant.Collection.DEFECT
 import com.easyhz.patchnote.core.common.constant.Field.REQUEST_DATE
+import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
+import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
 import com.easyhz.patchnote.core.common.util.fetchHandler
+import com.easyhz.patchnote.core.common.util.setHandler
 import com.easyhz.patchnote.data.model.defect.data.DefectData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query.Direction
