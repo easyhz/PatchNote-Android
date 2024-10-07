@@ -1,6 +1,8 @@
 package com.easyhz.patchnote.core.designSystem.component.loading
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,7 +43,9 @@ fun LoadingIndicator(
         focusManager.clearFocus()
     }
     AnimatedVisibility(
-        visible = isLoading
+        visible = isLoading,
+        enter = fadeIn(),
+        exit = fadeOut()
     ) {
         Box(
             modifier = modifier.fillMaxSize().noRippleClickable {  }.background(MainBackground.copy(0.5f)),

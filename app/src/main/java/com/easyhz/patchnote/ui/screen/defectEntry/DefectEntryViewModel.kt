@@ -53,6 +53,7 @@ class DefectEntryViewModel @Inject constructor(
             is DefectEntryIntent.ClickReceipt -> { createDefect(intent.entryItem, intent.invalidEntry) }
             is DefectEntryIntent.NavigateToUp -> { navigateUp() }
             is DefectEntryIntent.ShowError -> { setDialog(intent.message) }
+            is DefectEntryIntent.SetLoading -> { setLoading(intent.isLoading) }
         }
     }
 
@@ -108,6 +109,7 @@ class DefectEntryViewModel @Inject constructor(
         clearFocus()
         if (!isValidDefect(invalidEntry)) return@launch
         if (!isValidImage()) return@launch
+        setLoading(true)
         val param = EntryDefectParam(
             id = Generate.randomUUID(),
             site = entryItem[CategoryType.SITE]?.text.orEmpty(),
@@ -126,6 +128,8 @@ class DefectEntryViewModel @Inject constructor(
             .onFailure {
                 Log.e(tag, "createDefect : $it")
                 setDialog(ErrorMessage(title = context.getString(R.string.error_create_defect_failure)))
+            }.also {
+                setLoading(false)
             }
     }
 
@@ -179,5 +183,10 @@ class DefectEntryViewModel @Inject constructor(
                 else -> { }
             }
         }
+    }
+
+    /* 로딩 */
+    private fun setLoading(isLoading: Boolean) {
+        reduce { copy(isLoading = isLoading) }
     }
 }

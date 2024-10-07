@@ -18,4 +18,5 @@ sealed class DefectEntryIntent: UiIntent() {
     data class ClickReceipt(val entryItem: LinkedHashMap<CategoryType, TextFieldValue>, val invalidEntry: CategoryType?): DefectEntryIntent()
     data object NavigateToUp: DefectEntryIntent()
     data class ShowError(val message: ErrorMessage?): DefectEntryIntent()
+    data class SetLoading(val isLoading: Boolean): DefectEntryIntent()
 }

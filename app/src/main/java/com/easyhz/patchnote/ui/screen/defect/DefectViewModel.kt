@@ -72,6 +72,8 @@ class DefectViewModel @Inject constructor(
                 action = ErrorAction.NAVIGATE_UP
             )
             sendError(message = message)
+        }.also {
+            sendLoadingState()
         }
     }
 
@@ -125,5 +127,10 @@ class DefectViewModel @Inject constructor(
     /* error */
     private fun sendError(message: ErrorMessage) {
         postSideEffect { DefectSideEffect.SendError(message) }
+    }
+
+    /* loading */
+    private fun sendLoadingState() {
+        postSideEffect { DefectSideEffect.SendLoading(false) }
     }
 }

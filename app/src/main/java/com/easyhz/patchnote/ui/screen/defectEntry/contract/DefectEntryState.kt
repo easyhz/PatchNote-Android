@@ -5,6 +5,7 @@ import com.easyhz.patchnote.core.model.error.ErrorMessage
 import com.easyhz.patchnote.core.model.image.DefectImage
 
 data class DefectEntryState(
+    val isLoading: Boolean,
     val entryContent: String,
     val images: List<DefectImage>,
     val isShowImageBottomSheet: Boolean,
@@ -12,6 +13,7 @@ data class DefectEntryState(
 ) : UiState() {
     companion object {
         fun init() = DefectEntryState(
+            isLoading = true,
             entryContent = "",
             images = emptyList(),
             isShowImageBottomSheet = false,
