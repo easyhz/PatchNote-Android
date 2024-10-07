@@ -107,6 +107,7 @@ class DefectEntryViewModel @Inject constructor(
     private fun createDefect(entryItem: LinkedHashMap<CategoryType, TextFieldValue>, invalidEntry: CategoryType?) = viewModelScope.launch {
         clearFocus()
         if (!isValidDefect(invalidEntry)) return@launch
+        if (!isValidImage()) return@launch
         val param = EntryDefectParam(
             id = Generate.randomUUID(),
             site = entryItem[CategoryType.SITE]?.text.orEmpty(),
@@ -135,6 +136,16 @@ class DefectEntryViewModel @Inject constructor(
             setDialog(
                 ErrorMessage(title = context.getString(R.string.category_empty, valueString))
             )
+            return false
+        }
+
+        return true
+    }
+
+    /* 이미지 유효성 검사 */
+    private fun isValidImage(): Boolean {
+        if (currentState.images.isEmpty()) {
+            setDialog(ErrorMessage(title = context.getString(R.string.defect_entry_image_placeholder)))
             return false
         }
 
