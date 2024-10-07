@@ -10,12 +10,13 @@ import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.util.search.SearchHelper
 import com.easyhz.patchnote.core.model.category.CategoryType
 import com.easyhz.patchnote.core.model.category.getValue
-import com.easyhz.patchnote.core.model.error.ErrorAction
-import com.easyhz.patchnote.core.model.error.ErrorMessage
+import com.easyhz.patchnote.core.model.error.DialogAction
+import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.domain.usecase.category.FetchCategoryUseCase
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectIntent
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectSideEffect
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectState
+import com.easyhz.patchnote.ui.screen.defect.contract.DefectState.Companion.clearEntryItemValue
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectState.Companion.updateEntryItemValue
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectState.Companion.updateSearchCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -49,6 +50,9 @@ class DefectViewModel @Inject constructor(
             is DefectIntent.ValidateEntryItem -> {
                 validateEntryItem()
             }
+            is DefectIntent.ClearData -> {
+                clearData()
+            }
         }
     }
 
@@ -66,10 +70,10 @@ class DefectViewModel @Inject constructor(
         }.onFailure {
             Log.e(tag, "fetchCategory : $it")
             delay(700)
-            val message = ErrorMessage(
+            val message = DialogMessage(
                 title = context.getString(R.string.error_fetch_category_title),
                 message = context.getString(R.string.error_fetch_category_message),
-                action = ErrorAction.NAVIGATE_UP
+                action = DialogAction.NAVIGATE_UP
             )
             sendError(message = message)
         }.also {
@@ -125,12 +129,17 @@ class DefectViewModel @Inject constructor(
     }
 
     /* error */
-    private fun sendError(message: ErrorMessage) {
+    private fun sendError(message: DialogMessage) {
         postSideEffect { DefectSideEffect.SendError(message) }
     }
 
     /* loading */
     private fun sendLoadingState() {
         postSideEffect { DefectSideEffect.SendLoading(false) }
+    }
+
+    /* clearData */
+    private fun clearData() {
+        reduce { clearEntryItemValue() }
     }
 }

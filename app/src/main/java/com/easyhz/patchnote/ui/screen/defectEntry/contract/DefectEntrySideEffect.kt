@@ -10,4 +10,5 @@ sealed class DefectEntrySideEffect: UiSideEffect() {
     data object NavigateToUp: DefectEntrySideEffect()
     data object NavigateToHome: DefectEntrySideEffect()
     data class ShowSnackBar(val value: String): DefectEntrySideEffect()
+    data object SendClear: DefectEntrySideEffect()
 }

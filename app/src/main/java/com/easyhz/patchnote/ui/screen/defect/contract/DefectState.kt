@@ -38,5 +38,13 @@ data class DefectState(
             updatedSearchCategory[categoryType] = searchResult
             return copy(searchCategory = updatedSearchCategory)
         }
+
+        fun DefectState.clearEntryItemValue(): DefectState {
+            val updatedEntryItem = LinkedHashMap(entryItem)
+            CategoryType.entries.filter { it.enableClear }.forEach { item ->
+                updatedEntryItem[item] = TextFieldValue("")
+            }
+            return copy(entryItem = updatedEntryItem)
+        }
     }
 }

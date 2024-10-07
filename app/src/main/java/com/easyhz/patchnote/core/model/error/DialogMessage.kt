@@ -1,13 +1,14 @@
 package com.easyhz.patchnote.core.model.error
 
-data class ErrorMessage(
+data class DialogMessage(
     val title: String,
     val message: String? = null,
-    val action: ErrorAction? = null
+    val action: DialogAction? = null
 )
 
-enum class ErrorAction {
+enum class DialogAction {
     RETRY,
     DISMISS,
-    NAVIGATE_UP
+    NAVIGATE_UP,
+    CLEAR
 }

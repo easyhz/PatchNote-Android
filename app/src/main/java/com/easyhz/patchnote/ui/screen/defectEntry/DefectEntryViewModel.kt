@@ -14,8 +14,8 @@ import com.easyhz.patchnote.core.common.util.getPostposition
 import com.easyhz.patchnote.core.designSystem.component.bottomSheet.ImageBottomSheetType
 import com.easyhz.patchnote.core.model.category.CategoryType
 import com.easyhz.patchnote.core.model.defect.EntryDefectParam
-import com.easyhz.patchnote.core.model.error.ErrorAction
-import com.easyhz.patchnote.core.model.error.ErrorMessage
+import com.easyhz.patchnote.core.model.error.DialogAction
+import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.core.model.image.DefectImage
 import com.easyhz.patchnote.core.model.image.toDefectImages
 import com.easyhz.patchnote.domain.usecase.defect.CreateDefectUseCase
@@ -83,7 +83,7 @@ class DefectEntryViewModel @Inject constructor(
             }
             .onFailure {
                 Log.e(tag, "launchCamera : $it")
-                setDialog(ErrorMessage(title = context.getString(it.handleError())))
+                setDialog(DialogMessage(title = context.getString(it.handleError())))
             }
     }
 
@@ -122,11 +122,16 @@ class DefectEntryViewModel @Inject constructor(
         )
         createDefectUseCase.invoke(param)
             .onSuccess {
-                navigateHome()
+                setDialog(
+                    DialogMessage(
+                        title = context.getString(R.string.success_create_defect),
+                        action = DialogAction.CLEAR
+                    )
+                )
             }
             .onFailure {
                 Log.e(tag, "createDefect : $it")
-                setDialog(ErrorMessage(title = context.getString(R.string.error_create_defect_failure)))
+                setDialog(DialogMessage(title = context.getString(R.string.error_create_defect_failure)))
             }.also {
                 setLoading(false)
             }
@@ -136,9 +141,7 @@ class DefectEntryViewModel @Inject constructor(
     private fun isValidDefect(invalidEntry: CategoryType?): Boolean {
         invalidEntry?.let { type ->
             val valueString = context.getString(type.nameId) + getPostposition(type)
-            setDialog(
-                ErrorMessage(title = context.getString(R.string.category_empty, valueString))
-            )
+            setDialog(DialogMessage(title = context.getString(R.string.category_empty, valueString)))
             return false
         }
 
@@ -148,7 +151,7 @@ class DefectEntryViewModel @Inject constructor(
     /* 이미지 유효성 검사 */
     private fun isValidImage(): Boolean {
         if (currentState.images.isEmpty()) {
-            setDialog(ErrorMessage(title = context.getString(R.string.defect_entry_image_placeholder)))
+            setDialog(DialogMessage(title = context.getString(R.string.defect_entry_image_placeholder)))
             return false
         }
 
@@ -173,12 +176,13 @@ class DefectEntryViewModel @Inject constructor(
     }
 
     /* 에러 다이얼로그 */
-    private fun setDialog(message: ErrorMessage?) {
-        val action = message?.let { null } ?: currentState.errorMessage?.action
-        reduce { copy(errorMessage = message) }
+    private fun setDialog(message: DialogMessage?) {
+        val action = message?.let { null } ?: currentState.dialogMessage?.action
+        reduce { copy(dialogMessage = message) }
         action?.let {
             when(it) {
-                ErrorAction.NAVIGATE_UP -> navigateUp()
+                DialogAction.NAVIGATE_UP -> navigateUp()
+                DialogAction.CLEAR -> clearData()
                 else -> { }
             }
         }
@@ -187,5 +191,17 @@ class DefectEntryViewModel @Inject constructor(
     /* 로딩 */
     private fun setLoading(isLoading: Boolean) {
         reduce { copy(isLoading = isLoading) }
+    }
+
+    /* 데이터 클리어 */
+    private fun clearData() {
+        clearFocus()
+        sendClear()
+        reduce { copy(entryContent = "", images = emptyList()) }
+    }
+
+    /* sendClear */
+    private fun sendClear() {
+        postSideEffect { DefectEntrySideEffect.SendClear }
     }
 }

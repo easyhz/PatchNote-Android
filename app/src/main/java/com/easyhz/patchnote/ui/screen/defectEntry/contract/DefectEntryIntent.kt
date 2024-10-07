@@ -5,7 +5,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import com.easyhz.patchnote.core.common.base.UiIntent
 import com.easyhz.patchnote.core.designSystem.component.bottomSheet.ImageBottomSheetType
 import com.easyhz.patchnote.core.model.category.CategoryType
-import com.easyhz.patchnote.core.model.error.ErrorMessage
+import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.core.model.image.DefectImage
 
 sealed class DefectEntryIntent: UiIntent() {
@@ -17,6 +17,6 @@ sealed class DefectEntryIntent: UiIntent() {
     data class DeleteImage(val image: DefectImage) : DefectEntryIntent()
     data class ClickReceipt(val entryItem: LinkedHashMap<CategoryType, TextFieldValue>, val invalidEntry: CategoryType?): DefectEntryIntent()
     data object NavigateToUp: DefectEntryIntent()
-    data class ShowError(val message: ErrorMessage?): DefectEntryIntent()
+    data class ShowError(val message: DialogMessage?): DefectEntryIntent()
     data class SetLoading(val isLoading: Boolean): DefectEntryIntent()
 }

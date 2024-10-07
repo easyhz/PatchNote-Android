@@ -7,22 +7,26 @@ import com.easyhz.patchnote.R
 enum class CategoryType(
     @StringRes val nameId: Int,
     val alias: String,
-    val enabledEntry: Boolean = true
+    val enabledEntry: Boolean = true,
+    val enableClear: Boolean = true
 ){
     SITE(
         nameId = R.string.category_site,
-        alias = "site"
+        alias = "site",
+        enableClear = false
     ), BUILDING(
         nameId = R.string.category_building,
         alias = "building",
         enabledEntry = false,
+        enableClear = false
     ), UNIT(
         nameId = R.string.category_unit,
         alias = "unit",
-        enabledEntry = false
+        enabledEntry = false,
+        enableClear = false
     ), SPACE(
         nameId = R.string.category_space,
-        alias = "space"
+        alias = "space",
     ), PART(
         nameId = R.string.category_part,
         alias = "part"

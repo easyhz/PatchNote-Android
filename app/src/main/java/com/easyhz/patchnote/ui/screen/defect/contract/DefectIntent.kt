@@ -10,4 +10,5 @@ sealed class DefectIntent: UiIntent() {
     data class ClickCategoryDropDown(val categoryType: CategoryType, val value: String): DefectIntent()
     data class ChangeFocusState(val categoryType: CategoryType, val focusState: FocusState): DefectIntent()
     data object ValidateEntryItem: DefectIntent()
+    data object ClearData: DefectIntent()
 }

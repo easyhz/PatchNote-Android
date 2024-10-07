@@ -162,7 +162,7 @@ fun DefectEntryScreen(
             )
         }
 
-        uiState.errorMessage?.let { error ->
+        uiState.dialogMessage?.let { error ->
             BasicDialog(
                 title = error.title,
                 content = error.message,
@@ -204,6 +204,9 @@ fun DefectEntryScreen(
                     message = sideEffect.value,
                     withDismissAction = true
                 )
+            }
+            is DefectEntrySideEffect.SendClear -> {
+                defectViewModel.postIntent(DefectIntent.ClearData)
             }
         }
     }
