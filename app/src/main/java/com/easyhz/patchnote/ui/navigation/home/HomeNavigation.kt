@@ -8,9 +8,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.easyhz.patchnote.core.designSystem.util.transition.SlideDirection
+import com.easyhz.patchnote.core.designSystem.util.transition.enterSlide
 import com.easyhz.patchnote.core.designSystem.util.transition.exitSlide
 import com.easyhz.patchnote.ui.navigation.dataManagement.navigateToDataManagement
 import com.easyhz.patchnote.ui.navigation.defect.navigateToDefectEntry
+import com.easyhz.patchnote.ui.screen.filter.FilterScreen
 import com.easyhz.patchnote.ui.screen.home.HomeScreen
 
 internal fun NavGraphBuilder.homeGraph(
@@ -25,6 +27,16 @@ internal fun NavGraphBuilder.homeGraph(
         HomeScreen(
             navigateToDataManagement = navController::navigateToDataManagement,
             navigateToDefectEntry = navController::navigateToDefectEntry
+        )
+    }
+    composable<Filter>(
+        enterTransition = { enterSlide(SlideDirection.Up) },
+        exitTransition = { exitSlide(SlideDirection.Down) },
+        popEnterTransition = { enterSlide(SlideDirection.Up) },
+        popExitTransition = { exitSlide(SlideDirection.Down) }
+    ) {
+        FilterScreen(
+            navigateToUp = navController::navigateUp
         )
     }
 }
