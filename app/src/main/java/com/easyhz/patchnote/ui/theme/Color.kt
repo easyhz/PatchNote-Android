@@ -35,3 +35,6 @@ val DoneColor = Color(0xFF000000).copy(0.3f)
 
 @Stable
 val Grey900 = Color(0xFF212121)
+
+@Stable
+val UnselectedColor = Color(0xFFE5E5EC)

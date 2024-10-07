@@ -4,4 +4,9 @@
 
     <string name="gallery">앨범에서 추가</string>
     <string name="camera">카메라에서 추가</string>
+
+
+    <string name="date_picker_placeholder">날짜를 선택하세요</string>
+    <string name="date_picker_confirm">선택</string>
+    <string name="date_picker_dismiss">취소</string>
 </resources>
