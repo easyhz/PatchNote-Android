@@ -21,18 +21,17 @@ class HomeViewModel @Inject constructor(
 
     override fun handleIntent(intent: HomeIntent) {
         when(intent) {
+            is HomeIntent.FetchData -> fetchDefects(intent.searchParam)
             is HomeIntent.NavigateToDataManagement -> navigateToDataManagement()
             is HomeIntent.NavigateToDefectEntry -> navigateToDefectEntry()
+            is HomeIntent.NavigateToFilter -> navigateToFilter()
         }
     }
 
-    init {
-        fetchDefects()
-    }
 
     /* fetchDefects */
-    private fun fetchDefects() = viewModelScope.launch {
-        fetchDefectsUseCase.invoke(Unit).onSuccess {
+    private fun fetchDefects(searchParam: List<String>?) = viewModelScope.launch {
+        fetchDefectsUseCase.invoke(searchParam).onSuccess {
             reduce { copy(defectList = it) }
         }.onFailure {
             Log.e(tag, "fetchCategory : $it")
@@ -47,5 +46,10 @@ class HomeViewModel @Inject constructor(
     /* 하자 등록 화면 이동 */
     private fun navigateToDefectEntry() {
         postSideEffect { HomeSideEffect.NavigateToDefectEntry }
+    }
+
+    /* 필터 화면 이동 */
+    private fun navigateToFilter() {
+        postSideEffect { HomeSideEffect.NavigateToFilter }
     }
 }

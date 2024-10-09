@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +25,7 @@ import com.easyhz.patchnote.core.designSystem.component.card.HomeCard
 import com.easyhz.patchnote.core.designSystem.component.filter.HomeFilter
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.core.designSystem.component.topbar.HomeTopBar
+import com.easyhz.patchnote.ui.screen.home.contract.HomeIntent
 import com.easyhz.patchnote.ui.screen.home.contract.HomeSideEffect
 import com.easyhz.patchnote.ui.theme.SemiBold16
 import com.easyhz.patchnote.ui.theme.SubText
@@ -32,11 +34,15 @@ import com.easyhz.patchnote.ui.theme.SubText
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
+    searchParam: List<String>? = null,
     navigateToDataManagement: () -> Unit,
-    navigateToDefectEntry: () -> Unit
+    navigateToDefectEntry: () -> Unit,
+    navigateToFilter: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
+    LaunchedEffect(searchParam) {
+        viewModel.postIntent(HomeIntent.FetchData(searchParam))
+    }
     PatchNoteScaffold(
         modifier = modifier,
         topBar = {
@@ -45,9 +51,9 @@ fun HomeScreen(
                     navigateToDataManagement()
                 }
                 HomeFilter(
-                    items = emptyList()
+                    items = searchParam ?: emptyList(),
                 ) {
-
+                    viewModel.postIntent(HomeIntent.NavigateToFilter)
                 }
             }
         },
@@ -84,6 +90,9 @@ fun HomeScreen(
             }
             is HomeSideEffect.NavigateToDefectEntry -> {
                 navigateToDefectEntry()
+            }
+            is HomeSideEffect.NavigateToFilter -> {
+                navigateToFilter()
             }
         }
     }

@@ -11,4 +11,5 @@ sealed class DefectIntent: UiIntent() {
     data class ChangeFocusState(val categoryType: CategoryType, val focusState: FocusState): DefectIntent()
     data object ValidateEntryItem: DefectIntent()
     data object ClearData: DefectIntent()
+    data object SearchItem: DefectIntent()
 }

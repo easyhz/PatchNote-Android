@@ -7,6 +7,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
+import androidx.navigation.toRoute
 import com.easyhz.patchnote.core.designSystem.util.transition.SlideDirection
 import com.easyhz.patchnote.core.designSystem.util.transition.enterSlide
 import com.easyhz.patchnote.core.designSystem.util.transition.exitSlide
@@ -24,9 +26,12 @@ internal fun NavGraphBuilder.homeGraph(
         popEnterTransition = { fadeIn(animationSpec = tween(300)) },
         popExitTransition = { exitSlide(SlideDirection.End) }
     ) {
+        val args = it.toRoute<Home>()
         HomeScreen(
+            searchParam = args.searchParam,
             navigateToDataManagement = navController::navigateToDataManagement,
-            navigateToDefectEntry = navController::navigateToDefectEntry
+            navigateToDefectEntry = navController::navigateToDefectEntry,
+            navigateToFilter = navController::navigateToFilter
         )
     }
     composable<Filter>(
@@ -35,12 +40,20 @@ internal fun NavGraphBuilder.homeGraph(
         popEnterTransition = { enterSlide(SlideDirection.Up) },
         popExitTransition = { exitSlide(SlideDirection.Down) }
     ) {
+        val navOptions = navOptions {
+            popUpTo(navController.graph.id) { inclusive = true }
+        }
         FilterScreen(
-            navigateToUp = navController::navigateUp
+            navigateToUp = navController::navigateUp,
+            navigateToHome = { item -> navController.navigateToHome(searchParam = item, navOptions = navOptions) }
         )
     }
 }
 
-fun NavController.navigateToHome(navOptions: NavOptions? = null) {
-    navigate(Home, navOptions)
+fun NavController.navigateToHome(searchParam: List<String>? = null,navOptions: NavOptions? = null) {
+    navigate(Home(searchParam), navOptions)
+}
+
+fun NavController.navigateToFilter() {
+    navigate(Filter)
 }

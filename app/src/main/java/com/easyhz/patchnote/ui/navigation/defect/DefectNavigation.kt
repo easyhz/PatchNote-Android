@@ -24,7 +24,7 @@ internal fun NavGraphBuilder.defectGraph(
         }
         DefectEntryScreen(
             navigateToUp = navController::navigateUp,
-            navigateToHome = { navController.navigateToHome(navOptions) }
+            navigateToHome = { navController.navigateToHome(navOptions = navOptions) }
         )
     }
 }

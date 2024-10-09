@@ -6,4 +6,5 @@ import com.easyhz.patchnote.core.model.filter.FilterValue
 
 sealed class FilterIntent: UiIntent() {
     data class ChangeFilterValue(val filter: Filter, val value: FilterValue): FilterIntent()
+    data class Search(val item: List<String>): FilterIntent()
 }

@@ -3,4 +3,6 @@ package com.easyhz.patchnote.ui.navigation.home
 import kotlinx.serialization.Serializable
 
 @Serializable
-object Home
+data class Home(
+    val searchParam: List<String>? = null,
+)

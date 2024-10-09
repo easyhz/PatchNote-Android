@@ -53,6 +53,7 @@ class DefectViewModel @Inject constructor(
             is DefectIntent.ClearData -> {
                 clearData()
             }
+            is DefectIntent.SearchItem -> { searchItem() }
         }
     }
 
@@ -141,5 +142,11 @@ class DefectViewModel @Inject constructor(
     /* clearData */
     private fun clearData() {
         reduce { clearEntryItemValue() }
+    }
+
+    /* 검색 */
+    private fun searchItem() {
+        val search = currentState.entryItem.entries.filter { it.value.text.isNotBlank() }.map { "${it.key.alias}=${it.value.text}" }
+        postSideEffect { DefectSideEffect.SearchItem(item = search) }
     }
 }

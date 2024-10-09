@@ -222,6 +222,7 @@ fun DefectEntryScreen(
             is DefectSideEffect.SendLoading -> {
                 viewModel.postIntent(DefectEntryIntent.SetLoading(sideEffect.isLoading))
             }
+            else -> { }
         }
     }
 }

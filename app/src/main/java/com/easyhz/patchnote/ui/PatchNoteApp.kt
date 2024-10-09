@@ -26,7 +26,7 @@ fun PatchNoteApp() {
         NavHost(
             modifier = Modifier.statusBarsPadding().systemBarsPadding(),
             navController = navController,
-            startDestination = Home,
+            startDestination = Home(null),
             enterTransition = { enterSlide(SlideDirection.Start) },
             exitTransition = { exitSlide(SlideDirection.Start) },
             popEnterTransition = { enterSlide(SlideDirection.End) },

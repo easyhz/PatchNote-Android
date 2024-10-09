@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.easyhz.patchnote.R
+import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.button.BasicRadioButton
 import com.easyhz.patchnote.core.designSystem.component.datePicker.BasicDatePicker
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
@@ -40,8 +41,10 @@ import com.easyhz.patchnote.core.model.filter.FilterValue.Companion.asLong
 import com.easyhz.patchnote.core.model.filter.FilterValue.Companion.asString
 import com.easyhz.patchnote.ui.screen.defect.DefectViewModel
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectIntent
+import com.easyhz.patchnote.ui.screen.defect.contract.DefectSideEffect
 import com.easyhz.patchnote.ui.screen.defectEntry.component.DefectCategoryField
 import com.easyhz.patchnote.ui.screen.filter.contract.FilterIntent
+import com.easyhz.patchnote.ui.screen.filter.contract.FilterSideEffect
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Primary
 
@@ -50,7 +53,8 @@ fun FilterScreen(
     modifier: Modifier = Modifier,
     viewModel: FilterViewModel = hiltViewModel(),
     defectViewModel: DefectViewModel = hiltViewModel(),
-    navigateToUp: () -> Unit
+    navigateToUp: () -> Unit,
+    navigateToHome: (List<String>?) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val defectState by defectViewModel.uiState.collectAsStateWithLifecycle()
@@ -73,7 +77,7 @@ fun FilterScreen(
                     stringId = R.string.filter_apply,
                     textAlignment = Alignment.CenterEnd,
                     textColor = Primary,
-                    onClick = {  }
+                    onClick = { defectViewModel.postIntent(DefectIntent.SearchItem) }
                 ),
             )
         }
@@ -180,6 +184,20 @@ fun FilterScreen(
                 }
             }
             Spacer(modifier = Modifier.imePadding())
+        }
+    }
+
+    viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
+        when(sideEffect) {
+            is FilterSideEffect.NavigateToHome -> { navigateToHome(sideEffect.param) }
+            is FilterSideEffect.ClearFocus -> { focusManager.clearFocus() }
+        }
+    }
+
+    defectViewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
+        when(sideEffect) {
+            is DefectSideEffect.SearchItem -> { viewModel.postIntent(FilterIntent.Search(sideEffect.item)) }
+            else -> { }
         }
     }
 }
