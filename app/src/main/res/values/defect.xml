@@ -10,4 +10,7 @@
 
     <string name="defect_entry_receipt_success">하자 접수가 완료되었습니다.</string>
     <string name="defect_done">완료</string>
+
+    <string name="defect_not_done">완료되지 않은 하자입니다</string>
+    <string name="defect_do_done">완료 처리하기</string>
 </resources>
