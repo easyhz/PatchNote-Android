@@ -24,7 +24,7 @@ fun HomeTopBar(
     onClickMenu: () -> Unit
 ) {
     Row(
-        modifier = modifier.height(48.dp).fillMaxWidth().padding(horizontal = 20.dp),
+        modifier = modifier.height(52.dp).fillMaxWidth().padding(horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {

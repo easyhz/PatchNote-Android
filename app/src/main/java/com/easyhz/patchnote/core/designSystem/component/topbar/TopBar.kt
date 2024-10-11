@@ -29,9 +29,9 @@ fun TopBar(
 ) {
     Box(
         modifier = Modifier
-            .height(48.dp)
-            .padding(horizontal = 20.dp)
+            .height(52.dp)
             .fillMaxWidth()
+            .padding(horizontal = 20.dp)
     ) {
         left.content(
             modifier = Modifier.align(Alignment.CenterStart)
