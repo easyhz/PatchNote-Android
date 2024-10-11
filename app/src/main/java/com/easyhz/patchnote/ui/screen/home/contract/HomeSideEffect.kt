@@ -6,4 +6,5 @@ sealed class HomeSideEffect: UiSideEffect() {
     data object NavigateToDataManagement: HomeSideEffect()
     data object NavigateToDefectEntry: HomeSideEffect()
     data object NavigateToFilter: HomeSideEffect()
+    data class NavigateToDefectDetail(val defectId: String): HomeSideEffect()
 }

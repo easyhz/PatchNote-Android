@@ -17,4 +17,8 @@ class DefectRepositoryImpl @Inject constructor(
     override suspend fun fetchDefects(search: List<String>?): Result<List<DefectItem>> {
         return defectDataSource.fetchDefects(search).map { it.map { defectData -> defectData.toModel() } }
     }
+
+    override suspend fun fetchDefect(id: String): Result<DefectItem> {
+        return defectDataSource.fetchDefect(id).map { it.toModel() }
+    }
 }

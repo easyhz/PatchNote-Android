@@ -5,6 +5,7 @@ import com.easyhz.patchnote.core.common.constant.Field.REQUEST_DATE
 import com.easyhz.patchnote.core.common.constant.Field.SEARCH
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
+import com.easyhz.patchnote.core.common.util.documentHandler
 import com.easyhz.patchnote.core.common.util.fetchHandler
 import com.easyhz.patchnote.core.common.util.search
 import com.easyhz.patchnote.core.common.util.setHandler
@@ -23,10 +24,14 @@ class DefectDataSourceImpl @Inject constructor(
     }
 
     override suspend fun fetchDefects(search: List<String>?): Result<List<DefectData>> =
-        fetchHandler {
+        fetchHandler(dispatcher) {
             firestore.collection(DEFECT)
                 .search(SEARCH, search)
                 .orderBy(REQUEST_DATE, Direction.DESCENDING)
                 .get()
         }
+
+    override suspend fun fetchDefect(id: String): Result<DefectData> = documentHandler(dispatcher) {
+        firestore.collection(DEFECT).document(id).get()
+    }
 }

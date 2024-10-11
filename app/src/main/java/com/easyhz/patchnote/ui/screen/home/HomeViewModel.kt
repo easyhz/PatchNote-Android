@@ -25,6 +25,7 @@ class HomeViewModel @Inject constructor(
             is HomeIntent.NavigateToDataManagement -> navigateToDataManagement()
             is HomeIntent.NavigateToDefectEntry -> navigateToDefectEntry()
             is HomeIntent.NavigateToFilter -> navigateToFilter()
+            is HomeIntent.NavigateToDefectDetail -> navigateToDefectDetail(intent.defectId)
         }
     }
 
@@ -51,5 +52,10 @@ class HomeViewModel @Inject constructor(
     /* 필터 화면 이동 */
     private fun navigateToFilter() {
         postSideEffect { HomeSideEffect.NavigateToFilter }
+    }
+
+    /* 하자 상세 화면 이동 */
+    private fun navigateToDefectDetail(defectId: String) {
+        postSideEffect { HomeSideEffect.NavigateToDefectDetail(defectId = defectId) }
     }
 }

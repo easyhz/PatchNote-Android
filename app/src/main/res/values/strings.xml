@@ -10,4 +10,8 @@
     <string name="date_picker_confirm">선택</string>
     <string name="date_picker_dismiss">취소</string>
     <string name="dialog_button">확인</string>
+
+    <string name="requested_content">접수 내용</string>
+    <string name="in_progress_content">진행 중</string>
+    <string name="done_content">완료 내용</string>
 </resources>

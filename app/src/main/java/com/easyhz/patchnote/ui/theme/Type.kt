@@ -38,6 +38,22 @@ val Bold34 = TextStyle(
     )
 )
 
+val Bold22 = TextStyle(
+    fontFamily = Pretendard,
+    fontWeight = FontWeight.Bold,
+    color = MainBackground,
+    fontSize = 22.sp,
+    letterSpacing = LetterSpacing,
+    textAlign = TextAlign.Justify,
+    platformStyle = PlatformTextStyle(
+        includeFontPadding = false,
+    ),
+    lineHeightStyle = LineHeightStyle(
+        alignment = LineHeightStyle.Alignment.Center,
+        trim = LineHeightStyle.Trim.None
+    )
+)
+
 val Bold20 = TextStyle(
     fontFamily = Pretendard,
     fontWeight = FontWeight.Bold,
@@ -164,6 +180,21 @@ val Medium18 = TextStyle(
     fontFamily = Pretendard,
     fontWeight = FontWeight.Medium,
     fontSize = 18.sp,
+    letterSpacing = LetterSpacing,
+    textAlign = TextAlign.Justify,
+    platformStyle = PlatformTextStyle(
+        includeFontPadding = false,
+    ),
+    lineHeightStyle = LineHeightStyle(
+        alignment = LineHeightStyle.Alignment.Center,
+        trim = LineHeightStyle.Trim.None
+    )
+)
+
+val Medium20 = TextStyle(
+    fontFamily = Pretendard,
+    fontWeight = FontWeight.Medium,
+    fontSize = 20.sp,
     letterSpacing = LetterSpacing,
     textAlign = TextAlign.Justify,
     platformStyle = PlatformTextStyle(

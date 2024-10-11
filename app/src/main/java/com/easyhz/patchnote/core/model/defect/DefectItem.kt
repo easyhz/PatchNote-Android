@@ -55,4 +55,38 @@ data class DefectItem(
     val requestDate: String,
     val completionDate: String?,
     val search: List<String>
-)
+) {
+    fun createDefectContent(): List<DefectContent> {
+        val defectContentList = mutableListOf<DefectContent>()
+
+        defectContentList.add(
+            DefectContent(
+                progress = DefectProgress.REQUESTED,
+                description = beforeDescription,
+                imageSizes = beforeImageSizes,
+                imageUrls = beforeImageUrls
+            )
+        )
+
+        if (workerId.isNullOrBlank()) {
+            defectContentList.add(
+                DefectContent(
+                    progress = DefectProgress.DONE,
+                    description = "",
+                    imageSizes = emptyList(),
+                    imageUrls = emptyList()
+                )
+            )
+        } else {
+            defectContentList.add(
+                DefectContent(
+                    progress = DefectProgress.DONE,
+                    description = afterDescription,
+                    imageSizes = afterImageSizes,
+                    imageUrls = afterImageUrls
+                )
+            )
+        }
+        return defectContentList
+    }
+}

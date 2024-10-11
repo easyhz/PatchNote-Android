@@ -45,11 +45,12 @@ import com.easyhz.patchnote.ui.theme.SubText
 fun HomeCard(
     modifier: Modifier = Modifier,
     defectItem: DefectItem,
+    onClick: () -> Unit
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { }
+            .clickable { onClick() }
             .padding(horizontal = 20.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -183,6 +184,6 @@ private fun HomeCardPreview() {
             requesterId = "",
             search = emptyList()
         )
-    )
+    ) { }
 
 }

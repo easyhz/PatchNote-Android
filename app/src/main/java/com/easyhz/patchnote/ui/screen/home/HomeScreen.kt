@@ -37,7 +37,8 @@ fun HomeScreen(
     searchParam: List<String>? = null,
     navigateToDataManagement: () -> Unit,
     navigateToDefectEntry: () -> Unit,
-    navigateToFilter: () -> Unit
+    navigateToFilter: () -> Unit,
+    navigateToDefectDetail: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect(searchParam) {
@@ -78,7 +79,7 @@ fun HomeScreen(
                 HomeCard(
                     modifier = Modifier.fillMaxWidth(),
                     defectItem = defectItem
-                )
+                ) { viewModel.postIntent(HomeIntent.NavigateToDefectDetail(defectItem.id)) }
             }
         }
     }
@@ -93,6 +94,9 @@ fun HomeScreen(
             }
             is HomeSideEffect.NavigateToFilter -> {
                 navigateToFilter()
+            }
+            is HomeSideEffect.NavigateToDefectDetail -> {
+                navigateToDefectDetail(sideEffect.defectId)
             }
         }
     }
