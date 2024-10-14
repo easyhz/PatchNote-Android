@@ -68,7 +68,7 @@ fun FilterScreen(
                     iconId = R.drawable.ic_close_leading,
                     iconAlignment = Alignment.CenterStart,
                     tint = MainText,
-                    onClick = { }
+                    onClick = { viewModel.postIntent(FilterIntent.NavigateToUp) }
                 ),
                 title = TopBarType.TopBarTitle(
                     stringId = R.string.filter_title
@@ -191,6 +191,7 @@ fun FilterScreen(
         when(sideEffect) {
             is FilterSideEffect.NavigateToHome -> { navigateToHome(sideEffect.param) }
             is FilterSideEffect.ClearFocus -> { focusManager.clearFocus() }
+            is FilterSideEffect.NavigateToUp -> { navigateToUp() }
         }
     }
 

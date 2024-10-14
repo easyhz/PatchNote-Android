@@ -23,6 +23,7 @@ class FilterViewModel @Inject constructor(
         when(intent) {
             is FilterIntent.ChangeFilterValue -> { changeFilterValue(intent.filter, intent.value) }
             is FilterIntent.Search -> { searchDefect(intent.item) }
+            is FilterIntent.NavigateToUp -> { navigateToUp() }
         }
     }
 
@@ -41,6 +42,10 @@ class FilterViewModel @Inject constructor(
 
     private fun clearFocus() {
         postSideEffect { FilterSideEffect.ClearFocus }
+    }
+
+    private fun navigateToUp() {
+        postSideEffect { FilterSideEffect.NavigateToUp }
     }
 
 
