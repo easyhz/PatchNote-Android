@@ -36,6 +36,10 @@ class FilterViewModel @Inject constructor(
             is FilterIntent.NavigateToUp -> {
                 navigateToUp()
             }
+
+            is FilterIntent.ClearFilterValue -> {
+                clearFilterValue(intent.filter)
+            }
         }
     }
 
@@ -67,6 +71,10 @@ class FilterViewModel @Inject constructor(
 
     private fun navigateToUp() {
         postSideEffect { FilterSideEffect.NavigateToUp }
+    }
+
+    private fun clearFilterValue(filter: Filter) {
+        reduce { updateFilterItemValue(filter, filter.createEmptyValue()) }
     }
 
 

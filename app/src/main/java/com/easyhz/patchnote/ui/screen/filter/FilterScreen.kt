@@ -169,6 +169,7 @@ fun FilterScreen(
                             placeholder = stringResource(id = R.string.filter_name_placeholder),
                             singleLine = true,
                             isFilled = false,
+                            onIconClick = { viewModel.postIntent(FilterIntent.ClearFilterValue(filter)) },
                             keyboardOptions = KeyboardOptions.Default.copy(
                                 imeAction = ImeAction.Next,
                             ),
