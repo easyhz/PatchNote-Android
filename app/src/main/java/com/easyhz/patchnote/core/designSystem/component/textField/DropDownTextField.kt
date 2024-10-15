@@ -48,6 +48,7 @@ fun DropDownTextField(
     minLines: Int = 1,
     spacing: Dp = 12.dp,
     onFocusChanged: (FocusState) -> Unit = {},
+    onIconClick: (() -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -93,6 +94,7 @@ fun DropDownTextField(
                         placeholder = placeholder,
                         innerTextField = innerTextField,
                         spacing = spacing,
+                        onIconClick = onIconClick,
                     )
                 }
             )
@@ -133,5 +135,6 @@ private fun DropDownTextFieldPreview() {
         placeholder = "제목을 입력하세요",
         singleLine = true,
         isFilled = false,
+        onIconClick = { }
     )
 }

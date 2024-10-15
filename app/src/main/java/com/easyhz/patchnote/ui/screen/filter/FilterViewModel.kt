@@ -2,6 +2,7 @@ package com.easyhz.patchnote.ui.screen.filter
 
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.model.filter.Filter
+import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.core.model.filter.FilterValue
 import com.easyhz.patchnote.core.model.filter.FilterValue.Companion.asInt
 import com.easyhz.patchnote.core.model.filter.FilterValue.Companion.asLong
@@ -21,6 +22,9 @@ class FilterViewModel @Inject constructor(
 ) {
     override fun handleIntent(intent: FilterIntent) {
         when (intent) {
+            is FilterIntent.InitFilter -> {
+                initFilter(intent.filterParam)
+            }
             is FilterIntent.ChangeFilterValue -> {
                 changeFilterValue(intent.filter, intent.value)
             }
@@ -33,6 +37,10 @@ class FilterViewModel @Inject constructor(
                 navigateToUp()
             }
         }
+    }
+
+    private fun initFilter(filterParam: FilterParam) {
+        reduce { copy(filterItem = Filter.associateFilterValue(filterParam.indexFieldParam)) }
     }
 
     private fun changeFilterValue(filter: Filter, value: FilterValue) {

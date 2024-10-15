@@ -2,6 +2,7 @@ package com.easyhz.patchnote.core.model.filter
 
 import androidx.annotation.StringRes
 import com.easyhz.patchnote.R
+import com.easyhz.patchnote.core.common.util.toLinkedHashMap
 
 enum class Filter(
     @StringRes val nameId: Int,
@@ -42,8 +43,14 @@ enum class Filter(
     }
 
     companion object {
+        fun aliasOf(name: String): Filter? = entries.find { it.alias == name }
+
         fun toLinkedHashMap(): LinkedHashMap<Filter, FilterValue> =
             LinkedHashMap(entries.associateWith { it.createEmptyValue() })
+
+        fun associateFilterValue(value: LinkedHashMap<String, String>): LinkedHashMap<Filter, FilterValue> {
+            return entries.associateWith { FilterValue.StringValue(value[it.alias] ?: "") }.toLinkedHashMap()
+        }
     }
 
 }

@@ -27,6 +27,7 @@ fun DefectCategoryField(
     category: CategoryType,
     dropDownList: List<String>,
     onClickDropDownList: (String) -> Unit,
+    onIconClick : (() -> Unit)? = null,
     onFocusChanged: (FocusState) -> Unit,
     onNext: () -> Unit,
 ) {
@@ -48,6 +49,7 @@ fun DefectCategoryField(
                     singleLine = true,
                     isFilled = false,
                     onFocusChanged = onFocusChanged,
+                    onIconClick = onIconClick,
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Next,
@@ -72,6 +74,7 @@ fun DefectCategoryField(
                     singleLine = true,
                     isFilled = false,
                     onFocusChanged = onFocusChanged,
+                    onIconClick = onIconClick,
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Next,
                     ),
@@ -94,7 +97,8 @@ private fun DefectCategoryFieldPreview() {
         dropDownList = emptyList(),
         onClickDropDownList = {},
         onFocusChanged = {},
-        onNext = {}
+        onNext = {},
+        onIconClick= {}
     )
 
 }

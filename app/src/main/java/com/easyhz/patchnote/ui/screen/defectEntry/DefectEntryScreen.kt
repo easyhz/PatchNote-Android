@@ -206,7 +206,7 @@ fun DefectEntryScreen(
                 )
             }
             is DefectEntrySideEffect.SendClear -> {
-                defectViewModel.postIntent(DefectIntent.ClearData)
+                defectViewModel.postIntent(DefectIntent.ClearAllData)
             }
         }
     }

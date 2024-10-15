@@ -13,6 +13,7 @@ import com.easyhz.patchnote.core.model.category.CategoryType
 import com.easyhz.patchnote.core.model.category.getValue
 import com.easyhz.patchnote.core.model.error.DialogAction
 import com.easyhz.patchnote.core.model.error.DialogMessage
+import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.domain.usecase.category.FetchCategoryUseCase
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectIntent
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectSideEffect
@@ -53,12 +54,19 @@ class DefectViewModel @Inject constructor(
                 validateEntryItem()
             }
 
+            is DefectIntent.ClearAllData -> {
+                clearAllData()
+            }
             is DefectIntent.ClearData -> {
-                clearData()
+                clearData(intent.categoryType)
             }
 
             is DefectIntent.SearchItem -> {
                 searchItem()
+            }
+
+            is DefectIntent.InitFilter -> {
+                initFilter(intent.filterParam)
             }
         }
     }
@@ -150,8 +158,13 @@ class DefectViewModel @Inject constructor(
     }
 
     /* clearData */
-    private fun clearData() {
+    private fun clearAllData() {
         reduce { clearEntryItemValue() }
+    }
+
+    /* 특정 아이템만 클리어 */
+    private fun clearData(categoryType: CategoryType) {
+        reduce { updateEntryItemValue(categoryType, TextFieldValue("")) }
     }
 
     /* 검색 */
@@ -159,5 +172,15 @@ class DefectViewModel @Inject constructor(
         val search = currentState.entryItem.entries.filter { it.value.text.isNotBlank() }
             .associate { it.key.alias to it.value.text }.toLinkedHashMap()
         postSideEffect { DefectSideEffect.SearchItem(item = search) }
+    }
+
+    /* 필드 초기설정 */
+    private fun initFilter(filterParam: FilterParam) {
+        val item = CategoryType.entries.associateWith {
+            TextFieldValue(
+                filterParam.searchFieldParam[it.alias] ?: ""
+            )
+        }.toLinkedHashMap()
+        reduce { copy(entryItem = item) }
     }
 }

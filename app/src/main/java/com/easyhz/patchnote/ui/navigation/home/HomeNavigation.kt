@@ -12,6 +12,7 @@ import androidx.navigation.toRoute
 import com.easyhz.patchnote.core.designSystem.util.transition.SlideDirection
 import com.easyhz.patchnote.core.designSystem.util.transition.enterSlide
 import com.easyhz.patchnote.core.designSystem.util.transition.exitSlide
+import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.ui.navigation.dataManagement.navigateToDataManagement
 import com.easyhz.patchnote.ui.navigation.defect.navigateToDefectDetail
 import com.easyhz.patchnote.ui.navigation.defect.navigateToDefectEntry
@@ -38,6 +39,7 @@ internal fun NavGraphBuilder.homeGraph(
         )
     }
     composable<Filter>(
+        typeMap = Filter.typeMap,
         enterTransition = { enterSlide(SlideDirection.Up) },
         exitTransition = { exitSlide(SlideDirection.Down) },
         popEnterTransition = { enterSlide(SlideDirection.Up) },
@@ -46,7 +48,9 @@ internal fun NavGraphBuilder.homeGraph(
         val navOptions = navOptions {
             popUpTo(navController.graph.id) { inclusive = true }
         }
+        val args = it.toRoute<Filter>()
         FilterScreen(
+            filterParam = args.filterParam,
             navigateToUp = navController::navigateUp,
             navigateToHome = { item -> navController.navigateToHome(searchParam = item, navOptions = navOptions) }
         )
@@ -57,6 +61,6 @@ fun NavController.navigateToHome(searchParam: LinkedHashMap<String, String> = li
     navigate(Home(searchParam), navOptions)
 }
 
-fun NavController.navigateToFilter() {
-    navigate(Filter)
+fun NavController.navigateToFilter(filterParam: FilterParam) {
+    navigate(Filter(filterParam = filterParam))
 }

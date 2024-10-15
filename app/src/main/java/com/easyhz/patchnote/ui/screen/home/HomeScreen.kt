@@ -25,6 +25,7 @@ import com.easyhz.patchnote.core.designSystem.component.card.HomeCard
 import com.easyhz.patchnote.core.designSystem.component.filter.HomeFilter
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.core.designSystem.component.topbar.HomeTopBar
+import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.ui.screen.home.contract.HomeIntent
 import com.easyhz.patchnote.ui.screen.home.contract.HomeSideEffect
 import com.easyhz.patchnote.ui.theme.SemiBold16
@@ -34,10 +35,10 @@ import com.easyhz.patchnote.ui.theme.SubText
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
-    searchParam: LinkedHashMap<String, String>? = null,
+    searchParam: LinkedHashMap<String, String>,
     navigateToDataManagement: () -> Unit,
     navigateToDefectEntry: () -> Unit,
-    navigateToFilter: () -> Unit,
+    navigateToFilter: (FilterParam) -> Unit,
     navigateToDefectDetail: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -93,7 +94,7 @@ fun HomeScreen(
                 navigateToDefectEntry()
             }
             is HomeSideEffect.NavigateToFilter -> {
-                navigateToFilter()
+                navigateToFilter(FilterParam(searchFieldParam = searchParam, indexFieldParam = linkedMapOf()))
             }
             is HomeSideEffect.NavigateToDefectDetail -> {
                 navigateToDefectDetail(sideEffect.defectId)

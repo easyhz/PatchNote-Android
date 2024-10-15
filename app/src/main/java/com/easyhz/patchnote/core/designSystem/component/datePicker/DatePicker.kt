@@ -88,19 +88,21 @@ fun BasicDatePicker(
                 style = Medium18,
                 color = if (selectedDate != null) MainText else PlaceholderText
             )
-            Box(
-                modifier = Modifier
-                    .sizeIn(minWidth = 32.dp, minHeight = 32.dp)
-                    .noRippleClickable {
-                        onDateSelected(null)
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_delete),
-                    contentDescription = "delete",
-                    tint = PlaceholderText
-                )
+            if (selectedDate != null) {
+                Box(
+                    modifier = Modifier
+                        .sizeIn(minWidth = 32.dp, minHeight = 32.dp)
+                        .noRippleClickable {
+                            onDateSelected(null)
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_delete),
+                        contentDescription = "delete",
+                        tint = PlaceholderText
+                    )
+                }
             }
         }
     }

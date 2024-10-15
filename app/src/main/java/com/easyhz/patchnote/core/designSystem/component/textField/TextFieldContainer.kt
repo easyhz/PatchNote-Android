@@ -8,16 +8,21 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.easyhz.patchnote.R
+import com.easyhz.patchnote.core.designSystem.util.extension.noRippleClickable
 import com.easyhz.patchnote.core.designSystem.util.textField.TextFieldState
 import com.easyhz.patchnote.core.designSystem.util.textField.getTextFieldState
 import com.easyhz.patchnote.ui.theme.MainText
@@ -33,6 +38,7 @@ internal fun TextFieldContainer(
     title: String?,
     placeholder: String,
     spacing: Dp = 12.dp,
+    onIconClick: (() -> Unit)? = null,
     innerTextField: @Composable () -> Unit
 ) {
     Row(
@@ -53,6 +59,7 @@ internal fun TextFieldContainer(
                 modifier = modifier,
                 state = state,
                 placeholder = placeholder,
+                onIconClick = onIconClick,
                 innerTextField = innerTextField,
             )
         }
@@ -81,20 +88,43 @@ private fun TextFieldContainerContent(
     modifier: Modifier = Modifier,
     state: TextFieldState,
     placeholder: String,
+    onIconClick: (() -> Unit)? = null,
     innerTextField: @Composable () -> Unit
 ) {
-    Box(
+    Row (
         modifier = modifier.fillMaxWidth().clip(RoundedCornerShape(4.dp)).background(SubBackground).padding(horizontal = 12.dp, vertical = 8.dp),
-        contentAlignment = Alignment.CenterStart
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        innerTextField()
-        if (state == TextFieldState.Default) {
-            Text(
-                modifier = Modifier.fillMaxWidth().align(Alignment.CenterStart),
-                text = placeholder,
-                style = Medium18,
-                color = PlaceholderText
-            )
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            innerTextField()
+            if (state == TextFieldState.Default) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = placeholder,
+                    style = Medium18,
+                    color = PlaceholderText
+                )
+            }
+        }
+        if (onIconClick != null && state != TextFieldState.Default) {
+            Box(
+                modifier = Modifier
+                    .sizeIn(minWidth = 32.dp, minHeight = 32.dp)
+                    .noRippleClickable {
+                        onIconClick()
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_delete),
+                    contentDescription = "delete",
+                    tint = PlaceholderText
+                )
+            }
         }
     }
 }
@@ -106,7 +136,8 @@ private fun TextFieldContainerPrev() {
     val state = getTextFieldState("", false)
     TextFieldContainer(
         modifier = Modifier.height(40.dp),
-        state = state, title = null, placeholder = "제목을 입력하세요."
+        state = state, title = null, placeholder = "제목을 입력하세요.",
+        onIconClick = { }
     ) {
 
     }

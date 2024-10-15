@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +34,7 @@ import com.easyhz.patchnote.core.designSystem.component.textField.BaseTextField
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
 import com.easyhz.patchnote.core.designSystem.util.extension.noRippleClickable
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
+import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.core.model.filter.FilterProgress
 import com.easyhz.patchnote.core.model.filter.FilterType
 import com.easyhz.patchnote.core.model.filter.FilterValue
@@ -53,6 +55,7 @@ fun FilterScreen(
     modifier: Modifier = Modifier,
     viewModel: FilterViewModel = hiltViewModel(),
     defectViewModel: DefectViewModel = hiltViewModel(),
+    filterParam: FilterParam,
     navigateToUp: () -> Unit,
     navigateToHome: (LinkedHashMap<String, String>) -> Unit
 ) {
@@ -61,6 +64,10 @@ fun FilterScreen(
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
 
+    LaunchedEffect(Unit) {
+        viewModel.postIntent(FilterIntent.InitFilter(filterParam))
+        defectViewModel.postIntent(DefectIntent.InitFilter(filterParam))
+    }
     PatchNoteScaffold(
         topBar = {
             TopBar(
@@ -113,6 +120,9 @@ fun FilterScreen(
                                 value = it
                             )
                         )
+                    },
+                    onIconClick = {
+                        defectViewModel.postIntent(DefectIntent.ClearData(category))
                     },
                     onFocusChanged = {
                         defectViewModel.postIntent(

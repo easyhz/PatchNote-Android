@@ -28,6 +28,7 @@ fun BaseTextField(
     isFilled: Boolean,
     minLines: Int = 1,
     spacing: Dp = 12.dp,
+    onIconClick: (() -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     onFocusChanged: (FocusState) -> Unit = {},
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -54,6 +55,7 @@ fun BaseTextField(
                 placeholder = placeholder,
                 innerTextField = innerTextField,
                 spacing = spacing,
+                onIconClick = onIconClick,
             )
         }
     )
