@@ -34,7 +34,7 @@ import com.easyhz.patchnote.ui.theme.SubText
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
-    searchParam: List<String>? = null,
+    searchParam: LinkedHashMap<String, String>? = null,
     navigateToDataManagement: () -> Unit,
     navigateToDefectEntry: () -> Unit,
     navigateToFilter: () -> Unit,
@@ -52,7 +52,7 @@ fun HomeScreen(
                     navigateToDataManagement()
                 }
                 HomeFilter(
-                    items = searchParam ?: emptyList(),
+                    items = searchParam?.entries?.map { it.value } ?: emptyList(),
                 ) {
                     viewModel.postIntent(HomeIntent.NavigateToFilter)
                 }

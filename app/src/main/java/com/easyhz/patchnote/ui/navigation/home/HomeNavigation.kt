@@ -22,6 +22,7 @@ internal fun NavGraphBuilder.homeGraph(
     navController: NavController
 ) {
     composable<Home>(
+        typeMap = Home.typeMap,
         enterTransition = { fadeIn(animationSpec = tween(300)) },
         exitTransition = { fadeOut(animationSpec = tween(300)) },
         popEnterTransition = { fadeIn(animationSpec = tween(300)) },
@@ -52,7 +53,7 @@ internal fun NavGraphBuilder.homeGraph(
     }
 }
 
-fun NavController.navigateToHome(searchParam: List<String>? = null,navOptions: NavOptions? = null) {
+fun NavController.navigateToHome(searchParam: LinkedHashMap<String, String> = linkedMapOf(), navOptions: NavOptions? = null) {
     navigate(Home(searchParam), navOptions)
 }
 

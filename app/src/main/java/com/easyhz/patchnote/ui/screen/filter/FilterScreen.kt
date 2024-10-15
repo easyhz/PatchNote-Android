@@ -54,7 +54,7 @@ fun FilterScreen(
     viewModel: FilterViewModel = hiltViewModel(),
     defectViewModel: DefectViewModel = hiltViewModel(),
     navigateToUp: () -> Unit,
-    navigateToHome: (List<String>?) -> Unit
+    navigateToHome: (LinkedHashMap<String, String>) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val defectState by defectViewModel.uiState.collectAsStateWithLifecycle()
@@ -189,7 +189,7 @@ fun FilterScreen(
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {
-            is FilterSideEffect.NavigateToHome -> { navigateToHome(sideEffect.param) }
+            is FilterSideEffect.NavigateToHome -> { navigateToHome(sideEffect.searchFieldParam) }
             is FilterSideEffect.ClearFocus -> { focusManager.clearFocus() }
             is FilterSideEffect.NavigateToUp -> { navigateToUp() }
         }

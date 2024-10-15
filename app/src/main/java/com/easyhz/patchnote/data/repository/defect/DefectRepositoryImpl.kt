@@ -14,8 +14,11 @@ class DefectRepositoryImpl @Inject constructor(
         return defectDataSource.createDefect(param.toData())
     }
 
-    override suspend fun fetchDefects(search: List<String>?): Result<List<DefectItem>> {
-        return defectDataSource.fetchDefects(search).map { it.map { defectData -> defectData.toModel() } }
+    override suspend fun fetchDefects(search: LinkedHashMap<String, String>?): Result<List<DefectItem>> {
+        val param = search?.entries?.joinToString("||") {
+            "${it.key}=${it.value}"
+        }
+        return defectDataSource.fetchDefects(param).map { it.map { defectData -> defectData.toModel() } }
     }
 
     override suspend fun fetchDefect(id: String): Result<DefectItem> {

@@ -16,14 +16,22 @@ import javax.inject.Inject
 @HiltViewModel
 class FilterViewModel @Inject constructor(
 
-): BaseViewModel<FilterState, FilterIntent, FilterSideEffect>(
+) : BaseViewModel<FilterState, FilterIntent, FilterSideEffect>(
     initialState = FilterState.init()
 ) {
     override fun handleIntent(intent: FilterIntent) {
-        when(intent) {
-            is FilterIntent.ChangeFilterValue -> { changeFilterValue(intent.filter, intent.value) }
-            is FilterIntent.Search -> { searchDefect(intent.item) }
-            is FilterIntent.NavigateToUp -> { navigateToUp() }
+        when (intent) {
+            is FilterIntent.ChangeFilterValue -> {
+                changeFilterValue(intent.filter, intent.value)
+            }
+
+            is FilterIntent.Search -> {
+                searchDefect(intent.item)
+            }
+
+            is FilterIntent.NavigateToUp -> {
+                navigateToUp()
+            }
         }
     }
 
@@ -31,13 +39,18 @@ class FilterViewModel @Inject constructor(
         reduce { updateFilterItemValue(filter, value) }
     }
 
-    private fun searchDefect(item: List<String>) {
-        val search = currentState.filterItem.entries.filter {
+    private fun searchDefect(item: LinkedHashMap<String, String>) {
+        currentState.filterItem[Filter.REQUESTER]?.asString().takeIf { !it.isNullOrBlank() }?.let {
+            item[Filter.REQUESTER.alias] = it
+        }
+        val nonIndex = currentState.filterItem.entries.filter { !it.key.isInSearchField }.filter {
             it.value.asLong() != null || it.value.asInt() != 0 || it.value.asString() != ""
-        }.map { "${it.key.alias}=${it.value.value}" }
-        val param = search + item
+        }.associate {
+            it.key.alias to it.value.asString()
+        }
+
         clearFocus()
-        postSideEffect { FilterSideEffect.NavigateToHome(param) }
+        postSideEffect { FilterSideEffect.NavigateToHome(searchFieldParam = item) }
     }
 
     private fun clearFocus() {

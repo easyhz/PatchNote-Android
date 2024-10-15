@@ -8,5 +8,5 @@ sealed class DefectSideEffect: UiSideEffect() {
     data class ValidateEntryItem(val invalidEntry: CategoryType?): DefectSideEffect()
     data class SendError(val message: DialogMessage): DefectSideEffect()
     data class SendLoading(val isLoading: Boolean): DefectSideEffect()
-    data class SearchItem(val item: List<String>): DefectSideEffect()
+    data class SearchItem(val item: LinkedHashMap<String, String>): DefectSideEffect()
 }

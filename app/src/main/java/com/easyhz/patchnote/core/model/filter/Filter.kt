@@ -7,15 +7,17 @@ enum class Filter(
     @StringRes val nameId: Int,
     val alias: String,
     val filterType: FilterType,
+    val isInSearchField: Boolean = false
 ) {
     PROGRESS(
         nameId = R.string.filter_progress,
         alias = "progress",
-        filterType = FilterType.RADIO
+        filterType = FilterType.RADIO,
     ),REQUESTER(
         nameId = R.string.filter_requester,
         alias = "requesterName",
-        filterType = FilterType.FREE_FORM
+        filterType = FilterType.FREE_FORM,
+        isInSearchField = true
     ), REQUEST_DATE(
         nameId = R.string.filter_request_date,
         alias = "requestDate",

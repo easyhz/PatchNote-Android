@@ -23,7 +23,7 @@ class DefectDataSourceImpl @Inject constructor(
         firestore.collection(DEFECT).document(data.id).set(data)
     }
 
-    override suspend fun fetchDefects(search: List<String>?): Result<List<DefectData>> =
+    override suspend fun fetchDefects(search: String?): Result<List<DefectData>> =
         fetchHandler(dispatcher) {
             firestore.collection(DEFECT)
                 .search(SEARCH, search)

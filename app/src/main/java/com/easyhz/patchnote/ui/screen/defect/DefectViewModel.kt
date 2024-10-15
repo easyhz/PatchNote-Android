@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.util.search.SearchHelper
+import com.easyhz.patchnote.core.common.util.toLinkedHashMap
 import com.easyhz.patchnote.core.model.category.CategoryType
 import com.easyhz.patchnote.core.model.category.getValue
 import com.easyhz.patchnote.core.model.error.DialogAction
@@ -29,13 +30,13 @@ import javax.inject.Inject
 class DefectViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val fetchCategoryUseCase: FetchCategoryUseCase,
-): BaseViewModel<DefectState, DefectIntent, DefectSideEffect>(
+) : BaseViewModel<DefectState, DefectIntent, DefectSideEffect>(
     initialState = DefectState.init()
 ) {
     private val tag = "DefectViewModel"
 
     override fun handleIntent(intent: DefectIntent) {
-        when(intent) {
+        when (intent) {
             is DefectIntent.ChangeEntryValueTextValue -> {
                 onChangeEntryValueTextValue(intent.categoryType, intent.value)
             }
@@ -47,13 +48,18 @@ class DefectViewModel @Inject constructor(
             is DefectIntent.ChangeFocusState -> {
                 onChangeFocusState(intent.categoryType, intent.focusState)
             }
+
             is DefectIntent.ValidateEntryItem -> {
                 validateEntryItem()
             }
+
             is DefectIntent.ClearData -> {
                 clearData()
             }
-            is DefectIntent.SearchItem -> { searchItem() }
+
+            is DefectIntent.SearchItem -> {
+                searchItem()
+            }
         }
     }
 
@@ -84,7 +90,7 @@ class DefectViewModel @Inject constructor(
 
     /* [CategoryType] 의 텍스트 필드 값 변경 */
     private fun onChangeEntryValueTextValue(categoryType: CategoryType, value: TextFieldValue) {
-        val filterValue = when(categoryType) {
+        val filterValue = when (categoryType) {
             CategoryType.BUILDING, CategoryType.UNIT -> TextFieldValue(value.text.filter { it.isDigit() })
             else -> value
         }
@@ -120,7 +126,11 @@ class DefectViewModel @Inject constructor(
     /* validation */
     private fun validateEntryItem() {
         val invalidEntry = currentState.entryItem.entries
-            .firstOrNull { (category, value) -> value.text.isBlank() || !isExistCategoryList(category) }
+            .firstOrNull { (category, value) ->
+                value.text.isBlank() || !isExistCategoryList(
+                    category
+                )
+            }
         sendValid(invalidEntry = invalidEntry?.key)
     }
 
@@ -146,7 +156,8 @@ class DefectViewModel @Inject constructor(
 
     /* 검색 */
     private fun searchItem() {
-        val search = currentState.entryItem.entries.filter { it.value.text.isNotBlank() }.map { "${it.key.alias}=${it.value.text}" }
+        val search = currentState.entryItem.entries.filter { it.value.text.isNotBlank() }
+            .associate { it.key.alias to it.value.text }.toLinkedHashMap()
         postSideEffect { DefectSideEffect.SearchItem(item = search) }
     }
 }

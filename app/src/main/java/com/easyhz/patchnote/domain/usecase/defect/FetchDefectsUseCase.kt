@@ -7,8 +7,8 @@ import javax.inject.Inject
 
 class FetchDefectsUseCase @Inject constructor(
     private val defectRepository: DefectRepository
-): BaseUseCase<List<String>?, List<DefectItem>>() {
-    override suspend fun invoke(param: List<String>?): Result<List<DefectItem>> {
+): BaseUseCase<LinkedHashMap<String, String>?, List<DefectItem>>() {
+    override suspend fun invoke(param: LinkedHashMap<String, String>?): Result<List<DefectItem>> {
         return defectRepository.fetchDefects(param)
     }
 }

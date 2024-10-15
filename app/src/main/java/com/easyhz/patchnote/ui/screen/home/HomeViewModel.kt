@@ -31,7 +31,7 @@ class HomeViewModel @Inject constructor(
 
 
     /* fetchDefects */
-    private fun fetchDefects(searchParam: List<String>?) = viewModelScope.launch {
+    private fun fetchDefects(searchParam: LinkedHashMap<String, String>?) = viewModelScope.launch {
         fetchDefectsUseCase.invoke(searchParam).onSuccess {
             reduce { copy(defectList = it) }
         }.onFailure {
