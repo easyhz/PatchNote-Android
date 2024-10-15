@@ -43,8 +43,6 @@ enum class Filter(
     }
 
     companion object {
-        fun aliasOf(name: String): Filter? = entries.find { it.alias == name }
-
         fun toLinkedHashMap(): LinkedHashMap<Filter, FilterValue> =
             LinkedHashMap(entries.associateWith { it.createEmptyValue() })
 

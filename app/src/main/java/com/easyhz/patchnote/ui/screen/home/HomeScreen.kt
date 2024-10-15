@@ -53,7 +53,7 @@ fun HomeScreen(
                     navigateToDataManagement()
                 }
                 HomeFilter(
-                    items = searchParam?.entries?.map { it.value } ?: emptyList(),
+                    items = searchParam.entries.map { it.value },
                 ) {
                     viewModel.postIntent(HomeIntent.NavigateToFilter)
                 }
