@@ -3,6 +3,7 @@ package com.easyhz.patchnote.ui.screen.home
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
+import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.domain.usecase.defect.FetchDefectsUseCase
 import com.easyhz.patchnote.ui.screen.home.contract.HomeIntent
 import com.easyhz.patchnote.ui.screen.home.contract.HomeSideEffect
@@ -21,7 +22,7 @@ class HomeViewModel @Inject constructor(
 
     override fun handleIntent(intent: HomeIntent) {
         when(intent) {
-            is HomeIntent.FetchData -> fetchDefects(intent.searchParam)
+            is HomeIntent.FetchData -> fetchDefects(intent.filterParam)
             is HomeIntent.NavigateToDataManagement -> navigateToDataManagement()
             is HomeIntent.NavigateToDefectEntry -> navigateToDefectEntry()
             is HomeIntent.NavigateToFilter -> navigateToFilter()
@@ -31,8 +32,8 @@ class HomeViewModel @Inject constructor(
 
 
     /* fetchDefects */
-    private fun fetchDefects(searchParam: LinkedHashMap<String, String>?) = viewModelScope.launch {
-        fetchDefectsUseCase.invoke(searchParam).onSuccess {
+    private fun fetchDefects(filterParam: FilterParam) = viewModelScope.launch {
+        fetchDefectsUseCase.invoke(filterParam).onSuccess {
             reduce { copy(defectList = it) }
         }.onFailure {
             Log.e(tag, "fetchCategory : $it")

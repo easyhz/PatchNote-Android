@@ -31,7 +31,7 @@ internal fun NavGraphBuilder.homeGraph(
     ) {
         val args = it.toRoute<Home>()
         HomeScreen(
-            searchParam = args.searchParam,
+            filterParam = args.filterParam,
             navigateToDataManagement = navController::navigateToDataManagement,
             navigateToDefectEntry = navController::navigateToDefectEntry,
             navigateToFilter = navController::navigateToFilter,
@@ -52,13 +52,13 @@ internal fun NavGraphBuilder.homeGraph(
         FilterScreen(
             filterParam = args.filterParam,
             navigateToUp = navController::navigateUp,
-            navigateToHome = { item -> navController.navigateToHome(searchParam = item, navOptions = navOptions) }
+            navigateToHome = { item -> navController.navigateToHome(filterParam = item, navOptions = navOptions) }
         )
     }
 }
 
-fun NavController.navigateToHome(searchParam: LinkedHashMap<String, String> = linkedMapOf(), navOptions: NavOptions? = null) {
-    navigate(Home(searchParam), navOptions)
+fun NavController.navigateToHome(filterParam: FilterParam = FilterParam(), navOptions: NavOptions? = null) {
+    navigate(Home(filterParam), navOptions)
 }
 
 fun NavController.navigateToFilter(filterParam: FilterParam) {

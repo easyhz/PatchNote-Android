@@ -35,15 +35,15 @@ import com.easyhz.patchnote.ui.theme.SubText
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
-    searchParam: LinkedHashMap<String, String>,
+    filterParam: FilterParam,
     navigateToDataManagement: () -> Unit,
     navigateToDefectEntry: () -> Unit,
     navigateToFilter: (FilterParam) -> Unit,
     navigateToDefectDetail: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    LaunchedEffect(searchParam) {
-        viewModel.postIntent(HomeIntent.FetchData(searchParam))
+    LaunchedEffect(filterParam) {
+        viewModel.postIntent(HomeIntent.FetchData(filterParam))
     }
     PatchNoteScaffold(
         modifier = modifier,
@@ -53,7 +53,7 @@ fun HomeScreen(
                     navigateToDataManagement()
                 }
                 HomeFilter(
-                    items = searchParam.entries.map { it.value },
+                    items = filterParam.searchFieldParam.entries.map { it.value },
                 ) {
                     viewModel.postIntent(HomeIntent.NavigateToFilter)
                 }
@@ -94,7 +94,7 @@ fun HomeScreen(
                 navigateToDefectEntry()
             }
             is HomeSideEffect.NavigateToFilter -> {
-                navigateToFilter(FilterParam(searchFieldParam = searchParam, indexFieldParam = linkedMapOf()))
+                navigateToFilter(filterParam)
             }
             is HomeSideEffect.NavigateToDefectDetail -> {
                 navigateToDefectDetail(sideEffect.defectId)

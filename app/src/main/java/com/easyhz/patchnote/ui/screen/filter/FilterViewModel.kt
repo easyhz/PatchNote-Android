@@ -1,6 +1,7 @@
 package com.easyhz.patchnote.ui.screen.filter
 
 import com.easyhz.patchnote.core.common.base.BaseViewModel
+import com.easyhz.patchnote.core.common.util.toLinkedHashMap
 import com.easyhz.patchnote.core.model.filter.Filter
 import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.core.model.filter.FilterValue
@@ -55,14 +56,18 @@ class FilterViewModel @Inject constructor(
         currentState.filterItem[Filter.REQUESTER]?.asString().takeIf { !it.isNullOrBlank() }?.let {
             item[Filter.REQUESTER.alias] = it
         }
-        val nonIndex = currentState.filterItem.entries.filter { !it.key.isInSearchField }.filter {
+        val indexFieldParam = currentState.filterItem.entries.filter { !it.key.isInSearchField }.filter {
             it.value.asLong() != null || it.value.asInt() != 0 || it.value.asString() != ""
         }.associate {
             it.key.alias to it.value.asString()
-        }
+        }.toLinkedHashMap()
 
+        val filterParam = FilterParam(
+            searchFieldParam = item,
+            indexFieldParam = indexFieldParam,
+        )
         clearFocus()
-        postSideEffect { FilterSideEffect.NavigateToHome(searchFieldParam = item) }
+        postSideEffect { FilterSideEffect.NavigateToHome(filterParam = filterParam) }
     }
 
     private fun clearFocus() {
