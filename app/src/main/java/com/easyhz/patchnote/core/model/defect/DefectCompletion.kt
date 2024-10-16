@@ -14,12 +14,12 @@ data class DefectCompletion(
 )
 
 data class DefectCompletionParam(
+    val id: String,
     val afterDescription: String,
     val afterImageUris: List<Uri>
 ) {
 
     fun toDefectCompletion(
-        id: String,
         workerId: String,
         workerName: String,
         workerPhone: String,
