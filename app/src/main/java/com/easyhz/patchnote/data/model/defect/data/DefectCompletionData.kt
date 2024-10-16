@@ -3,7 +3,7 @@ package com.easyhz.patchnote.data.model.defect.data
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName
 
-data class CompletionData(
+data class DefectCompletionData(
     @PropertyName("afterDescription")
     val afterDescription: String = "",
     @PropertyName("afterImageSizes")
@@ -18,8 +18,6 @@ data class CompletionData(
     val workerName: String? = null,
     @PropertyName("workerPhone")
     val workerPhone: String? = null,
-    @PropertyName("requestDate")
-    val requestDate: Timestamp = Timestamp.now(),
     @PropertyName("completionDate")
     val completionDate: Timestamp? = Timestamp.now()
 )

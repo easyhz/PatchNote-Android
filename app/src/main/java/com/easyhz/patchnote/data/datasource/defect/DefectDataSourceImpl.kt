@@ -11,7 +11,7 @@ import com.easyhz.patchnote.core.common.util.fetchHandler
 import com.easyhz.patchnote.core.common.util.search
 import com.easyhz.patchnote.core.common.util.setHandler
 import com.easyhz.patchnote.core.model.defect.DefectProgress
-import com.easyhz.patchnote.data.model.defect.data.CompletionData
+import com.easyhz.patchnote.data.model.defect.data.DefectCompletionData
 import com.easyhz.patchnote.data.model.defect.data.DefectData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query.Direction
@@ -38,7 +38,7 @@ class DefectDataSourceImpl @Inject constructor(
         firestore.collection(DEFECT).document(id).get()
     }
 
-    override suspend fun updateDefectCompletion(id: String, data: CompletionData): Result<Unit> = setHandler(dispatcher) {
+    override suspend fun updateDefectCompletion(id: String, data: DefectCompletionData): Result<Unit> = setHandler(dispatcher) {
         firestore.runTransaction { transaction ->
             val docRef = firestore.collection(DEFECT).document(id)
             transaction.update(docRef, PROGRESS, DefectProgress.DONE)

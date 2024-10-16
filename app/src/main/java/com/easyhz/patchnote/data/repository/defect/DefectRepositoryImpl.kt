@@ -1,5 +1,6 @@
 package com.easyhz.patchnote.data.repository.defect
 
+import com.easyhz.patchnote.core.model.defect.DefectCompletion
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.EntryDefect
 import com.easyhz.patchnote.core.model.filter.FilterParam
@@ -25,5 +26,9 @@ class DefectRepositoryImpl @Inject constructor(
 
     override suspend fun fetchDefect(id: String): Result<DefectItem> {
         return defectDataSource.fetchDefect(id).map { it.toModel() }
+    }
+
+    override suspend fun updateDefectCompletion(param: DefectCompletion): Result<Unit> {
+        return defectDataSource.updateDefectCompletion(param.id, param.toData())
     }
 }
