@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -110,10 +111,8 @@ private fun HomeCardImage(
     imageUrl: String,
     progress: DefectProgress,
 ) {
-    val backgroundColor = if (progress.isDone()) DoneColor else SubBackground
-
     Box(
-        modifier = modifier.background(backgroundColor),
+        modifier = modifier.background(SubBackground),
         contentAlignment = Alignment.Center
     ) {
         ImageContent(imageUrl = imageUrl)
@@ -145,12 +144,19 @@ private fun DoneLabel(
     progress: DefectProgress
 ) {
     if (progress.isDone()) {
-        Text(
-            modifier = modifier,
-            text = stringResource(R.string.defect_done),
-            style = SemiBold16,
-            color = MainBackground
-        )
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(DoneColor),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                modifier = modifier,
+                text = stringResource(R.string.defect_done),
+                style = SemiBold16,
+                color = MainBackground
+            )
+        }
     }
 }
 

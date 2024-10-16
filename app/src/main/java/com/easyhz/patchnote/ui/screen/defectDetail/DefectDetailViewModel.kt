@@ -2,6 +2,7 @@ package com.easyhz.patchnote.ui.screen.defectDetail
 
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
+import com.easyhz.patchnote.core.model.defect.DefectMainItem
 import com.easyhz.patchnote.domain.usecase.defect.FetchDefectUseCase
 import com.easyhz.patchnote.ui.screen.defectDetail.contract.DetailIntent
 import com.easyhz.patchnote.ui.screen.defectDetail.contract.DetailSideEffect
@@ -21,6 +22,7 @@ class DefectDetailViewModel @Inject constructor(
         when(intent) {
             is DetailIntent.FetchData -> fetchDefectDetail(intent.defectId)
             is DetailIntent.NavigateToUp -> navigateToUp()
+            is DetailIntent.CompleteDefect -> navigateToDefectCompletion()
         }
     }
 
@@ -34,5 +36,22 @@ class DefectDetailViewModel @Inject constructor(
 
     private fun navigateToUp() {
         postSideEffect { DetailSideEffect.NavigateToUp }
+    }
+
+    private fun navigateToDefectCompletion() {
+        currentState.defectItem?.let { item ->
+            val defectMainItem = DefectMainItem(
+                id = item.id,
+                site = item.site,
+                building = item.building,
+                unit = item.unit,
+                space = item.space,
+                part = item.part,
+                workType = item.workType,
+                requesterName = item.requesterName,
+                requestDate = item.requestDate
+            )
+            postSideEffect { DetailSideEffect.NavigateToDefectCompletion(defectMainItem) }
+        }
     }
 }

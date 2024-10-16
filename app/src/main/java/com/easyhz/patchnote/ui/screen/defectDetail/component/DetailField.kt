@@ -1,6 +1,13 @@
 package com.easyhz.patchnote.ui.screen.defectDetail.component
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -86,13 +92,22 @@ fun DetailField(
                 }
             }
         }
-        HorizontalPager(
-            modifier = Modifier
-                .fillMaxWidth(),
-            state = pagerState,
+
+        AnimatedContent(
+            targetState = selectedIndex,
+            transitionSpec = {
+                if (selectedIndex == 0) {
+                    (slideInHorizontally { width -> -width } + fadeIn()).togetherWith(
+                        slideOutHorizontally { width -> width } + fadeOut())
+                } else {
+                    (slideInHorizontally { width -> width } + fadeIn()).togetherWith(
+                        slideOutHorizontally { width -> -width } + fadeOut())
+                }.using(SizeTransform(clip = false))
+            },
+            label = "DetailField",
         ) { page ->
             AnimatedVisibility(
-                visible = tabs[page].imageUrls.isEmpty()
+                visible = tabs[page].imageUrls.isEmpty(),
             ) {
                 Box(modifier = Modifier.height(500.dp).fillMaxWidth(), contentAlignment = Alignment.Center) {
                     Text(

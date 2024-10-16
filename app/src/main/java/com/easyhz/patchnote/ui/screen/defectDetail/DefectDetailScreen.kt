@@ -20,7 +20,10 @@ import com.easyhz.patchnote.core.designSystem.component.button.MainButton
 import com.easyhz.patchnote.core.designSystem.component.header.DefectHeader
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
+import com.easyhz.patchnote.core.designSystem.util.button.ButtonColor
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
+import com.easyhz.patchnote.core.model.defect.DefectMainItem
+import com.easyhz.patchnote.core.model.defect.DefectProgress
 import com.easyhz.patchnote.core.model.defect.DefectUser
 import com.easyhz.patchnote.ui.screen.defectDetail.component.DetailField
 import com.easyhz.patchnote.ui.screen.defectDetail.contract.DetailIntent
@@ -32,7 +35,8 @@ fun DefectDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: DefectDetailViewModel = hiltViewModel(),
     defectId: String,
-    navigateToUp: () -> Unit
+    navigateToUp: () -> Unit,
+    navigateToDefectCompletion: (DefectMainItem) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) {
@@ -62,10 +66,18 @@ fun DefectDetailScreen(
         },
         bottomBar = {
             MainButton(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 12.dp),
-                text = stringResource(R.string.defect_do_done)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 12.dp),
+                text = if (uiState.defectItem?.progress == DefectProgress.DONE) stringResource(R.string.defect_completion) else stringResource(
+                    R.string.defect_do_done
+                ),
+                buttonColor = ButtonColor(
+                    disabledContentColor = MainText
+                ),
+                enabled = uiState.defectItem?.progress != DefectProgress.DONE,
             ) {
-                /* 완료 처리 */
+                viewModel.postIntent(DetailIntent.CompleteDefect)
             }
         }
     ) { innerPadding ->
@@ -81,8 +93,14 @@ fun DefectDetailScreen(
                     part = uiState.defectItem!!.part,
                     space = uiState.defectItem!!.space,
                     workType = uiState.defectItem!!.workType,
-                    requester = DefectUser.create(uiState.defectItem!!.requesterName, uiState.defectItem!!.requestDate),
-                    worker = DefectUser.create(uiState.defectItem!!.workerName, uiState.defectItem!!.requestDate)
+                    requester = DefectUser.create(
+                        uiState.defectItem!!.requesterName,
+                        uiState.defectItem!!.requestDate
+                    ),
+                    worker = DefectUser.create(
+                        uiState.defectItem!!.workerName,
+                        uiState.defectItem!!.requestDate
+                    )
                 )
             }
             item {
@@ -97,9 +115,13 @@ fun DefectDetailScreen(
     }
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
-        when(sideEffect) {
+        when (sideEffect) {
             DetailSideEffect.NavigateToUp -> {
                 navigateToUp()
+            }
+
+            is DetailSideEffect.NavigateToDefectCompletion -> {
+                navigateToDefectCompletion(sideEffect.defectMainItem)
             }
         }
     }

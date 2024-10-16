@@ -1,9 +1,17 @@
 package com.easyhz.patchnote.data.datasource.defect
 
 import com.easyhz.patchnote.core.common.constant.Collection.DEFECT
+import com.easyhz.patchnote.core.common.constant.Field.AFTER_DESCRIPTION
+import com.easyhz.patchnote.core.common.constant.Field.AFTER_IMAGE_SIZES
+import com.easyhz.patchnote.core.common.constant.Field.AFTER_IMAGE_URLS
+import com.easyhz.patchnote.core.common.constant.Field.COMPLETION_DATE
+import com.easyhz.patchnote.core.common.constant.Field.COMPLETION_DATE_STR
 import com.easyhz.patchnote.core.common.constant.Field.PROGRESS
 import com.easyhz.patchnote.core.common.constant.Field.REQUEST_DATE
 import com.easyhz.patchnote.core.common.constant.Field.SEARCH
+import com.easyhz.patchnote.core.common.constant.Field.WORKER_ID
+import com.easyhz.patchnote.core.common.constant.Field.WORKER_NAME
+import com.easyhz.patchnote.core.common.constant.Field.WORKER_PHONE
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
 import com.easyhz.patchnote.core.common.util.documentHandler
@@ -39,10 +47,18 @@ class DefectDataSourceImpl @Inject constructor(
     }
 
     override suspend fun updateDefectCompletion(id: String, data: DefectCompletionData): Result<Unit> = setHandler(dispatcher) {
+        println("updateDefectCompletion id: $id, data: $data")
         firestore.runTransaction { transaction ->
             val docRef = firestore.collection(DEFECT).document(id)
             transaction.update(docRef, PROGRESS, DefectProgress.DONE)
-            transaction.set(docRef, data)
+            transaction.update(docRef, AFTER_DESCRIPTION, data.afterDescription)
+            transaction.update(docRef, AFTER_IMAGE_URLS, data.afterImageUrls)
+            transaction.update(docRef, AFTER_IMAGE_SIZES, data.afterImageSizes)
+            transaction.update(docRef, WORKER_ID, data.workerId)
+            transaction.update(docRef, WORKER_NAME, data.workerName)
+            transaction.update(docRef, WORKER_PHONE, data.workerPhone)
+            transaction.update(docRef, COMPLETION_DATE, data.completionDate)
+            transaction.update(docRef, COMPLETION_DATE_STR, data.completionDateStr)
 
             null
         }

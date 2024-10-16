@@ -59,10 +59,19 @@ fun DefectImageField(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = stringResource(R.string.defect_entry_image),
-                style = SemiBold18
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.defect_entry_image),
+                    style = SemiBold18
+                )
+                Text(
+                    text = "${images.size}/10",
+                    style = SemiBold18,
+                    color = PlaceholderText,
+                )
+            }
 
             Icon(
                 modifier = Modifier.size(32.dp).noRippleClickable { onClickAdd() },

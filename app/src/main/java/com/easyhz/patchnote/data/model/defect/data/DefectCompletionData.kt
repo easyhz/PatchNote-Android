@@ -1,5 +1,6 @@
 package com.easyhz.patchnote.data.model.defect.data
 
+import com.easyhz.patchnote.core.common.util.DateFormatUtil
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName
 
@@ -19,5 +20,7 @@ data class DefectCompletionData(
     @PropertyName("workerPhone")
     val workerPhone: String? = null,
     @PropertyName("completionDate")
-    val completionDate: Timestamp? = Timestamp.now()
+    val completionDate: Timestamp? = Timestamp.now(),
+    @PropertyName("completionDateStr")
+    val completionDateStr: String = DateFormatUtil.formatTimestampToDateString(Timestamp.now())
 )
