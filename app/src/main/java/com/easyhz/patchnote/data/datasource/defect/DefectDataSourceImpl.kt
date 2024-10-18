@@ -16,9 +16,12 @@ import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
 import com.easyhz.patchnote.core.common.util.documentHandler
 import com.easyhz.patchnote.core.common.util.fetchHandler
+import com.easyhz.patchnote.core.common.util.indexSearch
+import com.easyhz.patchnote.core.common.util.indexSearchDate
 import com.easyhz.patchnote.core.common.util.search
 import com.easyhz.patchnote.core.common.util.setHandler
 import com.easyhz.patchnote.core.model.defect.DefectProgress
+import com.easyhz.patchnote.core.model.filter.IndexField
 import com.easyhz.patchnote.data.model.defect.data.DefectCompletionData
 import com.easyhz.patchnote.data.model.defect.data.DefectData
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,10 +37,14 @@ class DefectDataSourceImpl @Inject constructor(
         firestore.collection(DEFECT).document(data.id).set(data)
     }
 
-    override suspend fun fetchDefects(search: String?): Result<List<DefectData>> =
+    override suspend fun fetchDefects(search: String?, index: IndexField): Result<List<DefectData>> =
         fetchHandler(dispatcher) {
             firestore.collection(DEFECT)
                 .search(SEARCH, search)
+                .indexSearch(PROGRESS, index.progress)
+                .indexSearchDate(REQUEST_DATE, index.requestDate)
+                .indexSearch(WORKER_NAME, index.workerName)
+                .indexSearch(COMPLETION_DATE_STR, index.completionDate)
                 .orderBy(REQUEST_DATE, Direction.DESCENDING)
                 .get()
         }
@@ -47,19 +54,22 @@ class DefectDataSourceImpl @Inject constructor(
     }
 
     override suspend fun updateDefectCompletion(id: String, data: DefectCompletionData): Result<Unit> = setHandler(dispatcher) {
-        println("updateDefectCompletion id: $id, data: $data")
         firestore.runTransaction { transaction ->
             val docRef = firestore.collection(DEFECT).document(id)
-            transaction.update(docRef, PROGRESS, DefectProgress.DONE)
-            transaction.update(docRef, AFTER_DESCRIPTION, data.afterDescription)
-            transaction.update(docRef, AFTER_IMAGE_URLS, data.afterImageUrls)
-            transaction.update(docRef, AFTER_IMAGE_SIZES, data.afterImageSizes)
-            transaction.update(docRef, WORKER_ID, data.workerId)
-            transaction.update(docRef, WORKER_NAME, data.workerName)
-            transaction.update(docRef, WORKER_PHONE, data.workerPhone)
-            transaction.update(docRef, COMPLETION_DATE, data.completionDate)
-            transaction.update(docRef, COMPLETION_DATE_STR, data.completionDateStr)
 
+            val updateData = mapOf(
+                PROGRESS to DefectProgress.DONE.name,
+                AFTER_DESCRIPTION to data.afterDescription,
+                AFTER_IMAGE_URLS to data.afterImageUrls,
+                AFTER_IMAGE_SIZES to data.afterImageSizes,
+                WORKER_ID to data.workerId,
+                WORKER_NAME to data.workerName,
+                WORKER_PHONE to data.workerPhone,
+                COMPLETION_DATE to data.completionDate,
+                COMPLETION_DATE_STR to data.completionDateStr
+            )
+
+            transaction.update(docRef, updateData)
             null
         }
     }

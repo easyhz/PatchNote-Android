@@ -1,7 +1,9 @@
 package com.easyhz.patchnote.ui.screen.filter
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -49,6 +53,7 @@ import com.easyhz.patchnote.ui.screen.filter.contract.FilterIntent
 import com.easyhz.patchnote.ui.screen.filter.contract.FilterSideEffect
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Primary
+import com.easyhz.patchnote.ui.theme.SemiBold16
 
 @Composable
 fun FilterScreen(
@@ -100,6 +105,23 @@ fun FilterScreen(
                 .padding(vertical = 8.dp, horizontal = 20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            Row(
+                modifier = Modifier.height(32.dp).noRippleClickable {
+                    viewModel.postIntent(FilterIntent.Reset)
+                    defectViewModel.postIntent(DefectIntent.Reset)
+                },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_reset_leading),
+                    contentDescription = "reset",
+                )
+                Text(
+                    text = stringResource(id = R.string.filter_reset),
+                    color = Primary,
+                    style = SemiBold16,
+                )
+            }
             defectState.entryItem.forEach { (category, value) ->
                 DefectCategoryField(
                     value = value,
@@ -174,7 +196,7 @@ fun FilterScreen(
                                 imeAction = ImeAction.Next,
                             ),
                             keyboardActions = KeyboardActions(
-                                onNext = { }
+                                onNext = { focusManager.moveFocus(FocusDirection.Down) }
                             )
                         )
                     }

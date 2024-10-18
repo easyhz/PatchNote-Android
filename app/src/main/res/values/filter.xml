@@ -17,4 +17,7 @@
     <string name="filter_progress_requested">미완료</string>
     <string name="filter_progress_done">완료</string>
 
+    <string name="filter_reset">필터 초기화</string>
+
+
 </resources>

@@ -20,8 +20,8 @@ class DefectRepositoryImpl @Inject constructor(
         val searchFieldParam = filterParam.searchFieldParam.entries.joinToString("||") {
             "${it.key}=${it.value}"
         }
-        // TODO : Index Search Field Param 추가 필요
-        return defectDataSource.fetchDefects(searchFieldParam).map { it.map { defectData -> defectData.toModel() } }
+        val indexSearchField = filterParam.toIndexField()
+        return defectDataSource.fetchDefects(searchFieldParam, indexSearchField).map { it.map { defectData -> defectData.toModel() } }
     }
 
     override suspend fun fetchDefect(id: String): Result<DefectItem> {

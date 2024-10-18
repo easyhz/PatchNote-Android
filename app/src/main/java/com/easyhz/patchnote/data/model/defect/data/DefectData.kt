@@ -86,5 +86,7 @@ data class DefectData(
     @PropertyName("completionDate")
     val completionDate: Timestamp? = null,
     @PropertyName("search")
-    val search: List<String> = emptyList()
+    val search: List<String> = emptyList(),
+    @PropertyName("completionDateStr")
+    val completionDateStr: String = ""
 )

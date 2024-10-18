@@ -19,6 +19,7 @@ import com.easyhz.patchnote.ui.screen.defect.contract.DefectIntent
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectSideEffect
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectState
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectState.Companion.clearEntryItemValue
+import com.easyhz.patchnote.ui.screen.defect.contract.DefectState.Companion.resetData
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectState.Companion.updateEntryItemValue
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectState.Companion.updateSearchCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -67,6 +68,10 @@ class DefectViewModel @Inject constructor(
 
             is DefectIntent.InitFilter -> {
                 initFilter(intent.filterParam)
+            }
+
+            is DefectIntent.Reset -> {
+                reset()
             }
         }
     }
@@ -182,5 +187,10 @@ class DefectViewModel @Inject constructor(
             )
         }.toLinkedHashMap()
         reduce { copy(entryItem = item) }
+    }
+
+    /* reset */
+    private fun reset() {
+        reduce { resetData() }
     }
 }

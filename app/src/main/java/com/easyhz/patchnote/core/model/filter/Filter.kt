@@ -2,6 +2,7 @@ package com.easyhz.patchnote.core.model.filter
 
 import androidx.annotation.StringRes
 import com.easyhz.patchnote.R
+import com.easyhz.patchnote.core.common.util.DateFormatUtil
 import com.easyhz.patchnote.core.common.util.toLinkedHashMap
 
 enum class Filter(
@@ -46,8 +47,31 @@ enum class Filter(
         fun toLinkedHashMap(): LinkedHashMap<Filter, FilterValue> =
             LinkedHashMap(entries.associateWith { it.createEmptyValue() })
 
-        fun associateFilterValue(value: LinkedHashMap<String, String>): LinkedHashMap<Filter, FilterValue> {
-            return entries.associateWith { FilterValue.StringValue(value[it.alias] ?: "") }.toLinkedHashMap()
+        fun associateFilterValue(filterParam: FilterParam): LinkedHashMap<Filter, FilterValue> {
+            val indexField = filterParam.indexFieldParam
+            val requesterName = filterParam.searchFieldParam["requesterName"]
+            return entries.associateWith {
+                when (it.filterType) {
+                    FilterType.RADIO ->  {
+                        indexField[it.alias]?.let { progress ->
+                            val filterProgress = FilterProgress.valueOf(progress)
+                            FilterValue.IntValue(FilterProgress.entries.indexOf(filterProgress))
+                        } ?: run {
+                            FilterValue.IntValue(0)
+                        }
+                    }
+                    FilterType.DATE -> {
+                        indexField[it.alias]?.let { date ->
+                            FilterValue.LongValue(DateFormatUtil.convertStringToMillis(date))
+                        } ?: run {
+                            FilterValue.LongValue(null)
+                        }
+                    }
+                    FilterType.FREE_FORM -> FilterValue.StringValue(indexField[it.alias] ?: "")
+                }
+            }.toLinkedHashMap().apply {
+                this[REQUESTER] = FilterValue.StringValue(requesterName ?: "")
+            }
         }
     }
 

@@ -15,4 +15,5 @@ sealed class DefectIntent: UiIntent() {
     data class ClearData(val categoryType: CategoryType): DefectIntent()
     data object SearchItem: DefectIntent()
     data class InitFilter(val filterParam: FilterParam): DefectIntent()
+    data object Reset: DefectIntent()
 }

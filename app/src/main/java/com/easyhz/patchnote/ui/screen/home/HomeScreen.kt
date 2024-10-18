@@ -14,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -42,6 +43,7 @@ fun HomeScreen(
     navigateToDefectDetail: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
     LaunchedEffect(filterParam) {
         viewModel.postIntent(HomeIntent.FetchData(filterParam))
     }
@@ -53,7 +55,7 @@ fun HomeScreen(
                     navigateToDataManagement()
                 }
                 HomeFilter(
-                    items = filterParam.searchFieldParam.entries.map { it.value },
+                    items = filterParam.toList(context),
                 ) {
                     viewModel.postIntent(HomeIntent.NavigateToFilter)
                 }

@@ -1,9 +1,11 @@
 package com.easyhz.patchnote.ui.screen.filter
 
 import com.easyhz.patchnote.core.common.base.BaseViewModel
+import com.easyhz.patchnote.core.common.util.DateFormatUtil
 import com.easyhz.patchnote.core.common.util.toLinkedHashMap
 import com.easyhz.patchnote.core.model.filter.Filter
 import com.easyhz.patchnote.core.model.filter.FilterParam
+import com.easyhz.patchnote.core.model.filter.FilterProgress
 import com.easyhz.patchnote.core.model.filter.FilterValue
 import com.easyhz.patchnote.core.model.filter.FilterValue.Companion.asInt
 import com.easyhz.patchnote.core.model.filter.FilterValue.Companion.asLong
@@ -41,11 +43,15 @@ class FilterViewModel @Inject constructor(
             is FilterIntent.ClearFilterValue -> {
                 clearFilterValue(intent.filter)
             }
+            is FilterIntent.Reset -> {
+                reduce { FilterState.init() }
+            }
         }
     }
 
     private fun initFilter(filterParam: FilterParam) {
-        reduce { copy(filterItem = Filter.associateFilterValue(filterParam.indexFieldParam)) }
+        reduce { copy(filterItem = Filter.associateFilterValue(filterParam)) }
+        println("currentState: ${currentState.filterItem}")
     }
 
     private fun changeFilterValue(filter: Filter, value: FilterValue) {
@@ -56,11 +62,20 @@ class FilterViewModel @Inject constructor(
         currentState.filterItem[Filter.REQUESTER]?.asString().takeIf { !it.isNullOrBlank() }?.let {
             item[Filter.REQUESTER.alias] = it
         }
-        val indexFieldParam = currentState.filterItem.entries.filter { !it.key.isInSearchField }.filter {
-            it.value.asLong() != null || it.value.asInt() != 0 || it.value.asString() != ""
-        }.associate {
-            it.key.alias to it.value.asString()
-        }.toLinkedHashMap()
+        val indexFieldParam = currentState.filterItem.entries
+            .filter { !it.key.isInSearchField }
+            .filter {
+                it.value.asLong() != null || it.value.asInt() != 0 || it.value.asString().isNotEmpty()
+            }
+            .associate { entry ->
+                val value = when {
+                    entry.value.asInt() != 0 -> FilterProgress.entries[entry.value.asInt()].progress.toString()
+                    entry.value.asLong() != null -> DateFormatUtil.convertMillisToDate(entry.value.asLong()!!)
+                    else -> entry.value.asString()
+                }
+                entry.key.alias to value
+            }
+            .toLinkedHashMap()
 
         val filterParam = FilterParam(
             searchFieldParam = item,

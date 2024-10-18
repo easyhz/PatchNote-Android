@@ -46,5 +46,13 @@ data class DefectState(
             }
             return copy(entryItem = updatedEntryItem)
         }
+
+        fun DefectState.resetData(): DefectState {
+            val updatedEntryItem = LinkedHashMap(entryItem)
+            CategoryType.entries.forEach { item ->
+                updatedEntryItem[item] = TextFieldValue("")
+            }
+            return copy(entryItem = updatedEntryItem)
+        }
     }
 }

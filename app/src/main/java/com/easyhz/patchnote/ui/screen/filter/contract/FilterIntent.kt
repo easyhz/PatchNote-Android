@@ -11,4 +11,5 @@ sealed class FilterIntent: UiIntent() {
     data class Search(val item: LinkedHashMap<String, String>): FilterIntent()
     data object NavigateToUp: FilterIntent()
     data class ClearFilterValue(val filter: Filter): FilterIntent()
+    data object Reset: FilterIntent()
 }
