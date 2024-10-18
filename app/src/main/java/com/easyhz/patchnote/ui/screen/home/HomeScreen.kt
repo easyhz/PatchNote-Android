@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,9 +33,12 @@ import com.easyhz.patchnote.core.designSystem.component.topbar.HomeTopBar
 import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.ui.screen.home.contract.HomeIntent
 import com.easyhz.patchnote.ui.screen.home.contract.HomeSideEffect
+import com.easyhz.patchnote.ui.theme.Primary
 import com.easyhz.patchnote.ui.theme.SemiBold16
+import com.easyhz.patchnote.ui.theme.SubBackground
 import com.easyhz.patchnote.ui.theme.SubText
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -44,45 +51,62 @@ fun HomeScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val pullToRefreshState = rememberPullToRefreshState()
+
     LaunchedEffect(filterParam) {
         viewModel.postIntent(HomeIntent.FetchData(filterParam))
     }
     PatchNoteScaffold(
         modifier = modifier,
         topBar = {
-            Column {
-                HomeTopBar {
-                    navigateToDataManagement()
-                }
-                HomeFilter(
-                    items = filterParam.toList(context),
-                ) {
-                    viewModel.postIntent(HomeIntent.NavigateToFilter)
-                }
+            HomeTopBar {
+                navigateToDataManagement()
             }
         },
         floatingActionButton = {
             HomeFloatingActionButton { navigateToDefectEntry() }
         }
     ) { innerPadding ->
-        if (uiState.defectList.isEmpty()) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(
-                    text = stringResource(R.string.home_defect_empty),
-                    style = SemiBold16,
-                    color = SubText
+        PullToRefreshBox(
+            modifier = Modifier.padding(innerPadding).fillMaxSize(),
+            isRefreshing = uiState.isRefreshing,
+            onRefresh = { viewModel.postIntent(HomeIntent.Refresh(filterParam)) },
+            state = pullToRefreshState,
+            indicator = {
+                Indicator(
+                    modifier = Modifier.align(Alignment.TopCenter),
+                    state = pullToRefreshState,
+                    isRefreshing = uiState.isRefreshing,
+                    containerColor = SubBackground,
+                    color = Primary
                 )
             }
-        }
-        LazyColumn(
-            modifier = Modifier.padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            items(uiState.defectList, key = { it.id }) { defectItem ->
-                HomeCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    defectItem = defectItem
-                ) { viewModel.postIntent(HomeIntent.NavigateToDefectDetail(defectItem.id)) }
+            if (uiState.defectList.isEmpty()) {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(
+                        text = stringResource(R.string.home_defect_empty),
+                        style = SemiBold16,
+                        color = SubText
+                    )
+                }
+            }
+            Column {
+                HomeFilter(
+                    items = filterParam.toList(context),
+                ) {
+                    viewModel.postIntent(HomeIntent.NavigateToFilter)
+                }
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    items(uiState.defectList, key = { it.id }) { defectItem ->
+                        HomeCard(
+                            modifier = Modifier.fillMaxWidth(),
+                            defectItem = defectItem
+                        ) { viewModel.postIntent(HomeIntent.NavigateToDefectDetail(defectItem.id)) }
+                    }
+                }
             }
         }
     }

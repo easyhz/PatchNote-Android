@@ -27,6 +27,7 @@ class HomeViewModel @Inject constructor(
             is HomeIntent.NavigateToDefectEntry -> navigateToDefectEntry()
             is HomeIntent.NavigateToFilter -> navigateToFilter()
             is HomeIntent.NavigateToDefectDetail -> navigateToDefectDetail(intent.defectId)
+            is HomeIntent.Refresh -> refresh(intent.filterParam)
         }
     }
 
@@ -37,6 +38,10 @@ class HomeViewModel @Inject constructor(
             reduce { copy(defectList = it) }
         }.onFailure {
             Log.e(tag, "fetchCategory : $it")
+        }.also {
+            if (currentState.isRefreshing) {
+                reduce { copy(isRefreshing = false) }
+            }
         }
     }
 
@@ -58,5 +63,11 @@ class HomeViewModel @Inject constructor(
     /* 하자 상세 화면 이동 */
     private fun navigateToDefectDetail(defectId: String) {
         postSideEffect { HomeSideEffect.NavigateToDefectDetail(defectId = defectId) }
+    }
+
+    /* refresh */
+    private fun refresh(filterParam: FilterParam) = viewModelScope.launch {
+        reduce { copy(isRefreshing = true) }
+        fetchDefects(filterParam)
     }
 }
