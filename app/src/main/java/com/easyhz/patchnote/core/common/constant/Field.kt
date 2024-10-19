@@ -13,4 +13,5 @@ object Field {
     const val WORKER_PHONE = "workerPhone"
     const val COMPLETION_DATE = "completionDate"
     const val COMPLETION_DATE_STR = "completionDateStr"
+    const val CONFIGURATION = "configuration"
 }

@@ -4,6 +4,8 @@ import com.easyhz.patchnote.data.datasource.auth.AuthDataSource
 import com.easyhz.patchnote.data.datasource.auth.AuthDataSourceImpl
 import com.easyhz.patchnote.data.datasource.category.CategoryDataSource
 import com.easyhz.patchnote.data.datasource.category.CategoryDataSourceImpl
+import com.easyhz.patchnote.data.datasource.configuration.ConfigurationDataSource
+import com.easyhz.patchnote.data.datasource.configuration.ConfigurationDataSourceImpl
 import com.easyhz.patchnote.data.datasource.defect.DefectDataSource
 import com.easyhz.patchnote.data.datasource.defect.DefectDataSourceImpl
 import com.easyhz.patchnote.data.datasource.image.ImageDataSource
@@ -43,4 +45,9 @@ interface DataSourceModule {
     fun bindUserLocalDataSource(
         userDataSourceImpl: UserLocalDataSourceImpl
     ): UserLocalDataSource
+
+    @Binds
+    fun bindConfigurationDataSource(
+        configurationDataSourceImpl: ConfigurationDataSourceImpl
+    ): ConfigurationDataSource
 }

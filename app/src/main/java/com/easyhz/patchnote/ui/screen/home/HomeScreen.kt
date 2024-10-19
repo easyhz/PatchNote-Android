@@ -1,5 +1,7 @@
 package com.easyhz.patchnote.ui.screen.home
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +20,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -27,14 +30,17 @@ import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.button.HomeFloatingActionButton
 import com.easyhz.patchnote.core.designSystem.component.card.HomeCard
+import com.easyhz.patchnote.core.designSystem.component.dialog.BasicDialog
 import com.easyhz.patchnote.core.designSystem.component.filter.HomeFilter
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.core.designSystem.component.topbar.HomeTopBar
+import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
 import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.ui.screen.home.contract.HomeIntent
 import com.easyhz.patchnote.ui.screen.home.contract.HomeSideEffect
 import com.easyhz.patchnote.ui.theme.Primary
 import com.easyhz.patchnote.ui.theme.SemiBold16
+import com.easyhz.patchnote.ui.theme.SemiBold18
 import com.easyhz.patchnote.ui.theme.SubBackground
 import com.easyhz.patchnote.ui.theme.SubText
 
@@ -109,6 +115,19 @@ fun HomeScreen(
                 }
             }
         }
+        if (!uiState.isLatestVersion) {
+            BasicDialog(
+                title = stringResource(R.string.version_dialog_title),
+                content = null,
+                positiveButton = BasicDialogButton(
+                    text = stringResource(R.string.version_dialog_button),
+                    style = SemiBold18.copy(color = Color.White),
+                    backgroundColor = Primary,
+                    onClick = { viewModel.postIntent(HomeIntent.UpdateAppVersion) }
+                ),
+                negativeButton = null
+            )
+        }
     }
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
@@ -124,6 +143,10 @@ fun HomeScreen(
             }
             is HomeSideEffect.NavigateToDefectDetail -> {
                 navigateToDefectDetail(sideEffect.defectId)
+            }
+            is HomeSideEffect.NavigateToVersionUpdate -> {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(sideEffect.url))
+                context.startActivity(intent)
             }
         }
     }

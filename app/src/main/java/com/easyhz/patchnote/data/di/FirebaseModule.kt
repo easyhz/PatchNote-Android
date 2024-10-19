@@ -29,7 +29,7 @@ object FirebaseModule {
 
     @Provides
     @Singleton
-    fun provideFireBaseStorage(): FirebaseStorage {
+    fun provideFirebaseStorage(): FirebaseStorage {
         return Firebase.storage
     }
 }

@@ -2,8 +2,10 @@ package com.easyhz.patchnote.ui.screen.home
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.easyhz.patchnote.BuildConfig
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.model.filter.FilterParam
+import com.easyhz.patchnote.domain.usecase.configuration.FetchConfigurationUseCase
 import com.easyhz.patchnote.domain.usecase.defect.FetchDefectsUseCase
 import com.easyhz.patchnote.ui.screen.home.contract.HomeIntent
 import com.easyhz.patchnote.ui.screen.home.contract.HomeSideEffect
@@ -14,6 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    private val fetchConfigurationUseCase: FetchConfigurationUseCase,
     private val fetchDefectsUseCase: FetchDefectsUseCase,
 ): BaseViewModel<HomeState, HomeIntent, HomeSideEffect>(
     initialState = HomeState.init()
@@ -28,7 +31,12 @@ class HomeViewModel @Inject constructor(
             is HomeIntent.NavigateToFilter -> navigateToFilter()
             is HomeIntent.NavigateToDefectDetail -> navigateToDefectDetail(intent.defectId)
             is HomeIntent.Refresh -> refresh(intent.filterParam)
+            is HomeIntent.UpdateAppVersion -> updateAppVersion()
         }
+    }
+
+    init {
+        fetchConfiguration()
     }
 
 
@@ -42,6 +50,16 @@ class HomeViewModel @Inject constructor(
             if (currentState.isRefreshing) {
                 reduce { copy(isRefreshing = false) }
             }
+        }
+    }
+
+    /* fetchConfiguration */
+    private fun fetchConfiguration() = viewModelScope.launch {
+        fetchConfigurationUseCase.invoke(Unit).onSuccess {
+            val isLatestVersion = it.androidVersion == BuildConfig.VERSION_NAME
+            reduce { copy(isLatestVersion = isLatestVersion, appConfiguration = it) }
+        }.onFailure {
+            Log.e(tag, "fetchConfiguration : $it")
         }
     }
 
@@ -69,5 +87,10 @@ class HomeViewModel @Inject constructor(
     private fun refresh(filterParam: FilterParam) = viewModelScope.launch {
         reduce { copy(isRefreshing = true) }
         fetchDefects(filterParam)
+    }
+
+    /* updateAppVersion */
+    private fun updateAppVersion() {
+        postSideEffect { HomeSideEffect.NavigateToVersionUpdate(currentState.appConfiguration.notionUrl) }
     }
 }

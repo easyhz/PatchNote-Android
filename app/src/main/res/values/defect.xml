@@ -18,5 +18,5 @@
 
     <string name="defect_completion_title">완료 정보 입력</string>
     <string name="defect_completion_button">완료</string>
-    <string name="defect_completion_dialog_title">해당 하자를 완료 처리 했습니다</string>
+    <string name="defect_completion_dialog_title">해당 하자를 완료 처리했습니다</string>
 </resources>

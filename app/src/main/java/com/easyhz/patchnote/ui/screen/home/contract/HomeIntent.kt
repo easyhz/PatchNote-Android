@@ -10,4 +10,5 @@ sealed class HomeIntent: UiIntent() {
     data object NavigateToDefectEntry: HomeIntent()
     data object NavigateToFilter: HomeIntent()
     data class NavigateToDefectDetail(val defectId: String): HomeIntent()
+    data object UpdateAppVersion: HomeIntent()
 }

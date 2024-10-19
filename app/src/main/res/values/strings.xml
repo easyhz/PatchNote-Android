@@ -15,4 +15,7 @@
     <string name="requested_content">접수 내용</string>
     <string name="in_progress_content">진행 중</string>
     <string name="done_content">완료 내용</string>
+
+    <string name="version_dialog_title">최신 버전이 아닙니다</string>
+    <string name="version_dialog_button">업데이트 하기</string>
 </resources>
