@@ -1,5 +1,6 @@
 package com.easyhz.patchnote.core.common.util
 
+import com.easyhz.patchnote.core.model.defect.DefectProgress
 import com.google.firebase.Timestamp
 import java.time.Instant
 import java.time.LocalDate
@@ -50,5 +51,28 @@ object DateFormatUtil {
         val instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant()
         return Timestamp(instant.epochSecond, instant.nano)
     }
+
+    fun displayDate(progress: DefectProgress, requestDate: String, completionDate: String?): String {
+        if (progress == DefectProgress.DONE && completionDate != null) {
+            return "$requestDate ~ $completionDate"
+//            val (reqYear, reqMonth, reqDay) = splitDate(requestDate)
+//            val (compYear, compMonth, compDay) = splitDate(completionDate)
+//
+//            return when {
+//                reqYear != compYear -> "$requestDate ~ $completionDate"
+//                reqMonth != compMonth -> "$requestDate ~ $compMonth.$compDay"
+//                reqDay != compDay -> "$requestDate ~ $compDay"
+//                else -> requestDate
+//            }
+        }
+        return requestDate
+    }
+
+    // 날짜를 분리해주는 유틸 함수
+    private fun splitDate(date: String): Triple<String, String, String> {
+        return Triple(date.substring(0, 4), date.substring(5, 7), date.substring(8, 10))
+    }
+
+
 
 }

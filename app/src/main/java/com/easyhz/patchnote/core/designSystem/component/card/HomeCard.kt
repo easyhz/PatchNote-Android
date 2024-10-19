@@ -28,9 +28,10 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.easyhz.patchnote.R
+import com.easyhz.patchnote.core.common.util.DateFormatUtil.displayDate
 import com.easyhz.patchnote.core.designSystem.component.chip.FilterChip
-import com.easyhz.patchnote.core.model.defect.DefectProgress
 import com.easyhz.patchnote.core.model.defect.DefectItem
+import com.easyhz.patchnote.core.model.defect.DefectProgress
 import com.easyhz.patchnote.core.model.defect.DefectProgress.Companion.isDone
 import com.easyhz.patchnote.ui.theme.Bold18
 import com.easyhz.patchnote.ui.theme.DoneColor
@@ -84,7 +85,11 @@ fun HomeCard(
                     color = MainText
                 )
                 Text(
-                    text = defectItem.requestDate,
+                    text = displayDate(
+                        progress = defectItem.progress,
+                        requestDate = defectItem.requestDate,
+                        completionDate = defectItem.completionDate
+                    ),
                     style = Regular14,
                     color = SubText
                 )
