@@ -25,7 +25,8 @@ fun EntryDefect.toData(): DefectData = DefectData(
     requestDate = Timestamp.now(),
     requesterName = requesterName,
     requesterPhone = requesterPhone,
-    search = this.exportSearch()
+    search = this.exportSearch(),
+    isDeleted = false
 )
 
 fun DefectData.toModel(): DefectItem = DefectItem(

@@ -89,8 +89,9 @@ data class DefectData(
     val search: List<String> = emptyList(),
     @PropertyName("completionDateStr")
     val completionDateStr: String = "",
-    @PropertyName("isDeleted")
-    val isDeleted: Boolean = false,
+    @get:PropertyName("isDeleted")
+    @set:PropertyName("isDeleted")
+    var isDeleted: Boolean = false,
     @PropertyName("deletionDate")
     val deletionDate: Timestamp? = null,
 )
