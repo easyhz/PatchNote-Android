@@ -27,6 +27,7 @@ glide = "1.0.0-beta01"
 androidxDataStore = "1.1.1"
 lottie = "6.4.0"
 desugaring = "2.1.2"
+coreSplashscreen = "1.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -64,6 +65,7 @@ androidx-datastore = { group = "androidx.datastore", name = "datastore-preferenc
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "androidxDataStore" }
 lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie"}
 desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugaring" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
