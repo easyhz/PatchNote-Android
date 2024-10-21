@@ -31,4 +31,8 @@ class DefectRepositoryImpl @Inject constructor(
     override suspend fun updateDefectCompletion(param: DefectCompletion): Result<Unit> {
         return defectDataSource.updateDefectCompletion(param.id, param.toData())
     }
+
+    override suspend fun deleteDefect(id: String): Result<Unit> {
+        return defectDataSource.deleteDefect(id)
+    }
 }

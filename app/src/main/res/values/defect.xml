@@ -19,4 +19,9 @@
     <string name="defect_completion_title">완료 정보 입력</string>
     <string name="defect_completion_button">완료</string>
     <string name="defect_completion_dialog_title">해당 하자를 완료 처리했습니다</string>
+
+    <string name="defect_delete_dialog_title">하자 정보를 삭제할까요?</string>
+    <string name="defect_delete_error">삭제 실패\n다시 시도해 주세요</string>
+    <string name="defect_delete_error_content">삭제된 데이터는 복구할 수 없습니다.</string>
+    <string name="defect_delete_success">하자 삭제에 성공하였습니다.</string>
 </resources>

@@ -1,34 +1,49 @@
 package com.easyhz.patchnote.ui.screen.defectDetail
 
+import android.content.Context
 import androidx.lifecycle.viewModelScope
+import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.base.BaseViewModel
+import com.easyhz.patchnote.core.designSystem.util.bottomSheet.DefectDetailBottomSheet
 import com.easyhz.patchnote.core.model.defect.DefectMainItem
+import com.easyhz.patchnote.core.model.error.DialogAction
+import com.easyhz.patchnote.core.model.error.DialogMessage
+import com.easyhz.patchnote.domain.usecase.defect.DeleteDefectUseCase
 import com.easyhz.patchnote.domain.usecase.defect.FetchDefectUseCase
 import com.easyhz.patchnote.ui.screen.defectDetail.contract.DetailIntent
 import com.easyhz.patchnote.ui.screen.defectDetail.contract.DetailSideEffect
 import com.easyhz.patchnote.ui.screen.defectDetail.contract.DetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DefectDetailViewModel @Inject constructor(
-    private val fetchDefectUseCase: FetchDefectUseCase
-): BaseViewModel<DetailState, DetailIntent, DetailSideEffect>(
+    @ApplicationContext private val context: Context,
+    private val fetchDefectUseCase: FetchDefectUseCase,
+    private val deleteDefectUseCase: DeleteDefectUseCase
+) : BaseViewModel<DetailState, DetailIntent, DetailSideEffect>(
     initialState = DetailState.init()
 ) {
 
     override fun handleIntent(intent: DetailIntent) {
-        when(intent) {
+        when (intent) {
             is DetailIntent.FetchData -> fetchDefectDetail(intent.defectId)
             is DetailIntent.NavigateToUp -> navigateToUp()
             is DetailIntent.CompleteDefect -> navigateToDefectCompletion()
+            is DetailIntent.ChangeStateBottomSheet -> setBottomSheet(intent.isShowBottomSheet)
+            is DetailIntent.ClickBottomSheetItem -> clickBottomSheetItem(intent.bottomSheetType)
+            is DetailIntent.ShowError -> setErrorDialog(intent.message)
+            is DetailIntent.ShowDeleteDialog -> setDeleteDialog(intent.isShow)
+            is DetailIntent.SetLoading -> reduce { copy(isLoading = intent.isLoading) }
+            is DetailIntent.DeleteDefect -> deleteDefect()
         }
     }
 
     private fun fetchDefectDetail(defectId: String) = viewModelScope.launch {
         fetchDefectUseCase.invoke(defectId).onSuccess {
-            reduce { copy(defectItem = it) }
+            reduce { copy(defectItem = it.defectItem, isOwner = it.isOwner) }
         }.onFailure {
 
         }
@@ -54,4 +69,61 @@ class DefectDetailViewModel @Inject constructor(
             postSideEffect { DetailSideEffect.NavigateToDefectCompletion(defectMainItem) }
         }
     }
+
+    private fun clickBottomSheetItem(item: DefectDetailBottomSheet) {
+        when (item) {
+            DefectDetailBottomSheet.DELETE -> {
+                setBottomSheet(false)
+                setDeleteDialog(true)
+            }
+        }
+    }
+
+    private fun setBottomSheet(isShow: Boolean) {
+        reduce { copy(isShowBottomSheet = isShow) }
+    }
+
+    private fun setDeleteDialog(isShow: Boolean) {
+        reduce { copy(isShowDeleteDialog = isShow) }
+    }
+
+    private fun deleteDefect() = viewModelScope.launch {
+        if (currentState.defectItem == null) return@launch
+        setLoading(true)
+        setDeleteDialog(false)
+        deleteDefectUseCase.invoke(currentState.defectItem!!.id).onSuccess {
+            setErrorDialog(
+                DialogMessage(
+                    title = context.getString(R.string.defect_delete_success),
+                    action = DialogAction.NAVIGATE_UP
+                )
+            )
+        }.onFailure {
+            setErrorDialog(
+                DialogMessage(
+                    title = context.getString(R.string.defect_delete_error),
+                    message = context.getString(R.string.defect_delete_error_content)
+                )
+            )
+        }.also {
+            setLoading(false)
+        }
+    }
+
+    /* 에러 다이얼로그 */
+    private fun setErrorDialog(message: DialogMessage?) {
+        val action = message?.let { null } ?: currentState.dialogMessage?.action
+        reduce { copy(dialogMessage = message) }
+        action?.let {
+            when (it) {
+                DialogAction.NAVIGATE_UP -> navigateToUp()
+                else -> {}
+            }
+        }
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        reduce { copy(isLoading = isLoading) }
+    }
+
 }

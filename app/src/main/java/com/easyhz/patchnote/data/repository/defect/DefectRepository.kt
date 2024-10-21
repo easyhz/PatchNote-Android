@@ -10,4 +10,5 @@ interface DefectRepository {
     suspend fun fetchDefects(filterParam: FilterParam): Result<List<DefectItem>>
     suspend fun fetchDefect(id: String): Result<DefectItem>
     suspend fun updateDefectCompletion(param: DefectCompletion): Result<Unit>
+    suspend fun deleteDefect(id: String): Result<Unit>
 }
