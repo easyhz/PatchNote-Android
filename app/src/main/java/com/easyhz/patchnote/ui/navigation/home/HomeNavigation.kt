@@ -52,12 +52,19 @@ internal fun NavGraphBuilder.homeGraph(
         FilterScreen(
             filterParam = args.filterParam,
             navigateToUp = navController::navigateUp,
-            navigateToHome = { item -> navController.navigateToHome(filterParam = item, navOptions = navOptions) }
+            navigateToHome = { item ->
+                navController.navigateToHome(
+                    filterParam = item,
+                    navOptions = navOptions
+                )
+            }
         )
     }
 }
 
-fun NavController.navigateToHome(filterParam: FilterParam = FilterParam(), navOptions: NavOptions? = null) {
+fun NavController.navigateToHome(
+    filterParam: FilterParam = FilterParam.initToHome(), navOptions: NavOptions? = null
+) {
     navigate(Home(filterParam), navOptions)
 }
 

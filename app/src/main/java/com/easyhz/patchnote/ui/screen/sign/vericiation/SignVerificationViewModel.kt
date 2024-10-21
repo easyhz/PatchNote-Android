@@ -1,18 +1,22 @@
 package com.easyhz.patchnote.ui.screen.sign.vericiation
 
+import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
+import com.easyhz.patchnote.core.common.error.handleError
 import com.easyhz.patchnote.data.model.sign.param.SignInWithPhoneParam
 import com.easyhz.patchnote.domain.usecase.sign.SignInWithPhoneUseCase
 import com.easyhz.patchnote.ui.screen.sign.vericiation.contract.VerificationIntent
 import com.easyhz.patchnote.ui.screen.sign.vericiation.contract.VerificationSideEffect
 import com.easyhz.patchnote.ui.screen.sign.vericiation.contract.VerificationState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignVerificationViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val signInWithPhoneUseCase: SignInWithPhoneUseCase,
 ): BaseViewModel<VerificationState, VerificationIntent, VerificationSideEffect>(
     initialState = VerificationState.init()
@@ -26,7 +30,7 @@ class SignVerificationViewModel @Inject constructor(
     }
 
     private fun changeVerificationCodeText(text: String) {
-        reduce { copy(codeText = text, enabledButton = text.isNotBlank()) }
+        reduce { copy(codeText = text.filter { it.isDigit() }, enabledButton = text.isNotBlank()) }
     }
 
     private fun navigateToUp() {
@@ -34,11 +38,20 @@ class SignVerificationViewModel @Inject constructor(
     }
 
     private fun requestVerification(verificationId: String, phoneNumber: String) = viewModelScope.launch {
+        setLoading(true)
         val param = SignInWithPhoneParam(verificationId, currentState.codeText)
         signInWithPhoneUseCase.invoke(param).onSuccess {
             postSideEffect { VerificationSideEffect.NavigateToName(it, phoneNumber) }
-        }.onFailure {
-            println(">>> 실패 $it")
+        }.onFailure { e ->
+            showSnackBar(context, e.handleError()) {
+                VerificationSideEffect.ShowSnackBar(it)
+            }
+        }.also {
+            setLoading(false)
         }
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        reduce { copy(isLoading = isLoading) }
     }
 }

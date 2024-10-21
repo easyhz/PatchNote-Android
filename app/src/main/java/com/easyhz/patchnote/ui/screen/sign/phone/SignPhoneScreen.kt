@@ -15,12 +15,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
+import com.easyhz.patchnote.core.designSystem.component.loading.LoadingIndicator
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.core.designSystem.component.sign.SignField
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
+import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntrySideEffect
 import com.easyhz.patchnote.ui.screen.sign.phone.contract.PhoneIntent
 import com.easyhz.patchnote.ui.screen.sign.phone.contract.PhoneSideEffect
+import com.easyhz.patchnote.ui.theme.LocalSnackBarHostState
 import com.easyhz.patchnote.ui.theme.MainText
 
 @Composable
@@ -28,9 +31,11 @@ fun SignPhoneScreen(
     modifier: Modifier = Modifier,
     viewModel: SignPhoneViewModel = hiltViewModel(),
     navigateToUp: () -> Unit,
-    navigateToVerificationId: (String, String) -> Unit
+    navigateToVerificationId: (String, String) -> Unit,
+    navigateToSignName: (String, String) -> Unit,
 ) {
     val activity = LocalContext.current as Activity
+    val snackBarHost = LocalSnackBarHostState.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     PatchNoteScaffold(
         modifier = modifier,
@@ -57,12 +62,23 @@ fun SignPhoneScreen(
         ) {
             viewModel.postIntent(PhoneIntent.RequestVerificationCode(activity = activity))
         }
+
+        LoadingIndicator(
+            isLoading = uiState.isLoading,
+        )
     }
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {
             is PhoneSideEffect.NavigateToUp -> navigateToUp()
             is PhoneSideEffect.NavigateToSignVerification -> { navigateToVerificationId(sideEffect.verificationId, sideEffect.phoneNumber) }
+            is PhoneSideEffect.NavigateToSignName -> { navigateToSignName(sideEffect.uid, sideEffect.phoneNumber) }
+            is PhoneSideEffect.ShowSnackBar -> {
+                snackBarHost.showSnackbar(
+                    message = sideEffect.message,
+                    withDismissAction = true
+                )
+            }
         }
 
     }

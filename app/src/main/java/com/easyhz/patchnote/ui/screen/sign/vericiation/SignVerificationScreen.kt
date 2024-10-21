@@ -13,12 +13,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
+import com.easyhz.patchnote.core.designSystem.component.loading.LoadingIndicator
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.core.designSystem.component.sign.SignField
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
 import com.easyhz.patchnote.ui.screen.sign.vericiation.contract.VerificationIntent
 import com.easyhz.patchnote.ui.screen.sign.vericiation.contract.VerificationSideEffect
+import com.easyhz.patchnote.ui.theme.LocalSnackBarHostState
 import com.easyhz.patchnote.ui.theme.MainText
 
 @Composable
@@ -31,6 +33,7 @@ fun SignVerificationScreen(
     navigateToName: (uid: String, phoneNumber: String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackBarHost = LocalSnackBarHostState.current
     PatchNoteScaffold(
         modifier = modifier,
         topBar = {
@@ -56,12 +59,21 @@ fun SignVerificationScreen(
         ) {
             viewModel.postIntent(VerificationIntent.RequestVerification(verificationId, phoneNumber))
         }
+        LoadingIndicator(
+            isLoading = uiState.isLoading,
+        )
     }
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {
             is VerificationSideEffect.NavigateToUp -> { navigateToUp() }
             is VerificationSideEffect.NavigateToName -> { navigateToName(sideEffect.uid, sideEffect.phoneNumber) }
+            is VerificationSideEffect.ShowSnackBar -> {
+                snackBarHost.showSnackbar(
+                    message = sideEffect.value,
+                    withDismissAction = true
+                )
+            }
         }
 
     }

@@ -20,7 +20,8 @@ internal fun NavGraphBuilder.signGraph(
         composable<Sign.Phone> {
             SignPhoneScreen(
                 navigateToUp = navController::navigateUp,
-                navigateToVerificationId = navController::navigateToVerification
+                navigateToVerificationId = navController::navigateToVerification,
+                navigateToSignName = navController::navigateToName
             )
         }
 

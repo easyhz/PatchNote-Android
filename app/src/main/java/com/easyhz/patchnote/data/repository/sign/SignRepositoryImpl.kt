@@ -31,7 +31,7 @@ class SignRepositoryImpl @Inject constructor(
 
                 val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                     override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-                        handleVerificationCompleted(credential, continuation)
+                        handleVerificationCompleted(credential, phoneNumber, continuation)
                     }
 
                     override fun onVerificationFailed(e: FirebaseException) {
@@ -64,6 +64,7 @@ class SignRepositoryImpl @Inject constructor(
 
     private fun handleVerificationCompleted(
         credential: PhoneAuthCredential,
+        phoneNumber: String,
         continuation: CancellableContinuation<Result<RequestVerificationCodeResponse>>
     ) {
         val scope = CoroutineScope(continuation.context)
@@ -74,7 +75,7 @@ class SignRepositoryImpl @Inject constructor(
                 authResult.user?.uid?.let { uid ->
                     continuation.resume(
                         Result.success(
-                            RequestVerificationCodeResponse.ReturnUid(uid = uid)
+                            RequestVerificationCodeResponse.ReturnUid(uid = uid, phoneNumber = phoneNumber)
                         )
                     )
                 } ?: throw Exception("User is null")

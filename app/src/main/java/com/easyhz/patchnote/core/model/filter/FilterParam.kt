@@ -9,6 +9,14 @@ data class FilterParam(
     val searchFieldParam: LinkedHashMap<String, String> = linkedMapOf(),
     val indexFieldParam: LinkedHashMap<String, String> = linkedMapOf(),
 ) {
+
+    companion object {
+        fun initToHome(): FilterParam = FilterParam(
+            indexFieldParam = linkedMapOf(
+                "progress" to FilterProgress.REQUESTED.name
+            )
+        )
+    }
     fun toIndexField(): IndexField {
         return IndexField(
             progress = indexFieldParam["progress"],
