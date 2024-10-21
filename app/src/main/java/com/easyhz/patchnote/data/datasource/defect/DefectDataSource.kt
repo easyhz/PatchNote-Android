@@ -9,4 +9,5 @@ interface DefectDataSource {
     suspend fun fetchDefects(search: String?, index: IndexField): Result<List<DefectData>>
     suspend fun fetchDefect(id: String): Result<DefectData>
     suspend fun updateDefectCompletion(id: String, data: DefectCompletionData): Result<Unit>
+    suspend fun deleteDefect(id: String): Result<Unit>
 }

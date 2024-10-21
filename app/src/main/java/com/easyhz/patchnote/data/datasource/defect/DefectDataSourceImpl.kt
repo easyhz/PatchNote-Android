@@ -75,4 +75,12 @@ class DefectDataSourceImpl @Inject constructor(
             null
         }
     }
+
+    override suspend fun deleteDefect(id: String): Result<Unit> = setHandler(dispatcher) {
+        firestore.runTransaction { transaction ->
+            val docRef = firestore.collection(DEFECT).document(id)
+            transaction.update(docRef, IS_DELETED, true)
+            null
+        }
+    }
 }
