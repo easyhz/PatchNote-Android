@@ -14,7 +14,7 @@
     <string name="filter_name_placeholder">이름을 입력하세요</string>
 
     <string name="filter_progress_none">선택 안함</string>
-    <string name="filter_progress_requested">미완료</string>
+    <string name="filter_progress_requested">접수됨</string>
     <string name="filter_progress_done">완료</string>
 
     <string name="filter_reset">필터 초기화</string>
