@@ -6,6 +6,7 @@ import com.easyhz.patchnote.core.common.constant.Field.AFTER_IMAGE_SIZES
 import com.easyhz.patchnote.core.common.constant.Field.AFTER_IMAGE_URLS
 import com.easyhz.patchnote.core.common.constant.Field.COMPLETION_DATE
 import com.easyhz.patchnote.core.common.constant.Field.COMPLETION_DATE_STR
+import com.easyhz.patchnote.core.common.constant.Field.IS_DELETED
 import com.easyhz.patchnote.core.common.constant.Field.PROGRESS
 import com.easyhz.patchnote.core.common.constant.Field.REQUEST_DATE
 import com.easyhz.patchnote.core.common.constant.Field.SEARCH
@@ -45,6 +46,7 @@ class DefectDataSourceImpl @Inject constructor(
                 .indexSearchDate(REQUEST_DATE, index.requestDate)
                 .indexSearch(WORKER_NAME, index.workerName)
                 .indexSearch(COMPLETION_DATE_STR, index.completionDate)
+                .whereEqualTo(IS_DELETED, false)
                 .orderBy(REQUEST_DATE, Direction.DESCENDING)
                 .get()
         }
