@@ -32,6 +32,7 @@ class HomeViewModel @Inject constructor(
             is HomeIntent.NavigateToDefectDetail -> navigateToDefectDetail(intent.defectId)
             is HomeIntent.Refresh -> refresh(intent.filterParam)
             is HomeIntent.UpdateAppVersion -> updateAppVersion()
+            is HomeIntent.NavigateToNotion -> updateAppVersion()
         }
     }
 

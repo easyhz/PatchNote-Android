@@ -35,6 +35,7 @@ import com.easyhz.patchnote.core.designSystem.component.filter.HomeFilter
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.core.designSystem.component.topbar.HomeTopBar
 import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
+import com.easyhz.patchnote.core.designSystem.util.extension.noRippleClickable
 import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.ui.screen.home.contract.HomeIntent
 import com.easyhz.patchnote.ui.screen.home.contract.HomeSideEffect
@@ -65,8 +66,10 @@ fun HomeScreen(
     PatchNoteScaffold(
         modifier = modifier,
         topBar = {
-            HomeTopBar {
-                navigateToDataManagement()
+            HomeTopBar(
+                onClickName = { viewModel.postIntent(HomeIntent.NavigateToNotion) },
+            ) {
+                viewModel.postIntent(HomeIntent.NavigateToDataManagement)
             }
         },
         floatingActionButton = {

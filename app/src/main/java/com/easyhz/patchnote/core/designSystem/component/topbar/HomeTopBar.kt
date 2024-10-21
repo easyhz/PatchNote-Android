@@ -21,6 +21,7 @@ import com.easyhz.patchnote.ui.theme.SemiBold24
 @Composable
 fun HomeTopBar(
     modifier: Modifier = Modifier,
+    onClickName: () -> Unit = { },
     onClickMenu: () -> Unit
 ) {
     Row(
@@ -29,6 +30,7 @@ fun HomeTopBar(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
+            modifier = Modifier.noRippleClickable { onClickName() },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
