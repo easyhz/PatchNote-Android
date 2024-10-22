@@ -4,8 +4,8 @@ import android.content.Context
 import android.net.Uri
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
-import com.easyhz.patchnote.data.datasource.image.ImageDataSource
 import com.easyhz.patchnote.core.model.image.ImageSize
+import com.easyhz.patchnote.data.datasource.image.ImageDataSource
 import com.easyhz.patchnote.data.provider.PatchNoteFileProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
@@ -28,10 +28,12 @@ class ImageRepositoryImpl @Inject constructor(
                 if (images.isEmpty()) return@runCatching emptyList()
                 val imageListDeferred = async {
                     images.mapIndexed { index, image ->
-                        image.let { imageUri ->
+                        val imageUri = PatchNoteFileProvider.compressImageUriToMaxSize(context, dispatcher, image, 0.5)
+                            .getOrThrow()
+                        imageUri.let { uri ->
                             imageDataSource.uploadImage(
                                 pathId,
-                                imageUri,
+                                uri,
                                 "$index"
                             ).getOrThrow()
                         }
@@ -45,7 +47,7 @@ class ImageRepositoryImpl @Inject constructor(
         withContext(dispatcher) {
             runCatching {
                 val thumbnail =
-                    PatchNoteFileProvider.compressImageUri(context, dispatcher, imageUri, 50)
+                    PatchNoteFileProvider.compressImageUriToMaxSize(context, dispatcher, imageUri, 0.1)
                         .getOrThrow()
                 imageDataSource.uploadImage(
                     pathId,

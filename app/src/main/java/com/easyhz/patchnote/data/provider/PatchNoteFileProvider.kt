@@ -33,40 +33,45 @@ class PatchNoteFileProvider : FileProvider(R.xml.file_path) {
             }
         }
 
-        suspend fun compressImageUri(
+        suspend fun compressImageUriToMaxSize(
             context: Context,
             dispatcher: CoroutineDispatcher,
             imageUri: Uri,
-            target: Int
+            maxFileSizeMB: Double = 0.5
         ): Result<Uri> = withContext(dispatcher) {
             runCatching {
-                val originalFile = uriToFile(context, imageUri)
-                val originalSize = originalFile.length()
-                val targetSize = originalSize * target / 100
+                val maxSizeBytes = (maxFileSizeMB * 1024 * 1024).toLong()
+                val originalBitmap = uriToBitmap(context, imageUri)
+
+                val originalData = compressBitmapQuality(originalBitmap, 100)
+                val originalSize = originalData.size.toLong()
+
+                if (originalSize <= maxSizeBytes) {
+                    return@runCatching imageUri
+                }
 
                 var quality = 100
-                var compressedFile: File
+                var compressedData: ByteArray
+                var resizedBitmap = originalBitmap
+                var resized = false
 
                 do {
-                    val bitmap = uriToBitmap(context, imageUri)
+                    compressedData = compressBitmapQuality(resizedBitmap, quality)
+                    val currentSize = compressedData.size.toLong()
 
-                    val compressedBitmapData = compressBitmapQuality(bitmap, quality)   // 압축
+                    if (currentSize > maxSizeBytes) {
+                        quality -= 5
+                        if (quality < 50 && !resized) {
+                            resizedBitmap = resizeBitmap(resizedBitmap, resizedBitmap.width / 2, resizedBitmap.height / 2)
+                            quality = 100
+                            resized = true
+                        }
+                    }
+                } while (compressedData.size > maxSizeBytes && quality > 0)
 
-                    compressedFile = File(context.cacheDir, "compressed_${originalFile.name}")
-                    val fileOutputStream = FileOutputStream(compressedFile)
-                    fileOutputStream.write(compressedBitmapData)
-                    fileOutputStream.flush()
-                    fileOutputStream.close()
-
-                    val compressedFileSize = compressedFile.length()
-
-                    quality -= 5
-
-                } while (compressedFileSize > targetSize && quality > 0)
-                Uri.fromFile(compressedFile)
+                saveCompressedImage(context, compressedData, "compressed_image_${imageUri.lastPathSegment}")
             }
         }
-
 
         /**
          *  이미지 가로 세로를 가져오는 함수
@@ -95,13 +100,30 @@ class PatchNoteFileProvider : FileProvider(R.xml.file_path) {
             }
         }
 
-        private fun uriToFile(context: Context, uri: Uri): File {
-            val inputStream = context.contentResolver.openInputStream(uri)
-            val tempFile = File(context.cacheDir, "temp_image_file")
-            tempFile.outputStream().use { outputStream ->
-                inputStream?.copyTo(outputStream)
+        private fun resizeBitmap(bitmap: Bitmap, maxWidth: Int, maxHeight: Int): Bitmap {
+            val width = bitmap.width
+            val height = bitmap.height
+            val aspectRatio = width.toFloat() / height.toFloat()
+
+            var newWidth = maxWidth
+            var newHeight = maxHeight
+
+            if (width > height) {
+                newHeight = (maxWidth / aspectRatio).toInt()
+            } else if (height > width) {
+                newWidth = (maxHeight * aspectRatio).toInt()
             }
-            return tempFile
+
+            return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
+        }
+
+        private fun saveCompressedImage(context: Context, compressedData: ByteArray, originalFileName: String): Uri {
+            val compressedFile = File(context.cacheDir, "compressed_${originalFileName}_${System.currentTimeMillis()}.jpeg")
+            FileOutputStream(compressedFile).use { fos ->
+                fos.write(compressedData)
+                fos.flush()
+            }
+            return Uri.fromFile(compressedFile)
         }
     }
 }
