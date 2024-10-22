@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.Log
 import androidx.core.content.FileProvider
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.constant.CacheDirectory
@@ -79,13 +80,18 @@ class PatchNoteFileProvider : FileProvider(R.xml.file_path) {
          *  @return ImageSize
          */
         fun getImageDimensions(context: Context, uri: Uri): ImageSize {
-            context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                val options = BitmapFactory.Options().apply {
-                    inJustDecodeBounds = true
-                }
-                BitmapFactory.decodeStream(inputStream, null, options)
-                return ImageSize(height = options.outHeight.toLong(), width = options.outWidth.toLong())
-            } ?: return ImageSize(938, 938)
+            try {
+                context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                    val options = BitmapFactory.Options().apply {
+                        inJustDecodeBounds = true
+                    }
+                    BitmapFactory.decodeStream(inputStream, null, options)
+                    return ImageSize(height = options.outHeight.toLong(), width = options.outWidth.toLong())
+                } ?: return ImageSize(938, 938)
+            } catch (e: Exception) {
+                Log.e("PatchNoteFileProvider", "Failed to get image dimensions", e)
+                return ImageSize(938, 938)
+            }
         }
 
         private fun compressBitmapQuality(bitmap: Bitmap, quality: Int): ByteArray {

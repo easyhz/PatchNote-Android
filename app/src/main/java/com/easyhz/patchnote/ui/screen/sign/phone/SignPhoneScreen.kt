@@ -20,7 +20,6 @@ import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffo
 import com.easyhz.patchnote.core.designSystem.component.sign.SignField
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
-import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntrySideEffect
 import com.easyhz.patchnote.ui.screen.sign.phone.contract.PhoneIntent
 import com.easyhz.patchnote.ui.screen.sign.phone.contract.PhoneSideEffect
 import com.easyhz.patchnote.ui.theme.LocalSnackBarHostState

@@ -51,7 +51,6 @@ class FilterViewModel @Inject constructor(
 
     private fun initFilter(filterParam: FilterParam) {
         reduce { copy(filterItem = Filter.associateFilterValue(filterParam)) }
-        println("currentState: ${currentState.filterItem}")
     }
 
     private fun changeFilterValue(filter: Filter, value: FilterValue) {

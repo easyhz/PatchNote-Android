@@ -9,4 +9,5 @@ interface UserRepository {
     suspend fun saveUser(user: User): Result<Unit>
     suspend fun getUserFromLocal(): Result<User>
     suspend fun updateUser(user: User): Unit
+    suspend fun getUserFromRemote(uid: String): Result<User>
 }

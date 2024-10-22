@@ -27,11 +27,15 @@ internal fun NavGraphBuilder.signGraph(
 
         composable<Sign.Verification> {
             val args = it.toRoute<Sign.Verification>()
+            val navOptions = navOptions {
+                popUpTo(navController.graph.id) { inclusive = true }
+            }
             SignVerificationScreen(
                 verificationId = args.verificationId,
                 phoneNumber = args.phoneNumber,
                 navigateToUp = navController::navigateUp,
-                navigateToName = navController::navigateToName
+                navigateToName = navController::navigateToName,
+                navigateToHome = { navController.navigateToHome(navOptions = navOptions) }
             )
         }
 

@@ -13,28 +13,27 @@ import com.easyhz.patchnote.core.designSystem.util.transition.enterSlide
 import com.easyhz.patchnote.core.designSystem.util.transition.exitSlide
 import com.easyhz.patchnote.ui.navigation.dataManagement.dataManagementGraph
 import com.easyhz.patchnote.ui.navigation.defect.defectGraph
-import com.easyhz.patchnote.ui.navigation.home.Home
 import com.easyhz.patchnote.ui.navigation.home.homeGraph
-import com.easyhz.patchnote.ui.navigation.onboarding.Onboarding
 import com.easyhz.patchnote.ui.navigation.onboarding.onboardingGraph
 import com.easyhz.patchnote.ui.navigation.sign.signGraph
+import com.easyhz.patchnote.ui.navigation.splash.Splash
+import com.easyhz.patchnote.ui.navigation.splash.splashGraph
 import com.easyhz.patchnote.ui.theme.LocalSnackBarHostState
 
 @Composable
-fun PatchNoteApp(
-    isLogin: Boolean
-) {
+fun PatchNoteApp() {
     val navController = rememberNavController()
     CompositionLocalProvider(LocalSnackBarHostState provides SnackbarHostState()) {
         NavHost(
             modifier = Modifier.statusBarsPadding().systemBarsPadding(),
             navController = navController,
-            startDestination = if(isLogin) Home() else Onboarding,
+            startDestination = Splash,
             enterTransition = { enterSlide(SlideDirection.Start) },
             exitTransition = { exitSlide(SlideDirection.Start) },
             popEnterTransition = { enterSlide(SlideDirection.End) },
             popExitTransition = { exitSlide(SlideDirection.End) }
         ) {
+            splashGraph(navController)
             onboardingGraph(navController)
             signGraph(navController)
             homeGraph(navController)

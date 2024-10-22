@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.handleError
 import com.easyhz.patchnote.data.model.sign.param.SignInWithPhoneParam
+import com.easyhz.patchnote.domain.usecase.sign.CheckAlreadyUserUseCase
 import com.easyhz.patchnote.domain.usecase.sign.SignInWithPhoneUseCase
 import com.easyhz.patchnote.ui.screen.sign.vericiation.contract.VerificationIntent
 import com.easyhz.patchnote.ui.screen.sign.vericiation.contract.VerificationSideEffect
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class SignVerificationViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val signInWithPhoneUseCase: SignInWithPhoneUseCase,
+    private val checkAlreadyUserUseCase: CheckAlreadyUserUseCase,
 ): BaseViewModel<VerificationState, VerificationIntent, VerificationSideEffect>(
     initialState = VerificationState.init()
 ) {
@@ -41,7 +43,18 @@ class SignVerificationViewModel @Inject constructor(
         setLoading(true)
         val param = SignInWithPhoneParam(verificationId, currentState.codeText)
         signInWithPhoneUseCase.invoke(param).onSuccess {
-            postSideEffect { VerificationSideEffect.NavigateToName(it, phoneNumber) }
+            checkAlreadyUser(it, phoneNumber)
+        }.onFailure { e ->
+            showSnackBar(context, e.handleError()) {
+                VerificationSideEffect.ShowSnackBar(it)
+            }
+        }
+    }
+
+    private fun checkAlreadyUser(uid: String, phoneNumber: String) = viewModelScope.launch {
+        checkAlreadyUserUseCase.invoke(uid).onSuccess { isAlreadyUser ->
+            if (isAlreadyUser) postSideEffect { VerificationSideEffect.NavigateToHome }
+            else postSideEffect { VerificationSideEffect.NavigateToName(uid, phoneNumber) }
         }.onFailure { e ->
             showSnackBar(context, e.handleError()) {
                 VerificationSideEffect.ShowSnackBar(it)
@@ -49,6 +62,7 @@ class SignVerificationViewModel @Inject constructor(
         }.also {
             setLoading(false)
         }
+
     }
 
     private fun setLoading(isLoading: Boolean) {

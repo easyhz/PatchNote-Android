@@ -28,6 +28,7 @@ androidxDataStore = "1.1.1"
 lottie = "6.4.0"
 desugaring = "2.1.2"
 coreSplashscreen = "1.0.0"
+firebaseAppcheckDebug = "18.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -55,6 +56,7 @@ firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx", version.ref = "analytics" }
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx"}
+firebase-appcheck-playintegrity = { group = "com.google.firebase", name = "firebase-appcheck-playintegrity" }
 gms-play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth"}
 google-services = { module = "com.google.gms:google-services", version.ref = "google-services" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
@@ -66,6 +68,7 @@ androidx-datastore-core = { group = "androidx.datastore", name = "datastore-pref
 lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie"}
 desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugaring" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+firebase-appcheck-debug = { group = "com.google.firebase", name = "firebase-appcheck-debug", version.ref = "firebaseAppcheckDebug" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

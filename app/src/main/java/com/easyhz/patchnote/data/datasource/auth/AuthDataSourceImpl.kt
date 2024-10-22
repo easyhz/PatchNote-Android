@@ -5,7 +5,9 @@ import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
 import com.easyhz.patchnote.core.common.util.setHandler
 import com.easyhz.patchnote.core.common.constant.Collection.USERS
+import com.easyhz.patchnote.core.common.util.documentHandler
 import com.easyhz.patchnote.data.model.sign.request.SaveUserRequest
+import com.easyhz.patchnote.data.model.sign.response.UserResponse
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
@@ -54,5 +56,9 @@ class AuthDataSourceImpl @Inject constructor(
 
     override suspend fun saveUser(saveUserRequest: SaveUserRequest): Result<Unit> = setHandler(dispatcher) {
         firestore.collection(USERS).document(saveUserRequest.id).set(saveUserRequest)
+    }
+
+    override suspend fun getUser(uid: String): Result<UserResponse> = documentHandler(dispatcher) {
+        firestore.collection(USERS).document(uid).get()
     }
 }
