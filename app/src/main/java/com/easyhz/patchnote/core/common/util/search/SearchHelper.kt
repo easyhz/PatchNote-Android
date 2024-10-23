@@ -19,20 +19,20 @@ object SearchHelper {
         val queryJamo = query.flatMap { char ->
             decomposeKorean(char).toList().filterNotNull()
         }.joinToString("")
-//        val queryInitials = query.map { char ->
-//            decomposeKorean(char).first ?: char
-//        }.joinToString("")
+        val queryInitials = query.map { char ->
+            decomposeKorean(char).first ?: char
+        }.joinToString("")
 
         return items.filter { item ->
             val itemJamo = item.flatMap { char ->
                 decomposeKorean(char).toList().filterNotNull()
             }.joinToString("")
 
-//            val itemInitials = item.map { char ->
-//                decomposeKorean(char).first ?: char
-//            }.joinToString("")
+            val itemInitials = item.map { char ->
+                decomposeKorean(char).first ?: char
+            }.joinToString("")
             itemJamo.contains(queryJamo, ignoreCase = true)
-//                    || itemInitials.contains(queryInitials, ignoreCase = true)
+                    || itemInitials.contains(queryInitials, ignoreCase = true)
         }
     }
     private fun decomposeKorean(char: Char): Triple<Char?, Char?, Char?> {
