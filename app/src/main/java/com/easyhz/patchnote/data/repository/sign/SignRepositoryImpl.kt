@@ -1,7 +1,7 @@
 package com.easyhz.patchnote.data.repository.sign
 
 import android.util.Log
-import com.easyhz.patchnote.data.datasource.auth.AuthDataSource
+import com.easyhz.patchnote.data.datasource.remote.auth.AuthDataSource
 import com.easyhz.patchnote.data.model.sign.param.RequestVerificationCodeParam
 import com.easyhz.patchnote.data.model.sign.param.RequestVerificationCodeParam.Companion.phoneNumberToCountryCode
 import com.easyhz.patchnote.data.model.sign.response.RequestVerificationCodeResponse
