@@ -8,4 +8,5 @@ interface ImageRepository {
     suspend fun uploadImages(pathId: String, images: List<Uri>): Result<List<String>>
     suspend fun uploadThumbnail(pathId: String, imageUri: Uri): Result<String>
     suspend fun getImageSizes(imageUri: List<Uri>): Result<List<ImageSize>>
+    suspend fun rotateImage(imageUri: Uri): Result<Unit>
 }

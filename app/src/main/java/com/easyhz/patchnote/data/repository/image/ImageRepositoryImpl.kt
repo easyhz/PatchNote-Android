@@ -65,4 +65,10 @@ class ImageRepositoryImpl @Inject constructor(
                 }
             }
         }
+
+    override suspend fun rotateImage(imageUri: Uri): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            PatchNoteFileProvider.rotateAndSaveImage(context, imageUri)
+        }
+    }
 }

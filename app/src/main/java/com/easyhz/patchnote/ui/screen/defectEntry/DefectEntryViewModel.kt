@@ -22,6 +22,7 @@ import com.easyhz.patchnote.core.model.image.DefectImage
 import com.easyhz.patchnote.core.model.image.toDefectImages
 import com.easyhz.patchnote.domain.usecase.defect.CreateDefectUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetTakePictureUriUseCase
+import com.easyhz.patchnote.domain.usecase.image.RotateImageUseCase
 import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntryIntent
 import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntrySideEffect
 import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntryState
@@ -36,7 +37,8 @@ import javax.inject.Inject
 class DefectEntryViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val getTakePictureUriUseCase: GetTakePictureUriUseCase,
-    private val createDefectUseCase: CreateDefectUseCase
+    private val createDefectUseCase: CreateDefectUseCase,
+    private val rotateImageUseCase: RotateImageUseCase
 ): BaseViewModel<DefectEntryState, DefectEntryIntent, DefectEntrySideEffect>(
     initialState = DefectEntryState.init()
 ) {
@@ -99,6 +101,7 @@ class DefectEntryViewModel @Inject constructor(
     private fun updateTakePicture(isUsed: Boolean) {
         if (!isUsed) return
         reduce { updateImages(newImages = listOf(takePictureUri.value).toDefectImages()) }
+        rotateImage(takePictureUri.value)
     }
 
     /* 이미지 삭제 */
@@ -212,5 +215,13 @@ class DefectEntryViewModel @Inject constructor(
     /* sendClear */
     private fun sendClear() {
         postSideEffect { DefectEntrySideEffect.SendClear }
+    }
+
+    /* 이미지 회전 */
+    private fun rotateImage(uri: Uri) = viewModelScope.launch {
+        rotateImageUseCase.invoke(uri)
+            .onFailure {
+                Log.e(tag, "rotateImage : $it")
+            }
     }
 }
