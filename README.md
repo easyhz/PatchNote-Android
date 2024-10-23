@@ -11,3 +11,11 @@
 이를 통해 효율적이고 투명한 하자 관리 프로세스를 구현합니다.
 
 <img width="300" alt="온보딩" src="https://github.com/user-attachments/assets/8ecad5ef-b304-4fdc-8cf7-de8ea1cebe95">
+
+## 문의
+
+>
+>**[1:1 문의](https://open.kakao.com/o/scxUP2Vg)**
+>
+>단체 채팅방은 존재하나 1:1로 먼저 문의해 주세요
+>
