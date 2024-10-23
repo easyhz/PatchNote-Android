@@ -21,3 +21,15 @@ internal enum class UserKey(
         key = "phone"
     )
 }
+
+
+internal enum class ConfigurationKey(
+    val key: String
+) {
+    PASSWORD(
+        key = "password"
+    ),
+    IS_ENTERED(
+        key = "isEntered"
+    )
+}

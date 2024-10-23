@@ -11,6 +11,10 @@ plugins {
     alias(libs.plugins.firebase.crashlytics)
 }
 
+val localProperties = Properties()
+localProperties.load(project.rootProject.file("local.properties").inputStream())
+
+
 val keystoreProperties = Properties()
 keystoreProperties.load(project.rootProject.file("keystore.properties").inputStream())
 
@@ -29,6 +33,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildConfigField("String", "AES_ENCRYPTION_KEY", localProperties["aes.encryption.key"].toString())
     }
 
     signingConfigs {
