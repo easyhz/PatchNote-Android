@@ -11,4 +11,11 @@
         <item name="android:windowSplashScreenBackground" tools:ignore="S">@color/white</item>
         <item name="android:windowSplashScreenAnimatedIcon" tools:ignore="S">@drawable/ic_app_icon</item>
     </style>
+
+    <style name="Theme.PatchNote.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@color/white</item>
+        <item name="windowSplashScreenAnimationDuration">100</item>
+        <item name="postSplashScreenTheme">@style/Theme.PatchNote</item>
+    </style>
 </resources>
