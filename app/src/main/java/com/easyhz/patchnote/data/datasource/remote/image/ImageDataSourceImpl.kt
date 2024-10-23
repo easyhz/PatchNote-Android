@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.data.datasource.image
+package com.easyhz.patchnote.data.datasource.remote.image
 
 import android.net.Uri
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher

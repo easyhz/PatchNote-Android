@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.data.datasource.defect
+package com.easyhz.patchnote.data.datasource.remote.defect
 
 import com.easyhz.patchnote.core.common.constant.Collection.DEFECT
 import com.easyhz.patchnote.core.common.constant.Field.AFTER_DESCRIPTION

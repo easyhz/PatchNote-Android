@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.data.datasource.defect
+package com.easyhz.patchnote.data.datasource.remote.defect
 
 import com.easyhz.patchnote.core.model.filter.IndexField
 import com.easyhz.patchnote.data.model.defect.data.DefectCompletionData

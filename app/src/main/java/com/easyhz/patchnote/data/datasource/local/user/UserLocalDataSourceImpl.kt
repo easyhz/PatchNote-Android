@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.data.datasource.user
+package com.easyhz.patchnote.data.datasource.local.user
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences

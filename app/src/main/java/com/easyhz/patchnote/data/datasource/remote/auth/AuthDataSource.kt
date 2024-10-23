@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.data.datasource.auth
+package com.easyhz.patchnote.data.datasource.remote.auth
 
 import android.app.Activity
 import com.easyhz.patchnote.data.model.sign.request.SaveUserRequest

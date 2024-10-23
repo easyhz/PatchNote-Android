@@ -2,7 +2,7 @@ package com.easyhz.patchnote.data.repository.category
 
 import com.easyhz.patchnote.core.model.category.Category
 import com.easyhz.patchnote.core.model.dataEntry.DataEntryItem
-import com.easyhz.patchnote.data.datasource.category.CategoryDataSource
+import com.easyhz.patchnote.data.datasource.remote.category.CategoryDataSource
 import com.easyhz.patchnote.data.mapper.category.toModel
 import javax.inject.Inject
 

@@ -1,8 +1,8 @@
 package com.easyhz.patchnote.data.repository.user
 
 import com.easyhz.patchnote.core.model.user.User
-import com.easyhz.patchnote.data.datasource.auth.AuthDataSource
-import com.easyhz.patchnote.data.datasource.user.UserLocalDataSource
+import com.easyhz.patchnote.data.datasource.remote.auth.AuthDataSource
+import com.easyhz.patchnote.data.datasource.local.user.UserLocalDataSource
 import com.easyhz.patchnote.data.mapper.sign.toModel
 import com.easyhz.patchnote.data.mapper.sign.toRequest
 import javax.inject.Inject

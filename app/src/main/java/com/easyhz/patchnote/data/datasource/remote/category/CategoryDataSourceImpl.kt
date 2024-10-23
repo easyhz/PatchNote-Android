@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.data.datasource.category
+package com.easyhz.patchnote.data.datasource.remote.category
 
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers

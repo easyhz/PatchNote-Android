@@ -4,7 +4,7 @@ import com.easyhz.patchnote.core.model.defect.DefectCompletion
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.EntryDefect
 import com.easyhz.patchnote.core.model.filter.FilterParam
-import com.easyhz.patchnote.data.datasource.defect.DefectDataSource
+import com.easyhz.patchnote.data.datasource.remote.defect.DefectDataSource
 import com.easyhz.patchnote.data.mapper.defect.toData
 import com.easyhz.patchnote.data.mapper.defect.toModel
 import javax.inject.Inject

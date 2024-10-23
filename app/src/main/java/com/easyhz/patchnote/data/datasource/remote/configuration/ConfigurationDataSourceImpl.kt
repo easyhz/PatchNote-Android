@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.data.datasource.configuration
+package com.easyhz.patchnote.data.datasource.remote.configuration
 
 import com.easyhz.patchnote.core.common.constant.Collection.CONFIGURATION
 import com.easyhz.patchnote.core.common.constant.Field

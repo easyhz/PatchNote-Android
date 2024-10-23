@@ -1,17 +1,19 @@
 package com.easyhz.patchnote.data.di
 
-import com.easyhz.patchnote.data.datasource.auth.AuthDataSource
-import com.easyhz.patchnote.data.datasource.auth.AuthDataSourceImpl
-import com.easyhz.patchnote.data.datasource.category.CategoryDataSource
-import com.easyhz.patchnote.data.datasource.category.CategoryDataSourceImpl
-import com.easyhz.patchnote.data.datasource.configuration.ConfigurationDataSource
-import com.easyhz.patchnote.data.datasource.configuration.ConfigurationDataSourceImpl
-import com.easyhz.patchnote.data.datasource.defect.DefectDataSource
-import com.easyhz.patchnote.data.datasource.defect.DefectDataSourceImpl
-import com.easyhz.patchnote.data.datasource.image.ImageDataSource
-import com.easyhz.patchnote.data.datasource.image.ImageDataSourceImpl
-import com.easyhz.patchnote.data.datasource.user.UserLocalDataSource
-import com.easyhz.patchnote.data.datasource.user.UserLocalDataSourceImpl
+import com.easyhz.patchnote.data.datasource.local.configuration.ConfigurationLocalDataSource
+import com.easyhz.patchnote.data.datasource.local.configuration.ConfigurationLocalDataSourceImpl
+import com.easyhz.patchnote.data.datasource.local.user.UserLocalDataSource
+import com.easyhz.patchnote.data.datasource.local.user.UserLocalDataSourceImpl
+import com.easyhz.patchnote.data.datasource.remote.auth.AuthDataSource
+import com.easyhz.patchnote.data.datasource.remote.auth.AuthDataSourceImpl
+import com.easyhz.patchnote.data.datasource.remote.category.CategoryDataSource
+import com.easyhz.patchnote.data.datasource.remote.category.CategoryDataSourceImpl
+import com.easyhz.patchnote.data.datasource.remote.configuration.ConfigurationDataSource
+import com.easyhz.patchnote.data.datasource.remote.configuration.ConfigurationDataSourceImpl
+import com.easyhz.patchnote.data.datasource.remote.defect.DefectDataSource
+import com.easyhz.patchnote.data.datasource.remote.defect.DefectDataSourceImpl
+import com.easyhz.patchnote.data.datasource.remote.image.ImageDataSource
+import com.easyhz.patchnote.data.datasource.remote.image.ImageDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -50,4 +52,9 @@ interface DataSourceModule {
     fun bindConfigurationDataSource(
         configurationDataSourceImpl: ConfigurationDataSourceImpl
     ): ConfigurationDataSource
+
+    @Binds
+    fun bindConfigurationLocalDataSource(
+        configurationLocalDataSourceImpl: ConfigurationLocalDataSourceImpl
+    ): ConfigurationLocalDataSource
 }

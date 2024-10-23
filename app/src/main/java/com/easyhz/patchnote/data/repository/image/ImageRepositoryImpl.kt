@@ -5,7 +5,7 @@ import android.net.Uri
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
 import com.easyhz.patchnote.core.model.image.ImageSize
-import com.easyhz.patchnote.data.datasource.image.ImageDataSource
+import com.easyhz.patchnote.data.datasource.remote.image.ImageDataSource
 import com.easyhz.patchnote.data.provider.PatchNoteFileProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher

@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.data.datasource.category
+package com.easyhz.patchnote.data.datasource.remote.category
 
 import com.easyhz.patchnote.core.model.dataEntry.DataEntryItem
 import com.easyhz.patchnote.data.model.category.response.CategoryResponse
