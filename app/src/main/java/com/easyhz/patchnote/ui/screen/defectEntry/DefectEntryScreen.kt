@@ -133,6 +133,7 @@ fun DefectEntryScreen(
                             )
                         )
                     },
+                    onIconClick = { defectViewModel.postIntent(DefectIntent.ClearData(category)) },
                     onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 )
             }
