@@ -20,4 +20,13 @@
     <string name="version_dialog_button">업데이트 하기</string>
 
     <string name="delete">삭제</string>
+
+    <string name="dialog_setting_password_title">데이터 설정</string>
+    <string name="dialog_setting_password_subtitle">접근하려면 관리자 권한이 필요합니다.</string>
+    <string name="dialog_setting_password_content_placeholder">비밀번호를 입력하세요.</string>
+    <string name="dialog_setting_password_positive">확인</string>
+    <string name="dialog_setting_password_negative">취소</string>
+    <string name="dialog_setting_password_error_title">오류</string>
+    <string name="dialog_setting_password_error_subtitle">비밀번호가 틀렸습니다.</string>
+    <string name="dialog_setting_password_error_button">확인</string>
 </resources>

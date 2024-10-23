@@ -9,13 +9,21 @@ data class HomeState(
     val isLatestVersion: Boolean,
     val defectList: List<DefectItem>,
     val isRefreshing: Boolean,
+    val isShowPasswordDialog: Boolean,
+    val isShowPasswordErrorDialog: Boolean,
+    val hasPassword: Boolean,
+    val password: String,
 ): UiState() {
     companion object {
         fun init() = HomeState(
             appConfiguration = Configuration("", "", ""),
             isLatestVersion = true,
             defectList = emptyList(),
-            isRefreshing = false
+            isRefreshing = false,
+            isShowPasswordDialog = false,
+            isShowPasswordErrorDialog = false,
+            hasPassword = false,
+            password = ""
         )
     }
 }
