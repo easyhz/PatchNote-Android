@@ -22,4 +22,11 @@ internal object Sign: Parcelable {
         val phoneNumber: String
     )
 
+    @Serializable
+    data class Team(
+        val uid: String,
+        val phoneNumber: String,
+        val userName: String
+    )
+
 }

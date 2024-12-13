@@ -9,6 +9,7 @@ import androidx.navigation.toRoute
 import com.easyhz.patchnote.ui.navigation.home.navigateToHome
 import com.easyhz.patchnote.ui.screen.sign.name.SignNameScreen
 import com.easyhz.patchnote.ui.screen.sign.phone.SignPhoneScreen
+import com.easyhz.patchnote.ui.screen.sign.team.SignTeamScreen
 import com.easyhz.patchnote.ui.screen.sign.vericiation.SignVerificationScreen
 
 internal fun NavGraphBuilder.signGraph(
@@ -41,14 +42,21 @@ internal fun NavGraphBuilder.signGraph(
 
         composable<Sign.Name> {
             val args = it.toRoute<Sign.Name>()
-            val navOptions = navOptions {
-                popUpTo(navController.graph.id) { inclusive = true }
-            }
             SignNameScreen(
                 uid = args.uid,
                 phoneNumber = args.phoneNumber,
                 navigateToUp = navController::navigateUp,
-                navigateToHome = { navController.navigateToHome(navOptions = navOptions) }
+                navigateToTeam = navController::navigateToTeam
+            )
+        }
+
+        composable<Sign.Team> {
+            val navOptions = navOptions {
+                popUpTo(navController.graph.id) { inclusive = true }
+            }
+            SignTeamScreen(
+                navigateToHome = { navController.navigateToHome(navOptions = navOptions) },
+                navigateToCreateTeam = { }
             )
         }
     }
@@ -64,4 +72,8 @@ fun NavController.navigateToVerification(verificationId: String, phoneNumber: St
 
 fun NavController.navigateToName(uid: String, phoneNumber: String) {
     navigate(Sign.Name(uid, phoneNumber))
+}
+
+fun NavController.navigateToTeam(uid: String, phoneNumber: String, userName: String) {
+    navigate(Sign.Team(uid, phoneNumber, userName))
 }
