@@ -14,4 +14,8 @@
     <string name="sign_name_subTitle">사용자를 식별하기 위해 이름을 사용합니다</string>
     <string name="sign_name_placeholder">이름을 입력해주세요</string>
 
+    <string name="sign_team_title">이미 소속된 팀이 있나요?</string>
+    <string name="sign_team_subTitle">팀 코드를 입력해주세요</string>
+    <string name="sign_team_placeholder">팀 코드를 입력해주세요</string>
+    <string name="sign_team_button">시작하기</string>
 </resources>
