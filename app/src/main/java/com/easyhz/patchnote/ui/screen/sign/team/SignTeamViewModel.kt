@@ -71,6 +71,7 @@ class SignTeamViewModel @Inject constructor(
     }
 
     private fun saveUser() = viewModelScope.launch {
+        hideTeamDialog()
         setLoading(true)
         val userRequest = User(
             id = currentState.uid,

@@ -26,6 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.dialog.BasicDialog
+import com.easyhz.patchnote.core.designSystem.component.loading.LoadingIndicator
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.core.designSystem.component.sign.SignField
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
@@ -99,6 +100,10 @@ fun SignTeamScreen(
                 )
             }
         }
+
+        LoadingIndicator(
+            isLoading = uiState.isLoading,
+        )
 
         if (uiState.isShowTeamDialog) {
             BasicDialog(
