@@ -20,12 +20,14 @@ class UserLocalDataSourceImpl @Inject constructor(
     private val userId = stringPreferencesKey(UserKey.USER_ID.key)
     private val userName = stringPreferencesKey(UserKey.USER_NAME.key)
     private val userPhone = stringPreferencesKey(UserKey.USER_PHONE.key)
+    private val userTeamId = stringPreferencesKey(UserKey.USER_TEAM_ID.key)
 
     override suspend fun updateUser(user: User): Unit = withContext(dispatcher) {
         dataStore.edit { preferences ->
             preferences[userId] = user.id
             preferences[userName] = user.name
             preferences[userPhone] = user.phone
+            preferences[userTeamId] = user.teamId
         }
     }
 
@@ -35,7 +37,8 @@ class UserLocalDataSourceImpl @Inject constructor(
             return@runCatching User(
                 id = preferences[userId] ?: throw generateNullException(UserKey.USER_ID),
                 name = preferences[userName] ?: throw generateNullException(UserKey.USER_NAME),
-                phone = preferences[userPhone] ?: throw generateNullException(UserKey.USER_PHONE)
+                phone = preferences[userPhone] ?: throw generateNullException(UserKey.USER_PHONE),
+                teamId = preferences[userTeamId] ?: throw generateNullException(UserKey.USER_TEAM_ID)
             )
         }
     }

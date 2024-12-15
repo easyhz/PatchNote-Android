@@ -7,11 +7,13 @@ import com.easyhz.patchnote.data.model.sign.response.UserResponse
 fun User.toRequest() = SaveUserRequest(
     id = id,
     name = name,
-    phone = phone
+    phone = phone,
+    teamId = teamId
 )
 
 fun UserResponse.toModel() = User(
     id = id,
     name = name,
-    phone = phone
+    phone = phone,
+    teamId = teamId
 )
