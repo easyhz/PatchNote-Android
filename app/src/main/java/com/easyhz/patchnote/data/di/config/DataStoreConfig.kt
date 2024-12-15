@@ -19,6 +19,8 @@ internal enum class UserKey(
         key = "name"
     ), USER_PHONE(
         key = "phone"
+    ), USER_TEAM_ID(
+        key = "teamId"
     )
 }
 
