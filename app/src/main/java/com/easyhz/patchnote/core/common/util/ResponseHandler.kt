@@ -51,6 +51,23 @@ internal suspend inline fun <reified T> documentHandler(
 }
 
 /**
+ * collection 에서 원하는 document 를 받는 함수 (쿼리)
+ *
+ * @param execute [QuerySnapshot] 파이어스토어 쿼리문이 들어옴.
+ */
+internal suspend inline fun <reified T> documentInQueryHandler(
+    dispatcher: CoroutineDispatcher,
+    crossinline execute: () -> Task<QuerySnapshot>
+): Result<T> = withContext(dispatcher) {
+    runCatching {
+        execute().await().documents.getOrNull(0)?.toObject(T::class.java) ?: throw AppError.NoResultError
+    }.fold(
+        onSuccess = {  Result.success(it) },
+        onFailure = { e -> handleException(e, "document") }
+    )
+}
+
+/**
  * collection 에 document 이름을 지정하고 저장하는 함수
  *
  * @param execute document id 를 지정한 set 쿼리문이 들어옴.

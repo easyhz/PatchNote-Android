@@ -56,7 +56,8 @@ internal fun NavGraphBuilder.signGraph(
             }
             SignTeamScreen(
                 navigateToHome = { navController.navigateToHome(navOptions = navOptions) },
-                navigateToCreateTeam = { }
+                navigateToCreateTeam = { },
+                navigateToUp = navController::navigateUp
             )
         }
     }

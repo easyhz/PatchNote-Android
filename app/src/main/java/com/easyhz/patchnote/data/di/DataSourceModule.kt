@@ -14,6 +14,8 @@ import com.easyhz.patchnote.data.datasource.remote.defect.DefectDataSource
 import com.easyhz.patchnote.data.datasource.remote.defect.DefectDataSourceImpl
 import com.easyhz.patchnote.data.datasource.remote.image.ImageDataSource
 import com.easyhz.patchnote.data.datasource.remote.image.ImageDataSourceImpl
+import com.easyhz.patchnote.data.datasource.remote.team.TeamRemoteDataSourceImpl
+import com.easyhz.patchnote.data.datasource.remote.team.TeamRemoteDateSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -57,4 +59,9 @@ interface DataSourceModule {
     fun bindConfigurationLocalDataSource(
         configurationLocalDataSourceImpl: ConfigurationLocalDataSourceImpl
     ): ConfigurationLocalDataSource
+
+    @Binds
+    fun bindTeamRemoteDataSource(
+        teamRemoteDataSourceImpl: TeamRemoteDataSourceImpl
+    ): TeamRemoteDateSource
 }

@@ -28,7 +28,7 @@ fun SignNameScreen(
     uid: String,
     phoneNumber: String,
     navigateToUp: () -> Unit,
-    navigateToHome: () -> Unit
+    navigateToTeam: (uid: String, phoneNumber: String, userName: String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackBarHost = LocalSnackBarHostState.current
@@ -56,7 +56,7 @@ fun SignNameScreen(
             onValueChange = { viewModel.postIntent(NameIntent.ChangeNameText(it)) },
             enabledButton = uiState.enabledButton,
         ) {
-            viewModel.postIntent(NameIntent.SaveUser(uid, phoneNumber))
+            viewModel.postIntent(NameIntent.NavigateToTeam)
         }
 
         LoadingIndicator(
@@ -67,7 +67,7 @@ fun SignNameScreen(
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {
             is NameSideEffect.NavigateToUp -> navigateToUp()
-            is NameSideEffect.NavigateToHome -> { navigateToHome() }
+            is NameSideEffect.NavigateToTeam -> { navigateToTeam(uid, phoneNumber, sideEffect.userName) }
             is NameSideEffect.ShowSnackBar -> {
                 snackBarHost.showSnackbar(
                     message = sideEffect.message,

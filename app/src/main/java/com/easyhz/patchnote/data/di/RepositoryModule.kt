@@ -10,6 +10,8 @@ import com.easyhz.patchnote.data.repository.image.ImageRepository
 import com.easyhz.patchnote.data.repository.image.ImageRepositoryImpl
 import com.easyhz.patchnote.data.repository.sign.SignRepository
 import com.easyhz.patchnote.data.repository.sign.SignRepositoryImpl
+import com.easyhz.patchnote.data.repository.team.TeamRepository
+import com.easyhz.patchnote.data.repository.team.TeamRepositoryImpl
 import com.easyhz.patchnote.data.repository.user.UserRepository
 import com.easyhz.patchnote.data.repository.user.UserRepositoryImpl
 import dagger.Binds
@@ -50,4 +52,9 @@ interface RepositoryModule {
     fun bindConfigurationRepository(
         configurationRepositoryImpl: ConfigurationRepositoryImpl
     ): ConfigurationRepository
+
+    @Binds
+    fun bindTeamRepository(
+        teamRepositoryImpl: TeamRepositoryImpl
+    ): TeamRepository
 }

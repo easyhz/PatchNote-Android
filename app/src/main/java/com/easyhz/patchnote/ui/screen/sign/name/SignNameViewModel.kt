@@ -9,7 +9,6 @@ import com.easyhz.patchnote.domain.usecase.sign.SaveUserUseCase
 import com.easyhz.patchnote.ui.screen.sign.name.contract.NameIntent
 import com.easyhz.patchnote.ui.screen.sign.name.contract.NameSideEffect
 import com.easyhz.patchnote.ui.screen.sign.name.contract.NameState
-import com.easyhz.patchnote.ui.screen.sign.phone.contract.PhoneSideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -26,7 +25,7 @@ class SignNameViewModel @Inject constructor(
         when(intent) {
             is NameIntent.ChangeNameText -> { changeNameText(intent.text) }
             is NameIntent.NavigateToUp -> { navigateToUp() }
-            is NameIntent.SaveUser -> { saveUser(intent.uid, intent.phoneNumber) }
+            is NameIntent.NavigateToTeam -> { navigateToTeam() }
         }
     }
 
@@ -43,10 +42,11 @@ class SignNameViewModel @Inject constructor(
         val userRequest = User(
             id = uid,
             name = currentState.nameText,
-            phone = phoneNumber
+            phone = phoneNumber,
+            teamId = ""
         )
         saveUserUseCase.invoke(userRequest).onSuccess {
-            postSideEffect { NameSideEffect.NavigateToHome }
+//            postSideEffect { NameSideEffect.NavigateToHome }
         }.onFailure { e ->
             showSnackBar(context, e.handleError()) {
                 NameSideEffect.ShowSnackBar(it)
@@ -54,6 +54,10 @@ class SignNameViewModel @Inject constructor(
         }.also {
             setLoading(false)
         }
+    }
+
+    private fun navigateToTeam() {
+        postSideEffect { NameSideEffect.NavigateToTeam(currentState.nameText) }
     }
 
     private fun setLoading(isLoading: Boolean) {

@@ -30,7 +30,8 @@ fun SignField(
     placeholder: String,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-     enabledButton: Boolean,
+    enabledButton: Boolean,
+    mainButtonText: String = stringResource(R.string.sign_button),
     onClick: () -> Unit
 ) {
     Column(
@@ -60,7 +61,7 @@ fun SignField(
             )
             MainButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.sign_button),
+                text = mainButtonText,
                 enabled = enabledButton,
                 onClick = onClick
             )

@@ -10,4 +10,7 @@ data class SaveUserRequest(
     val name: String = "",
     @PropertyName("phone")
     val phone: String = "",
+    @get:PropertyName("teamID")
+    @set:PropertyName("teamID")
+    var teamId: String = "",
 )
