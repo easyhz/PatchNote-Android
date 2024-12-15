@@ -33,6 +33,7 @@ import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignTeamIntent
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignTeamSideEffect
+import com.easyhz.patchnote.ui.theme.LocalSnackBarHostState
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Primary
 import com.easyhz.patchnote.ui.theme.SemiBold16
@@ -44,9 +45,10 @@ fun SignTeamScreen(
     modifier: Modifier = Modifier,
     viewModel: SignTeamViewModel = hiltViewModel(),
     navigateToHome: () -> Unit,
-    navigateToCreateTeam: () -> Unit,
+    navigateToCreateTeam: (uid: String, phoneNumber: String, userName: String) -> Unit,
     navigateToUp: () -> Unit,
 ) {
+    val snackBarHost = LocalSnackBarHostState.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     PatchNoteScaffold(
@@ -76,14 +78,14 @@ fun SignTeamScreen(
                 value = uiState.teamCodeText,
                 placeholder = stringResource(R.string.sign_team_placeholder),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                onValueChange = { viewModel.postIntent(SignTeamIntent.ChangeTeamNameText(it)) },
+                onValueChange = { viewModel.postIntent(SignTeamIntent.ChangeTeamCodeText(it)) },
                 enabledButton = uiState.enabledButton,
                 mainButtonText = stringResource(R.string.sign_team_button),
             ) { viewModel.postIntent(SignTeamIntent.RequestTeamCheck) }
 
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(0.5f)
                     .height(32.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .clickable { viewModel.postIntent(SignTeamIntent.NavigateToCreateTeam) },
@@ -101,7 +103,7 @@ fun SignTeamScreen(
         if (uiState.isShowTeamDialog) {
             BasicDialog(
                 title = stringResource(R.string.sign_team_dialog_title, uiState.teamName),
-                content = stringResource(R.string.sign_team_dialog_subtitle),
+                content = stringResource(R.string.sign_team_dialog_subTitle),
                 positiveButton = BasicDialogButton(
                     text = stringResource(R.string.sign_team_dialog_positive_button),
                     style = SemiBold18.copy(color = Color.White),
@@ -119,9 +121,14 @@ fun SignTeamScreen(
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            is SignTeamSideEffect.ShowSnackBar -> navigateToCreateTeam()
+            is SignTeamSideEffect.ShowSnackBar -> {
+                snackBarHost.showSnackbar(
+                    message = sideEffect.message,
+                    withDismissAction = true
+                )
+            }
             is SignTeamSideEffect.NavigateToHome -> navigateToHome()
-            is SignTeamSideEffect.NavigateToCreateTeam -> navigateToCreateTeam()
+            is SignTeamSideEffect.NavigateToCreateTeam -> navigateToCreateTeam(uiState.uid, uiState.phoneNumber, uiState.userName)
             is SignTeamSideEffect.NavigateToUp -> navigateToUp()
         }
     }

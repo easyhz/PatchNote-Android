@@ -27,7 +27,7 @@ class SignTeamViewModel @Inject constructor(
 ){
     override fun handleIntent(intent: SignTeamIntent) {
         when(intent) {
-            is SignTeamIntent.ChangeTeamNameText -> changeTeamCodeText(intent.text)
+            is SignTeamIntent.ChangeTeamCodeText -> changeTeamCodeText(intent.text)
             is SignTeamIntent.NavigateToUp -> navigateToUp()
             is SignTeamIntent.RequestTeamCheck -> findTeamByCode()
             is SignTeamIntent.ClickPositiveButton -> saveUser()
