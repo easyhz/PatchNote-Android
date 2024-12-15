@@ -11,18 +11,24 @@
     <string name="sign_verification_placeholder">인증번호를 입력해주세요</string>
 
     <string name="sign_name_title">이름(실명)을 입력해주세요.</string>
-    <string name="sign_name_subTitle">사용자를 식별하기 위해 이름을 사용합니다</string>
+    <string name="sign_name_subTitle">사용자를 식별하기 위해 이름을 사용해요</string>
     <string name="sign_name_placeholder">이름을 입력해주세요</string>
 
-    <string name="sign_team_title">이미 소속된 팀이 있나요?</string>
-    <string name="sign_team_subTitle">팀 코드를 입력해주세요</string>
+    <string name="sign_team_title">팀 코드를 입력해주세요</string>
+    <string name="sign_team_subTitle">이미 소속된 팀이 있나요?</string>
     <string name="sign_team_placeholder">팀 코드를 입력해주세요</string>
     <string name="sign_team_button">시작하기</string>
 
     <string name="sign_team_dialog_title">%1s 팀</string>
-    <string name="sign_team_dialog_subtitle">이 팀에 들어갈까요?</string>
+    <string name="sign_team_dialog_subTitle">이 팀에 들어갈까요?</string>
     <string name="sign_team_dialog_positive_button">확인</string>
     <string name="sign_team_dialog_negative_button">취소</string>
 
     <string name="sign_team_create_team">새 팀 만들기</string>
+
+
+    <string name="sign_create_team_title">팀 이름을 입력해주세요</string>
+    <string name="sign_create_team_subTitle">팀을 시작하기 위해 이름이 필요해요</string>
+    <string name="sign_create_team_placeholder">팀 이름을 입력해주세요</string>
+    <string name="sign_create_team_button">새 팀 시작하기</string>
 </resources>
