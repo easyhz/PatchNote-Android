@@ -5,4 +5,5 @@ object Collection {
     const val CATEGORY = "CategoryData"
     const val DEFECT = "Defects"
     const val CONFIGURATION = "Configuration"
+    const val TEAMS = "Teams"
 }
