@@ -8,7 +8,6 @@ import com.easyhz.patchnote.core.common.error.handleError
 import com.easyhz.patchnote.core.model.user.User
 import com.easyhz.patchnote.domain.usecase.sign.SaveUserUseCase
 import com.easyhz.patchnote.domain.usecase.team.FindTeamByCodeUseCase
-import com.easyhz.patchnote.ui.screen.sign.name.contract.NameSideEffect
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignTeamIntent
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignTeamSideEffect
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignTeamState
@@ -27,7 +26,14 @@ class SignTeamViewModel @Inject constructor(
     initialState = SignTeamState.init()
 ){
     override fun handleIntent(intent: SignTeamIntent) {
-        TODO("Not yet implemented")
+        when(intent) {
+            is SignTeamIntent.ChangeTeamNameText -> changeTeamCodeText(intent.text)
+            is SignTeamIntent.NavigateToUp -> navigateToUp()
+            is SignTeamIntent.RequestTeamCheck -> findTeamByCode()
+            is SignTeamIntent.ClickPositiveButton -> saveUser()
+            is SignTeamIntent.HideTeamDialog -> hideTeamDialog()
+            is SignTeamIntent.NavigateToCreateTeam -> navigateToCreateTeam()
+        }
     }
 
     init {
@@ -45,10 +51,16 @@ class SignTeamViewModel @Inject constructor(
         reduce { copy(uid = uid, phoneNumber = phoneNumber, userName = userName) }
     }
 
+    private fun changeTeamCodeText(text: String) {
+        reduce { copy(teamCodeText = text, enabledButton = text.isNotBlank()) }
+    }
+
+
     private fun findTeamByCode() = viewModelScope.launch {
         setLoading(true)
-        findTeamByCodeUseCase.invoke(currentState.teamText).onSuccess {
-            // 다이얼로그 띄우기
+        findTeamByCodeUseCase.invoke(currentState.teamCodeText).onSuccess {
+            reduce { copy(teamName = it.name, teamId = it.id) }
+            setDialog(true)
         }.onFailure { e ->
             showSnackBar(context, e.handleError()) {
                 SignTeamSideEffect.ShowSnackBar(it)
@@ -63,10 +75,11 @@ class SignTeamViewModel @Inject constructor(
         val userRequest = User(
             id = currentState.uid,
             name = currentState.userName,
-            phone = currentState.phoneNumber
+            phone = currentState.phoneNumber,
+            teamId = currentState.teamId
         )
         saveUserUseCase.invoke(userRequest).onSuccess {
-//            postSideEffect { NameSideEffect.NavigateToHome }
+            navigateToHome()
         }.onFailure { e ->
             showSnackBar(context, e.handleError()) {
                 SignTeamSideEffect.ShowSnackBar(it)
@@ -76,8 +89,24 @@ class SignTeamViewModel @Inject constructor(
         }
     }
 
+    private fun hideTeamDialog() {
+        setDialog(false)
+    }
+
     private fun navigateToUp() {
-//        postSideEffect { SignTeamSideEffect.NavigateToUp }
+        postSideEffect { SignTeamSideEffect.NavigateToUp }
+    }
+
+    private fun navigateToHome() {
+        postSideEffect { SignTeamSideEffect.NavigateToHome }
+    }
+
+    private fun navigateToCreateTeam() {
+        postSideEffect { SignTeamSideEffect.NavigateToCreateTeam }
+    }
+
+    private fun setDialog(isShow: Boolean) {
+        reduce { copy(isShowTeamDialog = isShow) }
     }
 
     private fun setLoading(isLoading: Boolean) {

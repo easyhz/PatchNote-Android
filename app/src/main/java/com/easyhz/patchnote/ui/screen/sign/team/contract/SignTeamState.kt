@@ -6,18 +6,24 @@ data class SignTeamState(
     val uid: String,
     val phoneNumber: String,
     val userName: String,
-    val teamText: String,
+    val teamCodeText: String,
+    val teamName: String,
+    val teamId: String,
     val enabledButton: Boolean,
     val isLoading: Boolean,
+    val isShowTeamDialog: Boolean,
 ): UiState() {
     companion object {
         fun init() = SignTeamState(
             uid = "",
             phoneNumber = "",
             userName = "",
-            teamText = "",
+            teamCodeText = "",
+            teamName = "",
+            teamId = "",
             enabledButton = false,
-            isLoading = false
+            isLoading = false,
+            isShowTeamDialog = false,
         )
     }
 }
