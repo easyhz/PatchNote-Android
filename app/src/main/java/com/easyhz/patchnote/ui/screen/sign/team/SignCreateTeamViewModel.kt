@@ -8,11 +8,14 @@ import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.AppError
 import com.easyhz.patchnote.core.common.error.handleError
 import com.easyhz.patchnote.core.common.util.Generate
+import com.easyhz.patchnote.core.model.team.CreateTeamParam
+import com.easyhz.patchnote.core.model.team.Team
 import com.easyhz.patchnote.core.model.user.User
-import com.easyhz.patchnote.domain.usecase.sign.SaveUserUseCase
+import com.easyhz.patchnote.domain.usecase.team.CreateTeamUseCase
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignCreateTeamIntent
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignCreateTeamSideEffect
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignCreateTeamState
+import com.easyhz.patchnote.ui.screen.sign.team.contract.SignTeamSideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.async
@@ -24,14 +27,14 @@ import javax.inject.Inject
 class SignCreateTeamViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val savedStateHandle: SavedStateHandle,
-    private val saveUserUseCase: SaveUserUseCase,
+    private val createTeamUseCase: CreateTeamUseCase,
 ): BaseViewModel<SignCreateTeamState, SignCreateTeamIntent, SignCreateTeamSideEffect>(
     initialState = SignCreateTeamState.init()
 ) {
     override fun handleIntent(intent: SignCreateTeamIntent) {
         when(intent) {
             is SignCreateTeamIntent.ChangeTeamNameText -> changeTeamNameText(intent.text)
-            is SignCreateTeamIntent.ClickMainButton -> saveInformation()
+            is SignCreateTeamIntent.ClickMainButton -> createTeam()
             is SignCreateTeamIntent.NavigateToUp -> navigateToUp()
         }
     }
@@ -55,40 +58,43 @@ class SignCreateTeamViewModel @Inject constructor(
         reduce { copy(teamNameText = text, enabledButton = text.isNotBlank()) }
     }
 
-    private fun saveInformation() {
+    private fun createTeam() {
         viewModelScope.launch {
             setLoading(true)
-            try {
-                val results = awaitAll(
-                    async { runCatching { saveTeam() } },
-                    async { runCatching { saveUser() } }
-                )
-
-                handleResults(results)
-            } catch (e: Exception) {
+            val teamId = Generate.randomUUID()
+            val param = CreateTeamParam(
+                user = getUser(teamId),
+                team = getTeam(teamId)
+            )
+            createTeamUseCase.invoke(param).onSuccess {
+                navigateToHome()
+            }.onFailure { e ->
                 showSnackBar(context, e.handleError()) {
                     SignCreateTeamSideEffect.ShowSnackBar(it)
                 }
-            } finally {
+            }.also {
                 setLoading(false)
             }
         }
     }
 
-    private suspend fun saveTeam() {
-        throw NotImplementedError("Not implemented")
-    }
-
-    private suspend fun saveUser() {
-        val userRequest = User(
+    private fun getUser(teamId: String): User {
+        return User(
             id = currentState.uid,
             name = currentState.userName,
             phone = currentState.phoneNumber,
-            teamId = Generate.randomUUID()
+            teamId = teamId
         )
-        return saveUserUseCase.invoke(userRequest).getOrThrow()
     }
 
+    private fun getTeam(teamId: String): Team {
+        return Team(
+            id = teamId,
+            name = currentState.teamNameText,
+            adminId = currentState.uid,
+            inviteCode = Generate.randomInviteCode()
+        )
+    }
 
     private fun navigateToUp() {
         postSideEffect { SignCreateTeamSideEffect.NavigateToUp }
@@ -100,17 +106,5 @@ class SignCreateTeamViewModel @Inject constructor(
 
     private fun setLoading(isLoading: Boolean) {
         reduce { copy(isLoading = isLoading) }
-    }
-
-    private fun handleResults(results: List<Result<*>>) {
-        val combinedException = results
-            .mapNotNull { it.exceptionOrNull() }
-            .onEach { Log.e(this.javaClass.name, "handleResults error", it) }
-            .takeIf { it.isNotEmpty() }
-            ?.let { AppError.UnexpectedError }
-
-        if (combinedException == null) return
-
-        throw combinedException
     }
 }

@@ -5,7 +5,8 @@ import com.easyhz.patchnote.core.common.constant.Field.INVITE_CODE
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
 import com.easyhz.patchnote.core.common.util.documentInQueryHandler
-import com.easyhz.patchnote.core.model.team.Team
+import com.easyhz.patchnote.core.common.util.setHandler
+import com.easyhz.patchnote.data.model.team.request.TeamRequest
 import com.easyhz.patchnote.data.model.team.response.TeamResponse
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,7 +21,7 @@ class TeamRemoteDataSourceImpl @Inject constructor(
             firestore.collection(TEAMS).whereEqualTo(INVITE_CODE, inviteCode).limit(1).get()
         }
 
-    override suspend fun createTeam(team: Team): Result<Unit> {
-        return Result.success(Unit)
+    override suspend fun createTeam(team: TeamRequest): Result<Unit> = setHandler(dispatcher) {
+        firestore.collection(TEAMS).document(team.id).set(team)
     }
 }
