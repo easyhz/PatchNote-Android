@@ -193,7 +193,8 @@ private fun HomeCardPreview() {
             beforeImageSizes = emptyList(),
             afterImageSizes = emptyList(),
             requesterId = "",
-            search = emptyList()
+            search = emptyList(),
+            teamId = ""
         )
     ) { }
 

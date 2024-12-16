@@ -94,4 +94,7 @@ data class DefectData(
     var isDeleted: Boolean = false,
     @PropertyName("deletionDate")
     val deletionDate: Timestamp? = null,
+    @get:PropertyName("teamID")
+    @set:PropertyName("teamID")
+    var teamId: String = "",
 )

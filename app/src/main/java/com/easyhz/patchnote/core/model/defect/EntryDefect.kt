@@ -19,6 +19,7 @@ data class EntryDefect(
     val requesterId: String,
     val requesterName: String,
     val requesterPhone: String,
+    val teamId: String,
 ) {
     fun exportSearch(): List<String> {
         val searchMap = CategoryType.entries.associate {
@@ -61,6 +62,7 @@ data class EntryDefectParam(
 ) {
     companion object {
         fun EntryDefectParam.toEntryDefect(
+            teamId: String,
             requesterId: String,
             requesterName: String,
             requesterPhone: String,
@@ -83,6 +85,7 @@ data class EntryDefectParam(
                 requesterId = requesterId,
                 requesterName = requesterName,
                 requesterPhone = requesterPhone,
+                teamId = teamId
             )
         }
     }

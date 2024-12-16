@@ -16,4 +16,5 @@ object Field {
     const val CONFIGURATION = "configuration"
     const val IS_DELETED = "isDeleted"
     const val INVITE_CODE = "inviteCode"
+    const val TEAM_ID = "teamID"
 }

@@ -54,7 +54,8 @@ data class DefectItem(
     val workerPhone: String?,
     val requestDate: String,
     val completionDate: String?,
-    val search: List<String>
+    val search: List<String>,
+    val teamId: String
 ) {
     fun createDefectContent(): List<DefectContent> {
         val defectContentList = mutableListOf<DefectContent>()

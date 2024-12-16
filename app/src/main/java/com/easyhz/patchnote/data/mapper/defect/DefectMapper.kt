@@ -26,7 +26,8 @@ fun EntryDefect.toData(): DefectData = DefectData(
     requesterName = requesterName,
     requesterPhone = requesterPhone,
     search = this.exportSearch(),
-    isDeleted = false
+    teamId = teamId,
+    isDeleted = false,
 )
 
 fun DefectData.toModel(): DefectItem = DefectItem(
@@ -53,5 +54,6 @@ fun DefectData.toModel(): DefectItem = DefectItem(
     afterImageUrls = afterImageUrls,
     requestDate = DateFormatUtil.formatTimestampToDateString(requestDate),
     completionDate = DateFormatUtil.formatTimestampToDateNullString(completionDate),
-    search = search
+    search = search,
+    teamId = teamId,
 )

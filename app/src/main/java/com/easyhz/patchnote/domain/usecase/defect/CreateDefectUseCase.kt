@@ -36,6 +36,7 @@ class CreateDefectUseCase @Inject constructor(
             val user = userDeferred.await().getOrThrow()
 
             val entryDefect = param.toEntryDefect(
+                teamId = user.teamId,
                 requesterId = user.id,
                 requesterName = user.name,
                 requesterPhone = user.phone,
