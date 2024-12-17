@@ -15,4 +15,6 @@ class TeamRepositoryImpl @Inject constructor(
     override suspend fun createTeam(team: Team): Result<Unit> =
         teamRemoteDateSource.createTeam(team.toRequest())
 
+    override suspend fun findTeamById(teamId: String): Result<Team> =
+        teamRemoteDateSource.findTeamById(teamId).map { it.toModel() }
 }
