@@ -13,9 +13,9 @@ import com.easyhz.patchnote.core.designSystem.util.transition.SlideDirection
 import com.easyhz.patchnote.core.designSystem.util.transition.enterSlide
 import com.easyhz.patchnote.core.designSystem.util.transition.exitSlide
 import com.easyhz.patchnote.core.model.filter.FilterParam
-import com.easyhz.patchnote.ui.navigation.dataManagement.navigateToDataManagement
 import com.easyhz.patchnote.ui.navigation.defect.navigateToDefectDetail
 import com.easyhz.patchnote.ui.navigation.defect.navigateToDefectEntry
+import com.easyhz.patchnote.ui.navigation.setting.navigateToSetting
 import com.easyhz.patchnote.ui.screen.filter.FilterScreen
 import com.easyhz.patchnote.ui.screen.home.HomeScreen
 
@@ -32,7 +32,7 @@ internal fun NavGraphBuilder.homeGraph(
         val args = it.toRoute<Home>()
         HomeScreen(
             filterParam = args.filterParam,
-            navigateToDataManagement = navController::navigateToDataManagement,
+            navigateToSetting = navController::navigateToSetting,
             navigateToDefectEntry = navController::navigateToDefectEntry,
             navigateToFilter = navController::navigateToFilter,
             navigateToDefectDetail = navController::navigateToDefectDetail

@@ -31,7 +31,7 @@ class HomeViewModel @Inject constructor(
     override fun handleIntent(intent: HomeIntent) {
         when(intent) {
             is HomeIntent.FetchData -> fetchDefects(intent.filterParam)
-            is HomeIntent.ClickDataManagement -> onClickDataManagement()
+            is HomeIntent.ClickSetting -> onClickSetting()
             is HomeIntent.NavigateToDefectEntry -> navigateToDefectEntry()
             is HomeIntent.NavigateToFilter -> navigateToFilter()
             is HomeIntent.NavigateToDefectDetail -> navigateToDefectDetail(intent.defectId)
@@ -82,9 +82,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    /* 데이터 관리 화면 이동 */
-    private fun navigateToDataManagement() {
-        postSideEffect { HomeSideEffect.NavigateToDataManagement }
+    /* 세팅 화면 이동 */
+    private fun navigateToSetting() {
+        postSideEffect { HomeSideEffect.NavigateToSetting(currentState.appConfiguration.notionUrl) }
     }
 
     /* 하자 등록 화면 이동 */
@@ -103,13 +103,14 @@ class HomeViewModel @Inject constructor(
     }
 
     /* onClickDataManagement */
-    private fun onClickDataManagement() {
-        if (currentState.hasPassword) {
-            navigateToDataManagement()
-        } else {
-            reduce { copy(isShowPasswordDialog = true) }
-            requestFocus()
-        }
+    private fun onClickSetting() {
+        navigateToSetting()
+//        if (currentState.hasPassword) {
+//            navigateToDataManagement()
+//        } else {
+//            reduce { copy(isShowPasswordDialog = true) }
+//            requestFocus()
+//        }
     }
 
     /* refresh */
@@ -144,7 +145,7 @@ class HomeViewModel @Inject constructor(
         if (currentState.password == currentState.appConfiguration.settingPassword) {
             reduce { copy(isShowPasswordDialog = false, hasPassword = true, password = "") }
             updateEnteredPassword()
-            navigateToDataManagement()
+            navigateToSetting()
         } else {
             setPasswordErrorDialog(true)
         }

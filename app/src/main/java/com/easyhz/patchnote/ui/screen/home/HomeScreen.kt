@@ -60,7 +60,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
     filterParam: FilterParam,
-    navigateToDataManagement: () -> Unit,
+    navigateToSetting: (String) -> Unit,
     navigateToDefectEntry: () -> Unit,
     navigateToFilter: (FilterParam) -> Unit,
     navigateToDefectDetail: (String) -> Unit
@@ -79,7 +79,7 @@ fun HomeScreen(
             HomeTopBar(
                 onClickName = { viewModel.postIntent(HomeIntent.NavigateToNotion) },
             ) {
-                viewModel.postIntent(HomeIntent.ClickDataManagement)
+                viewModel.postIntent(HomeIntent.ClickSetting)
             }
         },
         floatingActionButton = {
@@ -195,8 +195,8 @@ fun HomeScreen(
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {
-            is HomeSideEffect.NavigateToDataManagement -> {
-                navigateToDataManagement()
+            is HomeSideEffect.NavigateToSetting -> {
+                navigateToSetting(sideEffect.url)
             }
             is HomeSideEffect.NavigateToDefectEntry -> {
                 navigateToDefectEntry()
