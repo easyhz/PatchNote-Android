@@ -13,4 +13,13 @@ data class Team(
     val name: String,
     val adminId: String,
     val inviteCode: String,
-)
+) {
+    companion object {
+        val Empty = Team(
+            id = "",
+            name = "",
+            adminId = "",
+            inviteCode = "",
+        )
+    }
+}

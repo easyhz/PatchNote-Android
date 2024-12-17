@@ -4,6 +4,7 @@ import com.easyhz.patchnote.core.common.constant.Collection.TEAMS
 import com.easyhz.patchnote.core.common.constant.Field.INVITE_CODE
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
+import com.easyhz.patchnote.core.common.util.documentHandler
 import com.easyhz.patchnote.core.common.util.documentInQueryHandler
 import com.easyhz.patchnote.core.common.util.setHandler
 import com.easyhz.patchnote.data.model.team.request.TeamRequest
@@ -23,5 +24,9 @@ class TeamRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun createTeam(team: TeamRequest): Result<Unit> = setHandler(dispatcher) {
         firestore.collection(TEAMS).document(team.id).set(team)
+    }
+
+    override suspend fun findTeamById(teamId: String): Result<TeamResponse> = documentHandler(dispatcher) {
+        firestore.collection(TEAMS).document(teamId).get()
     }
 }
