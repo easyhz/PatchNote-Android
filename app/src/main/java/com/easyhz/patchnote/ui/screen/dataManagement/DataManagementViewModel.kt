@@ -1,5 +1,6 @@
 package com.easyhz.patchnote.ui.screen.dataManagement
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.model.category.DeleteCategory
@@ -19,6 +20,7 @@ class DataManagementViewModel @Inject constructor(
 ) : BaseViewModel<DataState, DataIntent, DataSideEffect>(
     initialState = DataState.init()
 ) {
+    private val tag = "DataManagementViewModel"
     override fun handleIntent(intent: DataIntent) {
         when (intent) {
             is DataIntent.DeleteCategoryValue -> { deleteCategoryValue(intent.categoryIndex, intent.index) }
@@ -38,7 +40,7 @@ class DataManagementViewModel @Inject constructor(
         fetchCategoryUseCase.invoke(Unit).onSuccess {
             reduce { copy(category = it) }
         }.onFailure {
-            println("실패 >>> $it")
+            Log.e(tag, "fetchCategory : ${it.message}", it)
         }
     }
 
@@ -54,7 +56,7 @@ class DataManagementViewModel @Inject constructor(
         deleteCategoryUseCase.invoke(param).onSuccess {
             println(">> 성공")
         }.onFailure {
-            println(">> 실패 $it")
+            Log.e(tag, "fetchCategory : ${it.message}", it)
         }.also {
             hideDeleteDialog()
             fetchCategory()

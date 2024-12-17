@@ -7,6 +7,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.base.BaseViewModel
+import com.easyhz.patchnote.core.common.error.AppError
+import com.easyhz.patchnote.core.common.error.handleError
 import com.easyhz.patchnote.core.common.util.search.SearchHelper
 import com.easyhz.patchnote.core.common.util.toLinkedHashMap
 import com.easyhz.patchnote.core.model.category.CategoryType
@@ -58,6 +60,7 @@ class DefectViewModel @Inject constructor(
             is DefectIntent.ClearAllData -> {
                 clearAllData()
             }
+
             is DefectIntent.ClearData -> {
                 clearData(intent.categoryType)
             }
@@ -82,23 +85,35 @@ class DefectViewModel @Inject constructor(
 
     /* fetchCategory */
     private fun fetchCategory() = viewModelScope.launch {
-        fetchCategoryUseCase.invoke(Unit).onSuccess {
-            reduce { copy(category = it) }
-            currentState.category.forEach {
-                searchCategory(it.type, "")
+        fetchCategoryUseCase.invoke(Unit)
+            .mapCatching { result ->
+                if (result.any { it.values.isEmpty() }) throw AppError.NoResultError
+                result
+            }.onSuccess {
+                reduce { copy(category = it) }
+                currentState.category.forEach {
+                    searchCategory(it.type, "")
+                }
+            }.onFailure {
+                handleErrorFetchCategory(it)
+            }.also {
+                sendLoadingState()
             }
-        }.onFailure {
-            Log.e(tag, "fetchCategory : $it")
-            delay(700)
-            val message = DialogMessage(
-                title = context.getString(R.string.error_fetch_category_title),
-                message = context.getString(R.string.error_fetch_category_message),
-                action = DialogAction.NAVIGATE_UP
-            )
-            sendError(message = message)
-        }.also {
-            sendLoadingState()
+    }
+
+    private suspend fun handleErrorFetchCategory(error: Throwable) {
+        Log.e(tag, "fetchCategory : $error")
+        delay(700)
+        val errorMessage = when(error) {
+            is AppError.NoResultError -> R.string.error_fetch_category_message_no_data
+            else -> error.handleError()
         }
+        val message = DialogMessage(
+            title = context.getString(R.string.error_fetch_category_title),
+            message = context.getString(errorMessage),
+            action = DialogAction.NAVIGATE_UP
+        )
+        sendError(message = message)
     }
 
     /* [CategoryType] 의 텍스트 필드 값 변경 */

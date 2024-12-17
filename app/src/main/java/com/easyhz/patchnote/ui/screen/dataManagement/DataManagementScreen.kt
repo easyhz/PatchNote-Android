@@ -1,8 +1,11 @@
 package com.easyhz.patchnote.ui.screen.dataManagement
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -26,8 +29,10 @@ import com.easyhz.patchnote.ui.screen.dataManagement.contract.DataIntent
 import com.easyhz.patchnote.ui.screen.dataManagement.contract.DataSideEffect
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Red
+import com.easyhz.patchnote.ui.theme.SemiBold16
 import com.easyhz.patchnote.ui.theme.SemiBold18
 import com.easyhz.patchnote.ui.theme.SubBackground
+import com.easyhz.patchnote.ui.theme.SubText
 
 @Composable
 fun DataManagementScreen(
@@ -61,6 +66,15 @@ fun DataManagementScreen(
             )
         }
     ) { innerPadding ->
+        if (uiState.category.isEmpty()) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(
+                    text = stringResource(R.string.data_management_is_empty),
+                    style = SemiBold16,
+                    color = SubText
+                )
+            }
+        }
         LazyColumn(
             modifier = modifier.padding(innerPadding),
             contentPadding = PaddingValues(vertical = 8.dp)

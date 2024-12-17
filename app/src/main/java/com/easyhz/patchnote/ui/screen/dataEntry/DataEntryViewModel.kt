@@ -1,8 +1,10 @@
 package com.easyhz.patchnote.ui.screen.dataEntry
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
+import com.easyhz.patchnote.core.common.error.handleError
 import com.easyhz.patchnote.core.model.category.CategoryType
 import com.easyhz.patchnote.domain.usecase.category.UpdateCategoryUseCase
 import com.easyhz.patchnote.ui.screen.dataEntry.contract.DataEntryIntent
@@ -10,11 +12,13 @@ import com.easyhz.patchnote.ui.screen.dataEntry.contract.DataEntrySideEffect
 import com.easyhz.patchnote.ui.screen.dataEntry.contract.DataEntryState
 import com.easyhz.patchnote.ui.screen.dataEntry.contract.DataEntryState.Companion.updateDataEntryItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DataEntryViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val updateCategoryUseCase: UpdateCategoryUseCase,
 ): BaseViewModel<DataEntryState, DataEntryIntent, DataEntrySideEffect>(
     initialState = DataEntryState.init()
@@ -47,17 +51,25 @@ class DataEntryViewModel @Inject constructor(
     }
 
     private fun updateCategory() = viewModelScope.launch {
+        setLoading(true)
         val param = currentState.dataEntryList.filter { it.value.isNotBlank() }
         if (param.isEmpty()) return@launch
         updateCategoryUseCase.invoke(param).onSuccess {
             hideKeyboard()
         }.onFailure {
             Log.e(this.javaClass.name, "updateCategory : ${it.message}")
-        }
+            showSnackBar(context, it.handleError()) {
+                DataEntrySideEffect.ShowSnackBar(it)
+            }
+        }.also { setLoading(false) }
 
     }
 
     private fun hideKeyboard() {
         postSideEffect { DataEntrySideEffect.HideKeyboard }
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        reduce { copy(isLoading = isLoading) }
     }
 }
