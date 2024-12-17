@@ -15,6 +15,7 @@ import com.easyhz.patchnote.ui.navigation.dataManagement.dataManagementGraph
 import com.easyhz.patchnote.ui.navigation.defect.defectGraph
 import com.easyhz.patchnote.ui.navigation.home.homeGraph
 import com.easyhz.patchnote.ui.navigation.onboarding.onboardingGraph
+import com.easyhz.patchnote.ui.navigation.setting.settingGraph
 import com.easyhz.patchnote.ui.navigation.sign.signGraph
 import com.easyhz.patchnote.ui.navigation.splash.Splash
 import com.easyhz.patchnote.ui.navigation.splash.splashGraph
@@ -39,6 +40,7 @@ fun PatchNoteApp() {
             homeGraph(navController)
             dataManagementGraph(navController)
             defectGraph(navController)
+            settingGraph(navController)
         }
     }
 }
