@@ -21,11 +21,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.category.CategoryEntryField
+import com.easyhz.patchnote.core.designSystem.component.loading.LoadingIndicator
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
 import com.easyhz.patchnote.ui.screen.dataEntry.contract.DataEntryIntent
 import com.easyhz.patchnote.ui.screen.dataEntry.contract.DataEntrySideEffect
+import com.easyhz.patchnote.ui.theme.LocalSnackBarHostState
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Primary
 
@@ -37,6 +39,8 @@ fun DataEntryScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
+    val snackBarHost = LocalSnackBarHostState.current
+
     PatchNoteScaffold(
         topBar = {
             TopBar(
@@ -81,6 +85,10 @@ fun DataEntryScreen(
             }
             item { Spacer(Modifier.imePadding()) }
         }
+
+        LoadingIndicator(
+            isLoading = uiState.isLoading,
+        )
     }
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
@@ -89,6 +97,12 @@ fun DataEntryScreen(
             is DataEntrySideEffect.HideKeyboard -> {
                 focusManager.clearFocus()
                 viewModel.postIntent(DataEntryIntent.NavigateToUp)
+            }
+            is DataEntrySideEffect.ShowSnackBar -> {
+                snackBarHost.showSnackbar(
+                    message = sideEffect.value,
+                    withDismissAction = true
+                )
             }
         }
     }

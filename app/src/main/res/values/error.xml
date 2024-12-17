@@ -10,8 +10,8 @@
         데이터 로드 실패\n
         다시 시도해 주세요.
     </string>
-    <string name="error_fetch_category_message">
-        존재하지 않는 문서입니다.
+    <string name="error_fetch_category_message_no_data">
+        데이터 관리에서 데이터를 추가해주세요
     </string>
     <string name="error_create_defect_failure">하자 접수에 실패했습니다\n다시 시도 해주세요</string>
     <string name="error_create_defect_completion_failure">하자 완료에 실패했습니다\n다시 시도 해주세요</string>
