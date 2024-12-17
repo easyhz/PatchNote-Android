@@ -16,17 +16,22 @@ class CategoryDataSourceImpl @Inject constructor(
     @Dispatcher(PatchNoteDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     private val firestore: FirebaseFirestore
 ): CategoryDataSource {
-    override suspend fun fetchCategory(): Result<CategoryResponse> = documentHandler(dispatcher) {
-        firestore.collection(CATEGORY).document(CATEGORY_DATA).get()
+    override suspend fun fetchCategory(teamId: String): Result<CategoryResponse> = documentHandler(dispatcher) {
+        firestore.collection(CATEGORY).document(teamId).get()
     }
 
-    override suspend fun updateCategory(dataList: List<DataEntryItem>): Result<Unit> = setHandler(dispatcher) {
+    override suspend fun updateCategory(teamId: String, dataList: List<DataEntryItem>): Result<Unit> = setHandler(dispatcher) {
         firestore.runTransaction { transaction ->
-            val docRef = firestore.collection(CATEGORY).document(CATEGORY_DATA)
+            val docRef = firestore.collection(CATEGORY).document(teamId)
             val snapshot = transaction.get(docRef)
+            if (!snapshot.exists()) {
+                val initialData = dataList.groupBy { it.categoryType.alias }
+                    .mapValues { ArrayList<String>() }
+                transaction.set(docRef, initialData)
+            }
             val groupedData = dataList.groupBy { it.categoryType.alias }
             groupedData.forEach { (category, items) ->
-                val categoryList = snapshot.get(category) as ArrayList<String>
+                val categoryList = snapshot.get(category) as ArrayList<String>? ?: ArrayList()
                 val newValues = items.map { it.value }
                 categoryList.addAll(newValues)
                 transaction.update(docRef, category, categoryList)
@@ -35,11 +40,11 @@ class CategoryDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteCategory(category: String, index: Int): Result<Unit> = setHandler(dispatcher) {
+    override suspend fun deleteCategory(teamId: String, category: String, index: Int): Result<Unit> = setHandler(dispatcher) {
         firestore.runTransaction { transaction ->
-            val docRef = firestore.collection(CATEGORY).document(CATEGORY_DATA)
+            val docRef = firestore.collection(CATEGORY).document(teamId)
             val snapshot = transaction.get(docRef)
-            val categoryList = snapshot.get(category) as ArrayList<String>
+            val categoryList = snapshot.get(category) as ArrayList<String>? ?: ArrayList()
             categoryList.removeAt(index)
             transaction.update(docRef, category, categoryList)
             null
