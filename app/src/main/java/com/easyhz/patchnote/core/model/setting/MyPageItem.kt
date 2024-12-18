@@ -58,6 +58,15 @@ enum class MyPageItem(
         override fun getValue(userInformation: UserInformation): String {
             return ""
         }
+    }, WITHDRAW(
+        titleResId = R.string.setting_my_page_withdraw,
+        textColor = Red,
+        enabledTitle = false,
+        enabledClick = true
+    ) {
+        override fun getValue(userInformation: UserInformation): String {
+            return ""
+        }
     };
 
     abstract fun getValue(userInformation: UserInformation): String

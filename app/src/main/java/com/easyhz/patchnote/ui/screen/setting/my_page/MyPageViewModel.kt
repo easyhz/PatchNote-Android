@@ -61,7 +61,7 @@ class MyPageViewModel @Inject constructor(
     private fun onClickMyPageItem(item: MyPageItem) {
         when (item) {
             MyPageItem.TEAM_INVITE_CODE -> onClickTeamInviteCode()
-            MyPageItem.LOGOUT, MyPageItem.LEAVE_TEAM -> setDialogDetail(item)
+            MyPageItem.LOGOUT, MyPageItem.LEAVE_TEAM, MyPageItem.WITHDRAW -> setDialogDetail(item)
             else -> {}
         }
     }
@@ -153,6 +153,15 @@ class MyPageViewModel @Inject constructor(
                 R.string.leave_team_dialog_message,
                 getDefaultPositiveButton(
                     text = context.getString(R.string.leave_team_dialog_positive_button),
+                    onClick = ::leaveTeam
+                )
+            )
+
+            MyPageItem.WITHDRAW -> Triple(
+                R.string.withdraw_dialog_title,
+                R.string.withdraw_dialog_message,
+                getDefaultPositiveButton(
+                    text = context.getString(R.string.withdraw_dialog_positive_button),
                     onClick = ::leaveTeam
                 )
             )
