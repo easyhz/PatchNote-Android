@@ -6,6 +6,7 @@ import com.easyhz.patchnote.core.common.constant.Field.AFTER_IMAGE_SIZES
 import com.easyhz.patchnote.core.common.constant.Field.AFTER_IMAGE_URLS
 import com.easyhz.patchnote.core.common.constant.Field.COMPLETION_DATE
 import com.easyhz.patchnote.core.common.constant.Field.COMPLETION_DATE_STR
+import com.easyhz.patchnote.core.common.constant.Field.DELETION_DATE
 import com.easyhz.patchnote.core.common.constant.Field.IS_DELETED
 import com.easyhz.patchnote.core.common.constant.Field.PROGRESS
 import com.easyhz.patchnote.core.common.constant.Field.REQUEST_DATE
@@ -27,6 +28,7 @@ import com.easyhz.patchnote.core.model.filter.IndexField
 import com.easyhz.patchnote.core.model.user.User
 import com.easyhz.patchnote.data.model.defect.data.DefectCompletionData
 import com.easyhz.patchnote.data.model.defect.data.DefectData
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query.Direction
 import kotlinx.coroutines.CoroutineDispatcher
@@ -83,6 +85,7 @@ class DefectDataSourceImpl @Inject constructor(
         firestore.runTransaction { transaction ->
             val docRef = firestore.collection(DEFECT).document(id)
             transaction.update(docRef, IS_DELETED, true)
+            transaction.update(docRef, DELETION_DATE, Timestamp.now())
             null
         }
     }

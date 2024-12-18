@@ -15,6 +15,7 @@ object Field {
     const val COMPLETION_DATE_STR = "completionDateStr"
     const val CONFIGURATION = "configuration"
     const val IS_DELETED = "isDeleted"
+    const val DELETION_DATE = "deletionDate"
     const val INVITE_CODE = "inviteCode"
     const val TEAM_ID = "teamID"
 }
