@@ -22,6 +22,8 @@ firebaseBom = "33.2.0"
 firebaseFirestoreKtx = "25.1.0"
 playServicesAuth = "21.2.0"
 google-services = "4.4.2"
+poi = "5.2.3"
+poiOoxml = "5.2.3"
 serialization = "1.6.3"
 glide = "1.0.0-beta01"
 androidxDataStore = "1.1.1"
@@ -69,6 +71,8 @@ lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = 
 desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugaring" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 firebase-appcheck-debug = { group = "com.google.firebase", name = "firebase-appcheck-debug", version.ref = "firebaseAppcheckDebug" }
+poi = { module = "org.apache.poi:poi", version.ref = "poi" }
+poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

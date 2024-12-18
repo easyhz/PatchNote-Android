@@ -24,7 +24,7 @@ android {
 
     defaultConfig {
         applicationId = "com.easyhz.patchnote"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 2
         versionName = "1.0.0"
@@ -146,4 +146,9 @@ dependencies {
 
     // desugaring
     coreLibraryDesugaring(libs.desugaring)
+
+    // poi
+    implementation(libs.poi)
+    implementation(libs.poi.ooxml)
+    implementation(kotlin("reflect"))
 }
