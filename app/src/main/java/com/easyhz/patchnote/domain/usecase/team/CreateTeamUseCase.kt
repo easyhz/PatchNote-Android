@@ -14,6 +14,7 @@ class CreateTeamUseCase @Inject constructor(
 ): BaseUseCase<CreateTeamParam, Unit>() {
     override suspend fun invoke(param: CreateTeamParam): Result<Unit> = coroutineScope {
         runCatching {
+            userRepository.updateUser(param.user)
             val userJob = async { userRepository.saveUser(param.user).getOrThrow() }
             val teamJob = async { teamRepository.createTeam(param.team).getOrThrow() }
 
