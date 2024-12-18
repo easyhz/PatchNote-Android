@@ -13,5 +13,14 @@
     <string name="setting_my_page_leave_team">팀 나가기</string>
     <string name="setting_my_page_team_invite_code_copy_success">팀 코드를 복사하였습니다.</string>
 
+    <string name="logout_dialog_title">로그아웃</string>
+    <string name="logout_dialog_message">정말로 로그아웃 할까요??</string>
+    <string name="logout_dialog_positive_button">로그아웃</string>
+    <string name="logout_dialog_negative_button">취소</string>
+
+    <string name="leave_team_dialog_title">팀 나가기</string>
+    <string name="leave_team_dialog_message">팀에서 나갈까요?\n작성한 정보는 사라지지 않습니다</string>
+    <string name="leave_team_dialog_positive_button">나가기</string>
+    <string name="leave_team_dialog_negative_button">취소</string>
 
 </resources>
