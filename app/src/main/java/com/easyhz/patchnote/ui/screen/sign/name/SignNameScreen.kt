@@ -59,10 +59,11 @@ fun SignNameScreen(
             viewModel.postIntent(NameIntent.NavigateToTeam)
         }
 
-        LoadingIndicator(
-            isLoading = uiState.isLoading,
-        )
     }
+
+    LoadingIndicator(
+        isLoading = uiState.isLoading,
+    )
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {

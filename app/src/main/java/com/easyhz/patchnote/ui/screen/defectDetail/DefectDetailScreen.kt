@@ -175,10 +175,11 @@ fun DefectDetailScreen(
                 viewModel.postIntent(DetailIntent.ShowDeleteDialog(false))
             }
         }
-        LoadingIndicator(
-            isLoading = uiState.isLoading,
-        )
     }
+
+    LoadingIndicator(
+        isLoading = uiState.isLoading,
+    )
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when (sideEffect) {

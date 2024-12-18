@@ -62,10 +62,11 @@ fun SignPhoneScreen(
             viewModel.postIntent(PhoneIntent.RequestVerificationCode(activity = activity))
         }
 
-        LoadingIndicator(
-            isLoading = uiState.isLoading,
-        )
     }
+
+    LoadingIndicator(
+        isLoading = uiState.isLoading,
+    )
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {

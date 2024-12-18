@@ -86,10 +86,11 @@ fun DataEntryScreen(
             item { Spacer(Modifier.imePadding()) }
         }
 
-        LoadingIndicator(
-            isLoading = uiState.isLoading,
-        )
     }
+
+    LoadingIndicator(
+        isLoading = uiState.isLoading,
+    )
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when (sideEffect) {

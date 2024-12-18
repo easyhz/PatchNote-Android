@@ -179,6 +179,7 @@ fun DefectEntryScreen(
             }
         }
     }
+
     LoadingIndicator(
         isLoading = uiState.isLoading,
     )
