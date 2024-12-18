@@ -7,11 +7,15 @@ import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.core.model.user.User
 import com.easyhz.patchnote.data.datasource.remote.defect.DefectDataSource
 import com.easyhz.patchnote.data.mapper.defect.toData
+import com.easyhz.patchnote.data.mapper.defect.toExportDefect
 import com.easyhz.patchnote.data.mapper.defect.toModel
+import com.easyhz.patchnote.data.util.ExportUtil
+import java.io.File
 import javax.inject.Inject
 
 class DefectRepositoryImpl @Inject constructor(
-    private val defectDataSource: DefectDataSource
+    private val defectDataSource: DefectDataSource,
+    private val exportUtil: ExportUtil,
 ): DefectRepository {
     override suspend fun createDefect(param: EntryDefect): Result<Unit> {
         return defectDataSource.createDefect(param.toData())
@@ -35,5 +39,9 @@ class DefectRepositoryImpl @Inject constructor(
 
     override suspend fun deleteDefect(id: String): Result<Unit> {
         return defectDataSource.deleteDefect(id)
+    }
+
+    override suspend fun exportDefects(defects: List<DefectItem>): Result<File> = runCatching {
+        exportUtil.exportDefects(defects.map { it.toExportDefect() })
     }
 }
