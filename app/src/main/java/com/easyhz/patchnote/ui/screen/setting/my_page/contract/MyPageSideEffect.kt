@@ -6,4 +6,5 @@ sealed class MyPageSideEffect: UiSideEffect() {
     data object NavigateToOnboarding: MyPageSideEffect()
     data class CopyTeamInviteCode(val inviteCode: String): MyPageSideEffect()
     data object NavigateToUp: MyPageSideEffect()
+    data class ShowSnackBar(val value: String): MyPageSideEffect()
 }

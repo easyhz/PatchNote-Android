@@ -25,14 +25,18 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.card.MyPageCard
+import com.easyhz.patchnote.core.designSystem.component.dialog.BasicDialog
+import com.easyhz.patchnote.core.designSystem.component.loading.LoadingIndicator
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
+import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
 import com.easyhz.patchnote.core.model.setting.MyPageItem
 import com.easyhz.patchnote.ui.screen.setting.my_page.contract.MyPageIntent
 import com.easyhz.patchnote.ui.screen.setting.my_page.contract.MyPageSideEffect
 import com.easyhz.patchnote.ui.theme.LocalSnackBarHostState
 import com.easyhz.patchnote.ui.theme.MainText
+import com.easyhz.patchnote.ui.theme.SubBackground
 import com.easyhz.patchnote.ui.theme.SubText
 
 @Composable
@@ -104,7 +108,24 @@ fun MyPageScreen(
                 }
             }
         }
+
+        uiState.dialogMessage?.let { error ->
+            BasicDialog(
+                title = error.title,
+                content = error.message,
+                positiveButton = error.positiveButton,
+                negativeButton = BasicDialogButton(
+                    text = stringResource(R.string.dialog_negative_button),
+                    backgroundColor = SubBackground,
+                    onClick = { viewModel.postIntent(MyPageIntent.ShowError(null)) }
+                ),
+            )
+        }
     }
+
+    LoadingIndicator(
+        isLoading = uiState.isLoading,
+    )
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when (sideEffect) {
@@ -120,6 +141,13 @@ fun MyPageScreen(
                 clipboardManager.setText(AnnotatedString(sideEffect.inviteCode))
                 snackBarHostState.showSnackbar(
                     message = context.getString(R.string.setting_my_page_team_invite_code_copy_success),
+                    withDismissAction = true
+                )
+            }
+
+            is MyPageSideEffect.ShowSnackBar -> {
+                snackBarHostState.showSnackbar(
+                    message = sideEffect.value,
                     withDismissAction = true
                 )
             }
