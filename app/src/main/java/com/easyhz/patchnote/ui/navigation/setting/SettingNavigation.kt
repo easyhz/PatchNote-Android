@@ -6,10 +6,12 @@ import androidx.compose.animation.fadeOut
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import com.easyhz.patchnote.core.designSystem.util.transition.SlideDirection
 import com.easyhz.patchnote.core.designSystem.util.transition.enterSlide
 import com.easyhz.patchnote.core.designSystem.util.transition.exitSlide
 import com.easyhz.patchnote.ui.navigation.dataManagement.navigateToDataManagement
+import com.easyhz.patchnote.ui.navigation.onboarding.navigateToOnboarding
 import com.easyhz.patchnote.ui.screen.setting.main.SettingScreen
 import com.easyhz.patchnote.ui.screen.setting.my_page.MyPageScreen
 
@@ -30,9 +32,12 @@ internal fun NavGraphBuilder.settingGraph(
     }
 
     composable<MyPage> {
+        val navOptions = navOptions {
+            popUpTo(navController.graph.id) { inclusive = true }
+        }
         MyPageScreen(
             navigateToUp = navController::navigateUp,
-            navigateToOnboarding = { /* TODO */ },
+            navigateToOnboarding = { navController.navigateToOnboarding(navOptions = navOptions) },
         )
     }
 }
