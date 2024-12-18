@@ -3,7 +3,7 @@
     <string name="filter_title">필터 선택</string>
     <string name="filter_apply">검색</string>
 
-    <string name="filter_progress">완료여부</string>
+    <string name="filter_progress">상태</string>
 
     <string name="filter_requester">접수자</string>
     <string name="filter_request_date">접수일</string>
@@ -13,7 +13,7 @@
 
     <string name="filter_name_placeholder">이름을 입력하세요</string>
 
-    <string name="filter_progress_none">선택 안함</string>
+    <string name="filter_progress_none">전체</string>
     <string name="filter_progress_requested">접수됨</string>
     <string name="filter_progress_done">완료</string>
 

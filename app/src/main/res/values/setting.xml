@@ -8,11 +8,11 @@
     <string name="setting_my_page_name">이름</string>
     <string name="setting_my_page_phone">전화번호</string>
     <string name="setting_my_page_team_name">팀</string>
-    <string name="setting_my_page_team_invite_code">팀 ID</string>
+    <string name="setting_my_page_team_invite_code">팀 초대 코드</string>
     <string name="setting_my_page_logout">로그아웃</string>
     <string name="setting_my_page_leave_team">팀 나가기</string>
     <string name="setting_my_page_withdraw">서비스 탈퇴</string>
-    <string name="setting_my_page_team_invite_code_copy_success">팀 코드를 복사하였습니다.</string>
+    <string name="setting_my_page_team_invite_code_copy_success">팀 초대 코드를 복사하였습니다.</string>
 
     <string name="logout_dialog_title">로그아웃</string>
     <string name="logout_dialog_message">정말로 로그아웃 할까요??</string>

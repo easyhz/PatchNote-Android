@@ -24,4 +24,23 @@
     <string name="defect_delete_error">삭제 실패\n다시 시도해 주세요</string>
     <string name="defect_delete_error_content">삭제된 데이터는 복구할 수 없습니다.</string>
     <string name="defect_delete_success">하자 삭제에 성공하였습니다.</string>
+
+    <string name="defect_id">하자번호</string>
+    <string name="defect_site">현장</string>
+    <string name="defect_building">동</string>
+    <string name="defect_unit">호수</string>
+    <string name="defect_space">공간</string>
+    <string name="defect_part">부위</string>
+    <string name="defect_work_type">공종</string>
+    <string name="defect_progress">상태</string>
+    <string name="defect_requester_name">접수자</string>
+    <string name="defect_requester_phone">접수자번호</string>
+    <string name="defect_request_date">접수일</string>
+    <string name="defect_before_description">접수내용</string>
+    <string name="defect_worker_name">작업자</string>
+    <string name="defect_worker_phone">작업자번호</string>
+    <string name="defect_completion_date">완료일</string>
+    <string name="defect_after_description">완료내용</string>
+    <string name="defect_thumbnail">사진</string>
+    <string name="export_defect_list">접수 리스트</string>
 </resources>
