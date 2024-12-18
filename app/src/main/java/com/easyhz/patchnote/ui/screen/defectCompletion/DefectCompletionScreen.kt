@@ -152,6 +152,7 @@ fun DefectCompletionScreen(
             }
         }
     }
+
     LoadingIndicator(
         isLoading = uiState.isLoading,
     )
