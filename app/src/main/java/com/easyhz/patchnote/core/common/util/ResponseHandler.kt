@@ -93,7 +93,7 @@ private fun <T> handleException(e: Throwable, tag: String): Result<T> {
 }
 
 private fun <T> handleFireStoreException(e: FirebaseFirestoreException, tag: String): Result<T> {
-    Log.e(TAG, "In $tag handler - FireStore: ${e.message}")
+    Log.e(TAG, "In $tag handler - FireStore: ${e.message}", e)
     return Result.failure(getErrorByCode(e.code))
 }
 
@@ -103,6 +103,6 @@ private fun <T> handleNoResultException(e: AppError.NoResultError, tag: String):
 }
 
 private fun <T> handleGeneralException(e: Throwable, tag: String): Result<T> {
-    Log.e(TAG, "In $tag handler - Exception: ${e.message}")
+    Log.e(TAG, "In $tag handler - Exception: ${e.message}", e)
     return Result.failure(AppError.UnexpectedError)
 }
