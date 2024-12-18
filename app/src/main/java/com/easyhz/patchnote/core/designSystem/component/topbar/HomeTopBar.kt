@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.easyhz.patchnote.R
+import com.easyhz.patchnote.core.designSystem.util.extension.circleClickable
 import com.easyhz.patchnote.core.designSystem.util.extension.noRippleClickable
 import com.easyhz.patchnote.ui.theme.SemiBold24
 
@@ -22,7 +23,8 @@ import com.easyhz.patchnote.ui.theme.SemiBold24
 fun HomeTopBar(
     modifier: Modifier = Modifier,
     onClickName: () -> Unit = { },
-    onClickMenu: () -> Unit
+    onClickSetting: () -> Unit,
+    onClickExport: () -> Unit
 ) {
     Row(
         modifier = modifier.height(52.dp).fillMaxWidth().padding(horizontal = 20.dp),
@@ -39,19 +41,37 @@ fun HomeTopBar(
             )
             Icon(
                 painter = painterResource(R.drawable.ic_info),
-                contentDescription = "icon_info"
+                contentDescription = null
             )
         }
-        Icon(
-            modifier = Modifier.noRippleClickable { onClickMenu() },
-            painter = painterResource(R.drawable.ic_setting),
-            contentDescription = "inc_setting"
-        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                modifier = Modifier.circleClickable(
+                    onClick = onClickExport
+                ),
+                painter = painterResource(R.drawable.ic_export),
+                contentDescription = null
+            )
+            Icon(
+                modifier = Modifier.circleClickable(
+                    onClick = { onClickSetting() }
+                ),
+                painter = painterResource(R.drawable.ic_setting),
+                contentDescription = null
+            )
+        }
     }
 }
 
 @Preview
 @Composable
 private fun HomeTopBarPreview() {
-    HomeTopBar { }
+    HomeTopBar(
+        onClickName = { },
+        onClickSetting = { },
+        onClickExport = { }
+    )
 }
