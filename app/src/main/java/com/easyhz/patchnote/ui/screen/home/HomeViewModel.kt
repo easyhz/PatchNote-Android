@@ -55,7 +55,7 @@ class HomeViewModel @Inject constructor(
         fetchDefectsUseCase.invoke(filterParam).onSuccess {
             reduce { copy(defectList = it) }
         }.onFailure {
-            Log.e(tag, "fetchDefects : $it")
+            Log.e(tag, "fetchDefects : $it", it)
         }.also {
             if (currentState.isRefreshing) {
                 reduce { copy(isRefreshing = false) }
