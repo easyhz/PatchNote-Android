@@ -28,7 +28,7 @@ class AuthDataSourceImpl @Inject constructor(
 
     override fun getUserId(): String? = firebaseAuth.currentUser?.uid
 
-    override fun logout() = firebaseAuth.signOut()
+    override fun logOut() = firebaseAuth.signOut()
 
     override fun verifyPhoneNumber(
         phoneNumber: String,
@@ -60,5 +60,9 @@ class AuthDataSourceImpl @Inject constructor(
 
     override suspend fun getUser(uid: String): Result<UserResponse> = documentHandler(dispatcher) {
         firestore.collection(USERS).document(uid).get()
+    }
+
+    override suspend fun deleteUser(uid: String): Result<Unit> = setHandler(dispatcher) {
+        firestore.collection(USERS).document(uid).delete()
     }
 }

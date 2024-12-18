@@ -43,6 +43,15 @@ class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteUser(): Unit = withContext(dispatcher) {
+        dataStore.edit { preferences ->
+            preferences.remove(userId)
+            preferences.remove(userName)
+            preferences.remove(userPhone)
+            preferences.remove(userTeamId)
+        }
+    }
+
 
     private fun generateNullException(userKey: UserKey): Exception {
         return Exception("${userKey.key} is null")

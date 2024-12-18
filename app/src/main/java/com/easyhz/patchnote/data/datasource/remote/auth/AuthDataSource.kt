@@ -10,10 +10,11 @@ import com.google.firebase.auth.PhoneAuthProvider.OnVerificationStateChangedCall
 interface AuthDataSource {
     fun isLogin(): Boolean
     fun getUserId(): String?
-    fun logout()
+    fun logOut()
     fun verifyPhoneNumber(phoneNumber: String, activity: Activity, callbacks: OnVerificationStateChangedCallbacks): Result<Unit>
     suspend fun getCredentials(verificationId: String, code: String): Result<PhoneAuthCredential>
     suspend fun signInWithPhone(credential: PhoneAuthCredential): Result<AuthResult>
     suspend fun saveUser(saveUserRequest: SaveUserRequest): Result<Unit>
     suspend fun getUser(uid: String): Result<UserResponse>
+    suspend fun deleteUser(uid: String): Result<Unit>
 }

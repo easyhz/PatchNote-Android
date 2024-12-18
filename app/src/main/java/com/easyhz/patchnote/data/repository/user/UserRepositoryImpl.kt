@@ -19,8 +19,8 @@ class UserRepositoryImpl @Inject constructor(
         return authDataSource.getUserId()
     }
 
-    override fun logout() {
-        authDataSource.logout()
+    override fun logOut() {
+        authDataSource.logOut()
     }
 
     override suspend fun saveUser(user: User): Result<Unit> {
@@ -37,5 +37,13 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getUserFromRemote(uid: String): Result<User> {
         return authDataSource.getUser(uid).map { it.toModel() }
+    }
+
+    override suspend fun deleteUserFromLocal() {
+        userLocalDataSource.deleteUser()
+    }
+
+    override suspend fun deleteUserFromRemote(uid: String): Result<Unit> {
+        return authDataSource.deleteUser(uid)
     }
 }

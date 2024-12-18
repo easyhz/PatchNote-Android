@@ -11,11 +11,10 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SaveUserUseCase @Inject constructor(
-    @Dispatcher(PatchNoteDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     private val userRepository: UserRepository
 ): BaseUseCase<User, Unit>() {
-    override suspend fun invoke(param: User): Result<Unit> = withContext(dispatcher) {
-        launch { userRepository.updateUser(param) }
-        return@withContext userRepository.saveUser(param)
+    override suspend fun invoke(param: User): Result<Unit> = runCatching {
+        userRepository.saveUser(param)
+        userRepository.updateUser(param)
     }
 }
