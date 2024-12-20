@@ -21,7 +21,7 @@ object UtilModule {
     @Provides
     fun provideExportUtil(
         @ApplicationContext context: Context,
-    ): ExportUtil{
+    ): ExportUtil {
         return ExportUtil(context)
     }
 }
