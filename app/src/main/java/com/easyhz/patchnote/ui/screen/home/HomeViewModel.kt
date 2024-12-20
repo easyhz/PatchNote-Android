@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.BuildConfig
 import com.easyhz.patchnote.core.common.base.BaseViewModel
+import com.easyhz.patchnote.core.common.util.CrashlyticsLogger
 import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.domain.usecase.configuration.FetchConfigurationUseCase
 import com.easyhz.patchnote.domain.usecase.configuration.UpdateEnteredPasswordUseCase
@@ -14,6 +15,8 @@ import com.easyhz.patchnote.domain.usecase.defect.FetchDefectsUseCase
 import com.easyhz.patchnote.ui.screen.home.contract.HomeIntent
 import com.easyhz.patchnote.ui.screen.home.contract.HomeSideEffect
 import com.easyhz.patchnote.ui.screen.home.contract.HomeState
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.FirebaseFirestoreException.Code
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -22,6 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    private val crashlyticsLogger: CrashlyticsLogger,
     private val fetchConfigurationUseCase: FetchConfigurationUseCase,
     private val fetchDefectsUseCase: FetchDefectsUseCase,
     private val validatePasswordUseCase: ValidatePasswordUseCase,
@@ -63,8 +67,9 @@ class HomeViewModel @Inject constructor(
     private fun fetchDefects(filterParam: FilterParam) = viewModelScope.launch {
         fetchDefectsUseCase.invoke(filterParam).onSuccess {
             reduce { copy(defectList = it) }
-        }.onFailure {
-            Log.e(tag, "fetchDefects : $it", it)
+        }.onFailure { e ->
+            handleIndexError(e, filterParam)
+            Log.e(tag, "fetchDefects : $e", e)
         }.also {
             if (currentState.isRefreshing) {
                 reduce { copy(isRefreshing = false) }
@@ -199,5 +204,15 @@ class HomeViewModel @Inject constructor(
 
     private fun shareFile(file: File) {
         postSideEffect { HomeSideEffect.ShareIntent(file) }
+    }
+
+    private fun handleIndexError(e: Throwable, filterParam: FilterParam) {
+        if (e is FirebaseFirestoreException && e.code == Code.FAILED_PRECONDITION) {
+            val errorMap = mapOf(
+                "FILTER_PARAM" to filterParam.toString(),
+                "ERROR_MESSAGE" to e.message.toString()
+            )
+            crashlyticsLogger.setKey("INDEX_ERROR", errorMap.toString())
+        }
     }
 }

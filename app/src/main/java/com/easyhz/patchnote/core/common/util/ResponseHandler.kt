@@ -2,7 +2,6 @@ package com.easyhz.patchnote.core.common.util
 
 import android.util.Log
 import com.easyhz.patchnote.core.common.error.AppError
-import com.easyhz.patchnote.core.common.error.getErrorByCode
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -94,7 +93,7 @@ private fun <T> handleException(e: Throwable, tag: String): Result<T> {
 
 private fun <T> handleFireStoreException(e: FirebaseFirestoreException, tag: String): Result<T> {
     Log.e(TAG, "In $tag handler - FireStore: ${e.message}", e)
-    return Result.failure(getErrorByCode(e.code))
+    return Result.failure(e)
 }
 
 private fun <T> handleNoResultException(e: AppError.NoResultError, tag: String): Result<T> {

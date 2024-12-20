@@ -13,4 +13,10 @@ sealed class AppError: Exception() {
         private fun readResolve(): Any = NoResultError
     }
 
+    /* 인덱스 에러 */
+    data object IndexError : AppError() {
+        @JvmStatic
+        private fun readResolve(): Any = IndexError
+    }
+
 }
