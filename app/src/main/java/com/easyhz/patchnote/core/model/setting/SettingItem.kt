@@ -12,5 +12,7 @@ enum class SettingItem(
         stringResId = R.string.setting_data_management
     ), MY_PAGE(
         stringResId = R.string.setting_my_page
+    ), BLOCK(
+        stringResId = R.string.setting_block
     )
 }

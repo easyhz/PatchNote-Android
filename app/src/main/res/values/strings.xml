@@ -29,4 +29,11 @@
     <string name="dialog_setting_password_error_title">오류</string>
     <string name="dialog_setting_password_error_subtitle">비밀번호가 틀렸습니다.</string>
     <string name="dialog_setting_password_error_button">확인</string>
+
+    <string name="dialog_block_title">차단하기</string>
+    <string name="dialog_block_subtitle">차단할 유저의 id를 입력해주세요</string>
+    <string name="dialog_block_placeholder">차단할 유저의 id를 입력해주세요</string>
+    <string name="dialog_block_positive">확인</string>
+    <string name="dialog_block_negative">취소</string>
+    <string name="dialog_block_propose">차단 내용은\n24시간 내에 검토됩니다.</string>
 </resources>

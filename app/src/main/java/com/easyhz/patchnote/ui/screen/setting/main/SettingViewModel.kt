@@ -13,12 +13,16 @@ import javax.inject.Inject
 class SettingViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ): BaseViewModel<SettingState, SettingIntent, SettingSideEffect>(
-    initialState = SettingState
+    initialState = SettingState.init()
 ) {
     override fun handleIntent(intent: SettingIntent) {
         when(intent) {
             is SettingIntent.ClickSettingItem -> onClickSettingItem(intent.settingItem)
             is SettingIntent.NavigateToUp -> navigateToUp()
+            is SettingIntent.ChangeBlockText -> changeBlockInputDialogText(intent.text)
+            is SettingIntent.ProposeBlock -> showSuccessDialog()
+            is SettingIntent.HideBlockDialog -> hideInputDialog()
+            is SettingIntent.HideSuccessDialog -> hideSuccessDialog()
         }
     }
 
@@ -27,6 +31,7 @@ class SettingViewModel @Inject constructor(
             SettingItem.ABOUT -> navigateToAbout()
             SettingItem.DATA_MANAGEMENT -> navigateToDataManagement()
             SettingItem.MY_PAGE -> navigateToMyPage()
+            SettingItem.BLOCK -> showInputDialog()
         }
     }
 
@@ -46,6 +51,26 @@ class SettingViewModel @Inject constructor(
 
     private fun navigateToMyPage() {
         postSideEffect { SettingSideEffect.NavigateToMyPage }
+    }
+
+    private fun showInputDialog() {
+        reduce { copy(isInputDialogVisible = true) }
+    }
+
+    private fun showSuccessDialog() {
+        reduce { copy(isInputDialogVisible = false, isSuccessDialogVisible = true) }
+    }
+
+    private fun changeBlockInputDialogText(text: String) {
+        reduce { copy(blockInputDialogText = text) }
+    }
+
+    private fun hideInputDialog() {
+        reduce { copy(isInputDialogVisible = false) }
+    }
+
+    private fun hideSuccessDialog() {
+        reduce { copy(isSuccessDialogVisible = false) }
     }
 
 }
