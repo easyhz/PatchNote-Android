@@ -59,7 +59,7 @@ fun HomeCard(
     ) {
         HomeCardImage(
             modifier = Modifier
-                .size(96.dp)
+                .size(100.dp)
                 .clip(RoundedCornerShape(8.dp)),
             imageUrl = defectItem.thumbnailUrl,
             progress = defectItem.progress
