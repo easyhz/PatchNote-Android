@@ -6,7 +6,7 @@
     <string name="defect_entry_content">내용</string>
     <string name="defect_entry_content_placeholder">내용을 입력하세요</string>
     <string name="defect_entry_image">사진</string>
-    <string name="defect_entry_image_placeholder">사진을 추가해주세요</string>
+    <string name="defect_entry_image_placeholder">사진을 추가해 주세요</string>
 
     <string name="defect_entry_receipt_success">하자 접수가 완료되었습니다.</string>
     <string name="defect_done">완료</string>
