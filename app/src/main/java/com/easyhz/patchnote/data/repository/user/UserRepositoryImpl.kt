@@ -46,4 +46,10 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun deleteUserFromRemote(uid: String): Result<Unit> {
         return authDataSource.deleteUser(uid)
     }
+
+    override suspend fun updateUserFromRemote(): Result<Unit> = runCatching {
+        val uid = authDataSource.getUserId() ?: return Result.failure(Exception("User not found"))
+        val user = authDataSource.getUser(uid).getOrThrow()
+        userLocalDataSource.updateUser(user.toModel())
+    }
 }

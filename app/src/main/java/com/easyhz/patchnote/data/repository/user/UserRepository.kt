@@ -12,4 +12,5 @@ interface UserRepository {
     suspend fun getUserFromRemote(uid: String): Result<User>
     suspend fun deleteUserFromLocal(): Unit
     suspend fun deleteUserFromRemote(uid: String): Result<Unit>
+    suspend fun updateUserFromRemote(): Result<Unit>
 }
