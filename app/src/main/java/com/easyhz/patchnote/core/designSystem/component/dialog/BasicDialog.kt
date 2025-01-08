@@ -42,7 +42,7 @@ fun BasicDialog(
     val innerPadding = 12.dp
     val buttonMinWidth = 132.dp
     val buttonSpacing = 12.dp
-    val columSpace = if(content == null) 32.dp else 24.dp
+    val columSpace = if(content == null) 32.dp else 12.dp
 
     Dialog(
         onDismissRequest = onDismissRequest,
