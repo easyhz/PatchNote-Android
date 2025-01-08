@@ -117,6 +117,7 @@ fun DefectDetailScreen(
             }
             item {
                 DetailField(
+                    isComplete = uiState.defectItem!!.progress == DefectProgress.DONE,
                     tabs = uiState.defectItem!!.createDefectContent()
                 )
             }

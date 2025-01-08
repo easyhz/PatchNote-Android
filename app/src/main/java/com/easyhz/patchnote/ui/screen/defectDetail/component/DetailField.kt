@@ -1,7 +1,6 @@
 package com.easyhz.patchnote.ui.screen.defectDetail.component
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -45,6 +44,7 @@ import com.easyhz.patchnote.ui.theme.SubText
 @Composable
 fun DetailField(
     modifier: Modifier = Modifier,
+    isComplete: Boolean,
     tabs: List<DefectContent>
 ) {
     val pagerState = rememberPagerState {
@@ -106,15 +106,37 @@ fun DetailField(
             },
             label = "DetailField",
         ) { page ->
-            AnimatedVisibility(
-                visible = tabs[page].imageUrls.isEmpty(),
-            ) {
-                Box(modifier = Modifier.height(500.dp).fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    Text(
-                        text = stringResource(R.string.defect_not_done),
-                        style = Medium18,
-                        color = MainText,
-                    )
+            AnimatedContent(
+                targetState = isComplete,
+                transitionSpec = {
+                    fadeIn() togetherWith  fadeOut()
+                },
+                label = "",
+            ) { isComplete ->
+                if (isComplete && page == 1 && tabs[page].description.isBlank() && tabs[page].imageUrls.isEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .height(500.dp)
+                            .fillMaxWidth(), contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.defect_completion_description),
+                            style = Medium18,
+                            color = MainText,
+                        )
+                    }
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .height(500.dp)
+                            .fillMaxWidth(), contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.defect_not_done),
+                            style = Medium18,
+                            color = MainText,
+                        )
+                    }
                 }
             }
             Column(
@@ -147,6 +169,7 @@ fun DetailField(
 @Composable
 private fun DetailFieldPreview() {
     DetailField(
+        isComplete = true,
         tabs = listOf(
             DefectContent(
                 DefectProgress.REQUESTED,

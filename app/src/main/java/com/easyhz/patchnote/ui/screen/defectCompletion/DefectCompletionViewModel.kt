@@ -159,7 +159,6 @@ class DefectCompletionViewModel @Inject constructor(
     }
 
     private fun clickCompletion(id: String) = viewModelScope.launch {
-        if (!isValidImage()) return@launch
         setLoading(true)
         val param = DefectCompletionParam(
             id = id,
@@ -174,16 +173,6 @@ class DefectCompletionViewModel @Inject constructor(
         }.also {
             setLoading(false)
         }
-    }
-
-    /* 이미지 유효성 검사 */
-    private fun isValidImage(): Boolean {
-        if (currentState.images.isEmpty()) {
-            setDialog(DialogMessage(title = context.getString(R.string.defect_entry_image_placeholder)))
-            return false
-        }
-
-        return true
     }
 
     /* 이미지 회전 */
