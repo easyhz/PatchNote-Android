@@ -67,6 +67,7 @@ fun BasicDialog(
             )
             content?.let {
                 Text(
+                    modifier = Modifier.padding(bottom = 12.dp),
                     text = it,
                     textAlign = TextAlign.Center,
                     style = SemiBold16,
