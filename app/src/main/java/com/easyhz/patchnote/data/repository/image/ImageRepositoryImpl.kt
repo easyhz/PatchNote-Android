@@ -28,7 +28,7 @@ class ImageRepositoryImpl @Inject constructor(
                 if (images.isEmpty()) return@runCatching emptyList()
                 val imageListDeferred = async {
                     images.mapIndexed { index, image ->
-                        val imageUri = PatchNoteFileProvider.compressImageUriToMaxSize(context, dispatcher, image, 0.5)
+                        val imageUri = PatchNoteFileProvider.compressImageUriToMaxSize(context, dispatcher, image, 0.1)
                             .getOrThrow()
                         imageUri.let { uri ->
                             imageDataSource.uploadImage(
@@ -47,7 +47,7 @@ class ImageRepositoryImpl @Inject constructor(
         withContext(dispatcher) {
             runCatching {
                 val thumbnail =
-                    PatchNoteFileProvider.compressImageUriToMaxSize(context, dispatcher, imageUri, 0.1)
+                    PatchNoteFileProvider.compressImageUriToMaxSize(context, dispatcher, imageUri, 0.05)
                         .getOrThrow()
                 imageDataSource.uploadImage(
                     pathId,
