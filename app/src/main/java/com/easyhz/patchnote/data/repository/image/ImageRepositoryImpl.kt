@@ -10,11 +10,16 @@ import com.easyhz.patchnote.data.provider.PatchNoteFileProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ImageRepositoryImpl @Inject constructor(
     @Dispatcher(PatchNoteDispatchers.IO) private val dispatcher: CoroutineDispatcher,
+    @Dispatcher(PatchNoteDispatchers.DEFAULT) private val defaultDispatcher: CoroutineDispatcher,
     @ApplicationContext private val context: Context,
     private val imageDataSource: ImageDataSource,
 ) : ImageRepository {
@@ -26,20 +31,23 @@ class ImageRepositoryImpl @Inject constructor(
         withContext(dispatcher) {
             runCatching {
                 if (images.isEmpty()) return@runCatching emptyList()
-                val imageListDeferred = async {
+                val semaphore = Semaphore(3)
+
+                coroutineScope {
                     images.mapIndexed { index, image ->
-                        val imageUri = PatchNoteFileProvider.compressImageUriToMaxSize(context, dispatcher, image, 0.1)
-                            .getOrThrow()
-                        imageUri.let { uri ->
-                            imageDataSource.uploadImage(
-                                pathId,
-                                uri,
-                                "$index"
-                            ).getOrThrow()
+                        async {
+                            semaphore.withPermit {
+                                val imageUri = PatchNoteFileProvider.compressImageUriToMaxSize(context, defaultDispatcher, image, 0.1)
+                                    .getOrThrow()
+                                imageDataSource.uploadImage(
+                                    pathId,
+                                    imageUri,
+                                    "$index"
+                                ).getOrThrow()
+                            }
                         }
-                    }
+                    }.awaitAll()
                 }
-                imageListDeferred.await()
             }
         }
 
@@ -47,7 +55,7 @@ class ImageRepositoryImpl @Inject constructor(
         withContext(dispatcher) {
             runCatching {
                 val thumbnail =
-                    PatchNoteFileProvider.compressImageUriToMaxSize(context, dispatcher, imageUri, 0.05)
+                    PatchNoteFileProvider.compressImageUriToMaxSize(context, dispatcher, imageUri, 0.03)
                         .getOrThrow()
                 imageDataSource.uploadImage(
                     pathId,
