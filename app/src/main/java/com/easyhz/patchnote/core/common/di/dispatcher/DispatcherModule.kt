@@ -14,4 +14,8 @@ object DispatcherModule {
     @Dispatcher(PatchNoteDispatchers.IO)
     @Provides
     fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @Dispatcher(PatchNoteDispatchers.DEFAULT)
+    @Provides
+    fun provideDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
 }
