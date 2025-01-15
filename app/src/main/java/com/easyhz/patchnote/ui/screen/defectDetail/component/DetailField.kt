@@ -125,7 +125,7 @@ fun DetailField(
                             color = MainText,
                         )
                     }
-                } else {
+                } else if (page == 1) {
                     Box(
                         modifier = Modifier
                             .height(500.dp)

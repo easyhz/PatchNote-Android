@@ -30,7 +30,6 @@ class SplashViewModel  @Inject constructor(
         isLoginUseCase.invoke(Unit).onSuccess {
             if (it) {
                 updateUser()
-                navigateToHome()
             }
             else { navigateToOnboarding() }
         }.onFailure { e ->
@@ -38,8 +37,10 @@ class SplashViewModel  @Inject constructor(
             navigateToOnboarding()
         }
     }
-    private fun updateUser() = viewModelScope.launch(Dispatchers.IO) {
-        updateUserUseCase.invoke(Unit).onFailure {
+    private fun updateUser() = viewModelScope.launch {
+        updateUserUseCase.invoke(Unit).onSuccess {
+            navigateToHome()
+        }.onFailure {
             Log.e("MainViewModel", "updateUser: ${it.message}")
         }
     }
