@@ -9,7 +9,6 @@ import com.easyhz.patchnote.ui.screen.splash.contract.SplashIntent
 import com.easyhz.patchnote.ui.screen.splash.contract.SplashSideEffect
 import com.easyhz.patchnote.ui.screen.splash.contract.SplashState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
