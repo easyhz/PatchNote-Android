@@ -21,3 +21,4 @@
 #-renamesourcefileattribute SourceFile
 -keep class com.google.firebase.crashlytics.** {*;}
 -keep interface com.google.firebase.crashlytics.** {*;}
+-keep class com.google.android.gms.** {*;}
