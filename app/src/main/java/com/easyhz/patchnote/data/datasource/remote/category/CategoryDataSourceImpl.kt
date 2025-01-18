@@ -6,7 +6,6 @@ import com.easyhz.patchnote.core.common.util.documentHandler
 import com.easyhz.patchnote.core.common.util.setHandler
 import com.easyhz.patchnote.core.model.dataEntry.DataEntryItem
 import com.easyhz.patchnote.core.common.constant.Collection.CATEGORY
-import com.easyhz.patchnote.core.common.constant.Field.CATEGORY_DATA
 import com.easyhz.patchnote.data.model.category.response.CategoryResponse
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineDispatcher
