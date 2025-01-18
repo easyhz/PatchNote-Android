@@ -19,6 +19,9 @@ val MainText = Color(0xFF000000)
 val SubText = Color(0xFF717171)
 
 @Stable
+val SubText2 = Color(0xFF3F3F3F)
+
+@Stable
 val PlaceholderText = Color(0xFFA8A8AA)
 
 @Stable

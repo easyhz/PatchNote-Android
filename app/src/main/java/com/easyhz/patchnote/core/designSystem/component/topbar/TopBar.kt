@@ -23,12 +23,13 @@ import com.easyhz.patchnote.ui.theme.SemiBold18
 
 @Composable
 fun TopBar(
+    modifier: Modifier = Modifier,
     left: TopBarType? = null,
     title: TopBarType? = null,
     right: TopBarType? = null,
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .height(52.dp)
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
