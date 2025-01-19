@@ -10,6 +10,15 @@ val Context.userDataStore: DataStore<Preferences> by preferencesDataStore(
     name = "PatchNote.user"
 )
 
+val Context.configurationDataStore: DataStore<Preferences> by preferencesDataStore(
+    name = "PatchNote.configuration"
+)
+
+val Context.receptionSettingDataStore: DataStore<Preferences> by preferencesDataStore(
+    name = "PatchNote.reception.setting"
+)
+
+
 internal enum class UserKey(
     val key: String
 ) {

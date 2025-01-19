@@ -2,6 +2,8 @@ package com.easyhz.patchnote.data.di
 
 import com.easyhz.patchnote.data.datasource.local.configuration.ConfigurationLocalDataSource
 import com.easyhz.patchnote.data.datasource.local.configuration.ConfigurationLocalDataSourceImpl
+import com.easyhz.patchnote.data.datasource.local.reception.ReceptionLocalDataSource
+import com.easyhz.patchnote.data.datasource.local.reception.ReceptionLocalDataSourceImpl
 import com.easyhz.patchnote.data.datasource.local.user.UserLocalDataSource
 import com.easyhz.patchnote.data.datasource.local.user.UserLocalDataSourceImpl
 import com.easyhz.patchnote.data.datasource.remote.auth.AuthDataSource
@@ -64,4 +66,9 @@ interface DataSourceModule {
     fun bindTeamRemoteDataSource(
         teamRemoteDataSourceImpl: TeamRemoteDataSourceImpl
     ): TeamRemoteDateSource
+
+    @Binds
+    fun bindReceptionLocalDataSource(
+        receptionLocalDataSourceImpl: ReceptionLocalDataSourceImpl
+    ): ReceptionLocalDataSource
 }
