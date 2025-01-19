@@ -2,7 +2,10 @@ package com.easyhz.patchnote.ui.screen.setting.main
 
 import androidx.lifecycle.SavedStateHandle
 import com.easyhz.patchnote.core.common.base.BaseViewModel
+import com.easyhz.patchnote.core.model.setting.EtcSettingItem
+import com.easyhz.patchnote.core.model.setting.MySettingItem
 import com.easyhz.patchnote.core.model.setting.SettingItem
+import com.easyhz.patchnote.core.model.setting.TeamSettingItem
 import com.easyhz.patchnote.ui.screen.setting.main.contract.SettingIntent
 import com.easyhz.patchnote.ui.screen.setting.main.contract.SettingSideEffect
 import com.easyhz.patchnote.ui.screen.setting.main.contract.SettingState
@@ -28,10 +31,29 @@ class SettingViewModel @Inject constructor(
 
     private fun onClickSettingItem(settingItem: SettingItem) {
         when(settingItem) {
-            SettingItem.ABOUT -> navigateToAbout()
-            SettingItem.DATA_MANAGEMENT -> navigateToDataManagement()
-            SettingItem.MY_PAGE -> navigateToMyPage()
-            SettingItem.BLOCK -> showInputDialog()
+            is TeamSettingItem -> handleTeamSettingItem(settingItem)
+            is MySettingItem -> handleMySettingItem(settingItem)
+            is EtcSettingItem -> handleEtcSettingItem(settingItem)
+        }
+    }
+
+    private fun handleTeamSettingItem(settingItem: TeamSettingItem) {
+        when(settingItem) {
+            TeamSettingItem.DATA_MANAGEMENT -> navigateToDataManagement()
+        }
+    }
+
+    private fun handleMySettingItem(settingItem: MySettingItem) {
+        when(settingItem) {
+            MySettingItem.MY_PAGE -> navigateToMyPage()
+            MySettingItem.RECEPTION_SETTINGS -> navigateToReceptionSetting()
+        }
+    }
+
+    private fun handleEtcSettingItem(settingItem: EtcSettingItem) {
+        when(settingItem) {
+            EtcSettingItem.ABOUT -> navigateToAbout()
+            EtcSettingItem.BLOCK -> showInputDialog()
         }
     }
 
@@ -71,6 +93,10 @@ class SettingViewModel @Inject constructor(
 
     private fun hideSuccessDialog() {
         reduce { copy(isSuccessDialogVisible = false) }
+    }
+
+    private fun navigateToReceptionSetting() {
+        postSideEffect { SettingSideEffect.NavigateToReceptionSetting }
     }
 
 }

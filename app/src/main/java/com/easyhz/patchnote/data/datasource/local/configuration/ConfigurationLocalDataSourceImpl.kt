@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
+import com.easyhz.patchnote.data.di.config.ConfigurationDataStore
 import com.easyhz.patchnote.data.di.config.ConfigurationKey
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first
@@ -15,7 +16,7 @@ import javax.inject.Inject
 
 class ConfigurationLocalDataSourceImpl @Inject constructor(
     @Dispatcher(PatchNoteDispatchers.IO) private val dispatcher: CoroutineDispatcher,
-    private val dataStore: DataStore<Preferences>
+    @ConfigurationDataStore private val dataStore: DataStore<Preferences>
 ): ConfigurationLocalDataSource {
     private val password = stringPreferencesKey(ConfigurationKey.PASSWORD.key)
     private val isEntered = booleanPreferencesKey(ConfigurationKey.IS_ENTERED.key)

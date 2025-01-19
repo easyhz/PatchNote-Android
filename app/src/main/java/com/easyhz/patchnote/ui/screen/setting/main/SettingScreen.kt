@@ -2,9 +2,11 @@ package com.easyhz.patchnote.ui.screen.setting.main
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -35,14 +37,17 @@ import com.easyhz.patchnote.core.designSystem.component.textField.BaseTextField
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
 import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
-import com.easyhz.patchnote.core.model.setting.SettingItem
+import com.easyhz.patchnote.core.model.setting.MajorSettingItem
 import com.easyhz.patchnote.ui.screen.setting.main.contract.SettingIntent
 import com.easyhz.patchnote.ui.screen.setting.main.contract.SettingSideEffect
+import com.easyhz.patchnote.ui.theme.Bold20
+import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Medium18
 import com.easyhz.patchnote.ui.theme.Primary
 import com.easyhz.patchnote.ui.theme.SemiBold18
 import com.easyhz.patchnote.ui.theme.SubBackground
+import com.easyhz.patchnote.ui.theme.SubText2
 
 @Composable
 fun SettingScreen(
@@ -50,13 +55,16 @@ fun SettingScreen(
     viewModel: SettingViewModel = hiltViewModel(),
     navigateToUp: () -> Unit,
     navigateToDataManagement: () -> Unit,
-    navigateToMyPage: () -> Unit
+    navigateToMyPage: () -> Unit,
+    navigateToReceptionSetting: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     PatchNoteScaffold(
+        containerColor = SubBackground,
         topBar = {
             TopBar(
+                modifier = Modifier.background(MainBackground),
                 left = TopBarType.TopBarIconButton(
                     iconId = R.drawable.ic_arrow_leading,
                     iconAlignment = Alignment.CenterStart,
@@ -71,22 +79,41 @@ fun SettingScreen(
     ) { innerPadding ->
         LazyColumn(
             modifier = modifier.padding(innerPadding),
-            contentPadding = PaddingValues(vertical = 8.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(SettingItem.entries) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 44.dp)
-                        .clickable { viewModel.postIntent(SettingIntent.ClickSettingItem(it)) }
-                        .padding(horizontal = 20.dp),
-                    contentAlignment = Alignment.CenterStart
+            items(MajorSettingItem.entries) { major ->
+                Column(
+                    modifier = Modifier.fillMaxWidth().background(MainBackground),
                 ) {
-                    Text(
-                        text = stringResource(it.stringResId),
-                        style = Medium18,
-                        color = MainText,
-                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 44.dp)
+                            .padding(horizontal = 20.dp),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        Text(
+                            text = stringResource(major.stringResId),
+                            style = Bold20,
+                            color = MainText
+                        )
+                    }
+                    major.items.forEach { item ->
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 44.dp)
+                                .clickable { viewModel.postIntent(SettingIntent.ClickSettingItem(item)) }
+                                .padding(horizontal = 20.dp),
+                            contentAlignment = Alignment.CenterStart
+                        ) {
+                            Text(
+                                text = stringResource(item.stringResId),
+                                style = Medium18,
+                                color = SubText2,
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -147,6 +174,7 @@ fun SettingScreen(
             }
             is SettingSideEffect.NavigateToDataManagement -> navigateToDataManagement()
             is SettingSideEffect.NavigateToMyPage -> navigateToMyPage()
+            is SettingSideEffect.NavigateToReceptionSetting -> navigateToReceptionSetting()
         }
     }
 }

@@ -14,6 +14,7 @@ import com.easyhz.patchnote.ui.navigation.dataManagement.navigateToDataManagemen
 import com.easyhz.patchnote.ui.navigation.onboarding.navigateToOnboarding
 import com.easyhz.patchnote.ui.screen.setting.main.SettingScreen
 import com.easyhz.patchnote.ui.screen.setting.my_page.MyPageScreen
+import com.easyhz.patchnote.ui.screen.setting.reception.ReceptionSettingScreen
 
 internal fun NavGraphBuilder.settingGraph(
     navController: NavController
@@ -28,6 +29,7 @@ internal fun NavGraphBuilder.settingGraph(
             navigateToDataManagement = navController::navigateToDataManagement,
             navigateToUp = navController::navigateUp,
             navigateToMyPage = navController::navigateToMyPage,
+            navigateToReceptionSetting = navController::navigateToReceptionSetting,
         )
     }
 
@@ -40,6 +42,12 @@ internal fun NavGraphBuilder.settingGraph(
             navigateToOnboarding = { navController.navigateToOnboarding(navOptions = navOptions) },
         )
     }
+
+    composable<ReceptionSetting> {
+        ReceptionSettingScreen(
+            navigateToUp = navController::navigateUp
+        )
+    }
 }
 
 fun NavController.navigateToSetting(notionUrl: String) {
@@ -48,4 +56,8 @@ fun NavController.navigateToSetting(notionUrl: String) {
 
 fun NavController.navigateToMyPage() {
     navigate(MyPage)
+}
+
+fun NavController.navigateToReceptionSetting() {
+    navigate(ReceptionSetting)
 }

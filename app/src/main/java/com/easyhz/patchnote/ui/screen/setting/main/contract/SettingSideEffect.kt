@@ -7,4 +7,5 @@ sealed class SettingSideEffect: UiSideEffect() {
     data class NavigateToAbout(val url: String): SettingSideEffect()
     data object NavigateToDataManagement: SettingSideEffect()
     data object NavigateToMyPage: SettingSideEffect()
+    data object NavigateToReceptionSetting: SettingSideEffect()
 }

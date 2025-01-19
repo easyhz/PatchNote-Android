@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
 import com.easyhz.patchnote.core.model.user.User
+import com.easyhz.patchnote.data.di.config.UserDataStore
 import com.easyhz.patchnote.data.di.config.UserKey
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first
@@ -15,7 +16,7 @@ import javax.inject.Inject
 
 class UserLocalDataSourceImpl @Inject constructor(
     @Dispatcher(PatchNoteDispatchers.IO) private val dispatcher: CoroutineDispatcher,
-    private val dataStore: DataStore<Preferences>
+    @UserDataStore private val dataStore: DataStore<Preferences>
 ): UserLocalDataSource {
     private val userId = stringPreferencesKey(UserKey.USER_ID.key)
     private val userName = stringPreferencesKey(UserKey.USER_NAME.key)

@@ -56,9 +56,9 @@ class DataEntryViewModel @Inject constructor(
         if (param.isEmpty()) return@launch
         updateCategoryUseCase.invoke(param).onSuccess {
             hideKeyboard()
-        }.onFailure {
-            Log.e(this.javaClass.name, "updateCategory : ${it.message}")
-            showSnackBar(context, it.handleError()) {
+        }.onFailure { e ->
+            Log.e(this.javaClass.name, "updateCategory : ${e.message}")
+            showSnackBar(context, e.handleError()) {
                 DataEntrySideEffect.ShowSnackBar(it)
             }
         }.also { setLoading(false) }

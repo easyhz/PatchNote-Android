@@ -17,6 +17,7 @@ import com.easyhz.patchnote.core.model.error.DialogAction
 import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.domain.usecase.category.FetchCategoryUseCase
+import com.easyhz.patchnote.domain.usecase.reception.GetReceptionSettingUseCase
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectIntent
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectSideEffect
 import com.easyhz.patchnote.ui.screen.defect.contract.DefectState
@@ -34,10 +35,13 @@ import javax.inject.Inject
 class DefectViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val fetchCategoryUseCase: FetchCategoryUseCase,
+    private val getReceptionSettingUseCase: GetReceptionSettingUseCase,
 ) : BaseViewModel<DefectState, DefectIntent, DefectSideEffect>(
     initialState = DefectState.init()
 ) {
     private val tag = "DefectViewModel"
+
+    private var categoryType = LinkedHashMap<CategoryType, Boolean>()
 
     override fun handleIntent(intent: DefectIntent) {
         when (intent) {
@@ -81,6 +85,7 @@ class DefectViewModel @Inject constructor(
 
     init {
         fetchCategory()
+        getReceptionSetting()
     }
 
     /* fetchCategory */
@@ -99,6 +104,12 @@ class DefectViewModel @Inject constructor(
             }.also {
                 sendLoadingState()
             }
+    }
+
+    private fun getReceptionSetting() = viewModelScope.launch {
+        getReceptionSettingUseCase.invoke().collect {
+            categoryType = it
+        }
     }
 
     private suspend fun handleErrorFetchCategory(error: Throwable) {
@@ -179,7 +190,7 @@ class DefectViewModel @Inject constructor(
 
     /* clearData */
     private fun clearAllData() {
-        reduce { clearEntryItemValue() }
+        reduce { clearEntryItemValue(categoryType) }
     }
 
     /* 특정 아이템만 클리어 */

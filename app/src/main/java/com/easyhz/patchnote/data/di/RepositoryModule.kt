@@ -8,6 +8,8 @@ import com.easyhz.patchnote.data.repository.defect.DefectRepository
 import com.easyhz.patchnote.data.repository.defect.DefectRepositoryImpl
 import com.easyhz.patchnote.data.repository.image.ImageRepository
 import com.easyhz.patchnote.data.repository.image.ImageRepositoryImpl
+import com.easyhz.patchnote.data.repository.reception.ReceptionRepository
+import com.easyhz.patchnote.data.repository.reception.ReceptionRepositoryImpl
 import com.easyhz.patchnote.data.repository.sign.SignRepository
 import com.easyhz.patchnote.data.repository.sign.SignRepositoryImpl
 import com.easyhz.patchnote.data.repository.team.TeamRepository
@@ -57,4 +59,9 @@ interface RepositoryModule {
     fun bindTeamRepository(
         teamRepositoryImpl: TeamRepositoryImpl
     ): TeamRepository
+
+    @Binds
+    fun bindReceptionRepository(
+        receptionRepositoryImpl: ReceptionRepositoryImpl
+    ): ReceptionRepository
 }
