@@ -22,6 +22,7 @@ class EntryDefectTest {
             requesterId = "requesterId",
             requesterName = "requesterName",
             requesterPhone = "requesterPhone",
+            teamId = "teamId"
         )
 
         val searchList = entryDefect.exportSearch()
