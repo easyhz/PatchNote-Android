@@ -55,7 +55,8 @@ fun SettingScreen(
     viewModel: SettingViewModel = hiltViewModel(),
     navigateToUp: () -> Unit,
     navigateToDataManagement: () -> Unit,
-    navigateToMyPage: () -> Unit
+    navigateToMyPage: () -> Unit,
+    navigateToReceptionSetting: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -173,6 +174,7 @@ fun SettingScreen(
             }
             is SettingSideEffect.NavigateToDataManagement -> navigateToDataManagement()
             is SettingSideEffect.NavigateToMyPage -> navigateToMyPage()
+            is SettingSideEffect.NavigateToReceptionSetting -> navigateToReceptionSetting()
         }
     }
 }

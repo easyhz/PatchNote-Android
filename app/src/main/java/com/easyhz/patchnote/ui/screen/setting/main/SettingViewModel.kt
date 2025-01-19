@@ -46,7 +46,7 @@ class SettingViewModel @Inject constructor(
     private fun handleMySettingItem(settingItem: MySettingItem) {
         when(settingItem) {
             MySettingItem.MY_PAGE -> navigateToMyPage()
-            MySettingItem.RECEPTION_SETTINGS -> println("RECEPTION_SETTINGS")
+            MySettingItem.RECEPTION_SETTINGS -> navigateToReceptionSetting()
         }
     }
 
@@ -93,6 +93,10 @@ class SettingViewModel @Inject constructor(
 
     private fun hideSuccessDialog() {
         reduce { copy(isSuccessDialogVisible = false) }
+    }
+
+    private fun navigateToReceptionSetting() {
+        postSideEffect { SettingSideEffect.NavigateToReceptionSetting }
     }
 
 }
