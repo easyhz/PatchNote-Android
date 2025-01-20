@@ -11,6 +11,7 @@ import androidx.navigation.toRoute
 import com.easyhz.patchnote.core.designSystem.util.transition.SlideDirection
 import com.easyhz.patchnote.core.designSystem.util.transition.enterSlide
 import com.easyhz.patchnote.core.designSystem.util.transition.exitSlide
+import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectMainItem
 import com.easyhz.patchnote.ui.navigation.home.navigateToHome
 import com.easyhz.patchnote.ui.screen.defectCompletion.DefectCompletionScreen
@@ -36,13 +37,12 @@ internal fun NavGraphBuilder.defectGraph(
     }
 
     composable<DefectDetail>(
+        typeMap = DefectDetail.typeMap,
         exitTransition = { fadeOut(animationSpec = tween(300)) },
         popEnterTransition = { fadeIn(animationSpec = tween(300)) },
         popExitTransition = { exitSlide(SlideDirection.End) }
     ) {
-        val args = it.toRoute<DefectDetail>()
         DefectDetailScreen(
-            defectId = args.defectId,
             navigateToUp = navController::navigateUp,
             navigateToDefectCompletion = navController::navigateToDefectCompletion
         )
@@ -67,8 +67,8 @@ fun NavController.navigateToDefectEntry() {
     navigate(DefectEntry)
 }
 
-fun NavController.navigateToDefectDetail(defectId: String) {
-    navigate(DefectDetail(defectId = defectId))
+fun NavController.navigateToDefectDetail(defectItem: DefectItem) {
+    navigate(DefectDetail(defectItem = defectItem.toArgs()))
 }
 
 fun NavController.navigateToDefectCompletion(defectMainItem: DefectMainItem) {

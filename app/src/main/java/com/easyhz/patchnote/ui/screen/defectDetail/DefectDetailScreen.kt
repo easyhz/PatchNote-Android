@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,14 +45,11 @@ import com.easyhz.patchnote.ui.theme.SubBackground
 fun DefectDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: DefectDetailViewModel = hiltViewModel(),
-    defectId: String,
     navigateToUp: () -> Unit,
     navigateToDefectCompletion: (DefectMainItem) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    LaunchedEffect(Unit) {
-        viewModel.postIntent(DetailIntent.FetchData(defectId))
-    }
+
     PatchNoteScaffold(
         topBar = {
             TopBar(

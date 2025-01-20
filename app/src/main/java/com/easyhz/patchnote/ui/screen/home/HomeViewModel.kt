@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.BuildConfig
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.util.CrashlyticsLogger
+import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.domain.usecase.configuration.FetchConfigurationUseCase
 import com.easyhz.patchnote.domain.usecase.configuration.UpdateEnteredPasswordUseCase
@@ -43,7 +44,7 @@ class HomeViewModel @Inject constructor(
             is HomeIntent.ClickExport -> onClickExport()
             is HomeIntent.NavigateToDefectEntry -> navigateToDefectEntry()
             is HomeIntent.NavigateToFilter -> navigateToFilter()
-            is HomeIntent.NavigateToDefectDetail -> navigateToDefectDetail(intent.defectId)
+            is HomeIntent.NavigateToDefectDetail -> navigateToDefectDetail(intent.defectItem)
             is HomeIntent.Refresh -> refresh(intent.filterParam)
             is HomeIntent.UpdateAppVersion -> updateAppVersion()
             is HomeIntent.NavigateToNotion -> updateAppVersion()
@@ -112,8 +113,8 @@ class HomeViewModel @Inject constructor(
     }
 
     /* 하자 상세 화면 이동 */
-    private fun navigateToDefectDetail(defectId: String) {
-        postSideEffect { HomeSideEffect.NavigateToDefectDetail(defectId = defectId) }
+    private fun navigateToDefectDetail(defectItem: DefectItem) {
+        postSideEffect { HomeSideEffect.NavigateToDefectDetail(defectItem = defectItem) }
     }
 
     /* onClickDataManagement */

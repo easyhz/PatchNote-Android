@@ -1,15 +1,18 @@
 package com.easyhz.patchnote.ui.screen.defectDetail
 
 import android.content.Context
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.base.BaseViewModel
+import com.easyhz.patchnote.core.common.util.serializable.SerializableHelper
 import com.easyhz.patchnote.core.designSystem.util.bottomSheet.DefectDetailBottomSheet
+import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectMainItem
 import com.easyhz.patchnote.core.model.error.DialogAction
 import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.domain.usecase.defect.DeleteDefectUseCase
-import com.easyhz.patchnote.domain.usecase.defect.FetchDefectUseCase
+import com.easyhz.patchnote.domain.usecase.sign.GetUserIdUseCase
 import com.easyhz.patchnote.ui.screen.defectDetail.contract.DetailIntent
 import com.easyhz.patchnote.ui.screen.defectDetail.contract.DetailSideEffect
 import com.easyhz.patchnote.ui.screen.defectDetail.contract.DetailState
@@ -21,15 +24,15 @@ import javax.inject.Inject
 @HiltViewModel
 class DefectDetailViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val fetchDefectUseCase: FetchDefectUseCase,
-    private val deleteDefectUseCase: DeleteDefectUseCase
+    private val savedStateHandle: SavedStateHandle,
+    private val serializableHelper: SerializableHelper,
+    private val deleteDefectUseCase: DeleteDefectUseCase,
+    private val getUserIdUseCase: GetUserIdUseCase,
 ) : BaseViewModel<DetailState, DetailIntent, DetailSideEffect>(
     initialState = DetailState.init()
 ) {
-
     override fun handleIntent(intent: DetailIntent) {
         when (intent) {
-            is DetailIntent.FetchData -> fetchDefectDetail(intent.defectId)
             is DetailIntent.NavigateToUp -> navigateToUp()
             is DetailIntent.CompleteDefect -> navigateToDefectCompletion()
             is DetailIntent.ChangeStateBottomSheet -> setBottomSheet(intent.isShowBottomSheet)
@@ -41,11 +44,18 @@ class DefectDetailViewModel @Inject constructor(
         }
     }
 
-    private fun fetchDefectDetail(defectId: String) = viewModelScope.launch {
-        fetchDefectUseCase.invoke(defectId).onSuccess {
-            reduce { copy(defectItem = it.defectItem, isOwner = it.isOwner) }
-        }.onFailure {
+    init {
+        initData()
+    }
 
+    private fun initData() {
+        val defectItemArgs: String? = savedStateHandle["defectItem"]
+        val defectItem = serializableHelper.deserialize(defectItemArgs, DefectItem::class.java) ?: return navigateToUp()
+
+        viewModelScope.launch {
+            getUserIdUseCase.invoke(Unit).onSuccess {
+                reduce { copy(defectItem = defectItem, isOwner = it == defectItem.requesterId) }
+            }
         }
     }
 

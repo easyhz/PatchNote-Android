@@ -52,6 +52,7 @@ import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffo
 import com.easyhz.patchnote.core.designSystem.component.textField.BaseTextField
 import com.easyhz.patchnote.core.designSystem.component.topbar.HomeTopBar
 import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
+import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.ui.screen.home.contract.HomeIntent
 import com.easyhz.patchnote.ui.screen.home.contract.HomeSideEffect
@@ -70,7 +71,7 @@ fun HomeScreen(
     navigateToSetting: (String) -> Unit,
     navigateToDefectEntry: () -> Unit,
     navigateToFilter: (FilterParam) -> Unit,
-    navigateToDefectDetail: (String) -> Unit
+    navigateToDefectDetail: (DefectItem) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -132,7 +133,7 @@ fun HomeScreen(
                         HomeCard(
                             modifier = Modifier.fillMaxWidth(),
                             defectItem = defectItem
-                        ) { viewModel.postIntent(HomeIntent.NavigateToDefectDetail(defectItem.id)) }
+                        ) { viewModel.postIntent(HomeIntent.NavigateToDefectDetail(defectItem)) }
                     }
                 }
             }
@@ -241,7 +242,7 @@ fun HomeScreen(
                 navigateToFilter(filterParam)
             }
             is HomeSideEffect.NavigateToDefectDetail -> {
-                navigateToDefectDetail(sideEffect.defectId)
+                navigateToDefectDetail(sideEffect.defectItem)
             }
             is HomeSideEffect.NavigateToVersionUpdate -> {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(sideEffect.url))
