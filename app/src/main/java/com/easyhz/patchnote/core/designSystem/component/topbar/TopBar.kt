@@ -3,8 +3,10 @@ package com.easyhz.patchnote.core.designSystem.component.topbar
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -57,7 +59,8 @@ fun TopBarTextButton(
 ) {
     Box(
         modifier = modifier
-            .size(48.dp)
+            .widthIn(48.dp)
+            .heightIn(48.dp)
             .noRippleClickable { onClick() },
         contentAlignment = alignment
     ) {
@@ -101,8 +104,11 @@ private fun TopBarPreview() {
             tint = MainText,
             onClick = { }
         ),
+        title = TopBarType.TopBarTitle(
+            stringId = R.string.app_name
+        ),
         right = TopBarType.TopBarTextButton(
-            stringId = R.string.category_site,
+            stringId = R.string.defect_export_button,
             textAlignment = Alignment.CenterEnd,
             textColor = MainText,
             onClick = { }
