@@ -44,4 +44,15 @@
     <string name="defect_after_description">완료내용</string>
     <string name="defect_thumbnail">사진</string>
     <string name="export_defect_list">접수 리스트</string>
+
+
+    <string name="defect_export_title">엑셀 다운로드</string>
+    <string name="defect_export_button">다운로드</string>
+    <string name="dialog_export_title">엑셀 다운로드</string>
+    <string name="dialog_export_content">하자 리스트를 엑셀로 저장할까요?</string>
+    <string name="dialog_export_positive">저장</string>
+
+    <string name="dialog_defect_export_need_date_title">날짜 설정 필요</string>
+    <string name="dialog_defect_export_need_date_content">접수일 또는 완료일을 설정해 주세요.</string>
+    <string name="dialog_defect_export_need_date_button">확인</string>
 </resources>
