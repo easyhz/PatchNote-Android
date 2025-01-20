@@ -1,6 +1,5 @@
 package com.easyhz.patchnote.ui.screen.home
 
-import android.os.Build
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.BuildConfig
@@ -11,7 +10,6 @@ import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.domain.usecase.configuration.FetchConfigurationUseCase
 import com.easyhz.patchnote.domain.usecase.configuration.UpdateEnteredPasswordUseCase
 import com.easyhz.patchnote.domain.usecase.configuration.ValidatePasswordUseCase
-import com.easyhz.patchnote.domain.usecase.defect.ExportDefectUseCase
 import com.easyhz.patchnote.domain.usecase.defect.FetchDefectsUseCase
 import com.easyhz.patchnote.ui.screen.home.contract.HomeIntent
 import com.easyhz.patchnote.ui.screen.home.contract.HomeSideEffect
@@ -21,7 +19,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException.Code
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,7 +28,6 @@ class HomeViewModel @Inject constructor(
     private val fetchDefectsUseCase: FetchDefectsUseCase,
     private val validatePasswordUseCase: ValidatePasswordUseCase,
     private val updateEnteredPasswordUseCase: UpdateEnteredPasswordUseCase,
-    private val exportDefectUseCase: ExportDefectUseCase,
 ): BaseViewModel<HomeState, HomeIntent, HomeSideEffect>(
     initialState = HomeState.init()
 ) {
@@ -52,9 +48,6 @@ class HomeViewModel @Inject constructor(
             is HomeIntent.CheckPassword -> checkPassword()
             is HomeIntent.HidePasswordDialog -> hidePasswordDialog()
             is HomeIntent.HidePasswordErrorDialog -> setPasswordErrorDialog(false)
-            is HomeIntent.ExportData -> exportData()
-            is HomeIntent.HideExportDialog -> setIsShowExportDialog(false)
-            is HomeIntent.ShowExportDialog -> setIsShowExportDialog(true)
             is HomeIntent.SetLoading -> reduce { copy(isLoading = intent.value) }
         }
     }
@@ -120,37 +113,10 @@ class HomeViewModel @Inject constructor(
     /* onClickDataManagement */
     private fun onClickSetting() {
         navigateToSetting()
-//        if (currentState.hasPassword) {
-//            navigateToDataManagement()
-//        } else {
-//            reduce { copy(isShowPasswordDialog = true) }
-//            requestFocus()
-//        }
     }
 
     private fun onClickExport() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            postSideEffect { HomeSideEffect.RequestPermission }
-        } else {
-            setIsShowExportDialog(true)
-        }
-    }
-
-    private fun setIsShowExportDialog(value: Boolean) {
-        reduce { copy(isShowExportDialog = value) }
-    }
-
-    private fun exportData() {
-        viewModelScope.launch {
-            setIsShowExportDialog(false)
-            reduce { copy(isLoading = true) }
-            exportDefectUseCase.invoke(currentState.defectList).onSuccess {
-                shareFile(it)
-            }.onFailure {
-                Log.e(tag, "onClickExport : $it", it)
-                reduce { copy(isLoading = false) }
-            }
-        }
+        postSideEffect { HomeSideEffect.NavigateToExport }
     }
 
     /* refresh */
@@ -201,10 +167,6 @@ class HomeViewModel @Inject constructor(
     /* setPasswordErrorDialog */
     private fun setPasswordErrorDialog(value: Boolean) = viewModelScope.launch {
         reduce { copy(isShowPasswordErrorDialog = value) }
-    }
-
-    private fun shareFile(file: File) {
-        postSideEffect { HomeSideEffect.ShareIntent(file) }
     }
 
     private fun handleIndexError(e: Throwable, filterParam: FilterParam) {

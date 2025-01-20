@@ -8,9 +8,8 @@ sealed class HomeSideEffect: UiSideEffect() {
     data class NavigateToSetting(val url: String): HomeSideEffect()
     data object NavigateToDefectEntry: HomeSideEffect()
     data object NavigateToFilter: HomeSideEffect()
+    data object NavigateToExport: HomeSideEffect()
     data class NavigateToDefectDetail(val defectItem: DefectItem): HomeSideEffect()
     data class NavigateToVersionUpdate(val url: String): HomeSideEffect()
     data object RequestFocus: HomeSideEffect()
-    data object RequestPermission: HomeSideEffect()
-    data class ShareIntent(val file: File): HomeSideEffect()
 }
