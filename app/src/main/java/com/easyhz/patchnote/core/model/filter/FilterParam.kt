@@ -4,6 +4,11 @@ import android.content.Context
 import com.easyhz.patchnote.R
 import kotlinx.serialization.Serializable
 
+/**
+ *
+ * @param searchFieldParam searchField 에 들어가는 필터 값
+ * @param indexFieldParam index 검색으로 설정한 항목에 들어가는 필터 값
+ */
 @Serializable
 data class FilterParam(
     val searchFieldParam: LinkedHashMap<String, String> = linkedMapOf(),
@@ -52,6 +57,10 @@ data class FilterParam(
             "progress" -> context.getString(FilterProgress.valueOf(value).titleId)
             else -> value
         }
+    }
+
+    fun isDateAllEmpty(): Boolean {
+        return indexFieldParam["requestDate"].isNullOrBlank() && indexFieldParam["completionDate"].isNullOrBlank()
     }
 }
 
