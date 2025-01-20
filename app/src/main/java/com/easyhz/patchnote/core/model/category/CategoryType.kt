@@ -34,6 +34,7 @@ enum class CategoryType(
         nameId = R.string.category_work_type,
         alias = "workType"
     );
+
     companion object{
         fun toLinkedHashMapTextFieldValue(): LinkedHashMap<CategoryType, TextFieldValue> {
             return LinkedHashMap(entries.associateWith { TextFieldValue("") })

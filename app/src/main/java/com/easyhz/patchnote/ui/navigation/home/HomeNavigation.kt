@@ -15,7 +15,9 @@ import com.easyhz.patchnote.core.designSystem.util.transition.exitSlide
 import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.ui.navigation.defect.navigateToDefectDetail
 import com.easyhz.patchnote.ui.navigation.defect.navigateToDefectEntry
+import com.easyhz.patchnote.ui.navigation.home.screen.DefectExport
 import com.easyhz.patchnote.ui.navigation.setting.navigateToSetting
+import com.easyhz.patchnote.ui.screen.export.DefectExportScreen
 import com.easyhz.patchnote.ui.screen.filter.FilterScreen
 import com.easyhz.patchnote.ui.screen.home.HomeScreen
 
@@ -35,7 +37,8 @@ internal fun NavGraphBuilder.homeGraph(
             navigateToSetting = navController::navigateToSetting,
             navigateToDefectEntry = navController::navigateToDefectEntry,
             navigateToFilter = navController::navigateToFilter,
-            navigateToDefectDetail = navController::navigateToDefectDetail
+            navigateToDefectDetail = navController::navigateToDefectDetail,
+            navigateToDefectExport = navController::navigateToDefectExport,
         )
     }
     composable<Filter>(
@@ -60,6 +63,20 @@ internal fun NavGraphBuilder.homeGraph(
             }
         )
     }
+
+    composable<DefectExport>(
+        typeMap = DefectExport.typeMap,
+        enterTransition = { enterSlide(SlideDirection.Up) },
+        exitTransition = { exitSlide(SlideDirection.Down) },
+        popEnterTransition = { enterSlide(SlideDirection.Up) },
+        popExitTransition = { exitSlide(SlideDirection.Down) }
+    ) {
+        val args = it.toRoute<DefectExport>()
+        DefectExportScreen(
+            filterParam = args.filterParam,
+            navigateToUp = navController::navigateUp
+        )
+    }
 }
 
 fun NavController.navigateToHome(
@@ -70,4 +87,8 @@ fun NavController.navigateToHome(
 
 fun NavController.navigateToFilter(filterParam: FilterParam) {
     navigate(Filter(filterParam = filterParam))
+}
+
+fun NavController.navigateToDefectExport(filterParam: FilterParam) {
+    navigate(DefectExport(filterParam = filterParam))
 }

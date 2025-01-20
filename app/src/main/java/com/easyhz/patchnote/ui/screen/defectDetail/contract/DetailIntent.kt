@@ -5,7 +5,6 @@ import com.easyhz.patchnote.core.designSystem.util.bottomSheet.DefectDetailBotto
 import com.easyhz.patchnote.core.model.error.DialogMessage
 
 sealed class DetailIntent: UiIntent() {
-    data class FetchData(val defectId: String): DetailIntent()
     data object NavigateToUp: DetailIntent()
     data object CompleteDefect: DetailIntent()
     data class ChangeStateBottomSheet(val isShowBottomSheet: Boolean): DetailIntent()

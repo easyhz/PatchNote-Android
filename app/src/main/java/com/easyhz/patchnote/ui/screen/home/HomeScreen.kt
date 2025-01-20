@@ -1,11 +1,7 @@
 package com.easyhz.patchnote.ui.screen.home
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,8 +32,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.easyhz.patchnote.R
@@ -52,6 +46,7 @@ import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffo
 import com.easyhz.patchnote.core.designSystem.component.textField.BaseTextField
 import com.easyhz.patchnote.core.designSystem.component.topbar.HomeTopBar
 import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
+import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.ui.screen.home.contract.HomeIntent
 import com.easyhz.patchnote.ui.screen.home.contract.HomeSideEffect
@@ -70,7 +65,8 @@ fun HomeScreen(
     navigateToSetting: (String) -> Unit,
     navigateToDefectEntry: () -> Unit,
     navigateToFilter: (FilterParam) -> Unit,
-    navigateToDefectDetail: (String) -> Unit
+    navigateToDefectDetail: (DefectItem) -> Unit,
+    navigateToDefectExport: (FilterParam) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -132,7 +128,7 @@ fun HomeScreen(
                         HomeCard(
                             modifier = Modifier.fillMaxWidth(),
                             defectItem = defectItem
-                        ) { viewModel.postIntent(HomeIntent.NavigateToDefectDetail(defectItem.id)) }
+                        ) { viewModel.postIntent(HomeIntent.NavigateToDefectDetail(defectItem)) }
                     }
                 }
             }
@@ -198,37 +194,12 @@ fun HomeScreen(
                 negativeButton = null
             )
         }
-
-        if(uiState.isShowExportDialog) {
-            BasicDialog(
-                title = stringResource(R.string.dialog_export_title),
-                content = stringResource(R.string.dialog_export_content),
-                positiveButton = BasicDialogButton(
-                    text = stringResource(R.string.dialog_export_positive),
-                    style = SemiBold18.copy(color = Color.White),
-                    backgroundColor = Primary,
-                    onClick = { viewModel.postIntent(HomeIntent.ExportData) }
-                ),
-                negativeButton = BasicDialogButton(
-                    text = stringResource(R.string.dialog_negative_button),
-                    backgroundColor = SubBackground,
-                    onClick = { viewModel.postIntent(HomeIntent.HideExportDialog) }
-                )
-            )
-        }
     }
 
     LoadingIndicator(
         isLoading = uiState.isLoading
     )
 
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            viewModel.postIntent(HomeIntent.ShowExportDialog)
-        }
-    }
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {
             is HomeSideEffect.NavigateToSetting -> {
@@ -240,8 +211,11 @@ fun HomeScreen(
             is HomeSideEffect.NavigateToFilter -> {
                 navigateToFilter(filterParam)
             }
+            is HomeSideEffect.NavigateToExport -> {
+                navigateToDefectExport(filterParam)
+            }
             is HomeSideEffect.NavigateToDefectDetail -> {
-                navigateToDefectDetail(sideEffect.defectId)
+                navigateToDefectDetail(sideEffect.defectItem)
             }
             is HomeSideEffect.NavigateToVersionUpdate -> {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(sideEffect.url))
@@ -249,35 +223,6 @@ fun HomeScreen(
             }
             is HomeSideEffect.RequestFocus -> {
                 focusRequester.requestFocus()
-            }
-            is HomeSideEffect.RequestPermission -> {
-                val hasPermission = ContextCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED
-
-                if (hasPermission) {
-                    viewModel.postIntent(HomeIntent.ShowExportDialog)
-                } else {
-                    permissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                }
-            }
-            is HomeSideEffect.ShareIntent -> {
-                val uri = FileProvider.getUriForFile(
-                    context,
-                    "${context.packageName}.file_provider",
-                    sideEffect.file
-                )
-
-                val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                    type = "application/vnd.ms-excel"
-                    putExtra(Intent.EXTRA_STREAM, uri)
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                }
-                viewModel.postIntent(HomeIntent.SetLoading(false))
-                context.startActivity(
-                    Intent.createChooser(shareIntent, "Share file via")
-                )
             }
         }
     }

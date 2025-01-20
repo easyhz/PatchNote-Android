@@ -6,8 +6,4 @@
 
     <string name="home_floating_action_button">접수</string>
 
-    <string name="dialog_export_title">엑셀 파일로 저장</string>
-    <string name="dialog_export_content">현재 하자 리스트를 엑셀로 저장할까요?</string>
-    <string name="dialog_export_positive">저장</string>
-
 </resources>

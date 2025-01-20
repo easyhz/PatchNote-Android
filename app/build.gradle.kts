@@ -151,4 +151,7 @@ dependencies {
     implementation(libs.poi)
     implementation(libs.poi.ooxml)
     implementation(kotlin("reflect"))
+
+    // moshi
+    implementation(libs.moshi.kotlin)
 }
