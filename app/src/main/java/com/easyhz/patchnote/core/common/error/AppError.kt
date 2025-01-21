@@ -19,4 +19,10 @@ sealed class AppError: Exception() {
         private fun readResolve(): Any = IndexError
     }
 
+    /* 유저 데이터 없음 에러 */
+    data object NoUserDataError : AppError() {
+        @JvmStatic
+        private fun readResolve(): Any = NoUserDataError
+    }
+
 }
