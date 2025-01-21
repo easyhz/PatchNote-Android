@@ -16,6 +16,7 @@ import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.ui.navigation.defect.navigateToDefectDetail
 import com.easyhz.patchnote.ui.navigation.defect.navigateToDefectEntry
 import com.easyhz.patchnote.ui.navigation.home.screen.DefectExport
+import com.easyhz.patchnote.ui.navigation.onboarding.navigateToOnboarding
 import com.easyhz.patchnote.ui.navigation.setting.navigateToSetting
 import com.easyhz.patchnote.ui.screen.export.DefectExportScreen
 import com.easyhz.patchnote.ui.screen.filter.FilterScreen
@@ -32,6 +33,9 @@ internal fun NavGraphBuilder.homeGraph(
         popExitTransition = { exitSlide(SlideDirection.End) }
     ) {
         val args = it.toRoute<Home>()
+        val navOptions = navOptions {
+            popUpTo(navController.graph.id) { inclusive = true }
+        }
         HomeScreen(
             filterParam = args.filterParam,
             navigateToSetting = navController::navigateToSetting,
@@ -39,6 +43,7 @@ internal fun NavGraphBuilder.homeGraph(
             navigateToFilter = navController::navigateToFilter,
             navigateToDefectDetail = navController::navigateToDefectDetail,
             navigateToDefectExport = navController::navigateToDefectExport,
+            navigateToLogin = { navController.navigateToOnboarding(navOptions = navOptions) }
         )
     }
     composable<Filter>(

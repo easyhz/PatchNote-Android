@@ -2,15 +2,18 @@ package com.easyhz.patchnote.ui.screen.home
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.easyhz.patchnote.BuildConfig
 import com.easyhz.patchnote.core.common.base.BaseViewModel
+import com.easyhz.patchnote.core.common.error.AppError
 import com.easyhz.patchnote.core.common.util.CrashlyticsLogger
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.domain.usecase.configuration.FetchConfigurationUseCase
 import com.easyhz.patchnote.domain.usecase.configuration.UpdateEnteredPasswordUseCase
 import com.easyhz.patchnote.domain.usecase.configuration.ValidatePasswordUseCase
-import com.easyhz.patchnote.domain.usecase.defect.FetchDefectsUseCase
+import com.easyhz.patchnote.domain.usecase.defect.GetDefectsPagingSourceUseCase
 import com.easyhz.patchnote.ui.screen.home.contract.HomeIntent
 import com.easyhz.patchnote.ui.screen.home.contract.HomeSideEffect
 import com.easyhz.patchnote.ui.screen.home.contract.HomeState
@@ -18,6 +21,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.FirebaseFirestoreException.Code
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,12 +31,15 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val crashlyticsLogger: CrashlyticsLogger,
     private val fetchConfigurationUseCase: FetchConfigurationUseCase,
-    private val fetchDefectsUseCase: FetchDefectsUseCase,
+    private val getDefectsPagingSourceUseCase: GetDefectsPagingSourceUseCase,
     private val validatePasswordUseCase: ValidatePasswordUseCase,
     private val updateEnteredPasswordUseCase: UpdateEnteredPasswordUseCase,
 ): BaseViewModel<HomeState, HomeIntent, HomeSideEffect>(
     initialState = HomeState.init()
 ) {
+    private val _defectState : MutableStateFlow<PagingData<DefectItem>> = MutableStateFlow(value = PagingData.empty())
+    val defectState: MutableStateFlow<PagingData<DefectItem>>
+        get() = _defectState
     private val tag = "HomeViewModel"
 
     override fun handleIntent(intent: HomeIntent) {
@@ -58,16 +67,22 @@ class HomeViewModel @Inject constructor(
 
 
     /* fetchDefects */
-    private fun fetchDefects(filterParam: FilterParam) = viewModelScope.launch {
-        fetchDefectsUseCase.invoke(filterParam).onSuccess {
-            reduce { copy(defectList = it) }
-        }.onFailure { e ->
-            handleIndexError(e, filterParam)
-            Log.e(tag, "fetchDefects : $e", e)
-        }.also {
-            if (currentState.isRefreshing) {
-                reduce { copy(isRefreshing = false) }
-            }
+    private fun fetchDefects(filterParam: FilterParam) {
+        viewModelScope.launch {
+            getDefectsPagingSourceUseCase
+                .invoke(filterParam = filterParam)
+                .onEach {
+                    if (currentState.isRefreshing) {
+                        reduce { copy(isRefreshing = false) }
+                    }
+                }
+                .catch { e ->
+                    handleIndexError(e, filterParam)
+                    Log.e(tag, "fetchDefects : $e", e)
+                }.cachedIn(viewModelScope)
+                .collect {
+                    _defectState.value = it
+                }
         }
     }
 
@@ -169,7 +184,14 @@ class HomeViewModel @Inject constructor(
         reduce { copy(isShowPasswordErrorDialog = value) }
     }
 
+    private fun navigateToLogin() {
+        postSideEffect { HomeSideEffect.NavigateToLogin }
+    }
+
     private fun handleIndexError(e: Throwable, filterParam: FilterParam) {
+        if (e is AppError.NoUserDataError) {
+            navigateToLogin()
+        }
         if (e is FirebaseFirestoreException && e.code == Code.FAILED_PRECONDITION) {
             val errorMap = mapOf(
                 "FILTER_PARAM" to filterParam.toString(),
