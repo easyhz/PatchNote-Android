@@ -77,9 +77,7 @@ fun DefectDetailScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp, vertical = 12.dp),
-                text = if (uiState.defectItem?.progress == DefectProgress.DONE) stringResource(R.string.defect_completion) else stringResource(
-                    R.string.defect_do_done
-                ),
+                text = if (uiState.defectItem?.progress == DefectProgress.DONE) stringResource(R.string.defect_completion) else stringResource(R.string.defect_do_done),
                 buttonColor = ButtonColor(
                     disabledContentColor = MainText
                 ),
