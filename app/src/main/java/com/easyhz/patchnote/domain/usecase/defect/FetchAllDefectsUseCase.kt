@@ -7,7 +7,7 @@ import com.easyhz.patchnote.data.repository.defect.DefectRepository
 import com.easyhz.patchnote.data.repository.user.UserRepository
 import javax.inject.Inject
 
-class FetchDefectsUseCase @Inject constructor(
+class FetchAllDefectsUseCase @Inject constructor(
     private val userRepository: UserRepository,
     private val defectRepository: DefectRepository
 ): BaseUseCase<FilterParam, List<DefectItem>>() {

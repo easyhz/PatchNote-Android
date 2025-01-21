@@ -154,4 +154,9 @@ dependencies {
 
     // moshi
     implementation(libs.moshi.kotlin)
+
+    // Paging
+    implementation(libs.paging.runtime)
+    implementation(libs.paging.common)
+    implementation(libs.paging.compose)
 }

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,6 +33,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.button.HomeFloatingActionButton
@@ -66,9 +67,11 @@ fun HomeScreen(
     navigateToDefectEntry: () -> Unit,
     navigateToFilter: (FilterParam) -> Unit,
     navigateToDefectDetail: (DefectItem) -> Unit,
-    navigateToDefectExport: (FilterParam) -> Unit
+    navigateToDefectExport: (FilterParam) -> Unit,
+    navigateToLogin: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val defectList = viewModel.defectState.collectAsLazyPagingItems()
     val context = LocalContext.current
     val pullToRefreshState = rememberPullToRefreshState()
     val focusRequester = remember { FocusRequester() }
@@ -106,7 +109,7 @@ fun HomeScreen(
                 )
             }
         ) {
-            if (uiState.defectList.isEmpty()) {
+            if (defectList.itemCount == 0 && defectList.loadState.refresh == LoadState.Loading) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(
                         text = stringResource(R.string.home_defect_empty),
@@ -124,11 +127,13 @@ fun HomeScreen(
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    items(uiState.defectList, key = { it.id }) { defectItem ->
-                        HomeCard(
-                            modifier = Modifier.fillMaxWidth(),
-                            defectItem = defectItem
-                        ) { viewModel.postIntent(HomeIntent.NavigateToDefectDetail(defectItem)) }
+                    items(defectList.itemCount) { index ->
+                        defectList[index]?.let { defectItem ->
+                            HomeCard(
+                                modifier = Modifier.fillMaxWidth(),
+                                defectItem = defectItem
+                            ) { viewModel.postIntent(HomeIntent.NavigateToDefectDetail(defectItem)) }
+                        }
                     }
                 }
             }
@@ -213,6 +218,9 @@ fun HomeScreen(
             }
             is HomeSideEffect.NavigateToExport -> {
                 navigateToDefectExport(filterParam)
+            }
+            is HomeSideEffect.NavigateToLogin -> {
+                navigateToLogin()
             }
             is HomeSideEffect.NavigateToDefectDetail -> {
                 navigateToDefectDetail(sideEffect.defectItem)

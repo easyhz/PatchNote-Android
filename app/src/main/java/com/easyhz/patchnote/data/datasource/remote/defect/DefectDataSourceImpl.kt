@@ -21,11 +21,13 @@ import com.easyhz.patchnote.core.common.util.documentHandler
 import com.easyhz.patchnote.core.common.util.fetchHandler
 import com.easyhz.patchnote.core.common.util.indexSearch
 import com.easyhz.patchnote.core.common.util.indexSearchDate
+import com.easyhz.patchnote.core.common.util.paging
 import com.easyhz.patchnote.core.common.util.search
 import com.easyhz.patchnote.core.common.util.setHandler
 import com.easyhz.patchnote.core.model.defect.DefectProgress
 import com.easyhz.patchnote.core.model.filter.IndexField
 import com.easyhz.patchnote.core.model.user.User
+import com.easyhz.patchnote.core.model.util.Paging
 import com.easyhz.patchnote.data.model.defect.data.DefectCompletionData
 import com.easyhz.patchnote.data.model.defect.data.DefectData
 import com.google.firebase.Timestamp
@@ -42,7 +44,12 @@ class DefectDataSourceImpl @Inject constructor(
         firestore.collection(DEFECT).document(data.id).set(data)
     }
 
-    override suspend fun fetchDefects(search: String?, index: IndexField, user: User): Result<List<DefectData>> =
+    override suspend fun fetchDefects(
+        search: String?,
+        index: IndexField,
+        user: User,
+        paging: Paging<Timestamp>?
+    ): Result<List<DefectData>> =
         fetchHandler(dispatcher) {
             firestore.collection(DEFECT)
                 .search(SEARCH, search)
@@ -53,6 +60,7 @@ class DefectDataSourceImpl @Inject constructor(
                 .whereEqualTo(TEAM_ID, user.teamId)
                 .whereEqualTo(IS_DELETED, false)
                 .orderBy(REQUEST_DATE, Direction.DESCENDING)
+                .paging(paging)
                 .get()
         }
 
