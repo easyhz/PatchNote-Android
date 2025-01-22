@@ -13,4 +13,6 @@ interface UserRepository {
     suspend fun deleteUserFromLocal(): Unit
     suspend fun deleteUserFromRemote(uid: String): Result<Unit>
     suspend fun updateUserFromRemote(): Result<Unit>
+    suspend fun isFirstOpen(): Result<Boolean>
+    suspend fun setIsFirstOpen(isFirstOpen: Boolean): Unit
 }

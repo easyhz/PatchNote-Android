@@ -14,6 +14,8 @@ import com.easyhz.patchnote.domain.usecase.configuration.FetchConfigurationUseCa
 import com.easyhz.patchnote.domain.usecase.configuration.UpdateEnteredPasswordUseCase
 import com.easyhz.patchnote.domain.usecase.configuration.ValidatePasswordUseCase
 import com.easyhz.patchnote.domain.usecase.defect.GetDefectsPagingSourceUseCase
+import com.easyhz.patchnote.domain.usecase.user.IsFirstOpenUseCase
+import com.easyhz.patchnote.domain.usecase.user.SetIsFirstOpenUseCase
 import com.easyhz.patchnote.ui.screen.home.contract.HomeIntent
 import com.easyhz.patchnote.ui.screen.home.contract.HomeSideEffect
 import com.easyhz.patchnote.ui.screen.home.contract.HomeState
@@ -30,6 +32,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val crashlyticsLogger: CrashlyticsLogger,
+    private val isFirstOpenUseCase: IsFirstOpenUseCase,
+    private val setIsFirstOpenUseCase: SetIsFirstOpenUseCase,
     private val fetchConfigurationUseCase: FetchConfigurationUseCase,
     private val getDefectsPagingSourceUseCase: GetDefectsPagingSourceUseCase,
     private val validatePasswordUseCase: ValidatePasswordUseCase,
@@ -64,6 +68,7 @@ class HomeViewModel @Inject constructor(
     }
 
     init {
+        fetchIsFirstOpen()
         fetchConfiguration()
     }
 
@@ -96,6 +101,23 @@ class HomeViewModel @Inject constructor(
             validatePassword(it.settingPassword)
         }.onFailure {
             Log.e(tag, "fetchConfiguration : $it")
+        }
+    }
+
+    /* fetchIsFirstOpen */
+    private fun fetchIsFirstOpen() = viewModelScope.launch {
+        isFirstOpenUseCase.invoke(Unit).onSuccess {
+            println("isFirstOpen : $it")
+            if (!it) return@launch
+            reduce { copy(isShowOnboardingDialog = true) }
+        }.onFailure {
+            Log.e(tag, "fetchIsFirstOpen : $it")
+        }
+    }
+
+    private fun setIsFirstOpen() = viewModelScope.launch {
+        setIsFirstOpenUseCase.invoke(false).onFailure {
+            Log.e(tag, "setIsFirstOpen : $it")
         }
     }
 
@@ -191,7 +213,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun hideOnboardingDialog() {
-        // isShow = true
+        setIsFirstOpen()
         setOnboardingDialog(false)
     }
 

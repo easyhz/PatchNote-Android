@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     private val authDataSource: AuthDataSource,
-    private val userLocalDataSource: UserLocalDataSource
+    private val userLocalDataSource: UserLocalDataSource,
 ): UserRepository {
     override fun isLogin(): Boolean {
         return authDataSource.isLogin()
@@ -51,5 +51,13 @@ class UserRepositoryImpl @Inject constructor(
         val uid = authDataSource.getUserId() ?: return Result.failure(Exception("User not found"))
         val user = authDataSource.getUser(uid).getOrThrow()
         userLocalDataSource.updateUser(user.toModel())
+    }
+
+    override suspend fun setIsFirstOpen(isFirstOpen: Boolean) {
+        return userLocalDataSource.setIsFirstOpen(isFirstOpen)
+    }
+
+    override suspend fun isFirstOpen(): Result<Boolean> {
+        return userLocalDataSource.isFirstOpen()
     }
 }

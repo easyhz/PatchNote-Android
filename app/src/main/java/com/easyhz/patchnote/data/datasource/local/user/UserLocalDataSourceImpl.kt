@@ -2,6 +2,7 @@ package com.easyhz.patchnote.data.datasource.local.user
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
@@ -22,6 +23,7 @@ class UserLocalDataSourceImpl @Inject constructor(
     private val userName = stringPreferencesKey(UserKey.USER_NAME.key)
     private val userPhone = stringPreferencesKey(UserKey.USER_PHONE.key)
     private val userTeamId = stringPreferencesKey(UserKey.USER_TEAM_ID.key)
+    private val isFirstOpen = booleanPreferencesKey(UserKey.IS_FIRST_OPEN.key)
 
     override suspend fun updateUser(user: User): Unit = withContext(dispatcher) {
         dataStore.edit { preferences ->
@@ -53,8 +55,21 @@ class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun isFirstOpen(): Result<Boolean> = withContext(dispatcher) {
+        runCatching {
+            val preferences = dataStore.data.first()
+            return@runCatching preferences[isFirstOpen] ?: true
+        }
+    }
+
+    override suspend fun setIsFirstOpen(newValue: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[isFirstOpen] = newValue
+        }
+    }
 
     private fun generateNullException(userKey: UserKey): Exception {
         return Exception("${userKey.key} is null")
     }
+
 }
