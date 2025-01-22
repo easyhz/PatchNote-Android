@@ -11,7 +11,8 @@ data class HomeState(
     val isShowPasswordErrorDialog: Boolean,
     val hasPassword: Boolean,
     val password: String,
-    val isLoading: Boolean
+    val isLoading: Boolean,
+    val isShowOnboardingDialog: Boolean,
 ): UiState() {
     companion object {
         fun init() = HomeState(
@@ -22,7 +23,8 @@ data class HomeState(
             isShowPasswordErrorDialog = false,
             hasPassword = false,
             password = "",
-            isLoading = false
+            isLoading = false,
+            isShowOnboardingDialog = false
         )
     }
 }

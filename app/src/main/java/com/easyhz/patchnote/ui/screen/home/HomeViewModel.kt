@@ -58,6 +58,8 @@ class HomeViewModel @Inject constructor(
             is HomeIntent.HidePasswordDialog -> hidePasswordDialog()
             is HomeIntent.HidePasswordErrorDialog -> setPasswordErrorDialog(false)
             is HomeIntent.SetLoading -> reduce { copy(isLoading = intent.value) }
+            is HomeIntent.HideOnboardingDialog -> hideOnboardingDialog()
+            is HomeIntent.ShowOnboardingDialog -> setOnboardingDialog(true)
         }
     }
 
@@ -188,6 +190,15 @@ class HomeViewModel @Inject constructor(
         postSideEffect { HomeSideEffect.NavigateToLogin }
     }
 
+    private fun hideOnboardingDialog() {
+        // isShow = true
+        setOnboardingDialog(false)
+    }
+
+    private fun setOnboardingDialog(value: Boolean) {
+        reduce { copy(isShowOnboardingDialog = value) }
+    }
+
     private fun handleIndexError(e: Throwable, filterParam: FilterParam) {
         if (e is AppError.NoUserDataError) {
             navigateToLogin()
@@ -198,6 +209,8 @@ class HomeViewModel @Inject constructor(
                 "ERROR_MESSAGE" to e.message.toString()
             )
             crashlyticsLogger.setKey("INDEX_ERROR", errorMap.toString())
+        } else {
+            crashlyticsLogger.setKey("FETCH_ERROR", e.printStackTrace().toString())
         }
     }
 }

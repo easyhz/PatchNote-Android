@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -25,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -40,7 +40,9 @@ import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.button.HomeFloatingActionButton
 import com.easyhz.patchnote.core.designSystem.component.card.HomeCard
 import com.easyhz.patchnote.core.designSystem.component.dialog.BasicDialog
+import com.easyhz.patchnote.core.designSystem.component.dialog.DialogButton
 import com.easyhz.patchnote.core.designSystem.component.dialog.InputDialog
+import com.easyhz.patchnote.core.designSystem.component.dialog.OnboardingDialog
 import com.easyhz.patchnote.core.designSystem.component.filter.HomeFilter
 import com.easyhz.patchnote.core.designSystem.component.loading.LoadingIndicator
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
@@ -51,6 +53,7 @@ import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.ui.screen.home.contract.HomeIntent
 import com.easyhz.patchnote.ui.screen.home.contract.HomeSideEffect
+import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.Primary
 import com.easyhz.patchnote.ui.theme.SemiBold16
 import com.easyhz.patchnote.ui.theme.SemiBold18
@@ -83,7 +86,7 @@ fun HomeScreen(
         modifier = modifier,
         topBar = {
             HomeTopBar(
-                onClickName = { viewModel.postIntent(HomeIntent.NavigateToNotion) },
+                onClickName = { viewModel.postIntent(HomeIntent.ShowOnboardingDialog) },
                 onClickSetting = { viewModel.postIntent(HomeIntent.ClickSetting) },
                 onClickExport = { viewModel.postIntent(HomeIntent.ClickExport) },
             )
@@ -109,13 +112,36 @@ fun HomeScreen(
                 )
             }
         ) {
-            if (defectList.itemCount == 0 && defectList.loadState.refresh == LoadState.Loading) {
+            if (defectList.itemCount == 0 && defectList.loadState.refresh is LoadState.NotLoading) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(
                         text = stringResource(R.string.home_defect_empty),
                         style = SemiBold16,
                         color = SubText
                     )
+                }
+            }
+            if (defectList.loadState.refresh is LoadState.Error) {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(20.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.home_defect_error),
+                            style = SemiBold16,
+                            color = SubText
+                        )
+                        DialogButton(
+                            modifier = Modifier.width(120.dp),
+                            dialogButton = BasicDialogButton(
+                                text = stringResource(R.string.home_defect_error_button),
+                                backgroundColor = Primary,
+                                style = SemiBold16.copy(color = MainBackground),
+                                onClick = { viewModel.postIntent(HomeIntent.Refresh(filterParam)) }
+                            )
+                        )
+                    }
                 }
             }
             Column {
@@ -144,7 +170,7 @@ fun HomeScreen(
                 content = null,
                 positiveButton = BasicDialogButton(
                     text = stringResource(R.string.version_dialog_button),
-                    style = SemiBold18.copy(color = Color.White),
+                    style = SemiBold18.copy(color = MainBackground),
                     backgroundColor = Primary,
                     onClick = { viewModel.postIntent(HomeIntent.UpdateAppVersion) }
                 ),
@@ -173,7 +199,7 @@ fun HomeScreen(
                 },
                 positiveButton = BasicDialogButton(
                     text = stringResource(R.string.dialog_setting_password_positive),
-                    style = SemiBold18.copy(color = Color.White),
+                    style = SemiBold18.copy(color = MainBackground),
                     backgroundColor = Primary,
                     onClick = { viewModel.postIntent(HomeIntent.CheckPassword) }
                 ),
@@ -192,11 +218,19 @@ fun HomeScreen(
                 content = null,
                 positiveButton = BasicDialogButton(
                     text = stringResource(R.string.dialog_setting_password_error_button),
-                    style = SemiBold18.copy(color = Color.White),
+                    style = SemiBold18.copy(color = MainBackground),
                     backgroundColor = Primary,
                     onClick = { viewModel.postIntent(HomeIntent.HidePasswordErrorDialog) }
                 ),
                 negativeButton = null
+            )
+        }
+
+        if (uiState.isShowOnboardingDialog) {
+            OnboardingDialog(
+                onDismissRequest = {
+                    viewModel.postIntent(HomeIntent.HideOnboardingDialog)
+                }
             )
         }
     }
