@@ -4,6 +4,7 @@ import com.easyhz.patchnote.core.common.base.UiState
 import com.easyhz.patchnote.core.model.configuration.Configuration
 
 data class HomeState(
+    val teamName: String,
     val appConfiguration: Configuration,
     val isLatestVersion: Boolean,
     val isRefreshing: Boolean,
@@ -16,6 +17,7 @@ data class HomeState(
 ): UiState() {
     companion object {
         fun init() = HomeState(
+            teamName = "PatchNote",
             appConfiguration = Configuration("", "", ""),
             isLatestVersion = true,
             isRefreshing = false,

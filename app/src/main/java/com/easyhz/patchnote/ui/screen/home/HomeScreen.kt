@@ -86,6 +86,7 @@ fun HomeScreen(
         modifier = modifier,
         topBar = {
             HomeTopBar(
+                title = uiState.teamName,
                 onClickName = { viewModel.postIntent(HomeIntent.ShowOnboardingDialog) },
                 onClickSetting = { viewModel.postIntent(HomeIntent.ClickSetting) },
                 onClickExport = { viewModel.postIntent(HomeIntent.ClickExport) },
