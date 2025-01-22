@@ -2,7 +2,6 @@ package com.easyhz.patchnote.ui.screen.setting.my_page
 
 import android.content.Context
 import android.util.Log
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.base.BaseViewModel
@@ -17,6 +16,7 @@ import com.easyhz.patchnote.domain.usecase.team.LeaveTeamUseCase
 import com.easyhz.patchnote.ui.screen.setting.my_page.contract.MyPageIntent
 import com.easyhz.patchnote.ui.screen.setting.my_page.contract.MyPageSideEffect
 import com.easyhz.patchnote.ui.screen.setting.my_page.contract.MyPageState
+import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.Red
 import com.easyhz.patchnote.ui.theme.SemiBold18
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -175,7 +175,7 @@ class MyPageViewModel @Inject constructor(
     private fun getDefaultPositiveButton(text: String, onClick: () -> Unit): BasicDialogButton {
         return BasicDialogButton(
             text = text,
-            style = SemiBold18.copy(color = Color.White),
+            style = SemiBold18.copy(color = MainBackground),
             backgroundColor = Red,
             onClick = onClick
         )

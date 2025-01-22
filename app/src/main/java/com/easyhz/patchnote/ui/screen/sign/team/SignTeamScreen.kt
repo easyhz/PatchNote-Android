@@ -16,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
@@ -35,6 +34,7 @@ import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignTeamIntent
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignTeamSideEffect
 import com.easyhz.patchnote.ui.theme.LocalSnackBarHostState
+import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Primary
 import com.easyhz.patchnote.ui.theme.SemiBold16
@@ -111,7 +111,7 @@ fun SignTeamScreen(
                 content = stringResource(R.string.sign_team_dialog_subTitle),
                 positiveButton = BasicDialogButton(
                     text = stringResource(R.string.sign_team_dialog_positive_button),
-                    style = SemiBold18.copy(color = Color.White),
+                    style = SemiBold18.copy(color = MainBackground),
                     backgroundColor = Primary,
                     onClick = { viewModel.postIntent(SignTeamIntent.ClickPositiveButton) }
                 ),

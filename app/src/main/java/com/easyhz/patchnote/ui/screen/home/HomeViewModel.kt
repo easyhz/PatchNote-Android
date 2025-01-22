@@ -14,6 +14,8 @@ import com.easyhz.patchnote.domain.usecase.configuration.FetchConfigurationUseCa
 import com.easyhz.patchnote.domain.usecase.configuration.UpdateEnteredPasswordUseCase
 import com.easyhz.patchnote.domain.usecase.configuration.ValidatePasswordUseCase
 import com.easyhz.patchnote.domain.usecase.defect.GetDefectsPagingSourceUseCase
+import com.easyhz.patchnote.domain.usecase.user.IsFirstOpenUseCase
+import com.easyhz.patchnote.domain.usecase.user.SetIsFirstOpenUseCase
 import com.easyhz.patchnote.ui.screen.home.contract.HomeIntent
 import com.easyhz.patchnote.ui.screen.home.contract.HomeSideEffect
 import com.easyhz.patchnote.ui.screen.home.contract.HomeState
@@ -30,6 +32,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val crashlyticsLogger: CrashlyticsLogger,
+    private val isFirstOpenUseCase: IsFirstOpenUseCase,
+    private val setIsFirstOpenUseCase: SetIsFirstOpenUseCase,
     private val fetchConfigurationUseCase: FetchConfigurationUseCase,
     private val getDefectsPagingSourceUseCase: GetDefectsPagingSourceUseCase,
     private val validatePasswordUseCase: ValidatePasswordUseCase,
@@ -58,10 +62,13 @@ class HomeViewModel @Inject constructor(
             is HomeIntent.HidePasswordDialog -> hidePasswordDialog()
             is HomeIntent.HidePasswordErrorDialog -> setPasswordErrorDialog(false)
             is HomeIntent.SetLoading -> reduce { copy(isLoading = intent.value) }
+            is HomeIntent.HideOnboardingDialog -> hideOnboardingDialog()
+            is HomeIntent.ShowOnboardingDialog -> setOnboardingDialog(true)
         }
     }
 
     init {
+        fetchIsFirstOpen()
         fetchConfiguration()
     }
 
@@ -94,6 +101,23 @@ class HomeViewModel @Inject constructor(
             validatePassword(it.settingPassword)
         }.onFailure {
             Log.e(tag, "fetchConfiguration : $it")
+        }
+    }
+
+    /* fetchIsFirstOpen */
+    private fun fetchIsFirstOpen() = viewModelScope.launch {
+        isFirstOpenUseCase.invoke(Unit).onSuccess {
+            println("isFirstOpen : $it")
+            if (!it) return@launch
+            reduce { copy(isShowOnboardingDialog = true) }
+        }.onFailure {
+            Log.e(tag, "fetchIsFirstOpen : $it")
+        }
+    }
+
+    private fun setIsFirstOpen() = viewModelScope.launch {
+        setIsFirstOpenUseCase.invoke(false).onFailure {
+            Log.e(tag, "setIsFirstOpen : $it")
         }
     }
 
@@ -188,6 +212,15 @@ class HomeViewModel @Inject constructor(
         postSideEffect { HomeSideEffect.NavigateToLogin }
     }
 
+    private fun hideOnboardingDialog() {
+        setIsFirstOpen()
+        setOnboardingDialog(false)
+    }
+
+    private fun setOnboardingDialog(value: Boolean) {
+        reduce { copy(isShowOnboardingDialog = value) }
+    }
+
     private fun handleIndexError(e: Throwable, filterParam: FilterParam) {
         if (e is AppError.NoUserDataError) {
             navigateToLogin()
@@ -198,6 +231,8 @@ class HomeViewModel @Inject constructor(
                 "ERROR_MESSAGE" to e.message.toString()
             )
             crashlyticsLogger.setKey("INDEX_ERROR", errorMap.toString())
+        } else {
+            crashlyticsLogger.setKey("FETCH_ERROR", e.printStackTrace().toString())
         }
     }
 }

@@ -19,4 +19,6 @@ sealed class HomeIntent: UiIntent() {
     data object HidePasswordDialog: HomeIntent()
     data object HidePasswordErrorDialog: HomeIntent()
     data class SetLoading(val value: Boolean): HomeIntent()
+    data object HideOnboardingDialog: HomeIntent()
+    data object ShowOnboardingDialog: HomeIntent()
 }

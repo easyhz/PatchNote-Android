@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.easyhz.patchnote.core.designSystem.util.button.ButtonColor
 import com.easyhz.patchnote.ui.theme.Bold20
@@ -26,6 +27,7 @@ fun MainButton(
     textStyle: TextStyle = Bold20,
     buttonColor: ButtonColor = ButtonColor(),
     enabled: Boolean = true,
+    height: Dp = 52.dp,
     onClick: () -> Unit,
 ) {
     val onClickInvoke: () -> Unit = remember(enabled, onClick) {
@@ -41,7 +43,7 @@ fun MainButton(
     Box(
         modifier = modifier
             .imePadding()
-            .height(52.dp)
+            .height(height)
             .clip(RoundedCornerShape(8.dp))
             .background(backgroundColor)
             .clickable(enabled) { onClickInvoke() },

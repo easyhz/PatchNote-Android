@@ -30,6 +30,8 @@ internal enum class UserKey(
         key = "phone"
     ), USER_TEAM_ID(
         key = "teamId"
+    ), IS_FIRST_OPEN(
+        key = "isFirstOpen"
     )
 }
 

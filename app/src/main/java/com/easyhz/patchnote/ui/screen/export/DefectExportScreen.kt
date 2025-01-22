@@ -28,7 +28,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -65,6 +64,7 @@ import com.easyhz.patchnote.ui.screen.defectEntry.component.DefectCategoryField
 import com.easyhz.patchnote.ui.screen.export.contract.DefectExportIntent
 import com.easyhz.patchnote.ui.screen.export.contract.DefectExportSideEffect
 import com.easyhz.patchnote.ui.theme.LocalSnackBarHostState
+import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Primary
 import com.easyhz.patchnote.ui.theme.SemiBold16
@@ -255,7 +255,7 @@ fun DefectExportScreen(
                 content = stringResource(R.string.dialog_export_content),
                 positiveButton = BasicDialogButton(
                     text = stringResource(R.string.dialog_export_positive),
-                    style = SemiBold18.copy(color = Color.White),
+                    style = SemiBold18.copy(color = MainBackground),
                     backgroundColor = Primary,
                     onClick = { defectViewModel.postIntent(DefectIntent.SearchItem) }
                 ),
@@ -274,7 +274,7 @@ fun DefectExportScreen(
                 content = stringResource(R.string.dialog_defect_export_need_date_content),
                 positiveButton = BasicDialogButton(
                     text = stringResource(R.string.dialog_defect_export_need_date_button),
-                    style = SemiBold18.copy(color = Color.White),
+                    style = SemiBold18.copy(color = MainBackground),
                     backgroundColor = Primary,
                     onClick = { viewModel.postIntent(DefectExportIntent.HideDateDialog) }
                 ),
