@@ -16,9 +16,13 @@ class DefectPagingSource(
         return try {
             val loadSize = params.loadSize
             val currentPage = params.key ?: fetchData(null, loadSize).getOrThrow()
-            val offset = currentPage.last()
+            val offset = currentPage.lastOrNull()
+                ?: return LoadResult.Page(
+                    data = emptyList(),
+                    prevKey = null,
+                    nextKey = null
+                )
             val nextPage = fetchData(offset.requestDate, loadSize).getOrThrow()
-
             LoadResult.Page(
                 data = currentPage,
                 prevKey = null,
