@@ -22,6 +22,7 @@ import com.easyhz.patchnote.ui.theme.SemiBold24
 @Composable
 fun HomeTopBar(
     modifier: Modifier = Modifier,
+    title: String = stringResource(id = R.string.app_name_ko),
     onClickName: () -> Unit = { },
     onClickSetting: () -> Unit,
     onClickExport: () -> Unit
@@ -36,7 +37,7 @@ fun HomeTopBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(id = R.string.app_name_ko),
+                text = title,
                 style = SemiBold24
             )
             Icon(

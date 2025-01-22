@@ -3,6 +3,7 @@ package com.easyhz.patchnote.data.repository.user
 import com.easyhz.patchnote.core.model.user.User
 import com.easyhz.patchnote.data.datasource.remote.auth.AuthDataSource
 import com.easyhz.patchnote.data.datasource.local.user.UserLocalDataSource
+import com.easyhz.patchnote.data.datasource.remote.team.TeamRemoteDateSource
 import com.easyhz.patchnote.data.mapper.sign.toModel
 import com.easyhz.patchnote.data.mapper.sign.toRequest
 import javax.inject.Inject
@@ -10,6 +11,7 @@ import javax.inject.Inject
 class UserRepositoryImpl @Inject constructor(
     private val authDataSource: AuthDataSource,
     private val userLocalDataSource: UserLocalDataSource,
+    private val teamRemoteDateSource: TeamRemoteDateSource,
 ): UserRepository {
     override fun isLogin(): Boolean {
         return authDataSource.isLogin()
@@ -50,7 +52,10 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun updateUserFromRemote(): Result<Unit> = runCatching {
         val uid = authDataSource.getUserId() ?: return Result.failure(Exception("User not found"))
         val user = authDataSource.getUser(uid).getOrThrow()
+        val teamName = teamRemoteDateSource.findTeamById(user.teamId).getOrThrow()
+
         userLocalDataSource.updateUser(user.toModel())
+        userLocalDataSource.updateTeamName(teamName.name)
     }
 
     override suspend fun setIsFirstOpen(isFirstOpen: Boolean) {

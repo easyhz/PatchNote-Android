@@ -14,6 +14,7 @@ import com.easyhz.patchnote.domain.usecase.configuration.FetchConfigurationUseCa
 import com.easyhz.patchnote.domain.usecase.configuration.UpdateEnteredPasswordUseCase
 import com.easyhz.patchnote.domain.usecase.configuration.ValidatePasswordUseCase
 import com.easyhz.patchnote.domain.usecase.defect.GetDefectsPagingSourceUseCase
+import com.easyhz.patchnote.domain.usecase.team.GetTeamNameUseCase
 import com.easyhz.patchnote.domain.usecase.user.IsFirstOpenUseCase
 import com.easyhz.patchnote.domain.usecase.user.SetIsFirstOpenUseCase
 import com.easyhz.patchnote.ui.screen.home.contract.HomeIntent
@@ -25,6 +26,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -38,16 +40,18 @@ class HomeViewModel @Inject constructor(
     private val getDefectsPagingSourceUseCase: GetDefectsPagingSourceUseCase,
     private val validatePasswordUseCase: ValidatePasswordUseCase,
     private val updateEnteredPasswordUseCase: UpdateEnteredPasswordUseCase,
-): BaseViewModel<HomeState, HomeIntent, HomeSideEffect>(
+    private val getTeamNameUseCase: GetTeamNameUseCase,
+) : BaseViewModel<HomeState, HomeIntent, HomeSideEffect>(
     initialState = HomeState.init()
 ) {
-    private val _defectState : MutableStateFlow<PagingData<DefectItem>> = MutableStateFlow(value = PagingData.empty())
+    private val _defectState: MutableStateFlow<PagingData<DefectItem>> =
+        MutableStateFlow(value = PagingData.empty())
     val defectState: MutableStateFlow<PagingData<DefectItem>>
         get() = _defectState
     private val tag = "HomeViewModel"
 
     override fun handleIntent(intent: HomeIntent) {
-        when(intent) {
+        when (intent) {
             is HomeIntent.FetchData -> fetchDefects(intent.filterParam)
             is HomeIntent.ClickSetting -> onClickSetting()
             is HomeIntent.ClickExport -> onClickExport()
@@ -70,8 +74,8 @@ class HomeViewModel @Inject constructor(
     init {
         fetchIsFirstOpen()
         fetchConfiguration()
+        getTeamName()
     }
-
 
     /* fetchDefects */
     private fun fetchDefects(filterParam: FilterParam) {
@@ -93,6 +97,14 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun getTeamName() = viewModelScope.launch {
+        getTeamNameUseCase.invoke()
+            .distinctUntilChanged()
+            .collect {
+                reduce { copy(teamName = it) }
+            }
+    }
+
     /* fetchConfiguration */
     private fun fetchConfiguration() = viewModelScope.launch {
         fetchConfigurationUseCase.invoke(Unit).onSuccess {
@@ -107,7 +119,6 @@ class HomeViewModel @Inject constructor(
     /* fetchIsFirstOpen */
     private fun fetchIsFirstOpen() = viewModelScope.launch {
         isFirstOpenUseCase.invoke(Unit).onSuccess {
-            println("isFirstOpen : $it")
             if (!it) return@launch
             reduce { copy(isShowOnboardingDialog = true) }
         }.onFailure {
