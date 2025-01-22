@@ -11,7 +11,9 @@ import com.easyhz.patchnote.core.model.user.User
 import com.easyhz.patchnote.data.di.config.UserDataStore
 import com.easyhz.patchnote.data.di.config.UserKey
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -24,6 +26,7 @@ class UserLocalDataSourceImpl @Inject constructor(
     private val userPhone = stringPreferencesKey(UserKey.USER_PHONE.key)
     private val userTeamId = stringPreferencesKey(UserKey.USER_TEAM_ID.key)
     private val isFirstOpen = booleanPreferencesKey(UserKey.IS_FIRST_OPEN.key)
+    private val userTeamName = stringPreferencesKey(UserKey.USER_TEAM_NAME.key)
 
     override suspend fun updateUser(user: User): Unit = withContext(dispatcher) {
         dataStore.edit { preferences ->
@@ -65,6 +68,18 @@ class UserLocalDataSourceImpl @Inject constructor(
     override suspend fun setIsFirstOpen(newValue: Boolean) {
         dataStore.edit { preferences ->
             preferences[isFirstOpen] = newValue
+        }
+    }
+
+    override suspend fun updateTeamName(teamName: String) {
+        dataStore.edit { preferences ->
+            preferences[userTeamName] = teamName
+        }
+    }
+
+    override suspend fun getTeamName(): Flow<String> {
+        return dataStore.data.map { preferences ->
+            preferences[userTeamName] ?: "PatchNote"
         }
     }
 

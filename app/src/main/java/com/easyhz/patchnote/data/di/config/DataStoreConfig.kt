@@ -32,6 +32,8 @@ internal enum class UserKey(
         key = "teamId"
     ), IS_FIRST_OPEN(
         key = "isFirstOpen"
+    ), USER_TEAM_NAME(
+        key = "teamName"
     )
 }
 
