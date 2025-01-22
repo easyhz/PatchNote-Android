@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -138,7 +137,7 @@ fun SettingScreen(
                 },
                 positiveButton = BasicDialogButton(
                     text = stringResource(R.string.dialog_block_positive),
-                    style = SemiBold18.copy(color = Color.White),
+                    style = SemiBold18.copy(color = MainBackground),
                     backgroundColor = Primary,
                     onClick = { viewModel.postIntent(SettingIntent.ProposeBlock) }
                 ),
@@ -156,7 +155,7 @@ fun SettingScreen(
                 content = null,
                 positiveButton = BasicDialogButton(
                     text = stringResource(R.string.dialog_block_positive),
-                    style = SemiBold18.copy(color = Color.White),
+                    style = SemiBold18.copy(color = MainBackground),
                     backgroundColor = Primary,
                     onClick = { viewModel.postIntent(SettingIntent.HideSuccessDialog) }
                 ),

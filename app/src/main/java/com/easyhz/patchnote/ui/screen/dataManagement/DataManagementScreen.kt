@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,6 +26,7 @@ import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
 import com.easyhz.patchnote.ui.screen.dataManagement.contract.DataIntent
 import com.easyhz.patchnote.ui.screen.dataManagement.contract.DataSideEffect
+import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Red
 import com.easyhz.patchnote.ui.theme.SemiBold16
@@ -92,7 +92,7 @@ fun DataManagementScreen(
                 content = stringResource(R.string.data_management_delete_dialog_content),
                 positiveButton = BasicDialogButton(
                     text = stringResource(R.string.data_management_delete_dialog_positive_button),
-                    style = SemiBold18.copy(color = Color.White),
+                    style = SemiBold18.copy(color = MainBackground),
                     backgroundColor = Red,
                     onClick = { viewModel.postIntent(DataIntent.ClickPositiveButton) }
                 ),
