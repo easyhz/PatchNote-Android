@@ -13,6 +13,7 @@ import com.easyhz.patchnote.core.model.setting.MyPageItem
 import com.easyhz.patchnote.domain.usecase.setting.FetchUserInformationUseCase
 import com.easyhz.patchnote.domain.usecase.sign.LogOutUseCase
 import com.easyhz.patchnote.domain.usecase.team.LeaveTeamUseCase
+import com.easyhz.patchnote.domain.usecase.team.WithdrawUseCase
 import com.easyhz.patchnote.ui.screen.setting.my_page.contract.MyPageIntent
 import com.easyhz.patchnote.ui.screen.setting.my_page.contract.MyPageSideEffect
 import com.easyhz.patchnote.ui.screen.setting.my_page.contract.MyPageState
@@ -30,6 +31,7 @@ class MyPageViewModel @Inject constructor(
     private val fetchUserInformationUseCase: FetchUserInformationUseCase,
     private val logOutUseCase: LogOutUseCase,
     private val leaveTeamUseCase: LeaveTeamUseCase,
+    private val withdrawUseCase: WithdrawUseCase,
 ) : BaseViewModel<MyPageState, MyPageIntent, MyPageSideEffect>(
     initialState = MyPageState.init(),
 ) {
@@ -117,6 +119,24 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
+    private fun withdraw() {
+        handleDialog(null)
+        viewModelScope.launch {
+            val uid = currentState.userInformation.user.id
+            setLoading(true)
+            withdrawUseCase.invoke(uid).onSuccess {
+                navigateToOnboarding()
+            }.onFailure { e ->
+                Log.e(tag, "withdraw failed", e)
+                showSnackBar(context, e.handleError()) {
+                    MyPageSideEffect.ShowSnackBar(it)
+                }
+            }.also {
+                setLoading(false)
+            }
+        }
+    }
+
     private fun navigateUp() {
         postSideEffect { MyPageSideEffect.NavigateToUp }
     }
@@ -162,7 +182,7 @@ class MyPageViewModel @Inject constructor(
                 R.string.withdraw_dialog_message,
                 getDefaultPositiveButton(
                     text = context.getString(R.string.withdraw_dialog_positive_button),
-                    onClick = ::leaveTeam
+                    onClick = ::withdraw
                 )
             )
 

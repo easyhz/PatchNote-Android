@@ -15,4 +15,6 @@ interface UserRepository {
     suspend fun updateUserFromRemote(): Result<Unit>
     suspend fun isFirstOpen(): Result<Boolean>
     suspend fun setIsFirstOpen(isFirstOpen: Boolean): Unit
+    suspend fun deleteTeam(userId: String): Result<Unit>
+    suspend fun updateTeamName(teamName: String): Result<Unit>
 }

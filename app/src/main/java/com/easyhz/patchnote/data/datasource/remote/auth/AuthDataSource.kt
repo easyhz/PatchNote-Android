@@ -17,4 +17,5 @@ interface AuthDataSource {
     suspend fun saveUser(saveUserRequest: SaveUserRequest): Result<Unit>
     suspend fun getUser(uid: String): Result<UserResponse>
     suspend fun deleteUser(uid: String): Result<Unit>
+    suspend fun deleteTeamId(uid: String): Result<Unit>
 }

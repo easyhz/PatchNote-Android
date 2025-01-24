@@ -6,8 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.handleError
 import com.easyhz.patchnote.core.model.user.User
+import com.easyhz.patchnote.domain.usecase.sign.GetUserUseCase
 import com.easyhz.patchnote.domain.usecase.sign.SaveUserUseCase
 import com.easyhz.patchnote.domain.usecase.team.FindTeamByCodeUseCase
+import com.easyhz.patchnote.domain.usecase.team.UpdateTeamNameUseCase
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignTeamIntent
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignTeamSideEffect
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignTeamState
@@ -22,6 +24,8 @@ class SignTeamViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val findTeamByCodeUseCase: FindTeamByCodeUseCase,
     private val saveUserUseCase: SaveUserUseCase,
+    private val getUserUseCase: GetUserUseCase,
+    private val updateTeamNameUseCase: UpdateTeamNameUseCase,
 ): BaseViewModel<SignTeamState, SignTeamIntent, SignTeamSideEffect>(
     initialState = SignTeamState.init()
 ){
@@ -45,10 +49,18 @@ class SignTeamViewModel @Inject constructor(
         val phoneNumber: String? = savedStateHandle["phoneNumber"]
         val userName: String? = savedStateHandle["userName"]
         if (uid.isNullOrBlank() || phoneNumber.isNullOrBlank() || userName.isNullOrBlank()) {
-            navigateToUp()
-            return
+            getUser()
+        } else {
+            reduce { copy(uid = uid, phoneNumber = phoneNumber, userName = userName) }
         }
-        reduce { copy(uid = uid, phoneNumber = phoneNumber, userName = userName) }
+    }
+
+    private fun getUser() = viewModelScope.launch {
+        getUserUseCase.invoke(Unit).onSuccess {
+            reduce { copy(uid = it.id, phoneNumber = it.phone, userName = it.name) }
+        }.onFailure {
+            navigateToUp()
+        }
     }
 
     private fun changeTeamCodeText(text: String) {
@@ -80,6 +92,7 @@ class SignTeamViewModel @Inject constructor(
             teamId = currentState.teamId
         )
         saveUserUseCase.invoke(userRequest).onSuccess {
+            updateTeamNameUseCase.invoke(currentState.teamName)
             navigateToHome()
         }.onFailure { e ->
             showSnackBar(context, e.handleError()) {
