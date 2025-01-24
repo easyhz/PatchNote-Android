@@ -1,25 +1,21 @@
 package com.easyhz.patchnote.ui.screen.sign.team
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
-import com.easyhz.patchnote.core.common.error.AppError
 import com.easyhz.patchnote.core.common.error.handleError
 import com.easyhz.patchnote.core.common.util.Generate
 import com.easyhz.patchnote.core.model.team.CreateTeamParam
 import com.easyhz.patchnote.core.model.team.Team
 import com.easyhz.patchnote.core.model.user.User
 import com.easyhz.patchnote.domain.usecase.team.CreateTeamUseCase
+import com.easyhz.patchnote.domain.usecase.team.UpdateTeamNameUseCase
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignCreateTeamIntent
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignCreateTeamSideEffect
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignCreateTeamState
-import com.easyhz.patchnote.ui.screen.sign.team.contract.SignTeamSideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,6 +24,7 @@ class SignCreateTeamViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val savedStateHandle: SavedStateHandle,
     private val createTeamUseCase: CreateTeamUseCase,
+    private val updateTeamNameUseCase: UpdateTeamNameUseCase,
 ): BaseViewModel<SignCreateTeamState, SignCreateTeamIntent, SignCreateTeamSideEffect>(
     initialState = SignCreateTeamState.init()
 ) {
@@ -67,6 +64,7 @@ class SignCreateTeamViewModel @Inject constructor(
                 team = getTeam(teamId)
             )
             createTeamUseCase.invoke(param).onSuccess {
+                updateTeamNameUseCase.invoke(currentState.teamNameText)
                 navigateToHome()
             }.onFailure { e ->
                 showSnackBar(context, e.handleError()) {

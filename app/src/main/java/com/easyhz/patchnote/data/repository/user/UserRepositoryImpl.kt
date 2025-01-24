@@ -65,4 +65,14 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun isFirstOpen(): Result<Boolean> {
         return userLocalDataSource.isFirstOpen()
     }
+
+    override suspend fun deleteTeam(userId: String): Result<Unit> = runCatching {
+        userLocalDataSource.deleteTeamName()
+        userLocalDataSource.deleteUser()
+        authDataSource.deleteTeamId(userId)
+    }
+
+    override suspend fun updateTeamName(teamName: String): Result<Unit> = runCatching {
+        userLocalDataSource.updateTeamName(teamName)
+    }
 }

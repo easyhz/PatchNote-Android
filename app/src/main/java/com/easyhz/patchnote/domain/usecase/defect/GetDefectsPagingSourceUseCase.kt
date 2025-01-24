@@ -18,7 +18,7 @@ class GetDefectsPagingSourceUseCase @Inject constructor(
         val user = userRepository.getUserFromLocal().getOrElse {
             return flow { throw AppError.NoUserDataError }
         }
-        if (user.teamId.isEmpty()) return flow { throw AppError.NoUserDataError }
+        if (user.teamId.isBlank()) return flow { throw AppError.NoUserDataError }
         return defectRepository.getDefectsPagingSource(filterParam = filterParam, user = user)
     }
 }

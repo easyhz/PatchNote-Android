@@ -37,6 +37,7 @@ internal fun NavGraphBuilder.signGraph(
                 phoneNumber = args.phoneNumber,
                 navigateToUp = navController::navigateUp,
                 navigateToName = navController::navigateToName,
+                navigateToTeam = navController::navigateToTeam,
                 navigateToHome = { navController.navigateToHome(navOptions = navOptions) }
             )
         }

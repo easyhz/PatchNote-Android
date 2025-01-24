@@ -31,6 +31,7 @@ fun SignVerificationScreen(
     phoneNumber: String,
     navigateToUp: () -> Unit,
     navigateToName: (uid: String, phoneNumber: String) -> Unit,
+    navigateToTeam: (uid: String, phoneNumber: String, userName: String) -> Unit,
     navigateToHome: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -70,6 +71,7 @@ fun SignVerificationScreen(
         when(sideEffect) {
             is VerificationSideEffect.NavigateToUp -> { navigateToUp() }
             is VerificationSideEffect.NavigateToName -> { navigateToName(sideEffect.uid, sideEffect.phoneNumber) }
+            is VerificationSideEffect.NavigateToTeam -> { navigateToTeam(sideEffect.uid, sideEffect.phoneNumber, sideEffect.userName) }
             is VerificationSideEffect.NavigateToHome -> { navigateToHome() }
             is VerificationSideEffect.ShowSnackBar -> {
                 snackBarHost.showSnackbar(

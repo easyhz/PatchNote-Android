@@ -83,6 +83,12 @@ class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteTeamName() {
+        dataStore.edit { preferences ->
+            preferences.remove(userTeamName)
+        }
+    }
+
     private fun generateNullException(userKey: UserKey): Exception {
         return Exception("${userKey.key} is null")
     }

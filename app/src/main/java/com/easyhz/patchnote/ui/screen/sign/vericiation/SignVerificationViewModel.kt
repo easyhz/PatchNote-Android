@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.handleError
+import com.easyhz.patchnote.core.model.sign.SignType
 import com.easyhz.patchnote.data.model.sign.param.SignInWithPhoneParam
 import com.easyhz.patchnote.domain.usecase.sign.CheckAlreadyUserUseCase
 import com.easyhz.patchnote.domain.usecase.sign.SignInWithPhoneUseCase
@@ -52,9 +53,12 @@ class SignVerificationViewModel @Inject constructor(
     }
 
     private fun checkAlreadyUser(uid: String, phoneNumber: String) = viewModelScope.launch {
-        checkAlreadyUserUseCase.invoke(uid).onSuccess { isAlreadyUser ->
-            if (isAlreadyUser) postSideEffect { VerificationSideEffect.NavigateToHome }
-            else postSideEffect { VerificationSideEffect.NavigateToName(uid, phoneNumber) }
+        checkAlreadyUserUseCase.invoke(uid).onSuccess { signType ->
+            when(signType) {
+                is SignType.NewUser -> navigateToName(uid, phoneNumber)
+                is SignType.TeamRequired -> navigateToTeam(signType.uid, signType.userName, signType.phoneNumber)
+                is SignType.ExistingUser -> navigateToHome()
+            }
         }.onFailure { e ->
             showSnackBar(context, e.handleError()) {
                 VerificationSideEffect.ShowSnackBar(it)
@@ -63,6 +67,18 @@ class SignVerificationViewModel @Inject constructor(
             setLoading(false)
         }
 
+    }
+
+    private fun navigateToName(uid: String, phoneNumber: String) {
+        postSideEffect { VerificationSideEffect.NavigateToName(uid, phoneNumber) }
+    }
+
+    private fun navigateToHome() {
+        postSideEffect { VerificationSideEffect.NavigateToHome }
+    }
+
+    private fun navigateToTeam(uid: String, phoneNumber: String, userName: String) {
+        postSideEffect { VerificationSideEffect.NavigateToTeam(uid, phoneNumber, userName) }
     }
 
     private fun setLoading(isLoading: Boolean) {

@@ -11,6 +11,6 @@ class IsLoginUseCase @Inject constructor(
         runCatching {
             val isLogin = userRepository.isLogin()
             val user = userRepository.getUserFromLocal().getOrThrow()
-            return Result.success(user.id.isNotBlank() && isLogin)
+            return Result.success(user.id.isNotBlank() && isLogin && user.teamId.isNotBlank())
         }
 }
