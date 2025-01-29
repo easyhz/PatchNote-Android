@@ -1,6 +1,5 @@
 package com.easyhz.patchnote.data.mapper.defect
 
-import android.content.Context
 import com.easyhz.patchnote.core.common.util.DateFormatUtil
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectProgress
