@@ -72,10 +72,10 @@ fun DefectItem.toExportDefect() = ExportDefect(
     requesterName = requesterName,
     requesterPhone = requesterPhone.takeLast(4),
     requestDate = requestDate,
-    beforeDescription = beforeDescription,
+    beforeDescription = beforeDescription.replace("\n", " "),
     workerName = workerName ?: "",
     workerPhone = workerPhone?.takeLast(4) ?: "",
     completionDate = completionDate ?: "",
-    afterDescription = afterDescription,
+    afterDescription = afterDescription.replace("\n", " "),
     thumbnail = thumbnailUrl
 )
