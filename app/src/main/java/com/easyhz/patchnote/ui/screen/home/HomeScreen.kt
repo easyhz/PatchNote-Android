@@ -260,7 +260,7 @@ fun HomeScreen(
             is HomeSideEffect.NavigateToDefectDetail -> {
                 navigateToDefectDetail(sideEffect.defectItem)
             }
-            is HomeSideEffect.NavigateToVersionUpdate -> {
+            is HomeSideEffect.NavigateToUrl -> {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(sideEffect.url))
                 context.startActivity(intent)
             }

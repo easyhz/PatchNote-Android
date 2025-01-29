@@ -10,6 +10,6 @@ sealed class HomeSideEffect: UiSideEffect() {
     data object NavigateToExport: HomeSideEffect()
     data object NavigateToLogin: HomeSideEffect()
     data class NavigateToDefectDetail(val defectItem: DefectItem): HomeSideEffect()
-    data class NavigateToVersionUpdate(val url: String): HomeSideEffect()
+    data class NavigateToUrl(val url: String): HomeSideEffect()
     data object RequestFocus: HomeSideEffect()
 }
