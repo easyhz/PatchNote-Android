@@ -109,7 +109,7 @@ class HomeViewModel @Inject constructor(
     private fun fetchConfiguration() = viewModelScope.launch {
         fetchConfigurationUseCase.invoke(Unit).onSuccess {
             val isLatestVersion = Version.needsUpdate(it.androidVersion)
-            reduce { copy(isLatestVersion = isLatestVersion, appConfiguration = it) }
+            reduce { copy(needsUpdate = isLatestVersion, appConfiguration = it) }
             validatePassword(it.settingPassword)
         }.onFailure {
             Log.e(tag, "fetchConfiguration : $it")
