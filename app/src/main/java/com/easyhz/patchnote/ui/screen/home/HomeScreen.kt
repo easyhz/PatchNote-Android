@@ -165,7 +165,7 @@ fun HomeScreen(
                 }
             }
         }
-        if (!uiState.isLatestVersion) {
+        if (uiState.needsUpdate) {
             BasicDialog(
                 title = stringResource(R.string.version_dialog_title),
                 content = null,

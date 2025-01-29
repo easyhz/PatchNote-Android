@@ -6,7 +6,7 @@ import com.easyhz.patchnote.core.model.configuration.Configuration
 data class HomeState(
     val teamName: String,
     val appConfiguration: Configuration,
-    val isLatestVersion: Boolean,
+    val needsUpdate: Boolean,
     val isRefreshing: Boolean,
     val isShowPasswordDialog: Boolean,
     val isShowPasswordErrorDialog: Boolean,
@@ -19,7 +19,7 @@ data class HomeState(
         fun init() = HomeState(
             teamName = "PatchNote",
             appConfiguration = Configuration("", "", ""),
-            isLatestVersion = true,
+            needsUpdate = true,
             isRefreshing = false,
             isShowPasswordDialog = false,
             isShowPasswordErrorDialog = false,
