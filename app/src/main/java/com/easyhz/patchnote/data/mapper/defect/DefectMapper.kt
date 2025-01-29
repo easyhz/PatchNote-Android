@@ -1,6 +1,5 @@
 package com.easyhz.patchnote.data.mapper.defect
 
-import android.content.Context
 import com.easyhz.patchnote.core.common.util.DateFormatUtil
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectProgress
@@ -72,10 +71,10 @@ fun DefectItem.toExportDefect() = ExportDefect(
     requesterName = requesterName,
     requesterPhone = requesterPhone.takeLast(4),
     requestDate = requestDate,
-    beforeDescription = beforeDescription,
+    beforeDescription = beforeDescription.replace("\n", " "),
     workerName = workerName ?: "",
     workerPhone = workerPhone?.takeLast(4) ?: "",
     completionDate = completionDate ?: "",
-    afterDescription = afterDescription,
+    afterDescription = afterDescription.replace("\n", " "),
     thumbnail = thumbnailUrl
 )

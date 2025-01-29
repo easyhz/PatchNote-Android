@@ -39,19 +39,17 @@ fun HomeFilter(
         if (items.isEmpty()) {
             item {
                 FilterChip(
-                    modifier = Modifier.height(28.dp),
                     text = stringResource(id = R.string.home_filter_empty),
                     style = Medium16.copy(color = MainText),
-                    paddingValues = PaddingValues(horizontal = 8.dp)
+                    paddingValues = PaddingValues(horizontal = 8.dp, vertical = 6.dp)
                 )
             }
         }
         items(items, key = { it }) {
             FilterChip(
-                modifier = Modifier.height(28.dp),
                 text = it,
                 style = Medium16.copy(color = MainText),
-                paddingValues = PaddingValues(horizontal = 8.dp)
+                paddingValues = PaddingValues(horizontal = 8.dp, vertical = 6.dp)
             )
         }
     }

@@ -60,7 +60,7 @@ class HomeViewModel @Inject constructor(
             is HomeIntent.NavigateToDefectDetail -> navigateToDefectDetail(intent.defectItem)
             is HomeIntent.Refresh -> refresh(intent.filterParam)
             is HomeIntent.UpdateAppVersion -> updateAppVersion()
-            is HomeIntent.NavigateToNotion -> updateAppVersion()
+            is HomeIntent.NavigateToNotion -> navigateToNotion()
             is HomeIntent.ChangePasswordText -> changePasswordText(intent.newValue)
             is HomeIntent.CheckPassword -> checkPassword()
             is HomeIntent.HidePasswordDialog -> hidePasswordDialog()
@@ -177,7 +177,11 @@ class HomeViewModel @Inject constructor(
 
     /* updateAppVersion */
     private fun updateAppVersion() {
-        postSideEffect { HomeSideEffect.NavigateToVersionUpdate(currentState.appConfiguration.notionUrl) }
+        postSideEffect { HomeSideEffect.NavigateToUrl("https://play.google.com/store/apps/details?id=com.easyhz.patchnote") }
+    }
+
+    private fun navigateToNotion() {
+        postSideEffect { HomeSideEffect.NavigateToUrl(currentState.appConfiguration.notionUrl) }
     }
 
     /* changePasswordText */

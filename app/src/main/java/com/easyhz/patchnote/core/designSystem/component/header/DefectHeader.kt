@@ -74,7 +74,6 @@ fun DefectHeader(
                 listOf(part, space, workType)
             ) {
                 FilterChip(
-                    modifier = Modifier.height(30.dp),
                     text = it,
                     style = Medium14.copy(color = MainText),
                     paddingValues = PaddingValues(horizontal = 8.dp, vertical = 6.dp)
