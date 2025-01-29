@@ -16,9 +16,6 @@
       <SelectionState runConfigName="BasicRadioButtonPreview">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="BasicDatePickerPreview">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="DetailFieldPreview">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>

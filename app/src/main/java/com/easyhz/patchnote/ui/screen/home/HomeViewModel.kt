@@ -4,10 +4,10 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.easyhz.patchnote.BuildConfig
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.AppError
 import com.easyhz.patchnote.core.common.util.CrashlyticsLogger
+import com.easyhz.patchnote.core.common.util.version.Version
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.domain.usecase.configuration.FetchConfigurationUseCase
@@ -108,7 +108,7 @@ class HomeViewModel @Inject constructor(
     /* fetchConfiguration */
     private fun fetchConfiguration() = viewModelScope.launch {
         fetchConfigurationUseCase.invoke(Unit).onSuccess {
-            val isLatestVersion = it.androidVersion == BuildConfig.VERSION_NAME
+            val isLatestVersion = Version.needsUpdate(it.androidVersion)
             reduce { copy(isLatestVersion = isLatestVersion, appConfiguration = it) }
             validatePassword(it.settingPassword)
         }.onFailure {
