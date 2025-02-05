@@ -12,8 +12,10 @@ import com.easyhz.patchnote.core.model.defect.EntryDefect
 import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.core.model.user.User
 import com.easyhz.patchnote.core.model.util.Paging
+import com.easyhz.patchnote.data.datasource.local.defect.DefectLocalDataSource
 import com.easyhz.patchnote.data.datasource.remote.defect.DefectDataSource
 import com.easyhz.patchnote.data.mapper.defect.toData
+import com.easyhz.patchnote.data.mapper.defect.toEntity
 import com.easyhz.patchnote.data.mapper.defect.toExportDefect
 import com.easyhz.patchnote.data.mapper.defect.toModel
 import com.easyhz.patchnote.data.pagingsource.defect.DefectPagingSource
@@ -30,6 +32,7 @@ class DefectRepositoryImpl @Inject constructor(
     @Dispatcher(PatchNoteDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     private val defectDataSource: DefectDataSource,
     private val exportUtil: ExportUtil,
+    private val defectLocalDataSource: DefectLocalDataSource,
 ): DefectRepository {
     override suspend fun createDefect(param: EntryDefect): Result<Unit> {
         return defectDataSource.createDefect(param.toData())
@@ -82,5 +85,9 @@ class DefectRepositoryImpl @Inject constructor(
 
     override suspend fun exportDefects(defects: List<DefectItem>): Result<File> = runCatching {
         exportUtil.exportDefects(defects.map { it.toExportDefect() })
+    }
+
+    override suspend fun saveOfflineDefect(defect: EntryDefect): Result<Unit> {
+        return defectLocalDataSource.saveOfflineDefect(defect.toEntity())
     }
 }
