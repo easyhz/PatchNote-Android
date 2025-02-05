@@ -27,7 +27,7 @@ class OfflineDefectDao: LocalDatabase() {
         val offlineDefectImage = createMockImages()
 
         // When
-        offlineDefectDao.saveOfflineDefectWithImages(
+        offlineDefectDao.saveOfflineDefect(
             defect = offlineDefect,
             images = offlineDefectImage
         )
@@ -46,11 +46,11 @@ class OfflineDefectDao: LocalDatabase() {
         val offlineDefect2 = createMockDefect(defectId = "defectId2")
 
         // When
-        offlineDefectDao.saveOfflineDefectWithImages(
+        offlineDefectDao.saveOfflineDefect(
             defect = offlineDefect,
             images = offlineDefectImage
         )
-        offlineDefectDao.saveOfflineDefectWithImages(
+        offlineDefectDao.saveOfflineDefect(
             defect = offlineDefect2,
             images = offlineDefectImage
         )

@@ -29,7 +29,7 @@ interface OfflineDefectDao {
      * 하자 임시저장 저장
      */
     @Transaction
-    suspend fun saveOfflineDefectWithImages(
+    suspend fun saveOfflineDefect(
         defect: OfflineDefectEntity,
         images: List<OfflineDefectImageEntity>
     ) {
