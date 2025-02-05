@@ -22,6 +22,7 @@ object MockDefect {
         requesterName = "RequesterName",
         requesterPhone = "RequesterPhone",
         teamId = teamId,
+        thumbnailUrl = "ThumbnailUrl $defectId",
         creationTime = System.currentTimeMillis(),
     )
 
@@ -34,7 +35,7 @@ object MockDefect {
         )
     }
 
-    fun offlineDefectImageEntity(
+    private fun offlineDefectImageEntity(
         defectId: String,
     ) = OfflineDefectImageEntity(
         defectId = defectId,

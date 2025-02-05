@@ -20,5 +20,6 @@ data class OfflineDefectEntity(
     val requesterName: String,
     val requesterPhone: String,
     val teamId: String,
+    val thumbnailUrl: String,
     val creationTime: Long = System.currentTimeMillis(),
 )
