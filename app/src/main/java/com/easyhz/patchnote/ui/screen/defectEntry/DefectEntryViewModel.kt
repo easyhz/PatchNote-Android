@@ -2,7 +2,6 @@ package com.easyhz.patchnote.ui.screen.defectEntry
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,6 +12,7 @@ import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.handleError
 import com.easyhz.patchnote.core.common.util.Generate
 import com.easyhz.patchnote.core.common.util.getPostposition
+import com.easyhz.patchnote.core.common.util.log.Logger
 import com.easyhz.patchnote.core.designSystem.component.bottomSheet.ImageBottomSheetType
 import com.easyhz.patchnote.core.model.category.CategoryType
 import com.easyhz.patchnote.core.model.defect.EntryDefectParam
@@ -36,6 +36,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DefectEntryViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val logger: Logger,
     private val getTakePictureUriUseCase: GetTakePictureUriUseCase,
     private val createDefectUseCase: CreateDefectUseCase,
     private val rotateImageUseCase: RotateImageUseCase
@@ -87,7 +88,7 @@ class DefectEntryViewModel @Inject constructor(
                 postSideEffect { DefectEntrySideEffect.NavigateToCamera(it) }
             }
             .onFailure {
-                Log.e(tag, "launchCamera : $it")
+                logger.e(tag, "launchCamera : $it")
                 setDialog(DialogMessage(title = context.getString(it.handleError())))
             }
     }
@@ -137,7 +138,7 @@ class DefectEntryViewModel @Inject constructor(
                 hasUploadHistory = true
             }
             .onFailure {
-                Log.e(tag, "createDefect : $it")
+                logger.e(tag, "createDefect : $it")
                 setDialog(DialogMessage(title = context.getString(R.string.error_create_defect_failure)))
             }.also {
                 setLoading(false)
@@ -221,7 +222,7 @@ class DefectEntryViewModel @Inject constructor(
     private fun rotateImage(uri: Uri) = viewModelScope.launch {
         rotateImageUseCase.invoke(uri)
             .onFailure {
-                Log.e(tag, "rotateImage : $it")
+                logger.e(tag, "rotateImage : $it")
             }
     }
 }
