@@ -33,7 +33,6 @@ class OfflineDefectDao: LocalDatabase() {
         )
         val result = offlineDefectDao.findOfflineDefects("teamId1", "requesterId1")
 
-
         // Then
         assertEquals(offlineDefect.id, result[0].defect.id)
         assertEquals(offlineDefectImage.size, result[0].images.size)
