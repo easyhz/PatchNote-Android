@@ -1,6 +1,8 @@
 package com.easyhz.patchnote.ui.screen.defectEntry.contract
 
+import androidx.compose.ui.text.input.TextFieldValue
 import com.easyhz.patchnote.core.common.base.UiState
+import com.easyhz.patchnote.core.model.category.CategoryType
 import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.core.model.image.DefectImage
 
@@ -10,6 +12,8 @@ data class DefectEntryState(
     val images: List<DefectImage>,
     val isShowImageBottomSheet: Boolean,
     val dialogMessage: DialogMessage?,
+    val isShowEntryDialog: Boolean,
+    val entryItem: LinkedHashMap<CategoryType, TextFieldValue>,
 ) : UiState() {
     companion object {
         fun init() = DefectEntryState(
@@ -18,6 +22,8 @@ data class DefectEntryState(
             images = emptyList(),
             isShowImageBottomSheet = false,
             dialogMessage = null,
+            isShowEntryDialog = false,
+            entryItem = linkedMapOf()
         )
 
         fun DefectEntryState.updateImages(newImages: List<DefectImage>): DefectEntryState =
