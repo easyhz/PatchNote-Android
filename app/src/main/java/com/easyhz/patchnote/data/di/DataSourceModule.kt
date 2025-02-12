@@ -2,6 +2,8 @@ package com.easyhz.patchnote.data.di
 
 import com.easyhz.patchnote.data.datasource.local.configuration.ConfigurationLocalDataSource
 import com.easyhz.patchnote.data.datasource.local.configuration.ConfigurationLocalDataSourceImpl
+import com.easyhz.patchnote.data.datasource.local.defect.DefectLocalDataSource
+import com.easyhz.patchnote.data.datasource.local.defect.DefectLocalDataSourceImpl
 import com.easyhz.patchnote.data.datasource.local.reception.ReceptionLocalDataSource
 import com.easyhz.patchnote.data.datasource.local.reception.ReceptionLocalDataSourceImpl
 import com.easyhz.patchnote.data.datasource.local.user.UserLocalDataSource
@@ -71,4 +73,9 @@ interface DataSourceModule {
     fun bindReceptionLocalDataSource(
         receptionLocalDataSourceImpl: ReceptionLocalDataSourceImpl
     ): ReceptionLocalDataSource
+
+    @Binds
+    fun bindDefectLocalDataSource(
+        defectLocalDataSourceImpl: DefectLocalDataSourceImpl
+    ): DefectLocalDataSource
 }
