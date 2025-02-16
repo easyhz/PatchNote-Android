@@ -1,5 +1,6 @@
 package com.easyhz.patchnote.core.database.defect.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
@@ -22,8 +23,14 @@ interface OfflineDefectDao {
      * 하자 임시저장 조회
      */
     @Transaction
-    @Query("SELECT * FROM OFFLINE_DEFECT WHERE teamId = :teamId AND requesterId = :requesterId")
-    fun findOfflineDefects(teamId: String, requesterId: String): List<OfflineDefect>
+    @Query("""
+        SELECT * 
+        FROM OFFLINE_DEFECT 
+        WHERE teamId = :teamId 
+            AND requesterId = :requesterId
+        ORDER BY creationTime DESC
+    """)
+    fun findOfflineDefects(teamId: String, requesterId: String): PagingSource<Int, OfflineDefect>
 
     /**
      * 하자 임시저장 저장
