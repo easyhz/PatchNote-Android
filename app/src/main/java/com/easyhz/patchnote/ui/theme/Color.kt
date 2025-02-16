@@ -41,3 +41,6 @@ val Grey900 = Color(0xFF212121)
 
 @Stable
 val UnselectedColor = Color(0xFFE5E5EC)
+
+@Stable
+val BottomBarBackground = Color(0xFFF5F5F5).copy(alpha = 0.94f)
