@@ -33,17 +33,21 @@ class DefectRepositoryImpl @Inject constructor(
     private val defectDataSource: DefectDataSource,
     private val exportUtil: ExportUtil,
     private val defectLocalDataSource: DefectLocalDataSource,
-): DefectRepository {
+) : DefectRepository {
     override suspend fun createDefect(param: EntryDefect): Result<Unit> {
         return defectDataSource.createDefect(param.toData())
     }
 
-    override suspend fun fetchDefects(filterParam: FilterParam, user: User): Result<List<DefectItem>> {
+    override suspend fun fetchDefects(
+        filterParam: FilterParam,
+        user: User
+    ): Result<List<DefectItem>> {
         val searchFieldParam = filterParam.searchFieldParam.entries.joinToString("||") {
             "${it.key}=${it.value}"
         }
         val indexSearchField = filterParam.toIndexField()
-        return defectDataSource.fetchDefects(searchFieldParam, indexSearchField, user, null).map { it.map { defectData -> defectData.toModel() } }
+        return defectDataSource.fetchDefects(searchFieldParam, indexSearchField, user, null)
+            .map { it.map { defectData -> defectData.toModel() } }
     }
 
     override fun getDefectsPagingSource(
@@ -89,5 +93,19 @@ class DefectRepositoryImpl @Inject constructor(
 
     override suspend fun saveOfflineDefect(defect: EntryDefect): Result<Unit> {
         return defectLocalDataSource.saveOfflineDefect(defect.toEntity())
+    }
+
+    override suspend fun getOfflineDefectsPagingSource(
+        teamId: String,
+        requesterId: String
+    ): Flow<PagingData<DefectItem>> {
+        return Pager(
+            config = PagingConfig(pageSize = PAGE_SIZE, initialLoadSize = PAGE_SIZE)
+        ) {
+            defectLocalDataSource.findOfflineDefects(teamId, requesterId)
+        }.flow
+        .map {
+            it.map { offlineDefect -> offlineDefect.toModel() }
+        }.flowOn(dispatcher)
     }
 }

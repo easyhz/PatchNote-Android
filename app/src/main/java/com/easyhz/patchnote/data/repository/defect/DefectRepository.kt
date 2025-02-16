@@ -19,4 +19,5 @@ interface DefectRepository {
     suspend fun exportDefects(defects: List<DefectItem>): Result<File>
 
     suspend fun saveOfflineDefect(defect: EntryDefect): Result<Unit>
+    suspend fun getOfflineDefectsPagingSource(teamId: String, requesterId: String): Flow<PagingData<DefectItem>>
 }
