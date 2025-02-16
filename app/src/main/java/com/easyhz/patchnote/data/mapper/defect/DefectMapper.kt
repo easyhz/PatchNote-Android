@@ -8,6 +8,7 @@ import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectProgress
 import com.easyhz.patchnote.core.model.defect.EntryDefect
 import com.easyhz.patchnote.core.model.defect.ExportDefect
+import com.easyhz.patchnote.core.model.image.ImageSize
 import com.easyhz.patchnote.data.mapper.image.toData
 import com.easyhz.patchnote.data.mapper.image.toModel
 import com.easyhz.patchnote.data.model.defect.data.DefectData
@@ -113,3 +114,33 @@ fun DefectItem.toExportDefect() = ExportDefect(
     afterDescription = afterDescription.replace("\n", " "),
     thumbnail = thumbnailUrl
 )
+
+fun OfflineDefect.toModel() = DefectItem(
+    id = defect.id,
+    site = defect.site,
+    building = defect.building,
+    unit = defect.unit,
+    space = defect.space,
+    part = defect.part,
+    workType = defect.workType,
+    progress = DefectProgress.REQUESTED,
+    thumbnailUrl = defect.thumbnailUrl,
+    beforeDescription = defect.beforeDescription,
+    beforeImageSizes = images.map { it.toModel() },
+    beforeImageUrls = images.map { it.url },
+    requesterId = defect.requesterId,
+    requesterName = defect.requesterName,
+    requesterPhone = defect.requesterPhone,
+    workerId = null,
+    workerName = null,
+    workerPhone = null,
+    afterDescription = "",
+    afterImageSizes = emptyList(),
+    afterImageUrls = emptyList(),
+    requestDate = DateFormatUtil.convertMillisToDate(defect.creationTime),
+    completionDate = null,
+    search = emptyList(),
+    teamId = defect.teamId,
+)
+
+private fun OfflineDefectImageEntity.toModel() = ImageSize(width, height)
