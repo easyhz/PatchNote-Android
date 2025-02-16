@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.ui.navigation.home.Home
-import com.easyhz.patchnote.ui.navigation.home.OfflineDefect
+import com.easyhz.patchnote.ui.navigation.offlineDefect.screen.OfflineDefect
 
 
 enum class BottomMenuTabs(
