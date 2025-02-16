@@ -33,6 +33,7 @@ firebaseAppcheckDebug = "18.0.0"
 moshi = "1.15.0"
 paging = "3.3.2"
 room = "2.6.1"
+junitKtx = "1.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -84,7 +85,9 @@ paging-compose = { group = "androidx.paging", name = "paging-compose", version.r
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
 room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
