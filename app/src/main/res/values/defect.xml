@@ -60,4 +60,7 @@
     <string name="dialog_defect_export_need_date_title">날짜 설정 필요</string>
     <string name="dialog_defect_export_need_date_content">접수일 또는 완료일을 설정해 주세요.</string>
     <string name="dialog_defect_export_need_date_button">확인</string>
+
+
+    <string name="offline_defect_title">임시저장</string>
 </resources>
