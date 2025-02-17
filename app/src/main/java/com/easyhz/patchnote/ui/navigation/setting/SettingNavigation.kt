@@ -50,8 +50,8 @@ internal fun NavGraphBuilder.settingGraph(
     }
 }
 
-fun NavController.navigateToSetting(notionUrl: String) {
-    navigate(Setting(notionUrl = notionUrl))
+fun NavController.navigateToSetting() {
+    navigate(Setting)
 }
 
 fun NavController.navigateToMyPage() {

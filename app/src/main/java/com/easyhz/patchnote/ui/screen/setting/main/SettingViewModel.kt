@@ -1,23 +1,28 @@
 package com.easyhz.patchnote.ui.screen.setting.main
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.model.setting.EtcSettingItem
 import com.easyhz.patchnote.core.model.setting.MySettingItem
 import com.easyhz.patchnote.core.model.setting.SettingItem
 import com.easyhz.patchnote.core.model.setting.TeamSettingItem
+import com.easyhz.patchnote.domain.usecase.configuration.FetchConfigurationUseCase
 import com.easyhz.patchnote.ui.screen.setting.main.contract.SettingIntent
 import com.easyhz.patchnote.ui.screen.setting.main.contract.SettingSideEffect
 import com.easyhz.patchnote.ui.screen.setting.main.contract.SettingState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle
+    private val fetchConfigurationUseCase: FetchConfigurationUseCase,
 ): BaseViewModel<SettingState, SettingIntent, SettingSideEffect>(
     initialState = SettingState.init()
 ) {
+    private val tag = "SettingViewModel"
     override fun handleIntent(intent: SettingIntent) {
         when(intent) {
             is SettingIntent.ClickSettingItem -> onClickSettingItem(intent.settingItem)
@@ -61,10 +66,12 @@ class SettingViewModel @Inject constructor(
         postSideEffect { SettingSideEffect.NavigateToUp }
     }
 
-    private fun navigateToAbout() {
-        val notionUrl: String? = savedStateHandle["notionUrl"]
-        notionUrl ?: return
-        postSideEffect { SettingSideEffect.NavigateToAbout(notionUrl) }
+    private fun navigateToAbout() = viewModelScope.launch {
+        fetchConfigurationUseCase.invoke(Unit).onSuccess {
+            postSideEffect { SettingSideEffect.NavigateToAbout(it.notionUrl) }
+        }.onFailure {
+            Log.e(tag, "fetchConfiguration : $it")
+        }
     }
 
     private fun navigateToDataManagement() {
