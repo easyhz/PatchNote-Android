@@ -1,7 +1,6 @@
 package com.easyhz.patchnote.ui.screen.setting.main
 
 import android.util.Log
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.model.setting.EtcSettingItem
