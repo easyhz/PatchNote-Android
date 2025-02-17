@@ -143,4 +143,6 @@ fun OfflineDefect.toModel() = DefectItem(
     teamId = defect.teamId,
 )
 
-private fun OfflineDefectImageEntity.toModel() = ImageSize(width, height)
+private fun OfflineDefectImageEntity.toModel() = ImageSize(
+    height = height, width = width
+)
