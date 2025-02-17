@@ -1,5 +1,6 @@
 package com.easyhz.patchnote.core.database.defect
 
+import androidx.paging.PagingSource
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.easyhz.patchnote.core.database.LocalDatabase
 import com.easyhz.patchnote.core.database.defect.dao.OfflineDefectDao
@@ -31,11 +32,18 @@ class OfflineDefectDao: LocalDatabase() {
             defect = offlineDefect,
             images = offlineDefectImage
         )
-        val result = offlineDefectDao.findOfflineDefects("teamId1", "requesterId1")
+        val result = offlineDefectDao.findOfflineDefects("teamId1", "requesterId1").load(
+            PagingSource.LoadParams.Refresh(
+                key = null,
+                loadSize = 10,
+                placeholdersEnabled = false
+            )
+        ) as PagingSource.LoadResult.Page
 
         // Then
-        assertEquals(offlineDefect.id, result[0].defect.id)
-        assertEquals(offlineDefectImage.size, result[0].images.size)
+        assertEquals(offlineDefect.id, result.first().defect.id)
+        assertEquals(offlineDefectImage.size, result.first().images.size)
+        assertEquals(offlineDefectImage.first().height, result.first().images.first().height)
     }
 
     @Test
@@ -55,11 +63,18 @@ class OfflineDefectDao: LocalDatabase() {
             images = offlineDefectImage
         )
         offlineDefectDao.deleteOfflineDefects("defectId1")
-        val result = offlineDefectDao.findOfflineDefects("teamId1", "requesterId1")
+        val result = offlineDefectDao.findOfflineDefects("teamId1", "requesterId1").load(
+            PagingSource.LoadParams.Refresh(
+                key = null,
+                loadSize = 10,
+                placeholdersEnabled = false
+            )
+        ) as PagingSource.LoadResult.Page
+
 
         // Then
-        assertEquals(1, result.size)
-        assertEquals(offlineDefect2.id, result[0].defect.id)
+        assertEquals(1, result.data.size)
+        assertEquals(offlineDefect2.id, result.first().defect.id)
     }
 
     // ✅ Mock 하자 데이터 생성 함수
