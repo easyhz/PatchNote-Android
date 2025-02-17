@@ -3,6 +3,7 @@ package com.easyhz.patchnote.ui.navigation.home
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -23,6 +24,7 @@ import com.easyhz.patchnote.ui.screen.filter.FilterScreen
 import com.easyhz.patchnote.ui.screen.home.HomeScreen
 
 internal fun NavGraphBuilder.homeGraph(
+    modifier: Modifier = Modifier,
     navController: NavController
 ) {
     composable<Home>(
@@ -37,6 +39,7 @@ internal fun NavGraphBuilder.homeGraph(
             popUpTo(navController.graph.id) { inclusive = true }
         }
         HomeScreen(
+            modifier = modifier,
             filterParam = args.filterParam,
             navigateToSetting = navController::navigateToSetting,
             navigateToDefectEntry = navController::navigateToDefectEntry,
@@ -46,6 +49,7 @@ internal fun NavGraphBuilder.homeGraph(
             navigateToLogin = { navController.navigateToOnboarding(navOptions = navOptions) }
         )
     }
+
     composable<Filter>(
         typeMap = Filter.typeMap,
         enterTransition = { enterSlide(SlideDirection.Up) },

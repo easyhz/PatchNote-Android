@@ -1,6 +1,7 @@
 package com.easyhz.patchnote.ui.screen.home
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -29,10 +30,12 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val crashlyticsLogger: CrashlyticsLogger,
     private val isFirstOpenUseCase: IsFirstOpenUseCase,
     private val setIsFirstOpenUseCase: SetIsFirstOpenUseCase,
@@ -72,9 +75,17 @@ class HomeViewModel @Inject constructor(
     }
 
     init {
+        getDefects()
         fetchIsFirstOpen()
         fetchConfiguration()
         getTeamName()
+    }
+
+    private fun getDefects() {
+        val jsonString = savedStateHandle.get<String?>("filterParam") ?: FilterParam().toString()
+        val filterParam = Json.decodeFromString<FilterParam>(jsonString)
+
+        fetchDefects(filterParam)
     }
 
     /* fetchDefects */

@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,7 +20,6 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -49,6 +50,7 @@ import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffo
 import com.easyhz.patchnote.core.designSystem.component.textField.BaseTextField
 import com.easyhz.patchnote.core.designSystem.component.topbar.HomeTopBar
 import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
+import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarItem
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.ui.screen.home.contract.HomeIntent
@@ -66,7 +68,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
     filterParam: FilterParam,
-    navigateToSetting: (String) -> Unit,
+    navigateToSetting: () -> Unit,
     navigateToDefectEntry: () -> Unit,
     navigateToFilter: (FilterParam) -> Unit,
     navigateToDefectDetail: (DefectItem) -> Unit,
@@ -79,17 +81,20 @@ fun HomeScreen(
     val pullToRefreshState = rememberPullToRefreshState()
     val focusRequester = remember { FocusRequester() }
 
-    LaunchedEffect(filterParam) {
-        viewModel.postIntent(HomeIntent.FetchData(filterParam))
-    }
     PatchNoteScaffold(
         modifier = modifier,
         topBar = {
             HomeTopBar(
                 title = uiState.teamName,
                 onClickName = { viewModel.postIntent(HomeIntent.ShowOnboardingDialog) },
-                onClickSetting = { viewModel.postIntent(HomeIntent.ClickSetting) },
-                onClickExport = { viewModel.postIntent(HomeIntent.ClickExport) },
+                topBarItem1 = TopBarItem(
+                    painter = painterResource(R.drawable.ic_export),
+                    onClick = { viewModel.postIntent(HomeIntent.ClickExport) }
+                ),
+                topBarItem2 = TopBarItem(
+                    painter = painterResource(R.drawable.ic_setting),
+                    onClick = { viewModel.postIntent(HomeIntent.ClickSetting) }
+                ),
             )
         },
         floatingActionButton = {
@@ -152,6 +157,7 @@ fun HomeScreen(
                     viewModel.postIntent(HomeIntent.NavigateToFilter)
                 }
                 LazyColumn(
+                    contentPadding = PaddingValues(bottom = 72.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     items(defectList.itemCount) { index ->
@@ -243,7 +249,7 @@ fun HomeScreen(
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {
             is HomeSideEffect.NavigateToSetting -> {
-                navigateToSetting(sideEffect.url)
+                navigateToSetting()
             }
             is HomeSideEffect.NavigateToDefectEntry -> {
                 navigateToDefectEntry()

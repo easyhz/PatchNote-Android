@@ -27,7 +27,7 @@ fun HomeFloatingActionButton(
 ) {
     FloatingActionButton(
         onClick = onClick,
-        modifier = modifier.height(48.dp),
+        modifier = modifier.height(46.dp),
         shape = CircleShape,
         containerColor = Primary,
         contentColor = MainBackground
