@@ -8,9 +8,15 @@
     <string name="defect_entry_image">사진</string>
     <string name="defect_entry_image_placeholder">사진을 추가해 주세요</string>
 
+    <string name="defect_entry_dialog_title">이대로 접수할까요?</string>
+    <string name="defect_entry_dialog_save">접수</string>
+    <string name="defect_entry_dialog_offline_save">임시저장</string>
+    <string name="defect_entry_dialog_cancel">취소</string>
+
     <string name="defect_entry_receipt_success">하자 접수가 완료되었습니다.</string>
     <string name="defect_done">완료</string>
     <string name="defect_request">접수</string>
+    <string name="defect_offline">작성</string>
 
     <string name="defect_not_done">완료되지 않은 하자입니다</string>
     <string name="defect_do_done">완료 처리하기</string>
@@ -55,4 +61,32 @@
     <string name="dialog_defect_export_need_date_title">날짜 설정 필요</string>
     <string name="dialog_defect_export_need_date_content">접수일 또는 완료일을 설정해 주세요.</string>
     <string name="dialog_defect_export_need_date_button">확인</string>
+
+
+    <string name="offline_defect_title">임시저장</string>
+    <string name="offline_defect_upload_dialog_title">전체 업로드</string>
+    <string name="offline_defect_upload_dialog_content">임시저장된 하자 리스트 전체를\n업로드 합니다.\n시간이 소요될 수 있습니다.</string>
+    <string name="offline_defect_upload_dialog_positive">업로드</string>
+    <string name="offline_defect_upload_dialog_negative">취소</string>
+    <string name="offline_defect_progress_dialog_title">업로드 중...</string>
+    <string name="offline_defect_progress_dialog_content">%1d개 중 %2d개 업로드 완료</string>
+    <string name="offline_defect_success_dialog_title">접수 완료</string>
+    <string name="offline_defect_success_dialog_content">하자 접수에 성공했습니다.</string>
+    <string name="offline_defect_success_dialog_button">확인</string>
+
+
+    <string name="offline_defect_detail_title">임시저장 상세</string>
+    <string name="offline_defect_detail_button">서버에 업로드</string>
+    <string name="offline_defect_detail_upload_dialog_title">서버에 업로드</string>
+    <string name="offline_defect_detail_upload_dialog_content">임시 저장된 내용을 업로드할까요?\n접수 시각은 현재 시각으로\n기록됩니다.</string>
+    <string name="offline_defect_detail_upload_dialog_positive">업로드</string>
+    <string name="offline_defect_detail_upload_dialog_negative">취소</string>
+    <string name="offline_defect_detail_delete_dialog_title">임시저장 삭제</string>
+    <string name="offline_defect_detail_delete_dialog_content">임시 저장된 내용을 삭제할까요?\n삭제된 정보는 복구할 수 없습니다.</string>
+    <string name="offline_defect_detail_delete_dialog_positive">삭제</string>
+    <string name="offline_defect_detail_delete_dialog_negative">취소</string>
+    <string name="offline_defect_upload_error">업로드 실패</string>
+    <string name="offline_defect_upload_error_content">잠시 후 다시 시도해 주세요.</string>
+
+
 </resources>

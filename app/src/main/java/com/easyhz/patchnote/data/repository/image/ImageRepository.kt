@@ -9,4 +9,5 @@ interface ImageRepository {
     suspend fun uploadThumbnail(pathId: String, imageUri: Uri): Result<String>
     suspend fun getImageSizes(imageUri: List<Uri>): Result<List<ImageSize>>
     suspend fun rotateImage(imageUri: Uri): Result<Unit>
+    suspend fun saveOfflineImages(imageUri: List<Uri>): Result<List<Uri?>>
 }

@@ -1,6 +1,9 @@
 package com.easyhz.patchnote.data.mapper.defect
 
 import com.easyhz.patchnote.core.common.util.DateFormatUtil
+import com.easyhz.patchnote.core.database.defect.entity.OfflineDefectEntity
+import com.easyhz.patchnote.core.database.defect.entity.OfflineDefectImageEntity
+import com.easyhz.patchnote.core.database.defect.model.OfflineDefect
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectProgress
 import com.easyhz.patchnote.core.model.defect.EntryDefect
@@ -31,7 +34,39 @@ fun EntryDefect.toData(): DefectData = DefectData(
     isDeleted = false,
 )
 
-fun DefectData.toModel(): DefectItem = DefectItem(
+fun EntryDefect.toEntity(): OfflineDefect {
+    val offlineDefectEntity = OfflineDefectEntity(
+        id = id,
+        site = site,
+        building = building,
+        unit = unit,
+        space = space,
+        part = part,
+        workType = workType,
+        beforeDescription = beforeDescription,
+        requesterId = requesterId,
+        requesterName = requesterName,
+        requesterPhone = requesterPhone,
+        teamId = teamId,
+        thumbnailUrl = thumbnailUrl,
+    )
+
+    val offlineDefectImageEntities = beforeImageUrls.zip(beforeImageSizes).map { (url, size) ->
+        OfflineDefectImageEntity(
+            defectId = id,
+            url = url,
+            width = size.width,
+            height = size.height,
+        )
+    }
+
+    return OfflineDefect(
+        defect = offlineDefectEntity,
+        images = offlineDefectImageEntities,
+    )
+}
+
+fun DefectData.toDefectItem(): DefectItem = DefectItem(
     id = id,
     site = site,
     building = building,

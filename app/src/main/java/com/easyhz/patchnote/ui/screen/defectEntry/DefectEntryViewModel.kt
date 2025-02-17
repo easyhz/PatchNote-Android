@@ -2,7 +2,6 @@ package com.easyhz.patchnote.ui.screen.defectEntry
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,6 +12,7 @@ import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.handleError
 import com.easyhz.patchnote.core.common.util.Generate
 import com.easyhz.patchnote.core.common.util.getPostposition
+import com.easyhz.patchnote.core.common.util.log.Logger
 import com.easyhz.patchnote.core.designSystem.component.bottomSheet.ImageBottomSheetType
 import com.easyhz.patchnote.core.model.category.CategoryType
 import com.easyhz.patchnote.core.model.defect.EntryDefectParam
@@ -21,6 +21,7 @@ import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.core.model.image.DefectImage
 import com.easyhz.patchnote.core.model.image.toDefectImages
 import com.easyhz.patchnote.domain.usecase.defect.CreateDefectUseCase
+import com.easyhz.patchnote.domain.usecase.defect.SaveOfflineDefectUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetTakePictureUriUseCase
 import com.easyhz.patchnote.domain.usecase.image.RotateImageUseCase
 import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntryIntent
@@ -36,9 +37,11 @@ import javax.inject.Inject
 @HiltViewModel
 class DefectEntryViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val logger: Logger,
     private val getTakePictureUriUseCase: GetTakePictureUriUseCase,
     private val createDefectUseCase: CreateDefectUseCase,
-    private val rotateImageUseCase: RotateImageUseCase
+    private val rotateImageUseCase: RotateImageUseCase,
+    private val saveOfflineDefectUseCase: SaveOfflineDefectUseCase,
 ): BaseViewModel<DefectEntryState, DefectEntryIntent, DefectEntrySideEffect>(
     initialState = DefectEntryState.init()
 ) {
@@ -58,6 +61,9 @@ class DefectEntryViewModel @Inject constructor(
             is DefectEntryIntent.NavigateToUp -> { handleNavigateToUp() }
             is DefectEntryIntent.ShowError -> { setDialog(intent.message) }
             is DefectEntryIntent.SetLoading -> { setLoading(intent.isLoading) }
+            is DefectEntryIntent.SaveDefect -> { saveDefect() }
+            is DefectEntryIntent.SaveOfflineDefect -> { saveOfflineDefect() }
+            is DefectEntryIntent.HideEntryDialog -> { hideEntryDialog() }
         }
     }
 
@@ -87,7 +93,7 @@ class DefectEntryViewModel @Inject constructor(
                 postSideEffect { DefectEntrySideEffect.NavigateToCamera(it) }
             }
             .onFailure {
-                Log.e(tag, "launchCamera : $it")
+                logger.e(tag, "launchCamera : $it")
                 setDialog(DialogMessage(title = context.getString(it.handleError())))
             }
     }
@@ -115,7 +121,56 @@ class DefectEntryViewModel @Inject constructor(
         if (!isValidDefect(invalidEntry)) return@launch
         if (!isValidImage()) return@launch
         setLoading(true)
-        val param = EntryDefectParam(
+        reduce { copy(entryItem = entryItem, isShowEntryDialog = true) }
+    }
+
+    private fun saveDefect() {
+        viewModelScope.launch {
+            hideEntryDialog()
+            setLoading(true)
+            createDefectUseCase.invoke(getEntryParam())
+                .onSuccess {
+                    setDialog(
+                        DialogMessage(
+                            title = context.getString(R.string.success_create_defect),
+                            action = DialogAction.CLEAR
+                        )
+                    )
+                    hasUploadHistory = true
+                }
+                .onFailure {
+                    logger.e(tag, "createDefect : $it")
+                    setDialog(DialogMessage(title = context.getString(R.string.error_create_defect_failure)))
+                }.also {
+                    setLoading(false)
+                }
+        }
+    }
+
+    private fun saveOfflineDefect() {
+        viewModelScope.launch {
+            setLoading(true)
+            hideEntryDialog()
+            saveOfflineDefectUseCase.invoke(getEntryParam())
+                .onSuccess {
+                    setDialog(
+                        DialogMessage(
+                            title = context.getString(R.string.success_create_offline_defect),
+                            action = DialogAction.CLEAR
+                        )
+                    )
+                }.onFailure {
+                    logger.e(tag, "saveOfflineDefect : $it")
+                    setDialog(DialogMessage(title = context.getString(R.string.error_create_defect_failure)))
+                }.also {
+                    setLoading(false)
+                }
+        }
+    }
+
+    private fun getEntryParam(): EntryDefectParam {
+        val entryItem = currentState.entryItem
+        return EntryDefectParam(
             id = Generate.randomUUID(),
             site = entryItem[CategoryType.SITE]?.text.orEmpty(),
             building = entryItem[CategoryType.BUILDING]?.text.orEmpty(),
@@ -126,22 +181,6 @@ class DefectEntryViewModel @Inject constructor(
             beforeDescription = currentState.entryContent,
             beforeImageUris = currentState.images.map { it.uri }
         )
-        createDefectUseCase.invoke(param)
-            .onSuccess {
-                setDialog(
-                    DialogMessage(
-                        title = context.getString(R.string.success_create_defect),
-                        action = DialogAction.CLEAR
-                    )
-                )
-                hasUploadHistory = true
-            }
-            .onFailure {
-                Log.e(tag, "createDefect : $it")
-                setDialog(DialogMessage(title = context.getString(R.string.error_create_defect_failure)))
-            }.also {
-                setLoading(false)
-            }
     }
 
     /* 하자 등록 유효성 검사 */
@@ -221,7 +260,12 @@ class DefectEntryViewModel @Inject constructor(
     private fun rotateImage(uri: Uri) = viewModelScope.launch {
         rotateImageUseCase.invoke(uri)
             .onFailure {
-                Log.e(tag, "rotateImage : $it")
+                logger.e(tag, "rotateImage : $it")
             }
+    }
+
+    /* 접수 다이얼로그 숨기기 */
+    private fun hideEntryDialog() {
+        reduce { copy(isShowEntryDialog = false) }
     }
 }

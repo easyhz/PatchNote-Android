@@ -14,6 +14,8 @@
         설정 > 데이터 관리에서\n데이터를 추가해 주세요
     </string>
     <string name="error_create_defect_failure">하자 접수에 실패했습니다\n다시 시도 해주세요</string>
+    <string name="error_create_offline_defect_failure">임시저장에 실패했습니다\n다시 시도 해주세요</string>
     <string name="error_create_defect_completion_failure">하자 완료에 실패했습니다\n다시 시도 해주세요</string>
     <string name="success_create_defect">하자 접수에 성공했습니다.</string>
+    <string name="success_create_offline_defect">임시저장에 성공했습니다.</string>
 </resources>

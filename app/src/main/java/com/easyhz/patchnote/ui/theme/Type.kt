@@ -101,6 +101,21 @@ val SemiBold24 = TextStyle(
     )
 )
 
+val SemiBold22 = TextStyle(
+    fontFamily = Pretendard,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 22.sp,
+    letterSpacing = LetterSpacing,
+    textAlign = TextAlign.Justify,
+    platformStyle = PlatformTextStyle(
+        includeFontPadding = false,
+    ),
+    lineHeightStyle = LineHeightStyle(
+        alignment = LineHeightStyle.Alignment.Center,
+        trim = LineHeightStyle.Trim.None
+    )
+)
+
 val SemiBold20 = TextStyle(
     fontFamily = Pretendard,
     fontWeight = FontWeight.SemiBold,
@@ -135,6 +150,21 @@ val SemiBold16 = TextStyle(
     fontFamily = Pretendard,
     fontWeight = FontWeight.SemiBold,
     fontSize = 16.sp,
+    letterSpacing = LetterSpacing,
+    textAlign = TextAlign.Justify,
+    platformStyle = PlatformTextStyle(
+        includeFontPadding = false,
+    ),
+    lineHeightStyle = LineHeightStyle(
+        alignment = LineHeightStyle.Alignment.Center,
+        trim = LineHeightStyle.Trim.None
+    )
+)
+
+val Medium10 = TextStyle(
+    fontFamily = Pretendard,
+    fontWeight = FontWeight.Medium,
+    fontSize = 10.sp,
     letterSpacing = LetterSpacing,
     textAlign = TextAlign.Justify,
     platformStyle = PlatformTextStyle(

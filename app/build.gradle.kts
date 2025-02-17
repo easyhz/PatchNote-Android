@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.gms)
     alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.room)
 }
 
 val localProperties = Properties()
@@ -26,8 +27,8 @@ android {
         applicationId = "com.easyhz.patchnote"
         minSdk = 26
         targetSdk = 35
-        versionCode = 7
-        versionName = "1.0.3"
+        versionCode = 8
+        versionName = "2.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -91,6 +92,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
 }
 
 dependencies {
@@ -104,6 +109,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.firebase.appcheck.debug)
+    implementation(libs.androidx.junit.ktx)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk)
@@ -159,4 +165,12 @@ dependencies {
     implementation(libs.paging.runtime)
     implementation(libs.paging.common)
     implementation(libs.paging.compose)
+
+    // Room
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
+    ksp(libs.androidx.room.compiler)
+    testImplementation(libs.room.testing)
 }

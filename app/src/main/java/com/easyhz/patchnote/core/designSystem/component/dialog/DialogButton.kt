@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +29,8 @@ fun DialogButton(
             .height(44.dp)
             .clip(RoundedCornerShape(4.dp))
             .background(dialogButton.backgroundColor)
-            .clickable { dialogButton.onClick() },
+            .clickable { dialogButton.onClick() }
+            .padding(horizontal = 12.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(

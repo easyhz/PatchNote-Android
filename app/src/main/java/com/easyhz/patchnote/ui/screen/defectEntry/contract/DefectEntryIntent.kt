@@ -19,4 +19,7 @@ sealed class DefectEntryIntent: UiIntent() {
     data object NavigateToUp: DefectEntryIntent()
     data class ShowError(val message: DialogMessage?): DefectEntryIntent()
     data class SetLoading(val isLoading: Boolean): DefectEntryIntent()
+    data object SaveDefect: DefectEntryIntent()
+    data object SaveOfflineDefect: DefectEntryIntent()
+    data object HideEntryDialog: DefectEntryIntent()
 }

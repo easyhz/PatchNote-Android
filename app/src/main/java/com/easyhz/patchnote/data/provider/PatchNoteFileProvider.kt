@@ -7,6 +7,7 @@ import android.graphics.Matrix
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.constant.CacheDirectory
@@ -17,6 +18,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStream
 
 class PatchNoteFileProvider : FileProvider(R.xml.file_path) {
     companion object {
@@ -113,6 +115,36 @@ class PatchNoteFileProvider : FileProvider(R.xml.file_path) {
                 Log.e("PatchNoteFileProvider", "Failed to rotate and save image", e)
             }
         }
+
+        /**
+         * CONTENT URI 로 가져온 이미지를 저장하는 함수
+         */
+        fun saveOfflineImage(context: Context, contentUri: Uri): Uri? {
+            val inputStream: InputStream = context.contentResolver.openInputStream(contentUri)
+                ?: return null
+
+            val dir = File(context.cacheDir, CacheDirectory.OFFLINE_IMAGES)
+            if (!dir.exists()) {
+                dir.mkdirs()
+            }
+            val cacheFile = File(
+                dir,
+                "${CacheDirectory.OFFLINE_IMAGE_PREFIX}${System.currentTimeMillis()}.jpg"
+            )
+
+            return try {
+                FileOutputStream(cacheFile).use { outputStream ->
+                    inputStream.use { input ->
+                        input.copyTo(outputStream)
+                    }
+                }
+                cacheFile.toUri()
+            } catch (e: IOException) {
+                e.printStackTrace()
+                null
+            }
+        }
+
 
         private fun saveBitmapToUri(context: Context, bitmap: Bitmap, uri: Uri) {
             context.contentResolver.openOutputStream(uri)?.use { outputStream ->

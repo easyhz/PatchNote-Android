@@ -19,7 +19,7 @@ data class HomeState(
         fun init() = HomeState(
             teamName = "PatchNote",
             appConfiguration = Configuration("", "", ""),
-            needsUpdate = true,
+            needsUpdate = false,
             isRefreshing = false,
             isShowPasswordDialog = false,
             isShowPasswordErrorDialog = false,

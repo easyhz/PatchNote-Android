@@ -26,6 +26,7 @@ import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.bottomSheet.ImageBottomSheet
 import com.easyhz.patchnote.core.designSystem.component.dialog.BasicDialog
+import com.easyhz.patchnote.core.designSystem.component.dialog.DefectEntryDialog
 import com.easyhz.patchnote.core.designSystem.component.loading.LoadingIndicator
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
@@ -178,7 +179,16 @@ fun DefectEntryScreen(
                 viewModel.postIntent(DefectEntryIntent.ShowError(null))
             }
         }
+
+        if (uiState.isShowEntryDialog) {
+            DefectEntryDialog(
+                onClickSave = { viewModel.postIntent(DefectEntryIntent.SaveDefect) },
+                onClickOfflineSave = { viewModel.postIntent(DefectEntryIntent.SaveOfflineDefect)  },
+                onDismissRequest = { viewModel.postIntent(DefectEntryIntent.HideEntryDialog) }
+            )
+        }
     }
+
 
     LoadingIndicator(
         isLoading = uiState.isLoading,

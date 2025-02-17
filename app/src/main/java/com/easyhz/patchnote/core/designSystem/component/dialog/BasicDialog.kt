@@ -42,7 +42,7 @@ fun BasicDialog(
     val innerPadding = 12.dp
     val buttonMinWidth = 132.dp
     val buttonSpacing = 12.dp
-    val columSpace = if(content == null) 32.dp else 12.dp
+    val columSpace = if(content == null) 24.dp else 12.dp
 
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -52,7 +52,7 @@ fun BasicDialog(
             modifier = modifier
                 .widthIn(max = innerPadding * 2 + buttonMinWidth * 2 + buttonSpacing + 32.dp)
                 .padding(horizontal = 20.dp)
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(8.dp))
                 .background(MainBackground)
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,

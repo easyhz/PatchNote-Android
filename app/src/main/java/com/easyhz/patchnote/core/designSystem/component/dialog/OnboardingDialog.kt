@@ -39,6 +39,7 @@ import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.designSystem.component.button.MainButton
 import com.easyhz.patchnote.core.designSystem.util.extension.dropShadow
 import com.easyhz.patchnote.core.designSystem.util.extension.noRippleClickable
+import com.easyhz.patchnote.core.model.onboarding.HomeOnboardingStep
 import com.easyhz.patchnote.core.model.onboarding.OnboardingStep
 import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.Medium16
@@ -49,10 +50,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun OnboardingDialog(
     modifier: Modifier = Modifier,
+    items: List<OnboardingStep>,
     onDismissRequest: () -> Unit
 ) {
     val pagerState = rememberPagerState {
-        OnboardingStep.entries.size
+        items.size
     }
     val coroutineScope = rememberCoroutineScope()
 
@@ -105,7 +107,7 @@ fun OnboardingDialog(
                         state = pagerState,
                     ) {
                         Image(
-                            painter = painterResource(id = OnboardingStep.entries[it].imageId),
+                            painter = painterResource(id = items[it].imageId),
                             contentDescription = null,
                             contentScale = ContentScale.FillWidth
                         )
@@ -122,7 +124,7 @@ fun OnboardingDialog(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    repeat(OnboardingStep.entries.size) { iteration ->
+                    repeat(items.size) { iteration ->
                         val color =
                             if (pagerState.currentPage == iteration) Primary else SubBackground
                         Box(
@@ -141,7 +143,7 @@ fun OnboardingDialog(
                 }
 
                 AnimatedContent(
-                    targetState = pagerState.currentPage == OnboardingStep.entries.size - 1,
+                    targetState = pagerState.currentPage == items.size - 1,
                     label = "",
                     transitionSpec = { fadeIn() togetherWith fadeOut() }
                 ) {
@@ -192,7 +194,9 @@ private fun OnboardingDialogPreview() {
             .fillMaxSize()
             .background(Color.White)
     ) {
-        OnboardingDialog {
+        OnboardingDialog(
+            items = HomeOnboardingStep.entries
+        ) {
 
         }
     }

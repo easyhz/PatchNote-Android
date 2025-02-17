@@ -12,4 +12,6 @@ interface UserLocalDataSource {
     suspend fun updateTeamName(teamName: String): Unit
     suspend fun getTeamName(): Flow<String>
     suspend fun deleteTeamName()
+    suspend fun isOfflineFirstOpen(): Result<Boolean>
+    suspend fun setIsOfflineFirstOpen(newValue: Boolean)
 }

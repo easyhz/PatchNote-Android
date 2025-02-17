@@ -20,15 +20,16 @@ import androidx.compose.ui.unit.dp
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.designSystem.util.extension.circleClickable
 import com.easyhz.patchnote.core.designSystem.util.extension.noRippleClickable
-import com.easyhz.patchnote.ui.theme.SemiBold24
+import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarItem
+import com.easyhz.patchnote.ui.theme.SemiBold22
 
 @Composable
 fun HomeTopBar(
     modifier: Modifier = Modifier,
     title: String = stringResource(id = R.string.app_name_ko),
     onClickName: () -> Unit = { },
-    onClickSetting: () -> Unit,
-    onClickExport: () -> Unit
+    topBarItem1: TopBarItem,
+    topBarItem2: TopBarItem,
 ) {
     Row(
         modifier = modifier.height(52.dp).fillMaxWidth().padding(horizontal = 20.dp),
@@ -42,7 +43,7 @@ fun HomeTopBar(
             Text(
                 modifier = Modifier.widthIn(max = 200.dp),
                 text = title,
-                style = SemiBold24,
+                style = SemiBold22,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -57,16 +58,16 @@ fun HomeTopBar(
         ) {
             Icon(
                 modifier = Modifier.size(32.dp).circleClickable(
-                    onClick = onClickExport
+                    onClick = topBarItem1.onClick
                 ),
-                painter = painterResource(R.drawable.ic_export),
+                painter = topBarItem1.painter,
                 contentDescription = null
             )
             Icon(
                 modifier = Modifier.size(32.dp).circleClickable(
-                    onClick = { onClickSetting() }
+                    onClick = topBarItem2.onClick
                 ),
-                painter = painterResource(R.drawable.ic_setting),
+                painter = topBarItem2.painter,
                 contentDescription = null
             )
         }
@@ -79,7 +80,13 @@ private fun HomeTopBarPreview() {
     HomeTopBar(
         title = "patchnote",
         onClickName = { },
-        onClickSetting = { },
-        onClickExport = { }
+        topBarItem1 = TopBarItem(
+            painter = painterResource(R.drawable.ic_export),
+            onClick = { }
+        ),
+        topBarItem2 = TopBarItem(
+            painter = painterResource(R.drawable.ic_setting),
+            onClick = { }
+        )
     )
 }
