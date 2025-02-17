@@ -10,6 +10,8 @@ import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.domain.usecase.configuration.FetchConfigurationUseCase
 import com.easyhz.patchnote.domain.usecase.defect.GetOfflineDefectsPagingSourceUseCase
 import com.easyhz.patchnote.domain.usecase.defect.UploadAllOfflineDefectToRemoteUseCase
+import com.easyhz.patchnote.domain.usecase.user.IsOfflineFirstOpenUseCase
+import com.easyhz.patchnote.domain.usecase.user.SetIsOfflineFirstOpenUseCase
 import com.easyhz.patchnote.ui.screen.offline.defect.contract.OfflineDefectIntent
 import com.easyhz.patchnote.ui.screen.offline.defect.contract.OfflineDefectSideEffect
 import com.easyhz.patchnote.ui.screen.offline.defect.contract.OfflineDefectState
@@ -26,6 +28,8 @@ class OfflineDefectViewModel @Inject constructor(
     private val getOfflineDefectsPagingSourceUseCase: GetOfflineDefectsPagingSourceUseCase,
     private val fetchConfigurationUseCase: FetchConfigurationUseCase,
     private val uploadAllOfflineDefectToRemoteUseCase: UploadAllOfflineDefectToRemoteUseCase,
+    private val isOfflineFirstOpenUseCase: IsOfflineFirstOpenUseCase,
+    private val setIsOfflineFirstOpenUseCase: SetIsOfflineFirstOpenUseCase,
 ): BaseViewModel<OfflineDefectState,OfflineDefectIntent, OfflineDefectSideEffect>(
     initialState = OfflineDefectState.init()
 ) {
@@ -52,6 +56,7 @@ class OfflineDefectViewModel @Inject constructor(
     init {
         fetchOfflineDefects()
         fetchConfiguration()
+        fetchIsOfflineFirstOpen()
     }
 
     /* fetchOfflineDefects */
@@ -81,6 +86,27 @@ class OfflineDefectViewModel @Inject constructor(
         }
     }
 
+    private fun fetchIsOfflineFirstOpen() {
+        viewModelScope.launch {
+            isOfflineFirstOpenUseCase.invoke(Unit).onSuccess {
+                if (!it) return@launch
+                reduce { copy(isShowOnboardingDialog = true) }
+            }.onFailure {
+                logger.e(tag, "fetchIsFirstOpen : $it")
+            }
+        }
+    }
+
+    private fun setIsOfflineFirstOpen() {
+        viewModelScope.launch {
+            setIsOfflineFirstOpenUseCase.invoke(false).onSuccess {
+                logger.d(tag, "setIsFirstOpen : $it")
+            }.onFailure {
+                logger.e(tag, "setIsFirstOpen : $it")
+            }
+        }
+    }
+
     private fun refresh() {
         reduce { copy(isRefreshing = true) }
         fetchOfflineDefects()
@@ -105,6 +131,9 @@ class OfflineDefectViewModel @Inject constructor(
 
     private fun setOnboardingDialog(isVisible: Boolean) {
         reduce { copy(isShowOnboardingDialog = isVisible) }
+        if (!isVisible) {
+            setIsOfflineFirstOpen()
+        }
     }
 
     private fun uploadAllOfflineDefect() {

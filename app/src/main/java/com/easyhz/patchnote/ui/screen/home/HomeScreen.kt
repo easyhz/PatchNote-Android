@@ -53,6 +53,7 @@ import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarItem
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.filter.FilterParam
+import com.easyhz.patchnote.core.model.onboarding.HomeOnboardingStep
 import com.easyhz.patchnote.ui.screen.home.contract.HomeIntent
 import com.easyhz.patchnote.ui.screen.home.contract.HomeSideEffect
 import com.easyhz.patchnote.ui.theme.MainBackground
@@ -235,6 +236,7 @@ fun HomeScreen(
 
         if (uiState.isShowOnboardingDialog) {
             OnboardingDialog(
+                items = HomeOnboardingStep.entries,
                 onDismissRequest = {
                     viewModel.postIntent(HomeIntent.HideOnboardingDialog)
                 }

@@ -27,6 +27,7 @@ class UserLocalDataSourceImpl @Inject constructor(
     private val userTeamId = stringPreferencesKey(UserKey.USER_TEAM_ID.key)
     private val isFirstOpen = booleanPreferencesKey(UserKey.IS_FIRST_OPEN.key)
     private val userTeamName = stringPreferencesKey(UserKey.USER_TEAM_NAME.key)
+    private val isOfflineFirstOpen = booleanPreferencesKey(UserKey.IS_OFFLINE_FIRST_OPEN.key)
 
     override suspend fun updateUser(user: User): Unit = withContext(dispatcher) {
         dataStore.edit { preferences ->
@@ -86,6 +87,19 @@ class UserLocalDataSourceImpl @Inject constructor(
     override suspend fun deleteTeamName() {
         dataStore.edit { preferences ->
             preferences.remove(userTeamName)
+        }
+    }
+
+    override suspend fun isOfflineFirstOpen(): Result<Boolean> = withContext(dispatcher) {
+        runCatching {
+            val preferences = dataStore.data.first()
+            return@runCatching preferences[isOfflineFirstOpen] ?: true
+        }
+    }
+
+    override suspend fun setIsOfflineFirstOpen(newValue: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[isOfflineFirstOpen] = newValue
         }
     }
 

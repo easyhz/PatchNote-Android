@@ -75,4 +75,12 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun updateTeamName(teamName: String): Result<Unit> = runCatching {
         userLocalDataSource.updateTeamName(teamName)
     }
+
+    override suspend fun isOfflineFirstOpen(): Result<Boolean> {
+        return userLocalDataSource.isOfflineFirstOpen()
+    }
+
+    override suspend fun setIsOfflineFirstOpen(newValue: Boolean) {
+        userLocalDataSource.setIsOfflineFirstOpen(newValue)
+    }
 }

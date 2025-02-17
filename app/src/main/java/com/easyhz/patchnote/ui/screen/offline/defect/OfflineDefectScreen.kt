@@ -37,6 +37,7 @@ import com.easyhz.patchnote.core.designSystem.component.topbar.HomeTopBar
 import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarItem
 import com.easyhz.patchnote.core.model.defect.DefectItem
+import com.easyhz.patchnote.core.model.onboarding.OfflineDefectOnboardingStep
 import com.easyhz.patchnote.ui.screen.offline.defect.contract.OfflineDefectIntent
 import com.easyhz.patchnote.ui.screen.offline.defect.contract.OfflineDefectSideEffect
 import com.easyhz.patchnote.ui.theme.MainBackground
@@ -150,6 +151,7 @@ fun OfflineDefectScreen(
 
         if (uiState.isShowOnboardingDialog) {
             OnboardingDialog(
+                items = OfflineDefectOnboardingStep.entries,
                 onDismissRequest = {
                     viewModel.postIntent(OfflineDefectIntent.HideOnboardingDialog)
                 }
