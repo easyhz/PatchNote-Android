@@ -126,6 +126,7 @@ class DefectEntryViewModel @Inject constructor(
 
     private fun saveDefect() {
         viewModelScope.launch {
+            hideEntryDialog()
             setLoading(true)
             createDefectUseCase.invoke(getEntryParam())
                 .onSuccess {
@@ -142,7 +143,6 @@ class DefectEntryViewModel @Inject constructor(
                     setDialog(DialogMessage(title = context.getString(R.string.error_create_defect_failure)))
                 }.also {
                     setLoading(false)
-                    hideEntryDialog()
                 }
         }
     }
@@ -150,6 +150,7 @@ class DefectEntryViewModel @Inject constructor(
     private fun saveOfflineDefect() {
         viewModelScope.launch {
             setLoading(true)
+            hideEntryDialog()
             saveOfflineDefectUseCase.invoke(getEntryParam())
                 .onSuccess {
                     setDialog(
@@ -163,7 +164,6 @@ class DefectEntryViewModel @Inject constructor(
                     setDialog(DialogMessage(title = context.getString(R.string.error_create_defect_failure)))
                 }.also {
                     setLoading(false)
-                    hideEntryDialog()
                 }
         }
     }
