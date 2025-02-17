@@ -22,7 +22,9 @@ class SaveOfflineDefectUseCase @Inject constructor(
     override suspend fun invoke(param: EntryDefectParam): Result<Unit> = withContext(dispatcher) {
         runCatching {
             val userDeferred = async { userRepository.getUserFromLocal() }
+            val offlineImageUrisDeferred = async { imageRepository.saveOfflineImages(param.beforeImageUris) }
             val imageSizesDeferred = async { imageRepository.getImageSizes(param.beforeImageUris) }
+            val offlineImageUris = offlineImageUrisDeferred.await().getOrElse { emptyList() }
             val imageSizes = imageSizesDeferred.await().getOrElse { emptyList() }
             val user = userDeferred.await().getOrThrow()
 
@@ -31,8 +33,8 @@ class SaveOfflineDefectUseCase @Inject constructor(
                 requesterId = user.id,
                 requesterName = user.name,
                 requesterPhone = user.phone,
-                thumbnailUrl = param.beforeImageUris.firstOrNull().toString(),
-                beforeImageUrls = param.beforeImageUris.map { it.toString() },
+                thumbnailUrl = offlineImageUris.firstOrNull().toString(),
+                beforeImageUrls = offlineImageUris.map { it.toString() },
                 beforeImageSizes = imageSizes
             )
 

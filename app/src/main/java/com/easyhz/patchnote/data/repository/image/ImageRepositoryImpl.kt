@@ -79,4 +79,12 @@ class ImageRepositoryImpl @Inject constructor(
             PatchNoteFileProvider.rotateAndSaveImage(context, imageUri)
         }
     }
+
+    override suspend fun saveOfflineImages(imageUri: List<Uri>): Result<List<Uri?>> = withContext(dispatcher) {
+        return@withContext runCatching {
+            imageUri.map {
+                 PatchNoteFileProvider.saveOfflineImage(context, it)
+            }
+        }
+    }
 }
