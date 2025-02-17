@@ -32,7 +32,7 @@ class OfflineDefectDao: LocalDatabase() {
             defect = offlineDefect,
             images = offlineDefectImage
         )
-        val result = offlineDefectDao.findOfflineDefects("teamId1", "requesterId1").load(
+        val result = offlineDefectDao.findOfflineDefectsPagingSource("teamId1", "requesterId1").load(
             PagingSource.LoadParams.Refresh(
                 key = null,
                 loadSize = 10,
@@ -63,7 +63,7 @@ class OfflineDefectDao: LocalDatabase() {
             images = offlineDefectImage
         )
         offlineDefectDao.deleteOfflineDefects("defectId1")
-        val result = offlineDefectDao.findOfflineDefects("teamId1", "requesterId1").load(
+        val result = offlineDefectDao.findOfflineDefectsPagingSource("teamId1", "requesterId1").load(
             PagingSource.LoadParams.Refresh(
                 key = null,
                 loadSize = 10,
