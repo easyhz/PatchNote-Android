@@ -11,11 +11,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import com.easyhz.patchnote.core.designSystem.util.transition.SlideDirection
 import com.easyhz.patchnote.core.designSystem.util.transition.exitSlide
-import com.easyhz.patchnote.ui.navigation.defect.navigateToDefectDetail
+import com.easyhz.patchnote.core.model.defect.DefectItem
+import com.easyhz.patchnote.ui.navigation.defect.toArgs
 import com.easyhz.patchnote.ui.navigation.offlineDefect.screen.OfflineDefect
+import com.easyhz.patchnote.ui.navigation.offlineDefect.screen.OfflineDefectDetail
 import com.easyhz.patchnote.ui.navigation.onboarding.navigateToOnboarding
 import com.easyhz.patchnote.ui.navigation.setting.navigateToSetting
 import com.easyhz.patchnote.ui.screen.offline.defect.OfflineDefectScreen
+import com.easyhz.patchnote.ui.screen.offline.detail.OfflineDefectDetailScreen
 
 
 internal fun NavGraphBuilder.offlineDefectGraph(
@@ -33,9 +36,20 @@ internal fun NavGraphBuilder.offlineDefectGraph(
         }
         OfflineDefectScreen(
             modifier = modifier,
-            navigateToOfflineDefectDetail = { navController.navigateToDefectDetail(it) },
+            navigateToOfflineDefectDetail = { navController.navigateToOfflineDefectDetail(it) },
             navigateToSetting = navController::navigateToSetting,
             navigateToLogin = { navController.navigateToOnboarding(navOptions) }
+        )
+    }
+
+    composable<OfflineDefectDetail>(
+        typeMap = OfflineDefectDetail.typeMap,
+        exitTransition = { fadeOut(animationSpec = tween(300)) },
+        popEnterTransition = { fadeIn(animationSpec = tween(300)) },
+        popExitTransition = { exitSlide(SlideDirection.End) }
+    ) {
+        OfflineDefectDetailScreen(
+            navigateToUp = navController::navigateUp,
         )
     }
 }
@@ -43,4 +57,8 @@ internal fun NavGraphBuilder.offlineDefectGraph(
 
 fun NavController.navigateToOfflineDefect(navOptions: NavOptions? = null) {
     navigate(OfflineDefect, navOptions)
+}
+
+fun NavController.navigateToOfflineDefectDetail(defectItem: DefectItem, navOptions: NavOptions? = null) {
+    navigate(OfflineDefectDetail(defectItem.toArgs()), navOptions)
 }

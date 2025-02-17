@@ -30,5 +30,7 @@ enum class DefectUserType(
         title = R.string.defect_entry_receipt
     ), WORKER(
         title = R.string.defect_done
+    ), OFFLINE(
+        title = R.string.defect_offline
     )
 }

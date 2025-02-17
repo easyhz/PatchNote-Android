@@ -39,7 +39,8 @@ fun DefectHeader(
     space: String,
     workType: String,
     requester: DefectUser?,
-    worker: DefectUser?
+    worker: DefectUser?,
+    offline: DefectUser? = null,
 ) {
     Column(
         modifier = modifier
@@ -84,6 +85,13 @@ fun DefectHeader(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            offline?.let {
+                Text(
+                    text = it.date + " " + stringResource(DefectUserType.OFFLINE.title),
+                    style = Medium16,
+                    color = SubText
+                )
+            }
             requester?.let {
                 DefectUserRow(
                     user = it,
