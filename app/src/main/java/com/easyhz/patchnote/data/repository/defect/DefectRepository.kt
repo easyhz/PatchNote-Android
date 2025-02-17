@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.easyhz.patchnote.core.model.defect.DefectCompletion
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.EntryDefect
+import com.easyhz.patchnote.core.model.defect.OfflineDefect
 import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.core.model.user.User
 import kotlinx.coroutines.flow.Flow
@@ -20,4 +21,7 @@ interface DefectRepository {
 
     suspend fun saveOfflineDefect(defect: EntryDefect): Result<Unit>
     suspend fun getOfflineDefectsPagingSource(teamId: String, requesterId: String): Flow<PagingData<DefectItem>>
+
+    fun findOfflineDefects(teamId: String, requesterId: String): List<OfflineDefect>
+    suspend fun deleteOfflineDefect(defectId: String): Result<Unit>
 }

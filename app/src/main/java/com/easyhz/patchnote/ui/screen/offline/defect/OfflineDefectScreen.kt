@@ -28,8 +28,10 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.card.HomeCard
+import com.easyhz.patchnote.core.designSystem.component.dialog.BasicDialog
 import com.easyhz.patchnote.core.designSystem.component.dialog.DialogButton
 import com.easyhz.patchnote.core.designSystem.component.dialog.OnboardingDialog
+import com.easyhz.patchnote.core.designSystem.component.dialog.ProgressDialog
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.core.designSystem.component.topbar.HomeTopBar
 import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
@@ -38,8 +40,10 @@ import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.ui.screen.offline.defect.contract.OfflineDefectIntent
 import com.easyhz.patchnote.ui.screen.offline.defect.contract.OfflineDefectSideEffect
 import com.easyhz.patchnote.ui.theme.MainBackground
+import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Primary
 import com.easyhz.patchnote.ui.theme.SemiBold16
+import com.easyhz.patchnote.ui.theme.SemiBold18
 import com.easyhz.patchnote.ui.theme.SubBackground
 import com.easyhz.patchnote.ui.theme.SubText
 
@@ -64,7 +68,7 @@ fun OfflineDefectScreen(
                 onClickName = { viewModel.postIntent(OfflineDefectIntent.ClickTopBarName) },
                 topBarItem1 = TopBarItem(
                     painter = painterResource(R.drawable.ic_upload),
-                    onClick = { viewModel.postIntent(OfflineDefectIntent.ClickUpload) }
+                    onClick = { viewModel.postIntent(OfflineDefectIntent.ClickAllUpload) }
                 ),
                 topBarItem2 = TopBarItem(
                     painter = painterResource(R.drawable.ic_setting),
@@ -132,7 +136,13 @@ fun OfflineDefectScreen(
                         HomeCard(
                             modifier = Modifier.fillMaxWidth(),
                             defectItem = defectItem
-                        ) { viewModel.postIntent(OfflineDefectIntent.NavigateToOfflineDefectDetail(defectItem)) }
+                        ) {
+                            viewModel.postIntent(
+                                OfflineDefectIntent.NavigateToOfflineDefectDetail(
+                                    defectItem
+                                )
+                            )
+                        }
                     }
                 }
             }
@@ -145,16 +155,63 @@ fun OfflineDefectScreen(
                 }
             )
         }
+
+        if (uiState.isShowUploadDialog) {
+            BasicDialog(
+                title = stringResource(R.string.offline_defect_upload_dialog_title),
+                content = stringResource(R.string.offline_defect_upload_dialog_content),
+                positiveButton = BasicDialogButton(
+                    text = stringResource(R.string.offline_defect_upload_dialog_positive),
+                    style = SemiBold18.copy(color = MainBackground),
+                    backgroundColor = Primary,
+                    onClick = { viewModel.postIntent(OfflineDefectIntent.UploadAllOfflineDefect) }
+                ),
+                negativeButton = BasicDialogButton(
+                    text = stringResource(R.string.offline_defect_upload_dialog_negative),
+                    style = SemiBold18.copy(color = MainText),
+                    backgroundColor = SubBackground,
+                    onClick = { viewModel.postIntent(OfflineDefectIntent.HideUploadDialog) }
+                ),
+            )
+        }
+
+        if (uiState.isShowUploadSuccessDialog) {
+            BasicDialog(
+                title = stringResource(R.string.offline_defect_success_dialog_title),
+                content = stringResource(R.string.offline_defect_success_dialog_content),
+                positiveButton = BasicDialogButton(
+                    text = stringResource(R.string.offline_defect_success_dialog_button),
+                    style = SemiBold18.copy(color = MainBackground),
+                    backgroundColor = Primary,
+                    onClick = { viewModel.postIntent(OfflineDefectIntent.HideUploadSuccessDialog) }
+                ),
+                negativeButton = null
+            )
+        }
+
+        if (uiState.offlineDefectProgress != null) {
+            ProgressDialog(
+                title = stringResource(R.string.offline_defect_progress_dialog_title),
+                content = stringResource(
+                    R.string.offline_defect_progress_dialog_content,
+                    uiState.offlineDefectProgress?.total ?: 0,
+                    uiState.offlineDefectProgress?.uploaded ?: 0
+                ),
+                progress = uiState.uploadProgress
+            )
+        }
     }
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
-        when(sideEffect) {
+        when (sideEffect) {
             is OfflineDefectSideEffect.NavigateToSetting -> {
                 navigateToSetting()
             }
+
             is OfflineDefectSideEffect.NavigateToLogin -> {
                 navigateToLogin()
             }
+
             is OfflineDefectSideEffect.NavigateToOfflineDefectDetail -> {
                 navigateToOfflineDefectDetail(sideEffect.defectItem)
             }

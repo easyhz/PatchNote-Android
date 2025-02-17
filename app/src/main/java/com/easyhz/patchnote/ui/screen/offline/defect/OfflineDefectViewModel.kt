@@ -9,6 +9,7 @@ import com.easyhz.patchnote.core.common.util.log.Logger
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.domain.usecase.configuration.FetchConfigurationUseCase
 import com.easyhz.patchnote.domain.usecase.defect.GetOfflineDefectsPagingSourceUseCase
+import com.easyhz.patchnote.domain.usecase.defect.UploadAllOfflineDefectToRemoteUseCase
 import com.easyhz.patchnote.ui.screen.offline.defect.contract.OfflineDefectIntent
 import com.easyhz.patchnote.ui.screen.offline.defect.contract.OfflineDefectSideEffect
 import com.easyhz.patchnote.ui.screen.offline.defect.contract.OfflineDefectState
@@ -24,6 +25,7 @@ class OfflineDefectViewModel @Inject constructor(
     private val logger: Logger,
     private val getOfflineDefectsPagingSourceUseCase: GetOfflineDefectsPagingSourceUseCase,
     private val fetchConfigurationUseCase: FetchConfigurationUseCase,
+    private val uploadAllOfflineDefectToRemoteUseCase: UploadAllOfflineDefectToRemoteUseCase,
 ): BaseViewModel<OfflineDefectState,OfflineDefectIntent, OfflineDefectSideEffect>(
     initialState = OfflineDefectState.init()
 ) {
@@ -37,10 +39,13 @@ class OfflineDefectViewModel @Inject constructor(
         when(intent) {
             is OfflineDefectIntent.Refresh -> refresh()
             is OfflineDefectIntent.ClickSetting -> onClickSetting()
-            is OfflineDefectIntent.ClickUpload -> onClickUpload()
+            is OfflineDefectIntent.ClickAllUpload -> onClickUpload()
             is OfflineDefectIntent.NavigateToOfflineDefectDetail -> navigateToOfflineDefectDetail(intent.defectItem)
             is OfflineDefectIntent.HideOnboardingDialog -> setOnboardingDialog(false)
             is OfflineDefectIntent.ClickTopBarName -> setOnboardingDialog(true)
+            is OfflineDefectIntent.UploadAllOfflineDefect -> uploadAllOfflineDefect()
+            is OfflineDefectIntent.HideUploadDialog -> setUploadDialog(false)
+            is OfflineDefectIntent.HideUploadSuccessDialog -> reduce { copy(isShowUploadSuccessDialog = false) }
         }
     }
 
@@ -87,7 +92,11 @@ class OfflineDefectViewModel @Inject constructor(
     }
 
     private fun onClickUpload() {
-        // show upload dialog
+        setUploadDialog(true)
+    }
+
+    private fun setUploadDialog(isVisible: Boolean) {
+        reduce { copy(isShowUploadDialog = isVisible) }
     }
 
     private fun navigateToOfflineDefectDetail(defectItem: DefectItem) {
@@ -96,6 +105,25 @@ class OfflineDefectViewModel @Inject constructor(
 
     private fun setOnboardingDialog(isVisible: Boolean) {
         reduce { copy(isShowOnboardingDialog = isVisible) }
+    }
+
+    private fun uploadAllOfflineDefect() {
+        reduce { copy(isShowUploadDialog = false, isShowUploadProgressDialog = true) }
+        uploadAllOfflineDefectToRemote()
+    }
+
+    private fun uploadAllOfflineDefectToRemote() {
+        viewModelScope.launch {
+            uploadAllOfflineDefectToRemoteUseCase.invoke(concurrency = 5)
+                .catch {
+                    logger.e(tag, "uploadAllOfflineDefectToRemote : $it", it)
+                }.collect {
+                    reduce { copy(offlineDefectProgress = it, uploadProgress = it.uploaded.toFloat() / it.total) }
+                    if (it.uploaded == it.total) {
+                        reduce { copy(offlineDefectProgress = null, isShowUploadProgressDialog = false) }
+                    }
+                }
+        }
     }
 
 }

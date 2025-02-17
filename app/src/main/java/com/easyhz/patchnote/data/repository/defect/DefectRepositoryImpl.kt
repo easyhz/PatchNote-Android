@@ -9,6 +9,7 @@ import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
 import com.easyhz.patchnote.core.model.defect.DefectCompletion
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.EntryDefect
+import com.easyhz.patchnote.core.model.defect.OfflineDefect
 import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.core.model.user.User
 import com.easyhz.patchnote.core.model.util.Paging
@@ -17,6 +18,7 @@ import com.easyhz.patchnote.data.datasource.remote.defect.DefectDataSource
 import com.easyhz.patchnote.data.mapper.defect.toData
 import com.easyhz.patchnote.data.mapper.defect.toEntity
 import com.easyhz.patchnote.data.mapper.defect.toExportDefect
+import com.easyhz.patchnote.data.mapper.defect.toDefectItem
 import com.easyhz.patchnote.data.mapper.defect.toModel
 import com.easyhz.patchnote.data.pagingsource.defect.DefectPagingSource
 import com.easyhz.patchnote.data.pagingsource.defect.DefectPagingSource.Companion.PAGE_SIZE
@@ -47,7 +49,7 @@ class DefectRepositoryImpl @Inject constructor(
         }
         val indexSearchField = filterParam.toIndexField()
         return defectDataSource.fetchDefects(searchFieldParam, indexSearchField, user, null)
-            .map { it.map { defectData -> defectData.toModel() } }
+            .map { it.map { defectData -> defectData.toDefectItem() } }
     }
 
     override fun getDefectsPagingSource(
@@ -72,11 +74,11 @@ class DefectRepositoryImpl @Inject constructor(
                     )
                 )
             }
-        }.flow.map { it.map { defectData -> defectData.toModel() } }.flowOn(dispatcher)
+        }.flow.map { it.map { defectData -> defectData.toDefectItem() } }.flowOn(dispatcher)
     }
 
     override suspend fun fetchDefect(id: String): Result<DefectItem> {
-        return defectDataSource.fetchDefect(id).map { it.toModel() }
+        return defectDataSource.fetchDefect(id).map { it.toDefectItem() }
     }
 
     override suspend fun updateDefectCompletion(param: DefectCompletion): Result<Unit> {
@@ -102,10 +104,18 @@ class DefectRepositoryImpl @Inject constructor(
         return Pager(
             config = PagingConfig(pageSize = PAGE_SIZE, initialLoadSize = PAGE_SIZE)
         ) {
-            defectLocalDataSource.findOfflineDefects(teamId, requesterId)
+            defectLocalDataSource.findOfflineDefectsPagingSource(teamId, requesterId)
         }.flow
         .map {
-            it.map { offlineDefect -> offlineDefect.toModel() }
+            it.map { offlineDefect -> offlineDefect.toDefectItem() }
         }.flowOn(dispatcher)
+    }
+
+    override fun findOfflineDefects(teamId: String, requesterId: String): List<OfflineDefect> {
+        return defectLocalDataSource.findOfflineDefects(teamId, requesterId).map { it.toModel() }
+    }
+
+    override suspend fun deleteOfflineDefect(defectId: String): Result<Unit> {
+        return defectLocalDataSource.deleteOfflineDefect(defectId)
     }
 }

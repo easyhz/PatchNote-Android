@@ -83,7 +83,7 @@ class ImageRepositoryImpl @Inject constructor(
     override suspend fun saveOfflineImages(imageUri: List<Uri>): Result<List<Uri?>> = withContext(dispatcher) {
         return@withContext runCatching {
             imageUri.map {
-                 PatchNoteFileProvider.saveOfflineImage(context, it)
+                PatchNoteFileProvider.compressImageUriToMaxSize(context, defaultDispatcher, it, 0.1).getOrThrow()
             }
         }
     }

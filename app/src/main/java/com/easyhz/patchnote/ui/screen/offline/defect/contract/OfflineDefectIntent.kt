@@ -9,5 +9,8 @@ sealed class OfflineDefectIntent: UiIntent() {
     data class NavigateToOfflineDefectDetail(val defectItem: DefectItem): OfflineDefectIntent()
     data object HideOnboardingDialog: OfflineDefectIntent()
     data object ClickTopBarName: OfflineDefectIntent()
-    data object ClickUpload: OfflineDefectIntent()
+    data object ClickAllUpload: OfflineDefectIntent()
+    data object UploadAllOfflineDefect: OfflineDefectIntent()
+    data object HideUploadDialog: OfflineDefectIntent()
+    data object HideUploadSuccessDialog: OfflineDefectIntent()
 }
