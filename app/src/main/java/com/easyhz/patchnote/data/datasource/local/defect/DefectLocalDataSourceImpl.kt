@@ -8,10 +8,17 @@ import javax.inject.Inject
 class DefectLocalDataSourceImpl @Inject constructor(
     private val offlineDefectDao: OfflineDefectDao
 ): DefectLocalDataSource {
-    override fun findOfflineDefects(
+    override fun findOfflineDefectsPagingSource(
         teamId: String,
         requesterId: String
     ): PagingSource<Int, OfflineDefect> {
+        return offlineDefectDao.findOfflineDefectsPagingSource(teamId, requesterId)
+    }
+
+    override fun findOfflineDefects(
+        teamId: String,
+        requesterId: String
+    ): List<OfflineDefect> {
         return offlineDefectDao.findOfflineDefects(teamId, requesterId)
     }
 
@@ -21,7 +28,7 @@ class DefectLocalDataSourceImpl @Inject constructor(
         offlineDefectDao.saveOfflineDefect(defect.defect, defect.images)
     }
 
-    override suspend fun deleteOfflineDefects(defectId: String) = runCatching {
+    override suspend fun deleteOfflineDefect(defectId: String) = runCatching {
         offlineDefectDao.deleteOfflineDefects(defectId)
     }
 }
