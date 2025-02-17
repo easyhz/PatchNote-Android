@@ -30,7 +30,17 @@ interface OfflineDefectDao {
             AND requesterId = :requesterId
         ORDER BY creationTime DESC
     """)
-    fun findOfflineDefects(teamId: String, requesterId: String): PagingSource<Int, OfflineDefect>
+    fun findOfflineDefectsPagingSource(teamId: String, requesterId: String): PagingSource<Int, OfflineDefect>
+
+    @Transaction
+    @Query("""
+        SELECT * 
+        FROM OFFLINE_DEFECT 
+        WHERE teamId = :teamId 
+            AND requesterId = :requesterId
+        ORDER BY creationTime DESC
+    """)
+    fun findOfflineDefects(teamId: String, requesterId: String): List<OfflineDefect>
 
     /**
      * 하자 임시저장 저장
