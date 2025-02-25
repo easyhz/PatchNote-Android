@@ -1,19 +1,14 @@
 package com.easyhz.patchnote.ui.screen.home
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -21,16 +16,11 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -40,14 +30,11 @@ import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.button.HomeFloatingActionButton
 import com.easyhz.patchnote.core.designSystem.component.card.HomeCard
-import com.easyhz.patchnote.core.designSystem.component.dialog.BasicDialog
 import com.easyhz.patchnote.core.designSystem.component.dialog.DialogButton
-import com.easyhz.patchnote.core.designSystem.component.dialog.InputDialog
 import com.easyhz.patchnote.core.designSystem.component.dialog.OnboardingDialog
 import com.easyhz.patchnote.core.designSystem.component.filter.HomeFilter
 import com.easyhz.patchnote.core.designSystem.component.loading.LoadingIndicator
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
-import com.easyhz.patchnote.core.designSystem.component.textField.BaseTextField
 import com.easyhz.patchnote.core.designSystem.component.topbar.HomeTopBar
 import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarItem
@@ -59,7 +46,6 @@ import com.easyhz.patchnote.ui.screen.home.contract.HomeSideEffect
 import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.Primary
 import com.easyhz.patchnote.ui.theme.SemiBold16
-import com.easyhz.patchnote.ui.theme.SemiBold18
 import com.easyhz.patchnote.ui.theme.SubBackground
 import com.easyhz.patchnote.ui.theme.SubText
 
@@ -80,7 +66,6 @@ fun HomeScreen(
     val defectList = viewModel.defectState.collectAsLazyPagingItems()
     val context = LocalContext.current
     val pullToRefreshState = rememberPullToRefreshState()
-    val focusRequester = remember { FocusRequester() }
 
     PatchNoteScaffold(
         modifier = modifier,
@@ -172,67 +157,7 @@ fun HomeScreen(
                 }
             }
         }
-        if (uiState.needsUpdate) {
-            BasicDialog(
-                title = stringResource(R.string.version_dialog_title),
-                content = null,
-                positiveButton = BasicDialogButton(
-                    text = stringResource(R.string.version_dialog_button),
-                    style = SemiBold18.copy(color = MainBackground),
-                    backgroundColor = Primary,
-                    onClick = { viewModel.postIntent(HomeIntent.UpdateAppVersion) }
-                ),
-                negativeButton = null
-            )
-        }
 
-        if (uiState.isShowPasswordDialog) {
-            InputDialog(
-                title = stringResource(R.string.dialog_setting_password_title),
-                subTitle = stringResource(R.string.dialog_setting_password_subtitle),
-                content = {
-                    BaseTextField(
-                        modifier = Modifier.focusRequester(focusRequester),
-                        containerModifier = Modifier.height(40.dp),
-                        value = uiState.password,
-                        onValueChange = { viewModel.postIntent(HomeIntent.ChangePasswordText(it)) },
-                        title = null,
-                        placeholder = stringResource(R.string.dialog_setting_password_content_placeholder),
-                        singleLine = true,
-                        isFilled = false,
-                        visualTransformation = PasswordVisualTransformation(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        keyboardActions = KeyboardActions(onDone = { viewModel.postIntent(HomeIntent.CheckPassword) })
-                    )
-                },
-                positiveButton = BasicDialogButton(
-                    text = stringResource(R.string.dialog_setting_password_positive),
-                    style = SemiBold18.copy(color = MainBackground),
-                    backgroundColor = Primary,
-                    onClick = { viewModel.postIntent(HomeIntent.CheckPassword) }
-                ),
-                negativeButton = BasicDialogButton(
-                    text = stringResource(R.string.dialog_setting_password_negative),
-                    backgroundColor = SubBackground,
-                    onClick = { viewModel.postIntent(HomeIntent.HidePasswordDialog) }
-                )
-            )
-        }
-        
-        if(uiState.isShowPasswordErrorDialog) {
-            InputDialog(
-                title = stringResource(R.string.dialog_setting_password_error_title),
-                subTitle = stringResource(R.string.dialog_setting_password_error_subtitle),
-                content = null,
-                positiveButton = BasicDialogButton(
-                    text = stringResource(R.string.dialog_setting_password_error_button),
-                    style = SemiBold18.copy(color = MainBackground),
-                    backgroundColor = Primary,
-                    onClick = { viewModel.postIntent(HomeIntent.HidePasswordErrorDialog) }
-                ),
-                negativeButton = null
-            )
-        }
 
         if (uiState.isShowOnboardingDialog) {
             OnboardingDialog(
@@ -267,13 +192,6 @@ fun HomeScreen(
             }
             is HomeSideEffect.NavigateToDefectDetail -> {
                 navigateToDefectDetail(sideEffect.defectItem)
-            }
-            is HomeSideEffect.NavigateToUrl -> {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(sideEffect.url))
-                context.startActivity(intent)
-            }
-            is HomeSideEffect.RequestFocus -> {
-                focusRequester.requestFocus()
             }
         }
     }

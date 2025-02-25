@@ -8,12 +8,9 @@ import androidx.paging.cachedIn
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.AppError
 import com.easyhz.patchnote.core.common.util.CrashlyticsLogger
-import com.easyhz.patchnote.core.common.util.version.Version
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.filter.FilterParam
-import com.easyhz.patchnote.domain.usecase.configuration.FetchConfigurationUseCase
 import com.easyhz.patchnote.domain.usecase.configuration.UpdateEnteredPasswordUseCase
-import com.easyhz.patchnote.domain.usecase.configuration.ValidatePasswordUseCase
 import com.easyhz.patchnote.domain.usecase.defect.GetDefectsPagingSourceUseCase
 import com.easyhz.patchnote.domain.usecase.team.GetTeamNameUseCase
 import com.easyhz.patchnote.domain.usecase.user.IsFirstOpenUseCase
@@ -24,7 +21,6 @@ import com.easyhz.patchnote.ui.screen.home.contract.HomeState
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.FirebaseFirestoreException.Code
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -39,9 +35,7 @@ class HomeViewModel @Inject constructor(
     private val crashlyticsLogger: CrashlyticsLogger,
     private val isFirstOpenUseCase: IsFirstOpenUseCase,
     private val setIsFirstOpenUseCase: SetIsFirstOpenUseCase,
-    private val fetchConfigurationUseCase: FetchConfigurationUseCase,
     private val getDefectsPagingSourceUseCase: GetDefectsPagingSourceUseCase,
-    private val validatePasswordUseCase: ValidatePasswordUseCase,
     private val updateEnteredPasswordUseCase: UpdateEnteredPasswordUseCase,
     private val getTeamNameUseCase: GetTeamNameUseCase,
 ) : BaseViewModel<HomeState, HomeIntent, HomeSideEffect>(
@@ -62,12 +56,6 @@ class HomeViewModel @Inject constructor(
             is HomeIntent.NavigateToFilter -> navigateToFilter()
             is HomeIntent.NavigateToDefectDetail -> navigateToDefectDetail(intent.defectItem)
             is HomeIntent.Refresh -> refresh(intent.filterParam)
-            is HomeIntent.UpdateAppVersion -> updateAppVersion()
-            is HomeIntent.NavigateToNotion -> navigateToNotion()
-            is HomeIntent.ChangePasswordText -> changePasswordText(intent.newValue)
-            is HomeIntent.CheckPassword -> checkPassword()
-            is HomeIntent.HidePasswordDialog -> hidePasswordDialog()
-            is HomeIntent.HidePasswordErrorDialog -> setPasswordErrorDialog(false)
             is HomeIntent.SetLoading -> reduce { copy(isLoading = intent.value) }
             is HomeIntent.HideOnboardingDialog -> hideOnboardingDialog()
             is HomeIntent.ShowOnboardingDialog -> setOnboardingDialog(true)
@@ -77,7 +65,6 @@ class HomeViewModel @Inject constructor(
     init {
         getDefects()
         fetchIsFirstOpen()
-        fetchConfiguration()
         getTeamName()
     }
 
@@ -116,17 +103,6 @@ class HomeViewModel @Inject constructor(
             }
     }
 
-    /* fetchConfiguration */
-    private fun fetchConfiguration() = viewModelScope.launch {
-        fetchConfigurationUseCase.invoke(Unit).onSuccess {
-            val isLatestVersion = Version.needsUpdate(it.androidVersion)
-            reduce { copy(needsUpdate = isLatestVersion, appConfiguration = it) }
-            validatePassword(it.settingPassword)
-        }.onFailure {
-            Log.e(tag, "fetchConfiguration : $it")
-        }
-    }
-
     /* fetchIsFirstOpen */
     private fun fetchIsFirstOpen() = viewModelScope.launch {
         isFirstOpenUseCase.invoke(Unit).onSuccess {
@@ -143,17 +119,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun validatePassword(password: String) = viewModelScope.launch {
-        validatePasswordUseCase.invoke(password).onSuccess {
-            reduce { copy(hasPassword = it) }
-        }.onFailure {
-            Log.e(tag, "validatePassword : $it")
-        }
-    }
-
     /* 세팅 화면 이동 */
     private fun navigateToSetting() {
-        postSideEffect { HomeSideEffect.NavigateToSetting(currentState.appConfiguration.notionUrl) }
+        postSideEffect { HomeSideEffect.NavigateToSetting }
     }
 
     /* 하자 등록 화면 이동 */
@@ -186,52 +154,12 @@ class HomeViewModel @Inject constructor(
         fetchDefects(filterParam)
     }
 
-    /* updateAppVersion */
-    private fun updateAppVersion() {
-        postSideEffect { HomeSideEffect.NavigateToUrl("https://play.google.com/store/apps/details?id=com.easyhz.patchnote") }
-    }
-
-    private fun navigateToNotion() {
-        postSideEffect { HomeSideEffect.NavigateToUrl(currentState.appConfiguration.notionUrl) }
-    }
-
-    /* changePasswordText */
-    private fun changePasswordText(newValue: String) {
-        reduce { copy(password = newValue) }
-    }
-
-    /* hidePasswordDialog */
-    private fun hidePasswordDialog() {
-        reduce { copy(isShowPasswordDialog = false, password = "") }
-    }
-
-    /* focusRequest */
-    private fun requestFocus() = viewModelScope.launch {
-        delay(300)
-        postSideEffect { HomeSideEffect.RequestFocus }
-    }
-
-    /* checkPassword */
-    private fun checkPassword() = viewModelScope.launch {
-        if (currentState.password == currentState.appConfiguration.settingPassword) {
-            reduce { copy(isShowPasswordDialog = false, hasPassword = true, password = "") }
-            updateEnteredPassword()
-            navigateToSetting()
-        } else {
-            setPasswordErrorDialog(true)
-        }
-    }
 
     /* updateEnteredPassword */
     private fun updateEnteredPassword() = viewModelScope.launch {
         updateEnteredPasswordUseCase.invoke(true).onFailure {
             Log.e(tag, "updateEnteredPassword : $it")
         }
-    }
-
-    /* setPasswordErrorDialog */
-    private fun setPasswordErrorDialog(value: Boolean) = viewModelScope.launch {
-        reduce { copy(isShowPasswordErrorDialog = value) }
     }
 
     private fun navigateToLogin() {
