@@ -1,10 +1,9 @@
 package com.easyhz.patchnote.data.di
 
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ktx.storage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,19 +16,31 @@ object FirebaseModule {
 
     @Provides
     @Singleton
-    fun provideFireStore(): FirebaseFirestore {
-        return FirebaseFirestore.getInstance()
+    fun provideFirebaseApp(): FirebaseApp {
+        return FirebaseApp.getInstance()
     }
 
     @Provides
     @Singleton
-    fun provideFirebaseAuth(): FirebaseAuth {
-        return FirebaseAuth.getInstance()
+    fun provideFireStore(
+        firebaseApp: FirebaseApp
+    ): FirebaseFirestore {
+        return FirebaseFirestore.getInstance(firebaseApp)
     }
 
     @Provides
     @Singleton
-    fun provideFirebaseStorage(): FirebaseStorage {
-        return Firebase.storage
+    fun provideFirebaseAuth(
+        firebaseApp: FirebaseApp
+    ): FirebaseAuth {
+        return FirebaseAuth.getInstance(firebaseApp)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseStorage(
+        firebaseApp: FirebaseApp
+    ): FirebaseStorage {
+        return FirebaseStorage.getInstance(firebaseApp)
     }
 }
