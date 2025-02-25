@@ -173,4 +173,7 @@ dependencies {
     implementation(libs.androidx.room.paging)
     ksp(libs.androidx.room.compiler)
     testImplementation(libs.room.testing)
+
+    // compressor
+    implementation(libs.image.compressor)
 }
