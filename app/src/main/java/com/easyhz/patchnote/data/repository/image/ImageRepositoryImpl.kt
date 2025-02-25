@@ -31,14 +31,15 @@ class ImageRepositoryImpl @Inject constructor(
         withContext(dispatcher) {
             runCatching {
                 if (images.isEmpty()) return@runCatching emptyList()
-                val semaphore = Semaphore(3)
+                val semaphore = Semaphore(5)
 
                 coroutineScope {
                     images.mapIndexed { index, image ->
                         async {
                             semaphore.withPermit {
-                                val imageUri = PatchNoteFileProvider.compressImageUriToMaxSize(context, defaultDispatcher, image, 0.1)
-                                    .getOrThrow()
+                                val imageUri =
+                                    PatchNoteFileProvider.compress(context, image, dispatcher)
+
                                 imageDataSource.uploadImage(
                                     pathId,
                                     imageUri,
@@ -55,8 +56,8 @@ class ImageRepositoryImpl @Inject constructor(
         withContext(dispatcher) {
             runCatching {
                 val thumbnail =
-                    PatchNoteFileProvider.compressImageUriToMaxSize(context, dispatcher, imageUri, 0.03)
-                        .getOrThrow()
+                    PatchNoteFileProvider.compress(context, imageUri, dispatcher)
+
                 imageDataSource.uploadImage(
                     pathId,
                     thumbnail,
@@ -80,11 +81,17 @@ class ImageRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun saveOfflineImages(imageUri: List<Uri>): Result<List<Uri?>> = withContext(dispatcher) {
-        return@withContext runCatching {
-            imageUri.map {
-                PatchNoteFileProvider.compressImageUriToMaxSize(context, defaultDispatcher, it, 0.1).getOrThrow()
+    override suspend fun saveOfflineImages(imageUri: List<Uri>): Result<List<Uri?>> =
+        withContext(dispatcher) {
+            return@withContext runCatching {
+                imageUri.map {
+                    PatchNoteFileProvider.compressImageUriToMaxSize(
+                        context,
+                        defaultDispatcher,
+                        it,
+                        0.1
+                    ).getOrThrow()
+                }
             }
         }
-    }
 }
