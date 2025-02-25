@@ -25,14 +25,14 @@ class CreateDefectUseCase @Inject constructor(
             val userDeferred = async { userRepository.getUserFromLocal() }
             val imageUrlsDeferred = async { imageRepository.uploadImages("${Storage.DEFECT}/${param.id}/Before/", param.beforeImageUris) }
             val thumbnailUrlDeferred = async {
-                val thumbnail = param.beforeImageUris.firstOrNull() ?: return@async Result.success("")
+                val thumbnail = param.beforeImageUris.firstOrNull() ?: return@async Result.failure(Exception("Thumbnail is not found"))
                 imageRepository.uploadThumbnail("${Storage.DEFECT}/${param.id}/", thumbnail)
             }
             val imageSizesDeferred = async { imageRepository.getImageSizes(param.beforeImageUris) }
 
-            val imageUrls = imageUrlsDeferred.await().getOrElse { emptyList() }
-            val thumbnailUrl = thumbnailUrlDeferred.await().getOrElse { "" }
-            val imageSizes = imageSizesDeferred.await().getOrElse { emptyList() }
+            val imageUrls = imageUrlsDeferred.await().getOrThrow()
+            val thumbnailUrl = thumbnailUrlDeferred.await().getOrThrow()
+            val imageSizes = imageSizesDeferred.await().getOrThrow()
             val user = userDeferred.await().getOrThrow()
 
             val entryDefect = param.toEntryDefect(

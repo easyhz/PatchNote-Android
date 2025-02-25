@@ -30,11 +30,11 @@ class UploadOfflineDefectToRemoteUseCase @Inject constructor(
     private suspend fun getEntryDefectModel(defect: DefectItem): EntryDefect = withContext(dispatcher) {
         val imageUrlsDeferred = async { imageRepository.uploadImages("${Storage.DEFECT}/${defect.id}/Before/", defect.beforeImageUrls.map { it.toUri() }) }
         val thumbnailUrlDeferred = async {
-            val thumbnail = defect.beforeImageUrls.firstOrNull() ?: return@async Result.success("")
+            val thumbnail = defect.beforeImageUrls.firstOrNull() ?: return@async Result.failure(Exception("Thumbnail is not found"))
             imageRepository.uploadThumbnail("${Storage.DEFECT}/${defect.id}/", thumbnail.toUri())
         }
-        val imageUrls = imageUrlsDeferred.await().getOrElse { emptyList() }
-        val thumbnailUrl = thumbnailUrlDeferred.await().getOrElse { "" }
+        val imageUrls = imageUrlsDeferred.await().getOrThrow()
+        val thumbnailUrl = thumbnailUrlDeferred.await().getOrThrow()
         val imageSizes = defect.beforeImageSizes.map { ImageSize(height = it.height, width =  it.width) }
         return@withContext EntryDefect(
             id = defect.id,

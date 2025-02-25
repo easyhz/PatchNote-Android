@@ -25,8 +25,8 @@ class UpdateDefectCompletionUseCase @Inject constructor(
             val imageUrlsDeferred = async { imageRepository.uploadImages("${Storage.DEFECT}/${param.id}/After/", param.afterImageUris) }
             val imageSizesDeferred = async { imageRepository.getImageSizes(param.afterImageUris) }
 
-            val imageUrls = imageUrlsDeferred.await().getOrElse { emptyList() }
-            val imageSizes = imageSizesDeferred.await().getOrElse { emptyList() }
+            val imageUrls = imageUrlsDeferred.await().getOrThrow()
+            val imageSizes = imageSizesDeferred.await().getOrThrow()
             val user = userDeferred.await().getOrThrow()
 
             val defectCompletion = param.toDefectCompletion(

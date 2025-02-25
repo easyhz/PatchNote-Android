@@ -11,7 +11,11 @@ import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.constant.CacheDirectory
+import com.easyhz.patchnote.core.common.util.Generate
 import com.easyhz.patchnote.core.model.image.ImageSize
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.default
+import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
@@ -36,6 +40,40 @@ class PatchNoteFileProvider : FileProvider(R.xml.file_path) {
                 )
                 val authority = "${context.packageName}.file_provider"
                 getUriForFile(context, authority, file)
+            }
+        }
+
+        suspend fun compress(
+            context: Context,
+            imageUri: Uri,
+            dispatcher: CoroutineDispatcher,
+            maxFileSize: Long? = null
+        ): Uri {
+            try {
+                val dir = File(context.cacheDir, CacheDirectory.COMPRESSED_IMAGES)
+                if (!dir.exists()) {
+                    dir.mkdirs()
+                }
+
+                val compressedFile = File(dir, "${CacheDirectory.COMPRESSED_IMAGE_PREFIX}${Generate.randomUUID()}_${System.currentTimeMillis()}.jpeg")
+                context.contentResolver.openInputStream(imageUri)?.use { input ->
+                    FileOutputStream(compressedFile).use { output ->
+                        input.copyTo(output)
+                    }
+                }
+
+
+                return Compressor.compress(context, compressedFile, dispatcher) {
+                    if (maxFileSize == null) {
+                        default()
+                    } else {
+                        default()
+                        size(maxFileSize)
+                    }
+                }.toUri()
+            } catch (e: Exception) {
+                Log.e("PatchNoteFileProvider", "Failed to compress image", e)
+                throw e
             }
         }
 
@@ -68,7 +106,11 @@ class PatchNoteFileProvider : FileProvider(R.xml.file_path) {
                     if (currentSize > maxSizeBytes) {
                         quality -= 5
                         if (quality < 50 && !resized) {
-                            resizedBitmap = resizeBitmap(resizedBitmap, resizedBitmap.width / 2, resizedBitmap.height / 2)
+                            resizedBitmap = resizeBitmap(
+                                resizedBitmap,
+                                resizedBitmap.width / 2,
+                                resizedBitmap.height / 2
+                            )
                             quality = 100
                             resized = true
                         }
@@ -91,7 +133,10 @@ class PatchNoteFileProvider : FileProvider(R.xml.file_path) {
                         inJustDecodeBounds = true
                     }
                     BitmapFactory.decodeStream(inputStream, null, options)
-                    return ImageSize(height = options.outHeight.toLong(), width = options.outWidth.toLong())
+                    return ImageSize(
+                        height = options.outHeight.toLong(),
+                        width = options.outWidth.toLong()
+                    )
                 } ?: return ImageSize(938, 938)
             } catch (e: Exception) {
                 Log.e("PatchNoteFileProvider", "Failed to get image dimensions", e)
@@ -181,12 +226,19 @@ class PatchNoteFileProvider : FileProvider(R.xml.file_path) {
             return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
         }
 
-        private fun saveCompressedImage(context: Context, compressedData: ByteArray, originalFileName: String): Uri {
+        private fun saveCompressedImage(
+            context: Context,
+            compressedData: ByteArray,
+            originalFileName: String
+        ): Uri {
             val dir = File(context.cacheDir, CacheDirectory.COMPRESSED_IMAGES)
             if (!dir.exists()) {
                 dir.mkdirs()
             }
-            val compressedFile = File(dir, "${CacheDirectory.COMPRESSED_IMAGE_PREFIX}${originalFileName}_${System.currentTimeMillis()}.jpeg")
+            val compressedFile = File(
+                dir,
+                "${CacheDirectory.COMPRESSED_IMAGE_PREFIX}${originalFileName}_${System.currentTimeMillis()}.jpeg"
+            )
             FileOutputStream(compressedFile).use { fos ->
                 fos.write(compressedData)
                 fos.flush()
@@ -204,7 +256,10 @@ class PatchNoteFileProvider : FileProvider(R.xml.file_path) {
             }
             inputStream.close()
 
-            val orientation = exif?.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+            val orientation = exif?.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL
+            )
             if (orientation != -1) {
                 when (orientation) {
                     ExifInterface.ORIENTATION_ROTATE_90 -> return 90

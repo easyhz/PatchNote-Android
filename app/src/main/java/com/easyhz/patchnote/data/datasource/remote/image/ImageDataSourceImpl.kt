@@ -4,6 +4,7 @@ import android.net.Uri
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storageMetadata
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -15,8 +16,12 @@ class ImageDataSourceImpl @Inject constructor(
 ) : ImageDataSource {
     override suspend fun uploadImage(pathId: String, imageUri: Uri, imageName: String): Result<String> = withContext(dispatcher) {
         runCatching {
-            val imageRef = storage.reference.child(pathId).child(imageName)
-            imageRef.putFile(imageUri).await()
+            val imageRef = storage.reference.child("$pathId/$imageName")
+            val metadata = storageMetadata {
+                contentType = "image/jpeg"
+            }
+
+            imageRef.putFile(imageUri, metadata).await()
             imageRef.downloadUrl.await().toString()
         }
     }
