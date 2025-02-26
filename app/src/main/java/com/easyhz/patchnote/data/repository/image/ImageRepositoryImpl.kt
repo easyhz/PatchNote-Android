@@ -18,17 +18,17 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ImageRepositoryImpl @Inject constructor(
-    @Dispatcher(PatchNoteDispatchers.IO) private val dispatcher: CoroutineDispatcher,
+    @Dispatcher(PatchNoteDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
     @Dispatcher(PatchNoteDispatchers.DEFAULT) private val defaultDispatcher: CoroutineDispatcher,
     @ApplicationContext private val context: Context,
     private val imageDataSource: ImageDataSource,
 ) : ImageRepository {
 
     override suspend fun getTakePictureUri(): Result<Uri> =
-        PatchNoteFileProvider.getTakePictureUri(context, dispatcher)
+        PatchNoteFileProvider.getTakePictureUri(context, ioDispatcher)
 
     override suspend fun uploadImages(pathId: String, images: List<Uri>): Result<List<String>> =
-        withContext(dispatcher) {
+        withContext(ioDispatcher) {
             runCatching {
                 if (images.isEmpty()) return@runCatching emptyList()
                 val semaphore = Semaphore(5)
@@ -37,13 +37,17 @@ class ImageRepositoryImpl @Inject constructor(
                     images.mapIndexed { index, image ->
                         async {
                             semaphore.withPermit {
-                                val imageUri =
-                                    PatchNoteFileProvider.compress(context, image, dispatcher)
+                                val imageUri = PatchNoteFileProvider.compress(
+                                    context = context,
+                                    imageUri = image,
+                                    defaultDispatcher = defaultDispatcher,
+                                    ioDispatcher = ioDispatcher
+                                )
 
                                 imageDataSource.uploadImage(
-                                    pathId,
-                                    imageUri,
-                                    "$index"
+                                    pathId = pathId,
+                                    imageUri = imageUri,
+                                    imageName = "$index"
                                 ).getOrThrow()
                             }
                         }
@@ -53,21 +57,25 @@ class ImageRepositoryImpl @Inject constructor(
         }
 
     override suspend fun uploadThumbnail(pathId: String, imageUri: Uri): Result<String> =
-        withContext(dispatcher) {
+        withContext(ioDispatcher) {
             runCatching {
-                val thumbnail =
-                    PatchNoteFileProvider.compress(context, imageUri, dispatcher)
+                val thumbnail = PatchNoteFileProvider.compress(
+                    context = context,
+                    imageUri = imageUri,
+                    defaultDispatcher = defaultDispatcher,
+                    ioDispatcher = ioDispatcher
+                )
 
                 imageDataSource.uploadImage(
-                    pathId,
-                    thumbnail,
-                    "thumbnail"
+                    pathId = pathId,
+                    imageUri = thumbnail,
+                    imageName = "thumbnail"
                 ).getOrThrow()
             }
         }
 
     override suspend fun getImageSizes(imageUri: List<Uri>): Result<List<ImageSize>> =
-        withContext(dispatcher) {
+        withContext(ioDispatcher) {
             runCatching {
                 imageUri.map {
                     PatchNoteFileProvider.getImageDimensions(context, it)
@@ -75,22 +83,22 @@ class ImageRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun rotateImage(imageUri: Uri): Result<Unit> = withContext(dispatcher) {
+    override suspend fun rotateImage(imageUri: Uri): Result<Unit> = withContext(ioDispatcher) {
         runCatching {
             PatchNoteFileProvider.rotateAndSaveImage(context, imageUri)
         }
     }
 
     override suspend fun saveOfflineImages(imageUri: List<Uri>): Result<List<Uri?>> =
-        withContext(dispatcher) {
+        withContext(ioDispatcher) {
             return@withContext runCatching {
                 imageUri.map {
-                    PatchNoteFileProvider.compressImageUriToMaxSize(
-                        context,
-                        defaultDispatcher,
-                        it,
-                        0.1
-                    ).getOrThrow()
+                    PatchNoteFileProvider.compress(
+                        context = context,
+                        imageUri = it,
+                        defaultDispatcher = defaultDispatcher,
+                        ioDispatcher = ioDispatcher
+                    )
                 }
             }
         }
