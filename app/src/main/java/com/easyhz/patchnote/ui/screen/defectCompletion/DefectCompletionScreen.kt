@@ -33,7 +33,7 @@ import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
 import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
 import com.easyhz.patchnote.core.designSystem.util.extension.noRippleClickable
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
-import com.easyhz.patchnote.core.model.defect.DefectMainItem
+import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectUser
 import com.easyhz.patchnote.ui.screen.defectCompletion.contract.DefectCompletionIntent
 import com.easyhz.patchnote.ui.screen.defectCompletion.contract.DefectCompletionSideEffect
@@ -49,8 +49,8 @@ import com.easyhz.patchnote.ui.theme.SemiBold18
 fun DefectCompletionScreen(
     modifier: Modifier = Modifier,
     viewModel: DefectCompletionViewModel = hiltViewModel(),
-    defectMainItem: DefectMainItem,
     navigateToUp: () -> Unit,
+    navigateToDefectDetail: (DefectItem) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
@@ -84,7 +84,7 @@ fun DefectCompletionScreen(
                     stringId = R.string.defect_completion_button,
                     textAlignment = Alignment.CenterEnd,
                     textColor = Primary,
-                    onClick = { viewModel.postIntent(DefectCompletionIntent.ClickCompletion(id = defectMainItem.id)) }
+                    onClick = { viewModel.postIntent(DefectCompletionIntent.ClickCompletion(id = uiState.defectMainItem.id)) }
                 )
             )
         },
@@ -101,13 +101,13 @@ fun DefectCompletionScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             DefectHeader(
-                site = defectMainItem.site,
-                building = defectMainItem.building,
-                unit = defectMainItem.unit,
-                part = defectMainItem.part,
-                space = defectMainItem.space,
-                workType = defectMainItem.workType,
-                requester = DefectUser.create(defectMainItem.requesterName, defectMainItem.requestDate),
+                site = uiState.defectMainItem.site,
+                building = uiState.defectMainItem.building,
+                unit = uiState.defectMainItem.unit,
+                part = uiState.defectMainItem.part,
+                space = uiState.defectMainItem.space,
+                workType = uiState.defectMainItem.workType,
+                requester = DefectUser.create(uiState.defectMainItem.requesterName, uiState.defectMainItem.requestDate),
                 worker = null
             )
             DefectContentField(
@@ -170,6 +170,9 @@ fun DefectCompletionScreen(
             }
             is DefectCompletionSideEffect.NavigateToUp -> {
                 navigateToUp()
+            }
+            is DefectCompletionSideEffect.NavigateToDefectDetail -> {
+                navigateToDefectDetail(sideEffect.defectItem)
             }
         }
     }
