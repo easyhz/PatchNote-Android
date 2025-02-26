@@ -1,10 +1,12 @@
 package com.easyhz.patchnote.ui.screen.defectCompletion.contract
 
 import com.easyhz.patchnote.core.common.base.UiState
+import com.easyhz.patchnote.core.model.defect.DefectMainItem
 import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.core.model.image.DefectImage
 
 data class DefectCompletionState(
+    val defectMainItem: DefectMainItem,
     val completionContent: String,
     val images: List<DefectImage>,
     val isShowImageBottomSheet: Boolean,
@@ -14,6 +16,7 @@ data class DefectCompletionState(
 ): UiState() {
     companion object {
         fun init() = DefectCompletionState(
+            defectMainItem = DefectMainItem.empty(),
             completionContent = "",
             images = emptyList(),
             isShowImageBottomSheet = false,

@@ -122,7 +122,7 @@ class DefectViewModel @Inject constructor(
         val message = DialogMessage(
             title = context.getString(R.string.error_fetch_category_title),
             message = context.getString(errorMessage),
-            action = DialogAction.NAVIGATE_UP
+            action = DialogAction.NavigateUp
         )
         sendError(message = message)
     }

@@ -133,7 +133,7 @@ class DefectEntryViewModel @Inject constructor(
                     setDialog(
                         DialogMessage(
                             title = context.getString(R.string.success_create_defect),
-                            action = DialogAction.CLEAR
+                            action = DialogAction.Clear
                         )
                     )
                     hasUploadHistory = true
@@ -156,7 +156,7 @@ class DefectEntryViewModel @Inject constructor(
                     setDialog(
                         DialogMessage(
                             title = context.getString(R.string.success_create_offline_defect),
-                            action = DialogAction.CLEAR
+                            action = DialogAction.Clear
                         )
                     )
                 }.onFailure {
@@ -232,8 +232,8 @@ class DefectEntryViewModel @Inject constructor(
         reduce { copy(dialogMessage = message) }
         action?.let {
             when(it) {
-                DialogAction.NAVIGATE_UP -> navigateUp()
-                DialogAction.CLEAR -> clearData()
+                DialogAction.NavigateUp -> navigateUp()
+                DialogAction.Clear -> clearData()
                 else -> { }
             }
         }

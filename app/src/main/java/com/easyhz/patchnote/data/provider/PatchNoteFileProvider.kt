@@ -46,7 +46,8 @@ class PatchNoteFileProvider : FileProvider(R.xml.file_path) {
         suspend fun compress(
             context: Context,
             imageUri: Uri,
-            dispatcher: CoroutineDispatcher,
+            defaultDispatcher: CoroutineDispatcher,
+            ioDispatcher: CoroutineDispatcher,
             maxFileSize: Long? = null
         ): Uri {
             try {
@@ -56,14 +57,16 @@ class PatchNoteFileProvider : FileProvider(R.xml.file_path) {
                 }
 
                 val compressedFile = File(dir, "${CacheDirectory.COMPRESSED_IMAGE_PREFIX}${Generate.randomUUID()}_${System.currentTimeMillis()}.jpeg")
-                context.contentResolver.openInputStream(imageUri)?.use { input ->
-                    FileOutputStream(compressedFile).use { output ->
-                        input.copyTo(output)
+                withContext(ioDispatcher) {
+                    context.contentResolver.openInputStream(imageUri)?.use { input ->
+                        FileOutputStream(compressedFile).use { output ->
+                            input.copyTo(output)
+                        }
                     }
                 }
 
 
-                return Compressor.compress(context, compressedFile, dispatcher) {
+                return Compressor.compress(context, compressedFile, defaultDispatcher) {
                     if (maxFileSize == null) {
                         default()
                     } else {
@@ -74,50 +77,6 @@ class PatchNoteFileProvider : FileProvider(R.xml.file_path) {
             } catch (e: Exception) {
                 Log.e("PatchNoteFileProvider", "Failed to compress image", e)
                 throw e
-            }
-        }
-
-        suspend fun compressImageUriToMaxSize(
-            context: Context,
-            dispatcher: CoroutineDispatcher,
-            imageUri: Uri,
-            maxFileSizeMB: Double = 0.5
-        ): Result<Uri> = withContext(dispatcher) {
-            runCatching {
-                val maxSizeBytes = (maxFileSizeMB * 1024 * 1024).toLong()
-                val originalBitmap = uriToBitmap(context, imageUri)
-
-                val originalData = compressBitmapQuality(originalBitmap, 100)
-                val originalSize = originalData.size.toLong()
-
-                if (originalSize <= maxSizeBytes) {
-                    return@runCatching imageUri
-                }
-
-                var quality = 100
-                var compressedData: ByteArray
-                var resizedBitmap = originalBitmap
-                var resized = false
-
-                do {
-                    compressedData = compressBitmapQuality(resizedBitmap, quality)
-                    val currentSize = compressedData.size.toLong()
-
-                    if (currentSize > maxSizeBytes) {
-                        quality -= 5
-                        if (quality < 50 && !resized) {
-                            resizedBitmap = resizeBitmap(
-                                resizedBitmap,
-                                resizedBitmap.width / 2,
-                                resizedBitmap.height / 2
-                            )
-                            quality = 100
-                            resized = true
-                        }
-                    }
-                } while (compressedData.size > maxSizeBytes && quality > 0)
-
-                saveCompressedImage(context, compressedData, "${imageUri.lastPathSegment}")
             }
         }
 
@@ -161,35 +120,6 @@ class PatchNoteFileProvider : FileProvider(R.xml.file_path) {
             }
         }
 
-        /**
-         * CONTENT URI 로 가져온 이미지를 저장하는 함수
-         */
-        fun saveOfflineImage(context: Context, contentUri: Uri): Uri? {
-            val inputStream: InputStream = context.contentResolver.openInputStream(contentUri)
-                ?: return null
-
-            val dir = File(context.cacheDir, CacheDirectory.OFFLINE_IMAGES)
-            if (!dir.exists()) {
-                dir.mkdirs()
-            }
-            val cacheFile = File(
-                dir,
-                "${CacheDirectory.OFFLINE_IMAGE_PREFIX}${System.currentTimeMillis()}.jpg"
-            )
-
-            return try {
-                FileOutputStream(cacheFile).use { outputStream ->
-                    inputStream.use { input ->
-                        input.copyTo(outputStream)
-                    }
-                }
-                cacheFile.toUri()
-            } catch (e: IOException) {
-                e.printStackTrace()
-                null
-            }
-        }
-
 
         private fun saveBitmapToUri(context: Context, bitmap: Bitmap, uri: Uri) {
             context.contentResolver.openOutputStream(uri)?.use { outputStream ->
@@ -197,53 +127,10 @@ class PatchNoteFileProvider : FileProvider(R.xml.file_path) {
             }
         }
 
-        private fun compressBitmapQuality(bitmap: Bitmap, quality: Int): ByteArray {
-            val byteArrayOutputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
-            return byteArrayOutputStream.toByteArray()
-        }
-
         private fun uriToBitmap(context: Context, uri: Uri): Bitmap {
             return context.contentResolver.openInputStream(uri).use { inputStream ->
                 BitmapFactory.decodeStream(inputStream)
             }
-        }
-
-        private fun resizeBitmap(bitmap: Bitmap, maxWidth: Int, maxHeight: Int): Bitmap {
-            val width = bitmap.width
-            val height = bitmap.height
-            val aspectRatio = width.toFloat() / height.toFloat()
-
-            var newWidth = maxWidth
-            var newHeight = maxHeight
-
-            if (width > height) {
-                newHeight = (maxWidth / aspectRatio).toInt()
-            } else if (height > width) {
-                newWidth = (maxHeight * aspectRatio).toInt()
-            }
-
-            return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
-        }
-
-        private fun saveCompressedImage(
-            context: Context,
-            compressedData: ByteArray,
-            originalFileName: String
-        ): Uri {
-            val dir = File(context.cacheDir, CacheDirectory.COMPRESSED_IMAGES)
-            if (!dir.exists()) {
-                dir.mkdirs()
-            }
-            val compressedFile = File(
-                dir,
-                "${CacheDirectory.COMPRESSED_IMAGE_PREFIX}${originalFileName}_${System.currentTimeMillis()}.jpeg"
-            )
-            FileOutputStream(compressedFile).use { fos ->
-                fos.write(compressedData)
-                fos.flush()
-            }
-            return Uri.fromFile(compressedFile)
         }
 
         private fun getOrientationOfImage(context: Context, uri: Uri): Int {

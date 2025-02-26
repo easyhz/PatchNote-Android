@@ -4,16 +4,20 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.handleError
+import com.easyhz.patchnote.core.common.util.serializable.SerializableHelper
 import com.easyhz.patchnote.core.designSystem.component.bottomSheet.ImageBottomSheetType
 import com.easyhz.patchnote.core.model.defect.DefectCompletionParam
+import com.easyhz.patchnote.core.model.defect.DefectMainItem
 import com.easyhz.patchnote.core.model.error.DialogAction
 import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.core.model.image.DefectImage
 import com.easyhz.patchnote.core.model.image.toDefectImages
+import com.easyhz.patchnote.domain.usecase.defect.FetchDefectUseCase
 import com.easyhz.patchnote.domain.usecase.defect.UpdateDefectCompletionUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetTakePictureUriUseCase
 import com.easyhz.patchnote.domain.usecase.image.RotateImageUseCase
@@ -30,8 +34,11 @@ import javax.inject.Inject
 @HiltViewModel
 class DefectCompletionViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val savedStateHandle: SavedStateHandle,
+    private val serializableHelper: SerializableHelper,
     private val getTakePictureUriUseCase: GetTakePictureUriUseCase,
     private val updateDefectCompletionUseCase: UpdateDefectCompletionUseCase,
+    private val fetchDefectUseCase: FetchDefectUseCase,
     private val rotateImageUseCase: RotateImageUseCase
 ) : BaseViewModel<DefectCompletionState, DefectCompletionIntent, DefectCompletionSideEffect>(
     initialState = DefectCompletionState.init(),
@@ -81,6 +88,17 @@ class DefectCompletionViewModel @Inject constructor(
                 setLoading(intent.isLoading)
             }
         }
+    }
+
+    init {
+        initData()
+    }
+
+    private fun initData() {
+        val defectItemArgs: String? = savedStateHandle["defectMainItem"]
+        val defectMainItem = serializableHelper.deserialize(defectItemArgs, DefectMainItem::class.java) ?: return navigateUp()
+
+        reduce { copy(defectMainItem = defectMainItem) }
     }
 
     private fun onChangeCompletionContent(newValue: String) {
@@ -144,7 +162,7 @@ class DefectCompletionViewModel @Inject constructor(
         reduce { copy(dialogMessage = message) }
         action?.let {
             when (it) {
-                DialogAction.NAVIGATE_UP -> navigateUp()
+                is DialogAction.CustomAction -> navigateToDefectDetail()
                 else -> {}
             }
         }
@@ -166,13 +184,28 @@ class DefectCompletionViewModel @Inject constructor(
             afterImageUris = currentState.images.map { it.uri }
         )
         updateDefectCompletionUseCase.invoke(param).onSuccess {
-            setDialog(DialogMessage(title = context.getString(R.string.defect_completion_dialog_title), action = DialogAction.NAVIGATE_UP))
+            setDialog(DialogMessage(title = context.getString(R.string.defect_completion_dialog_title), action = DialogAction.CustomAction))
         }.onFailure {
             Log.e(tag, "clickCompletion : $it")
             setDialog(DialogMessage(title = context.getString(R.string.error_create_defect_completion_failure)))
         }.also {
             setLoading(false)
         }
+    }
+
+    private fun navigateToDefectDetail() {
+        viewModelScope.launch {
+            setLoading(true)
+            fetchDefectUseCase.invoke(currentState.defectMainItem.id).onSuccess {
+                postSideEffect { DefectCompletionSideEffect.NavigateToDefectDetail(it.defectItem) }
+            }.onFailure {
+                Log.e(tag, "navigateToDefectDetail : $it")
+                navigateUp()
+            }.also {
+                setLoading(false)
+            }
+        }
+
     }
 
     /* 이미지 회전 */

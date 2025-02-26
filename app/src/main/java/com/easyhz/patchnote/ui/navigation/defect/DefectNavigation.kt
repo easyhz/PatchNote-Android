@@ -5,14 +5,15 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
-import androidx.navigation.toRoute
 import com.easyhz.patchnote.core.designSystem.util.transition.SlideDirection
 import com.easyhz.patchnote.core.designSystem.util.transition.enterSlide
 import com.easyhz.patchnote.core.designSystem.util.transition.exitSlide
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectMainItem
+import com.easyhz.patchnote.ui.navigation.home.Home
 import com.easyhz.patchnote.ui.navigation.home.navigateToHome
 import com.easyhz.patchnote.ui.screen.defectCompletion.DefectCompletionScreen
 import com.easyhz.patchnote.ui.screen.defectDetail.DefectDetailScreen
@@ -55,10 +56,14 @@ internal fun NavGraphBuilder.defectGraph(
         popEnterTransition = { enterSlide(SlideDirection.Up) },
         popExitTransition = { exitSlide(SlideDirection.Down) }
     ) {
-        val args = it.toRoute<DefectCompletion>()
+        val navOptions = navOptions {
+            popUpTo(Home::class.java.name) {
+                inclusive = false
+            }
+        }
         DefectCompletionScreen(
-            defectMainItem = args.defectMainItem,
-            navigateToUp = navController::navigateUp
+            navigateToUp = navController::navigateUp,
+            navigateToDefectDetail = { navController.navigateToDefectDetail(it, navOptions) }
         )
     }
 }
@@ -67,8 +72,8 @@ fun NavController.navigateToDefectEntry() {
     navigate(DefectEntry)
 }
 
-fun NavController.navigateToDefectDetail(defectItem: DefectItem) {
-    navigate(DefectDetail(defectItem = defectItem.toArgs()))
+fun NavController.navigateToDefectDetail(defectItem: DefectItem, navOptions: NavOptions? = null) {
+    navigate(DefectDetail(defectItem = defectItem.toArgs()), navOptions = navOptions)
 }
 
 fun NavController.navigateToDefectCompletion(defectMainItem: DefectMainItem) {

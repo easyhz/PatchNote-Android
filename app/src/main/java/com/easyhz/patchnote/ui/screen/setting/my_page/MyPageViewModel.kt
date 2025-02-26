@@ -150,7 +150,7 @@ class MyPageViewModel @Inject constructor(
         reduce { copy(dialogMessage = message) }
         action?.let {
             when (it) {
-                DialogAction.CUSTOM_ACTION -> logout()
+                DialogAction.CustomAction -> logout()
                 else -> {}
             }
         }

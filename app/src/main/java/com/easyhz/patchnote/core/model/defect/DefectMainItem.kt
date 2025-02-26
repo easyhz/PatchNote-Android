@@ -13,4 +13,18 @@ data class DefectMainItem(
     val workType: String,
     val requesterName: String,
     val requestDate: String,
-)
+) {
+    companion object {
+        fun empty() = DefectMainItem(
+            id = "",
+            site = "",
+            building = "",
+            unit = "",
+            space = "",
+            part = "",
+            workType = "",
+            requesterName = "",
+            requestDate = "",
+        )
+    }
+}
