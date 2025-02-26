@@ -10,10 +10,11 @@ data class DialogMessage(
     val negativeButton: BasicDialogButton? = null,
 )
 
-enum class DialogAction {
-    RETRY,
-    DISMISS,
-    NAVIGATE_UP,
-    CLEAR,
-    CUSTOM_ACTION
+sealed class DialogAction{
+    data object Retry: DialogAction()
+    data object Dismiss: DialogAction()
+    data object NavigateUp: DialogAction()
+    data object Clear: DialogAction()
+    data object CustomAction: DialogAction()
+    data class WithParam<T>(val param: T): DialogAction()
 }

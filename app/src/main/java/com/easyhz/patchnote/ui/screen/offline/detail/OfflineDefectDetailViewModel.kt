@@ -115,7 +115,7 @@ class OfflineDefectDetailViewModel @Inject constructor(
             setErrorDialog(
                 DialogMessage(
                     title = context.getString(R.string.defect_delete_success),
-                    action = DialogAction.NAVIGATE_UP
+                    action = DialogAction.NavigateUp
                 )
             )
         }.onFailure {
@@ -136,7 +136,7 @@ class OfflineDefectDetailViewModel @Inject constructor(
         reduce { copy(dialogMessage = message) }
         action?.let {
             when (it) {
-                DialogAction.NAVIGATE_UP -> navigateToUp()
+                DialogAction.NavigateUp -> navigateToUp()
                 else -> {}
             }
         }
