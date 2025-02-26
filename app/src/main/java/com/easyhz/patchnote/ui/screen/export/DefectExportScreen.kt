@@ -57,9 +57,9 @@ import com.easyhz.patchnote.core.model.filter.FilterValue
 import com.easyhz.patchnote.core.model.filter.FilterValue.Companion.asInt
 import com.easyhz.patchnote.core.model.filter.FilterValue.Companion.asLong
 import com.easyhz.patchnote.core.model.filter.FilterValue.Companion.asString
-import com.easyhz.patchnote.ui.screen.defect.DefectViewModel
-import com.easyhz.patchnote.ui.screen.defect.contract.DefectIntent
-import com.easyhz.patchnote.ui.screen.defect.contract.DefectSideEffect
+import com.easyhz.patchnote.ui.screen.defect.common.DefectViewModel
+import com.easyhz.patchnote.ui.screen.defect.common.contract.DefectIntent
+import com.easyhz.patchnote.ui.screen.defect.common.contract.DefectSideEffect
 import com.easyhz.patchnote.ui.screen.defectEntry.component.DefectCategoryField
 import com.easyhz.patchnote.ui.screen.export.contract.DefectExportIntent
 import com.easyhz.patchnote.ui.screen.export.contract.DefectExportSideEffect
