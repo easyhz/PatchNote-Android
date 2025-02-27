@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.ui.screen.offline.detail
+package com.easyhz.patchnote.ui.screen.defect.offline.detail
 
 import android.content.Context
 import androidx.lifecycle.SavedStateHandle
@@ -12,9 +12,9 @@ import com.easyhz.patchnote.core.model.error.DialogAction
 import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.domain.usecase.defect.DeleteOfflineDefectUseCase
 import com.easyhz.patchnote.domain.usecase.defect.UploadOfflineDefectToRemoteUseCase
-import com.easyhz.patchnote.ui.screen.offline.detail.contract.OfflineDefectDetailIntent
-import com.easyhz.patchnote.ui.screen.offline.detail.contract.OfflineDefectDetailSideEffect
-import com.easyhz.patchnote.ui.screen.offline.detail.contract.OfflineDefectDetailState
+import com.easyhz.patchnote.ui.screen.defect.offline.detail.contract.OfflineDefectDetailIntent
+import com.easyhz.patchnote.ui.screen.defect.offline.detail.contract.OfflineDefectDetailSideEffect
+import com.easyhz.patchnote.ui.screen.defect.offline.detail.contract.OfflineDefectDetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch

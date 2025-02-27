@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.ui.screen.export.contract
+package com.easyhz.patchnote.ui.screen.defect.export.contract
 
 import com.easyhz.patchnote.core.common.base.UiSideEffect
 import java.io.File

@@ -13,9 +13,9 @@ import com.easyhz.patchnote.core.model.error.DialogAction
 import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.domain.usecase.defect.DeleteDefectUseCase
 import com.easyhz.patchnote.domain.usecase.sign.GetUserIdUseCase
-import com.easyhz.patchnote.ui.screen.defectDetail.contract.DetailIntent
-import com.easyhz.patchnote.ui.screen.defectDetail.contract.DetailSideEffect
-import com.easyhz.patchnote.ui.screen.defectDetail.contract.DetailState
+import com.easyhz.patchnote.ui.screen.defect.defectDetail.contract.DetailIntent
+import com.easyhz.patchnote.ui.screen.defect.defectDetail.contract.DetailSideEffect
+import com.easyhz.patchnote.ui.screen.defect.defectDetail.contract.DetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.ui.screen.offline.defect
+package com.easyhz.patchnote.ui.screen.defect.offline.defect
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
@@ -12,9 +12,9 @@ import com.easyhz.patchnote.domain.usecase.defect.GetOfflineDefectsPagingSourceU
 import com.easyhz.patchnote.domain.usecase.defect.UploadAllOfflineDefectToRemoteUseCase
 import com.easyhz.patchnote.domain.usecase.user.IsOfflineFirstOpenUseCase
 import com.easyhz.patchnote.domain.usecase.user.SetIsOfflineFirstOpenUseCase
-import com.easyhz.patchnote.ui.screen.offline.defect.contract.OfflineDefectIntent
-import com.easyhz.patchnote.ui.screen.offline.defect.contract.OfflineDefectSideEffect
-import com.easyhz.patchnote.ui.screen.offline.defect.contract.OfflineDefectState
+import com.easyhz.patchnote.ui.screen.defect.offline.defect.contract.OfflineDefectIntent
+import com.easyhz.patchnote.ui.screen.defect.offline.defect.contract.OfflineDefectSideEffect
+import com.easyhz.patchnote.ui.screen.defect.offline.defect.contract.OfflineDefectState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
@@ -30,7 +30,7 @@ class OfflineDefectViewModel @Inject constructor(
     private val uploadAllOfflineDefectToRemoteUseCase: UploadAllOfflineDefectToRemoteUseCase,
     private val isOfflineFirstOpenUseCase: IsOfflineFirstOpenUseCase,
     private val setIsOfflineFirstOpenUseCase: SetIsOfflineFirstOpenUseCase,
-): BaseViewModel<OfflineDefectState,OfflineDefectIntent, OfflineDefectSideEffect>(
+): BaseViewModel<OfflineDefectState, OfflineDefectIntent, OfflineDefectSideEffect>(
     initialState = OfflineDefectState.init()
 ) {
     private val tag = "OfflineDefectViewModel"

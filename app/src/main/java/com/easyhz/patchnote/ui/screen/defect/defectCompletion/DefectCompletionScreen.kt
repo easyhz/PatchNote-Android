@@ -35,10 +35,10 @@ import com.easyhz.patchnote.core.designSystem.util.extension.noRippleClickable
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectUser
-import com.easyhz.patchnote.ui.screen.defectCompletion.contract.DefectCompletionIntent
-import com.easyhz.patchnote.ui.screen.defectCompletion.contract.DefectCompletionSideEffect
-import com.easyhz.patchnote.ui.screen.defectEntry.component.DefectContentField
-import com.easyhz.patchnote.ui.screen.defectEntry.component.DefectImageField
+import com.easyhz.patchnote.ui.screen.defect.defectCompletion.contract.DefectCompletionIntent
+import com.easyhz.patchnote.ui.screen.defect.defectCompletion.contract.DefectCompletionSideEffect
+import com.easyhz.patchnote.ui.screen.defect.defectEntry.component.DefectContentField
+import com.easyhz.patchnote.ui.screen.defect.defectEntry.component.DefectImageField
 import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Primary

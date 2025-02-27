@@ -17,8 +17,8 @@ import com.easyhz.patchnote.ui.navigation.offlineDefect.screen.OfflineDefect
 import com.easyhz.patchnote.ui.navigation.offlineDefect.screen.OfflineDefectDetail
 import com.easyhz.patchnote.ui.navigation.onboarding.navigateToOnboarding
 import com.easyhz.patchnote.ui.navigation.setting.navigateToSetting
-import com.easyhz.patchnote.ui.screen.offline.defect.OfflineDefectScreen
-import com.easyhz.patchnote.ui.screen.offline.detail.OfflineDefectDetailScreen
+import com.easyhz.patchnote.ui.screen.defect.offline.defect.OfflineDefectScreen
+import com.easyhz.patchnote.ui.screen.defect.offline.detail.OfflineDefectDetailScreen
 
 
 internal fun NavGraphBuilder.offlineDefectGraph(

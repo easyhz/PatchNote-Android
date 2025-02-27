@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.ui.screen.offline.defect.contract
+package com.easyhz.patchnote.ui.screen.defect.offline.defect.contract
 
 import com.easyhz.patchnote.core.common.base.UiState
 import com.easyhz.patchnote.core.model.configuration.Configuration

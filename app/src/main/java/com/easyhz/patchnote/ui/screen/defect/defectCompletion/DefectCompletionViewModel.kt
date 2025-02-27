@@ -21,11 +21,11 @@ import com.easyhz.patchnote.domain.usecase.defect.FetchDefectUseCase
 import com.easyhz.patchnote.domain.usecase.defect.UpdateDefectCompletionUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetTakePictureUriUseCase
 import com.easyhz.patchnote.domain.usecase.image.RotateImageUseCase
-import com.easyhz.patchnote.ui.screen.defectCompletion.contract.DefectCompletionIntent
-import com.easyhz.patchnote.ui.screen.defectCompletion.contract.DefectCompletionSideEffect
-import com.easyhz.patchnote.ui.screen.defectCompletion.contract.DefectCompletionState
-import com.easyhz.patchnote.ui.screen.defectCompletion.contract.DefectCompletionState.Companion.deleteImage
-import com.easyhz.patchnote.ui.screen.defectCompletion.contract.DefectCompletionState.Companion.updateImages
+import com.easyhz.patchnote.ui.screen.defect.defectCompletion.contract.DefectCompletionIntent
+import com.easyhz.patchnote.ui.screen.defect.defectCompletion.contract.DefectCompletionSideEffect
+import com.easyhz.patchnote.ui.screen.defect.defectCompletion.contract.DefectCompletionState
+import com.easyhz.patchnote.ui.screen.defect.defectCompletion.contract.DefectCompletionState.Companion.deleteImage
+import com.easyhz.patchnote.ui.screen.defect.defectCompletion.contract.DefectCompletionState.Companion.updateImages
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch

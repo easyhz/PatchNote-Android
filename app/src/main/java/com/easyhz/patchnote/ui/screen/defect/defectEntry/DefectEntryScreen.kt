@@ -36,11 +36,11 @@ import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
 import com.easyhz.patchnote.ui.screen.defect.common.DefectViewModel
 import com.easyhz.patchnote.ui.screen.defect.common.contract.DefectIntent
 import com.easyhz.patchnote.ui.screen.defect.common.contract.DefectSideEffect
-import com.easyhz.patchnote.ui.screen.defectEntry.component.DefectCategoryField
-import com.easyhz.patchnote.ui.screen.defectEntry.component.DefectContentField
-import com.easyhz.patchnote.ui.screen.defectEntry.component.DefectImageField
-import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntryIntent
-import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntrySideEffect
+import com.easyhz.patchnote.ui.screen.defect.defectEntry.contract.DefectEntryIntent
+import com.easyhz.patchnote.ui.screen.defect.defectEntry.component.DefectCategoryField
+import com.easyhz.patchnote.ui.screen.defect.defectEntry.component.DefectContentField
+import com.easyhz.patchnote.ui.screen.defect.defectEntry.component.DefectImageField
+import com.easyhz.patchnote.ui.screen.defect.defectEntry.contract.DefectEntrySideEffect
 import com.easyhz.patchnote.ui.theme.LocalSnackBarHostState
 import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.MainText

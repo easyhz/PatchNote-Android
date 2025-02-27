@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.ui.screen.offline.defect
+package com.easyhz.patchnote.ui.screen.defect.offline.defect
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,8 +38,8 @@ import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarItem
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.onboarding.OfflineDefectOnboardingStep
-import com.easyhz.patchnote.ui.screen.offline.defect.contract.OfflineDefectIntent
-import com.easyhz.patchnote.ui.screen.offline.defect.contract.OfflineDefectSideEffect
+import com.easyhz.patchnote.ui.screen.defect.offline.defect.contract.OfflineDefectIntent
+import com.easyhz.patchnote.ui.screen.defect.offline.defect.contract.OfflineDefectSideEffect
 import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Primary

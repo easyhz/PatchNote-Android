@@ -15,9 +15,9 @@ import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectMainItem
 import com.easyhz.patchnote.ui.navigation.home.Home
 import com.easyhz.patchnote.ui.navigation.home.navigateToHome
-import com.easyhz.patchnote.ui.screen.defectCompletion.DefectCompletionScreen
-import com.easyhz.patchnote.ui.screen.defectDetail.DefectDetailScreen
-import com.easyhz.patchnote.ui.screen.defectEntry.DefectEntryScreen
+import com.easyhz.patchnote.ui.screen.defect.defectCompletion.DefectCompletionScreen
+import com.easyhz.patchnote.ui.screen.defect.defectDetail.DefectDetailScreen
+import com.easyhz.patchnote.ui.screen.defect.defectEntry.DefectEntryScreen
 
 internal fun NavGraphBuilder.defectGraph(
     navController: NavController

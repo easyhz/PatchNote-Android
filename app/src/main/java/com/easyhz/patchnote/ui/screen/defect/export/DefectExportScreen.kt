@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.ui.screen.export
+package com.easyhz.patchnote.ui.screen.defect.export
 
 import android.Manifest
 import android.content.ClipData
@@ -60,9 +60,9 @@ import com.easyhz.patchnote.core.model.filter.FilterValue.Companion.asString
 import com.easyhz.patchnote.ui.screen.defect.common.DefectViewModel
 import com.easyhz.patchnote.ui.screen.defect.common.contract.DefectIntent
 import com.easyhz.patchnote.ui.screen.defect.common.contract.DefectSideEffect
-import com.easyhz.patchnote.ui.screen.defectEntry.component.DefectCategoryField
-import com.easyhz.patchnote.ui.screen.export.contract.DefectExportIntent
-import com.easyhz.patchnote.ui.screen.export.contract.DefectExportSideEffect
+import com.easyhz.patchnote.ui.screen.defect.defectEntry.component.DefectCategoryField
+import com.easyhz.patchnote.ui.screen.defect.export.contract.DefectExportIntent
+import com.easyhz.patchnote.ui.screen.defect.export.contract.DefectExportSideEffect
 import com.easyhz.patchnote.ui.theme.LocalSnackBarHostState
 import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.MainText

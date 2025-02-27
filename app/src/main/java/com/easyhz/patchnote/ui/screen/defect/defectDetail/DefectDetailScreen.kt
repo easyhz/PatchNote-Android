@@ -30,9 +30,9 @@ import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
 import com.easyhz.patchnote.core.model.defect.DefectMainItem
 import com.easyhz.patchnote.core.model.defect.DefectProgress
 import com.easyhz.patchnote.core.model.defect.DefectUser
-import com.easyhz.patchnote.ui.screen.defectDetail.component.DetailField
-import com.easyhz.patchnote.ui.screen.defectDetail.contract.DetailIntent
-import com.easyhz.patchnote.ui.screen.defectDetail.contract.DetailSideEffect
+import com.easyhz.patchnote.ui.screen.defect.defectDetail.component.DetailField
+import com.easyhz.patchnote.ui.screen.defect.defectDetail.contract.DetailIntent
+import com.easyhz.patchnote.ui.screen.defect.defectDetail.contract.DetailSideEffect
 import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Primary

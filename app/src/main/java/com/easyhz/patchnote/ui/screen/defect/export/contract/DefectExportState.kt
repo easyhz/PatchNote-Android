@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.ui.screen.export.contract
+package com.easyhz.patchnote.ui.screen.defect.export.contract
 
 import com.easyhz.patchnote.core.common.base.UiState
 import com.easyhz.patchnote.core.model.filter.Filter

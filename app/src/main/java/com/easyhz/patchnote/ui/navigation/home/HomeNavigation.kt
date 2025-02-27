@@ -19,7 +19,7 @@ import com.easyhz.patchnote.ui.navigation.defect.navigateToDefectEntry
 import com.easyhz.patchnote.ui.navigation.home.screen.DefectExport
 import com.easyhz.patchnote.ui.navigation.onboarding.navigateToOnboarding
 import com.easyhz.patchnote.ui.navigation.setting.navigateToSetting
-import com.easyhz.patchnote.ui.screen.export.DefectExportScreen
+import com.easyhz.patchnote.ui.screen.defect.export.DefectExportScreen
 import com.easyhz.patchnote.ui.screen.filter.FilterScreen
 import com.easyhz.patchnote.ui.screen.home.HomeScreen
 

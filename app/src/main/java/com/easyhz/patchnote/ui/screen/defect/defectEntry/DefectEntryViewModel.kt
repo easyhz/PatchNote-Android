@@ -24,11 +24,11 @@ import com.easyhz.patchnote.domain.usecase.defect.CreateDefectUseCase
 import com.easyhz.patchnote.domain.usecase.defect.SaveOfflineDefectUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetTakePictureUriUseCase
 import com.easyhz.patchnote.domain.usecase.image.RotateImageUseCase
-import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntryIntent
-import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntrySideEffect
-import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntryState
-import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntryState.Companion.deleteImage
-import com.easyhz.patchnote.ui.screen.defectEntry.contract.DefectEntryState.Companion.updateImages
+import com.easyhz.patchnote.ui.screen.defect.defectEntry.contract.DefectEntryIntent
+import com.easyhz.patchnote.ui.screen.defect.defectEntry.contract.DefectEntrySideEffect
+import com.easyhz.patchnote.ui.screen.defect.defectEntry.contract.DefectEntryState
+import com.easyhz.patchnote.ui.screen.defect.defectEntry.contract.DefectEntryState.Companion.deleteImage
+import com.easyhz.patchnote.ui.screen.defect.defectEntry.contract.DefectEntryState.Companion.updateImages
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch

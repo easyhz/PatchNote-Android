@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.ui.screen.offline.detail
+package com.easyhz.patchnote.ui.screen.defect.offline.detail
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,9 +29,9 @@ import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
 import com.easyhz.patchnote.core.model.defect.DefectProgress
 import com.easyhz.patchnote.core.model.defect.DefectUser
-import com.easyhz.patchnote.ui.screen.defectDetail.component.DetailField
-import com.easyhz.patchnote.ui.screen.offline.detail.contract.OfflineDefectDetailIntent
-import com.easyhz.patchnote.ui.screen.offline.detail.contract.OfflineDefectDetailSideEffect
+import com.easyhz.patchnote.ui.screen.defect.defectDetail.component.DetailField
+import com.easyhz.patchnote.ui.screen.defect.offline.detail.contract.OfflineDefectDetailIntent
+import com.easyhz.patchnote.ui.screen.defect.offline.detail.contract.OfflineDefectDetailSideEffect
 import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Primary
