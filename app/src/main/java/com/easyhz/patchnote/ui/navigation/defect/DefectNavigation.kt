@@ -8,6 +8,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
+import androidx.navigation.toRoute
 import com.easyhz.patchnote.core.designSystem.util.transition.SlideDirection
 import com.easyhz.patchnote.core.designSystem.util.transition.enterSlide
 import com.easyhz.patchnote.core.designSystem.util.transition.exitSlide
@@ -43,8 +44,18 @@ internal fun NavGraphBuilder.defectGraph(
         popEnterTransition = { fadeIn(animationSpec = tween(300)) },
         popExitTransition = { exitSlide(SlideDirection.End) }
     ) {
+        val args = it.toRoute<DefectDetail>()
         DefectDetailScreen(
-            navigateToUp = navController::navigateUp,
+            navigateToUp = {
+                if (args.isRefresh) {
+                    val navOptions = navOptions {
+                        popUpTo(navController.graph.id) { inclusive = true }
+                    }
+                    navController.navigateToHome(navOptions = navOptions)
+                } else {
+                    navController.navigateUp()
+                }
+            },
             navigateToDefectCompletion = navController::navigateToDefectCompletion
         )
     }
@@ -63,7 +74,7 @@ internal fun NavGraphBuilder.defectGraph(
         }
         DefectCompletionScreen(
             navigateToUp = navController::navigateUp,
-            navigateToDefectDetail = { navController.navigateToDefectDetail(it, navOptions) }
+            navigateToDefectDetail = { navController.navigateToDefectDetail(defectItem = it, isRefresh = true, navOptions = navOptions) }
         )
     }
 }
@@ -72,8 +83,8 @@ fun NavController.navigateToDefectEntry() {
     navigate(DefectEntry)
 }
 
-fun NavController.navigateToDefectDetail(defectItem: DefectItem, navOptions: NavOptions? = null) {
-    navigate(DefectDetail(defectItem = defectItem.toArgs()), navOptions = navOptions)
+fun NavController.navigateToDefectDetail(defectItem: DefectItem, isRefresh: Boolean = false, navOptions: NavOptions? = null) {
+    navigate(DefectDetail(defectItem = defectItem.toArgs(), isRefresh = isRefresh), navOptions = navOptions)
 }
 
 fun NavController.navigateToDefectCompletion(defectMainItem: DefectMainItem) {

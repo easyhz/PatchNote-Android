@@ -11,7 +11,8 @@ import kotlin.reflect.typeOf
 
 @Serializable
 data class DefectDetail(
-    val defectItem: DefectItemArgs
+    val defectItem: DefectItemArgs,
+    val isRefresh: Boolean
 ) {
     companion object {
         val typeMap = mapOf(
