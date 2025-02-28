@@ -4,6 +4,8 @@ import android.content.Context
 import android.net.Uri
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
+import com.easyhz.patchnote.core.common.util.Generate
+import com.easyhz.patchnote.core.model.image.DefectImage
 import com.easyhz.patchnote.core.model.image.ImageSize
 import com.easyhz.patchnote.data.datasource.remote.image.ImageDataSource
 import com.easyhz.patchnote.data.provider.PatchNoteFileProvider
@@ -102,4 +104,14 @@ class ImageRepositoryImpl @Inject constructor(
                 }
             }
         }
+
+    override suspend fun getDefectImages(imageUrls: List<String>): Result<List<DefectImage>> = withContext(ioDispatcher) {
+        return@withContext runCatching {
+            imageUrls.map {
+                val id = Generate.randomUuid()
+                val uri = imageDataSource.downloadImage(context = context, imageUrl = it, id = id).getOrThrow()
+                DefectImage(id = id, uri = uri)
+            }
+        }
+    }
 }
