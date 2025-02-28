@@ -17,7 +17,7 @@ sealed class DefectEntryIntent: UiIntent() {
     data class DeleteImage(val image: DefectImage) : DefectEntryIntent()
     data class ClickReceipt(val entryItem: LinkedHashMap<CategoryType, TextFieldValue>, val invalidEntry: CategoryType?): DefectEntryIntent()
     data object NavigateToUp: DefectEntryIntent()
-    data class ShowError(val message: DialogMessage?): DefectEntryIntent()
+    data class SetDialog(val message: DialogMessage?): DefectEntryIntent()
     data class SetLoading(val isLoading: Boolean): DefectEntryIntent()
     data object SaveDefect: DefectEntryIntent()
     data object SaveOfflineDefect: DefectEntryIntent()

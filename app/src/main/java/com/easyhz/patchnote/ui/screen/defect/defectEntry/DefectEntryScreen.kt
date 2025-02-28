@@ -164,19 +164,19 @@ fun DefectEntryScreen(
             )
         }
 
-        uiState.dialogMessage?.let { error ->
+        uiState.dialogMessage?.let { dialog ->
             BasicDialog(
-                title = error.title,
-                content = error.message,
+                title = dialog.title,
+                content = dialog.message,
                 positiveButton = BasicDialogButton(
                     text = stringResource(R.string.dialog_button),
                     style = SemiBold18.copy(color = MainBackground),
                     backgroundColor = Primary,
-                    onClick = { viewModel.postIntent(DefectEntryIntent.ShowError(null)) }
+                    onClick = { viewModel.postIntent(DefectEntryIntent.SetDialog(null)) }
                 ),
                 negativeButton = null
             ) {
-                viewModel.postIntent(DefectEntryIntent.ShowError(null))
+                viewModel.postIntent(DefectEntryIntent.SetDialog(null))
             }
         }
 
@@ -229,7 +229,7 @@ fun DefectEntryScreen(
                 viewModel.postIntent(DefectEntryIntent.ClickReceipt(defectState.entryItem, sideEffect.invalidEntry))
             }
             is DefectSideEffect.SendError -> {
-                viewModel.postIntent(DefectEntryIntent.ShowError(sideEffect.message))
+                viewModel.postIntent(DefectEntryIntent.SetDialog(sideEffect.message))
             }
             is DefectSideEffect.SendLoading -> {
                 viewModel.postIntent(DefectEntryIntent.SetLoading(sideEffect.isLoading))

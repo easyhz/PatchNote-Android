@@ -59,7 +59,7 @@ class DefectEntryViewModel @Inject constructor(
             is DefectEntryIntent.DeleteImage -> { deleteEntryImage(intent.image) }
             is DefectEntryIntent.ClickReceipt -> { createDefect(intent.entryItem, intent.invalidEntry) }
             is DefectEntryIntent.NavigateToUp -> { handleNavigateToUp() }
-            is DefectEntryIntent.ShowError -> { setDialog(intent.message) }
+            is DefectEntryIntent.SetDialog -> { setDialog(intent.message) }
             is DefectEntryIntent.SetLoading -> { setLoading(intent.isLoading) }
             is DefectEntryIntent.SaveDefect -> { saveDefect() }
             is DefectEntryIntent.SaveOfflineDefect -> { saveOfflineDefect() }
