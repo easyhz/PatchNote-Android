@@ -12,6 +12,7 @@ data class DefectEditState(
     val defectItem: DefectItem?,
     val entryContent: String,
     val images: List<DefectImage>,
+    val isSuccessGetData: Boolean,
     val isShowImageBottomSheet: Boolean,
     val dialogMessage: DialogMessage?,
     val isShowEntryDialog: Boolean,
@@ -26,6 +27,7 @@ data class DefectEditState(
             isShowImageBottomSheet = false,
             dialogMessage = null,
             isShowEntryDialog = false,
+            isSuccessGetData = false,
             entryItem = linkedMapOf()
         )
 

@@ -24,6 +24,7 @@ import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.core.model.image.DefectImage
 import com.easyhz.patchnote.core.model.image.toDefectImages
 import com.easyhz.patchnote.domain.usecase.defect.CreateDefectUseCase
+import com.easyhz.patchnote.domain.usecase.image.GetDefectImagesUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetTakePictureUriUseCase
 import com.easyhz.patchnote.domain.usecase.image.RotateImageUseCase
 import com.easyhz.patchnote.ui.screen.defect.edit.contract.DefectEditIntent
@@ -33,7 +34,6 @@ import com.easyhz.patchnote.ui.screen.defect.edit.contract.DefectEditState.Compa
 import com.easyhz.patchnote.ui.screen.defect.edit.contract.DefectEditState.Companion.updateImages
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -46,6 +46,7 @@ class DefectEditViewModel @Inject constructor(
     private val getTakePictureUriUseCase: GetTakePictureUriUseCase,
     private val createDefectUseCase: CreateDefectUseCase,
     private val rotateImageUseCase: RotateImageUseCase,
+    private val getDefectImagesUseCase: GetDefectImagesUseCase,
 ): BaseViewModel<DefectEditState, DefectEditIntent, DefectEditSideEffect>(
     initialState = DefectEditState.init()
 ) {
@@ -78,21 +79,29 @@ class DefectEditViewModel @Inject constructor(
         val defectItemArgs: String? = savedStateHandle["defectItem"]
         val defectItem = serializableHelper.deserialize(defectItemArgs, DefectItem::class.java) ?: return navigateUp()
 
-        val entryItem = linkedMapOf(
-            CategoryType.SITE to TextFieldValue(defectItem.site),
-            CategoryType.BUILDING to TextFieldValue(defectItem.building),
-            CategoryType.UNIT to TextFieldValue(defectItem.unit),
-            CategoryType.SPACE to TextFieldValue(defectItem.space),
-            CategoryType.PART to TextFieldValue(defectItem.part),
-            CategoryType.WORK_TYPE to TextFieldValue(defectItem.workType),
-        )
-
         reduce { copy(defectItem = defectItem, entryContent = defectItem.beforeDescription, entryItem = entryItem) }
+        setUp(defectItem)
+    }
+
+    private fun setUp(defectItem: DefectItem) {
         viewModelScope.launch {
             setLoading(true)
-            delay(700)
-            postSideEffect { DefectEditSideEffect.SendEntryItem(entryItem) }
-            setLoading(false)
+            getDefectImagesUseCase.invoke(defectItem.beforeImageUrls).onSuccess {
+                val entryItem = linkedMapOf(
+                    CategoryType.SITE to TextFieldValue(defectItem.site),
+                    CategoryType.BUILDING to TextFieldValue(defectItem.building),
+                    CategoryType.UNIT to TextFieldValue(defectItem.unit),
+                    CategoryType.SPACE to TextFieldValue(defectItem.space),
+                    CategoryType.PART to TextFieldValue(defectItem.part),
+                    CategoryType.WORK_TYPE to TextFieldValue(defectItem.workType),
+                )
+                reduce { copy(images = it, isSuccessGetData = true, isLoading = false) }
+                postSideEffect { DefectEditSideEffect.SendEntryItem(entryItem) }
+            }.onFailure {
+                logger.e(tag, "setUp : $it")
+                setLoading(false)
+                setDialog(DialogMessage(title = context.getString(it.handleError())))
+            }
         }
     }
 
@@ -252,6 +261,7 @@ class DefectEditViewModel @Inject constructor(
 
     /* 로딩 */
     private fun setLoading(isLoading: Boolean) {
+        if (!currentState.isSuccessGetData && !isLoading) return
         reduce { copy(isLoading = isLoading) }
     }
 
