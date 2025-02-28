@@ -19,6 +19,7 @@ import com.easyhz.patchnote.ui.navigation.home.navigateToHome
 import com.easyhz.patchnote.ui.screen.defect.defectCompletion.DefectCompletionScreen
 import com.easyhz.patchnote.ui.screen.defect.defectDetail.DefectDetailScreen
 import com.easyhz.patchnote.ui.screen.defect.defectEntry.DefectEntryScreen
+import com.easyhz.patchnote.ui.screen.defect.edit.DefectEditScreen
 
 internal fun NavGraphBuilder.defectGraph(
     navController: NavController
@@ -56,7 +57,8 @@ internal fun NavGraphBuilder.defectGraph(
                     navController.navigateUp()
                 }
             },
-            navigateToDefectCompletion = navController::navigateToDefectCompletion
+            navigateToDefectCompletion = navController::navigateToDefectCompletion,
+            navigateToDefectEdit = navController::navigateToDefectEdit,
         )
     }
 
@@ -77,6 +79,24 @@ internal fun NavGraphBuilder.defectGraph(
             navigateToDefectDetail = { navController.navigateToDefectDetail(defectItem = it, isRefresh = true, navOptions = navOptions) }
         )
     }
+
+    composable<DefectEdit>(
+        typeMap = DefectEdit.typeMap,
+        enterTransition = { enterSlide(SlideDirection.Up) },
+        exitTransition = { exitSlide(SlideDirection.Down) },
+        popEnterTransition = { enterSlide(SlideDirection.Up) },
+        popExitTransition = { exitSlide(SlideDirection.Down) }
+    ) {
+        val navOptions = navOptions {
+            popUpTo(Home::class.java.name) {
+                inclusive = false
+            }
+        }
+        DefectEditScreen(
+            navigateToUp = navController::navigateUp,
+            navigateToDefectDetail = { navController.navigateToDefectDetail(defectItem = it, navOptions = navOptions) }
+        )
+    }
 }
 
 fun NavController.navigateToDefectEntry() {
@@ -89,4 +109,8 @@ fun NavController.navigateToDefectDetail(defectItem: DefectItem, isRefresh: Bool
 
 fun NavController.navigateToDefectCompletion(defectMainItem: DefectMainItem) {
     navigate(DefectCompletion(defectMainItem = defectMainItem))
+}
+
+fun NavController.navigateToDefectEdit(defectItem: DefectItem) {
+    navigate(DefectEdit(defectItem = defectItem.toArgs()))
 }

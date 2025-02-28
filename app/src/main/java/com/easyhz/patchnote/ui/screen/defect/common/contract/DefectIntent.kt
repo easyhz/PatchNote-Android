@@ -16,4 +16,5 @@ sealed class DefectIntent: UiIntent() {
     data object SearchItem: DefectIntent()
     data class InitFilter(val filterParam: FilterParam): DefectIntent()
     data object Reset: DefectIntent()
+    data class SendEntryItem(val entryItem: LinkedHashMap<CategoryType, TextFieldValue>): DefectIntent()
 }

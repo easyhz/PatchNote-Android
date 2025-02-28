@@ -86,6 +86,10 @@ class DefectDetailViewModel @Inject constructor(
                 setBottomSheet(false)
                 setDeleteDialog(true)
             }
+            DefectDetailBottomSheet.EDIT -> {
+                setBottomSheet(false)
+                postSideEffect { DetailSideEffect.NavigateToDefectEdit(currentState.defectItem!!) }
+            }
         }
     }
 
