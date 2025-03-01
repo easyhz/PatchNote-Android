@@ -94,3 +94,7 @@ fun LocalDateTime.toDateTimeString(): String {
     val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")
     return this.format(formatter)
 }
+
+fun LocalDateTime.toMillis(): Long {
+    return this.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+}

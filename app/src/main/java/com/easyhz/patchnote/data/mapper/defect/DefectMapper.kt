@@ -2,6 +2,7 @@ package com.easyhz.patchnote.data.mapper.defect
 
 import com.easyhz.patchnote.core.common.util.DateFormatUtil
 import com.easyhz.patchnote.core.common.util.toDateString
+import com.easyhz.patchnote.core.common.util.toMillis
 import com.easyhz.patchnote.core.database.defect.entity.OfflineDefectEntity
 import com.easyhz.patchnote.core.database.defect.entity.OfflineDefectImageEntity
 import com.easyhz.patchnote.core.database.defect.model.OfflineDefect
@@ -50,6 +51,7 @@ fun EntryDefect.toEntity(): OfflineDefect {
         requesterPhone = requesterPhone,
         teamId = teamId,
         thumbnailUrl = thumbnailUrl,
+        creationTime = this.creationTime?.toMillis() ?: System.currentTimeMillis()
     )
 
     val offlineDefectImageEntities = beforeImageUrls.zip(beforeImageSizes).map { (url, size) ->
