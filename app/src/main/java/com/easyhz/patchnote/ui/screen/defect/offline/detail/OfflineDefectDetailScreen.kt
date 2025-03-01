@@ -28,6 +28,7 @@ import com.easyhz.patchnote.core.designSystem.util.bottomSheet.DefectDetailBotto
 import com.easyhz.patchnote.core.designSystem.util.button.ButtonColor
 import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
+import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectProgress
 import com.easyhz.patchnote.core.model.defect.DefectUser
 import com.easyhz.patchnote.ui.screen.defect.defectDetail.component.DetailField
@@ -46,6 +47,7 @@ fun OfflineDefectDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: OfflineDefectDetailViewModel = hiltViewModel(),
     navigateToUp: () -> Unit,
+    navigateToDefectEdit: (DefectItem) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -214,8 +216,11 @@ fun OfflineDefectDetailScreen(
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            OfflineDefectDetailSideEffect.NavigateToUp -> {
+            is OfflineDefectDetailSideEffect.NavigateToUp -> {
                 navigateToUp()
+            }
+            is OfflineDefectDetailSideEffect.NavigateToDefectEdit -> {
+                navigateToDefectEdit(sideEffect.defectItem)
             }
         }
     }
