@@ -46,6 +46,7 @@ import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Primary
 import com.easyhz.patchnote.ui.theme.SemiBold18
+import com.easyhz.patchnote.ui.theme.SubBackground
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -181,11 +182,22 @@ fun DefectEditScreen(
         }
 
         if (uiState.isShowEntryDialog) {
-//            DefectEntryDialog(
-//                onClickSave = { viewModel.postIntent(DefectUpdateIntent.SaveDefect) },
-//                onClickOfflineSave = { viewModel.postIntent(DefectUpdateIntent.SaveOfflineDefect)  },
-//                onDismissRequest = { viewModel.postIntent(DefectUpdateIntent.HideEntryDialog) }
-//            )
+            BasicDialog(
+                title = stringResource(R.string.defect_edit_dialog_title),
+                content = null,
+                positiveButton = BasicDialogButton(
+                    text = stringResource(R.string.defect_edit_dialog_positive),
+                    style = SemiBold18.copy(color = MainBackground),
+                    backgroundColor = Primary,
+                    onClick = { viewModel.postIntent(DefectEditIntent.UpdateDefect) }
+                ),
+                negativeButton = BasicDialogButton(
+                    text = stringResource(R.string.defect_edit_dialog_negative),
+                    style = SemiBold18.copy(color = MainText),
+                    backgroundColor = SubBackground,
+                    onClick = { viewModel.postIntent(DefectEditIntent.HideEntryDialog) }
+                )
+            )
         }
     }
 
@@ -218,12 +230,8 @@ fun DefectEditScreen(
                 )
             }
             is DefectEditSideEffect.SendEntryItem -> {
-                println("SendEntryItem <- DefectEditScreen ${sideEffect.entryItem}")
                 defectViewModel.postIntent(DefectIntent.SendEntryItem(sideEffect.entryItem))
             }
-//            is DefectUpdateSideEffect.SendClear -> {
-//                defectViewModel.postIntent(DefectIntent.ClearAllData)
-//            }
         }
     }
 

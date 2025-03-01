@@ -24,6 +24,7 @@ import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.core.model.image.DefectImage
 import com.easyhz.patchnote.core.model.image.toDefectImages
 import com.easyhz.patchnote.domain.usecase.defect.CreateDefectUseCase
+import com.easyhz.patchnote.domain.usecase.defect.FetchDefectUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetDefectImagesUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetTakePictureUriUseCase
 import com.easyhz.patchnote.domain.usecase.image.RotateImageUseCase
@@ -47,6 +48,7 @@ class DefectEditViewModel @Inject constructor(
     private val createDefectUseCase: CreateDefectUseCase,
     private val rotateImageUseCase: RotateImageUseCase,
     private val getDefectImagesUseCase: GetDefectImagesUseCase,
+    private val fetchDefectUseCase: FetchDefectUseCase,
 ): BaseViewModel<DefectEditState, DefectEditIntent, DefectEditSideEffect>(
     initialState = DefectEditState.init()
 ) {
@@ -158,7 +160,6 @@ class DefectEditViewModel @Inject constructor(
         clearFocus()
         if (!isValidDefect(invalidEntry)) return@launch
         if (!isValidImage()) return@launch
-        setLoading(true)
         reduce { copy(entryItem = entryItem, isShowEntryDialog = true) }
     }
 
@@ -170,7 +171,7 @@ class DefectEditViewModel @Inject constructor(
                 .onSuccess {
                     setDialog(
                         DialogMessage(
-                            title = context.getString(R.string.success_create_defect),
+                            title = context.getString(R.string.defect_edit_success_dialog_title),
                             action = DialogAction.CustomAction
                         )
                     )
@@ -188,7 +189,7 @@ class DefectEditViewModel @Inject constructor(
     private fun getEntryParam(): EntryDefectParam {
         val entryItem = currentState.entryItem
         return EntryDefectParam(
-            id = Generate.randomUUID(),
+            id = currentState.defectItem?.id ?: Generate.randomUUID(),
             site = entryItem[CategoryType.SITE]?.text.orEmpty(),
             building = entryItem[CategoryType.BUILDING]?.text.orEmpty(),
             unit = entryItem[CategoryType.UNIT]?.text.orEmpty(),
@@ -196,7 +197,8 @@ class DefectEditViewModel @Inject constructor(
             part = entryItem[CategoryType.PART]?.text.orEmpty(),
             workType = entryItem[CategoryType.WORK_TYPE]?.text.orEmpty(),
             beforeDescription = currentState.entryContent,
-            beforeImageUris = currentState.images.map { it.uri }
+            beforeImageUris = currentState.images.map { it.uri },
+            creationTime = currentState.defectItem?.requestDate
         )
     }
 
@@ -234,10 +236,20 @@ class DefectEditViewModel @Inject constructor(
 
     /* 홈으로 */
     private fun navigateHome() {
-        if (currentState.defectItem != null) {
-            postSideEffect { DefectEditSideEffect.NavigateToDefectDetail(currentState.defectItem!!) }
-        } else {
-            navigateUp()
+        viewModelScope.launch {
+            if (currentState.defectItem != null && currentState.defectItem?.id != null) {
+                setLoading(true)
+                fetchDefectUseCase.invoke(currentState.defectItem?.id!!).onSuccess {
+                    postSideEffect { DefectEditSideEffect.NavigateToDefectDetail(it.defectItem) }
+                }.onFailure {
+                    logger.e(tag, "navigateToDefectDetail : $it")
+                    navigateUp()
+                }.also {
+                    setLoading(false)
+                }
+            } else {
+                navigateUp()
+            }
         }
     }
 
