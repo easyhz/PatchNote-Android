@@ -27,6 +27,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 
@@ -115,7 +116,15 @@ class DefectRepositoryImpl @Inject constructor(
         return defectLocalDataSource.findOfflineDefects(teamId, requesterId).map { it.toModel() }
     }
 
+    override suspend fun findOfflineDefect(defectId: String): Result<DefectItem> = withContext(dispatcher) {
+        return@withContext defectLocalDataSource.findOfflineDefect(defectId).map { it.toDefectItem() }
+    }
+
     override suspend fun deleteOfflineDefect(defectId: String): Result<Unit> {
         return defectLocalDataSource.deleteOfflineDefect(defectId)
+    }
+
+    override suspend fun updateOfflineDefect(defect: EntryDefect): Result<Unit> {
+        return defectLocalDataSource.updateOfflineDefect(defect.toEntity())
     }
 }
