@@ -1,7 +1,6 @@
 package com.easyhz.patchnote.ui.navigation.defect
 
 import com.easyhz.patchnote.core.common.util.serializableType
-import com.easyhz.patchnote.core.common.util.urlDecode
 import com.easyhz.patchnote.core.common.util.urlEncode
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectProgress
@@ -73,36 +72,8 @@ internal fun DefectItem.toArgs() = DefectItemArgs(
     workerId = workerId,
     workerName = workerName,
     workerPhone = workerPhone,
-    requestDate = requestDate,
-    completionDate = completionDate,
-    search = search,
-    teamId = teamId
-)
-
-internal fun DefectItemArgs.toModel() = DefectItem(
-    id = id,
-    site = site,
-    building = building,
-    unit = unit,
-    space = space,
-    part = part,
-    workType = workType,
-    progress = progress,
-    thumbnailUrl = thumbnailUrl,
-    beforeDescription = beforeDescription,
-    beforeImageSizes = beforeImageSizes,
-    beforeImageUrls = beforeImageUrls.map { it.urlDecode() },
-    afterDescription = afterDescription,
-    afterImageSizes = afterImageSizes,
-    afterImageUrls = afterImageUrls.map { it.urlDecode() },
-    requesterId = requesterId,
-    requesterName = requesterName,
-    requesterPhone = requesterPhone,
-    workerId = workerId,
-    workerName = workerName,
-    workerPhone = workerPhone,
-    requestDate = requestDate,
-    completionDate = completionDate,
+    requestDate = requestDate.toString(),
+    completionDate = completionDate?.toString(),
     search = search,
     teamId = teamId
 )
