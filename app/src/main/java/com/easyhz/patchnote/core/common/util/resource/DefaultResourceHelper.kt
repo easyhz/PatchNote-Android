@@ -1,7 +1,6 @@
 package com.easyhz.patchnote.core.common.util.resource
 
 import android.content.Context
-import com.easyhz.patchnote.core.common.util.resource.ResourceHelper
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
