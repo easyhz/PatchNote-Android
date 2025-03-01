@@ -6,6 +6,7 @@ import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.util.log.Logger
 import com.easyhz.patchnote.core.common.util.resource.ResourceHelper
 import com.easyhz.patchnote.core.common.util.serializable.SerializableHelper
+import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.error.DialogAction
 import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.domain.usecase.defect.CreateDefectUseCase
@@ -26,7 +27,7 @@ class DefectEditViewModel @Inject constructor(
     getTakePictureUriUseCase: GetTakePictureUriUseCase,
     rotateImageUseCase: RotateImageUseCase,
     getDefectImagesUseCase: GetDefectImagesUseCase,
-    fetchDefectUseCase: FetchDefectUseCase,
+    private val fetchDefectUseCase: FetchDefectUseCase,
     private val createDefectUseCase: CreateDefectUseCase,
 ): EditViewModel(
     logger = logger,
@@ -36,7 +37,6 @@ class DefectEditViewModel @Inject constructor(
     getTakePictureUriUseCase = getTakePictureUriUseCase,
     rotateImageUseCase = rotateImageUseCase,
     getDefectImagesUseCase = getDefectImagesUseCase,
-    fetchDefectUseCase = fetchDefectUseCase,
 ) {
     override val tag: String
         get() = "DefectEditViewModel"
@@ -61,6 +61,18 @@ class DefectEditViewModel @Inject constructor(
                 }.also {
                     setLoading(false)
                 }
+        }
+    }
+
+    override suspend fun fetchDefect(
+        defectId: String,
+        onSuccess: (DefectItem) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        fetchDefectUseCase.invoke(defectId).onSuccess {
+            onSuccess(it.defectItem)
+        }.onFailure {
+            onFailure(it)
         }
     }
 }
