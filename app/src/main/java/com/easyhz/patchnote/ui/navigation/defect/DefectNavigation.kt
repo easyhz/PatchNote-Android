@@ -3,6 +3,7 @@ package com.easyhz.patchnote.ui.navigation.defect
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -20,6 +21,7 @@ import com.easyhz.patchnote.ui.screen.defect.defectCompletion.DefectCompletionSc
 import com.easyhz.patchnote.ui.screen.defect.defectDetail.DefectDetailScreen
 import com.easyhz.patchnote.ui.screen.defect.defectEntry.DefectEntryScreen
 import com.easyhz.patchnote.ui.screen.defect.edit.DefectEditScreen
+import com.easyhz.patchnote.ui.screen.defect.edit.DefectEditViewModel
 
 internal fun NavGraphBuilder.defectGraph(
     navController: NavController
@@ -93,6 +95,7 @@ internal fun NavGraphBuilder.defectGraph(
             }
         }
         DefectEditScreen(
+            viewModel = hiltViewModel<DefectEditViewModel>(),
             navigateToUp = navController::navigateUp,
             navigateToDefectDetail = { navController.navigateToDefectDetail(defectItem = it, navOptions = navOptions) }
         )

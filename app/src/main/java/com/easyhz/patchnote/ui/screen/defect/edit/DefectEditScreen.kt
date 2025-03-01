@@ -52,7 +52,7 @@ import com.easyhz.patchnote.ui.theme.SubBackground
 @Composable
 fun DefectEditScreen(
     modifier: Modifier = Modifier,
-    viewModel: DefectEditViewModel = hiltViewModel(),
+    viewModel: EditViewModel = hiltViewModel(),
     defectViewModel: DefectViewModel = hiltViewModel(),
     navigateToUp: () -> Unit,
     navigateToDefectDetail: (DefectItem) -> Unit,
