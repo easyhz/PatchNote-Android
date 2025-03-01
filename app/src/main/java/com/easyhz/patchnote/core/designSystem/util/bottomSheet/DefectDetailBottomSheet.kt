@@ -9,6 +9,10 @@ enum class DefectDetailBottomSheet: BottomSheetType {
             get() = R.string.delete
         override val iconId: Int
             get() = R.drawable.ic_delete
-    }
-
+    }, EDIT {
+        override val titleId: Int
+            get() = R.string.edit
+        override val iconId: Int
+            get() = R.drawable.ic_edit
+    };
 }

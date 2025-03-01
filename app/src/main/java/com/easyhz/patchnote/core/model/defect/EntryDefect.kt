@@ -3,6 +3,7 @@ package com.easyhz.patchnote.core.model.defect
 import android.net.Uri
 import com.easyhz.patchnote.core.model.category.CategoryType
 import com.easyhz.patchnote.core.model.image.ImageSize
+import java.time.LocalDateTime
 
 data class EntryDefect(
     val id: String,
@@ -20,6 +21,7 @@ data class EntryDefect(
     val requesterName: String,
     val requesterPhone: String,
     val teamId: String,
+    val creationTime: LocalDateTime? = null,
 ) {
     fun exportSearch(): List<String> {
         val searchMap = CategoryType.entries.associate {
@@ -59,6 +61,7 @@ data class EntryDefectParam(
     val workType: String,
     val beforeDescription: String,
     val beforeImageUris: List<Uri>,
+    val creationTime: LocalDateTime? = null,
 ) {
     companion object {
         fun EntryDefectParam.toEntryDefect(
@@ -85,7 +88,8 @@ data class EntryDefectParam(
                 requesterId = requesterId,
                 requesterName = requesterName,
                 requesterPhone = requesterPhone,
-                teamId = teamId
+                teamId = teamId,
+                creationTime = creationTime
             )
         }
     }

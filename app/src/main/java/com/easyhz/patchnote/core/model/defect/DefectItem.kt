@@ -1,6 +1,7 @@
 package com.easyhz.patchnote.core.model.defect
 
 import com.easyhz.patchnote.core.model.image.ImageSize
+import java.time.LocalDateTime
 
 /**
  * 하자 데이터
@@ -52,8 +53,8 @@ data class DefectItem(
     val workerId: String?,
     val workerName: String?,
     val workerPhone: String?,
-    val requestDate: String,
-    val completionDate: String?,
+    val requestDate: LocalDateTime,
+    val completionDate: LocalDateTime?,
     val search: List<String>,
     val teamId: String
 ) {

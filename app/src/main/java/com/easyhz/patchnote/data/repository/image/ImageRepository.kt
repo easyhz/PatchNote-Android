@@ -1,6 +1,7 @@
 package com.easyhz.patchnote.data.repository.image
 
 import android.net.Uri
+import com.easyhz.patchnote.core.model.image.DefectImage
 import com.easyhz.patchnote.core.model.image.ImageSize
 
 interface ImageRepository {
@@ -10,4 +11,5 @@ interface ImageRepository {
     suspend fun getImageSizes(imageUri: List<Uri>): Result<List<ImageSize>>
     suspend fun rotateImage(imageUri: Uri): Result<Unit>
     suspend fun saveOfflineImages(imageUri: List<Uri>): Result<List<Uri?>>
+    suspend fun getDefectImages(imageUrls: List<String>): Result<List<DefectImage>>
 }

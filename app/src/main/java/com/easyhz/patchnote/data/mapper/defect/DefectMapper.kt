@@ -1,6 +1,8 @@
 package com.easyhz.patchnote.data.mapper.defect
 
 import com.easyhz.patchnote.core.common.util.DateFormatUtil
+import com.easyhz.patchnote.core.common.util.toDateString
+import com.easyhz.patchnote.core.common.util.toMillis
 import com.easyhz.patchnote.core.database.defect.entity.OfflineDefectEntity
 import com.easyhz.patchnote.core.database.defect.entity.OfflineDefectImageEntity
 import com.easyhz.patchnote.core.database.defect.model.OfflineDefect
@@ -11,7 +13,7 @@ import com.easyhz.patchnote.core.model.defect.ExportDefect
 import com.easyhz.patchnote.data.mapper.image.toData
 import com.easyhz.patchnote.data.mapper.image.toModel
 import com.easyhz.patchnote.data.model.defect.data.DefectData
-import com.google.firebase.Timestamp
+import java.time.LocalDateTime
 
 fun EntryDefect.toData(): DefectData = DefectData(
     id = id,
@@ -26,7 +28,7 @@ fun EntryDefect.toData(): DefectData = DefectData(
     beforeImageSizes = beforeImageSizes.map { it.toData() },
     beforeImageUrls = beforeImageUrls,
     requesterId = requesterId,
-    requestDate = Timestamp.now(),
+    requestDate = DateFormatUtil.localDateTimeToTimestamp(creationTime),
     requesterName = requesterName,
     requesterPhone = requesterPhone,
     search = this.exportSearch(),
@@ -49,6 +51,7 @@ fun EntryDefect.toEntity(): OfflineDefect {
         requesterPhone = requesterPhone,
         teamId = teamId,
         thumbnailUrl = thumbnailUrl,
+        creationTime = this.creationTime?.toMillis() ?: System.currentTimeMillis()
     )
 
     val offlineDefectImageEntities = beforeImageUrls.zip(beforeImageSizes).map { (url, size) ->
@@ -88,8 +91,8 @@ fun DefectData.toDefectItem(): DefectItem = DefectItem(
     afterDescription = afterDescription,
     afterImageSizes = afterImageSizes.map { it.toModel() },
     afterImageUrls = afterImageUrls,
-    requestDate = DateFormatUtil.formatTimestampToDateString(requestDate),
-    completionDate = DateFormatUtil.formatTimestampToDateNullString(completionDate),
+    requestDate = DateFormatUtil.formatTimestampToDateTime(requestDate) ?: LocalDateTime.now(),
+    completionDate = DateFormatUtil.formatTimestampToDateTime(completionDate),
     search = search,
     teamId = teamId,
 )
@@ -105,11 +108,11 @@ fun DefectItem.toExportDefect() = ExportDefect(
     progress = progress,
     requesterName = requesterName,
     requesterPhone = requesterPhone.takeLast(4),
-    requestDate = requestDate,
+    requestDate = requestDate.toDateString(),
     beforeDescription = beforeDescription.replace("\n", " "),
     workerName = workerName ?: "",
     workerPhone = workerPhone?.takeLast(4) ?: "",
-    completionDate = completionDate ?: "",
+    completionDate = completionDate?.toDateString() ?: "",
     afterDescription = afterDescription.replace("\n", " "),
     thumbnail = thumbnailUrl
 )

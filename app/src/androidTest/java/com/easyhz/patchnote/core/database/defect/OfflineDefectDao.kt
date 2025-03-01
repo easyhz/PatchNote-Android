@@ -77,6 +77,25 @@ class OfflineDefectDao: LocalDatabase() {
         assertEquals(offlineDefect2.id, result.first().defect.id)
     }
 
+    @Test
+    fun `하자_이미지_삭제`() = runTest {
+        // Given
+        val offlineDefect = createMockDefect()
+        val offlineDefectImage = createMockImages()
+
+        // When
+        offlineDefectDao.saveOfflineDefect(
+            defect = offlineDefect,
+            images = offlineDefectImage
+        )
+
+        offlineDefectDao.deleteOfflineDefectImages("defectId1")
+        val result = offlineDefectDao.findOfflineDefect("defectId1")
+
+        // Then
+        assertEquals(0, result.images.size)
+    }
+
     // ✅ Mock 하자 데이터 생성 함수
     private fun createMockDefect(defectId: String = "defectId1") = MockDefect.offlineDefectEntity(
         defectId = defectId,

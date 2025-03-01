@@ -7,6 +7,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Date
 import java.util.Locale
 
 object DateFormatUtil {
@@ -15,19 +16,30 @@ object DateFormatUtil {
 
 
     fun formatTimestampToDateString(timestamp: Timestamp): String {
-        val localDateTime = LocalDateTime.ofInstant(timestamp.toDate().toInstant(), ZoneId.systemDefault())
+        val localDateTime =
+            LocalDateTime.ofInstant(timestamp.toDate().toInstant(), ZoneId.systemDefault())
         return formatter.format(localDateTime)
     }
 
-    fun formatTimestampToDateNullString(timestamp: Timestamp?): String? {
+    fun localDateTimeToTimestamp(localDateTime: LocalDateTime?): Timestamp {
+        if (localDateTime == null) return Timestamp.now()
+        val instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant()
+        return Timestamp(Date.from(instant))
+    }
+
+    fun formatTimestampToDateTime(timestamp: Timestamp?): LocalDateTime? {
         if (timestamp == null) return null
-        val localDateTime = LocalDateTime.ofInstant(timestamp.toDate().toInstant(), ZoneId.systemDefault())
-        return formatter.format(localDateTime)
+        return LocalDateTime.ofInstant(timestamp.toDate().toInstant(), ZoneId.systemDefault())
     }
 
     fun convertMillisToDate(millis: Long): String {
-        val localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault())
+        val localDateTime =
+            LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault())
         return formatter.format(localDateTime)
+    }
+
+    fun convertMillisToDateTime(millis: Long): LocalDateTime {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault())
     }
 
     fun convertStringToMillis(string: String): Long {
@@ -52,7 +64,11 @@ object DateFormatUtil {
         return Timestamp(instant.epochSecond, instant.nano)
     }
 
-    fun displayDate(progress: DefectProgress, requestDate: String, completionDate: String?): String {
+    fun displayDate(
+        progress: DefectProgress,
+        requestDate: String,
+        completionDate: String?
+    ): String {
         if (progress == DefectProgress.DONE && completionDate != null) {
             return "$requestDate ~ $completionDate"
 //            val (reqYear, reqMonth, reqDay) = splitDate(requestDate)
@@ -68,11 +84,17 @@ object DateFormatUtil {
         return requestDate
     }
 
-    // 날짜를 분리해주는 유틸 함수
-    private fun splitDate(date: String): Triple<String, String, String> {
-        return Triple(date.substring(0, 4), date.substring(5, 7), date.substring(8, 10))
-    }
+}
 
+fun LocalDateTime.toDateString(): String {
+    return this.toLocalDate().toString().replace("-", ".")
+}
 
+fun LocalDateTime.toDateTimeString(): String {
+    val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")
+    return this.format(formatter)
+}
 
+fun LocalDateTime.toMillis(): Long {
+    return this.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 }

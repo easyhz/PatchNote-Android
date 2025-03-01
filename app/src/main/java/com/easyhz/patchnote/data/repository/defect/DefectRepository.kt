@@ -23,5 +23,8 @@ interface DefectRepository {
     suspend fun getOfflineDefectsPagingSource(teamId: String, requesterId: String): Flow<PagingData<DefectItem>>
 
     fun findOfflineDefects(teamId: String, requesterId: String): List<OfflineDefect>
+    suspend fun findOfflineDefect(defectId: String): Result<DefectItem>
+
     suspend fun deleteOfflineDefect(defectId: String): Result<Unit>
+    suspend fun updateOfflineDefect(defect: EntryDefect): Result<Unit>
 }

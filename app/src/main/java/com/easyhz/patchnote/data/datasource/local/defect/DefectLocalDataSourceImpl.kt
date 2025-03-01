@@ -22,6 +22,10 @@ class DefectLocalDataSourceImpl @Inject constructor(
         return offlineDefectDao.findOfflineDefects(teamId, requesterId)
     }
 
+    override fun findOfflineDefect(defectId: String): Result<OfflineDefect> = runCatching {
+        offlineDefectDao.findOfflineDefect(defectId)
+    }
+
     override suspend fun saveOfflineDefect(
         defect: OfflineDefect
     ) = runCatching {
@@ -30,5 +34,9 @@ class DefectLocalDataSourceImpl @Inject constructor(
 
     override suspend fun deleteOfflineDefect(defectId: String) = runCatching {
         offlineDefectDao.deleteOfflineDefects(defectId)
+    }
+
+    override suspend fun updateOfflineDefect(defect: OfflineDefect) = runCatching {
+        offlineDefectDao.updateOfflineDefect(defect.defect, defect.images)
     }
 }
