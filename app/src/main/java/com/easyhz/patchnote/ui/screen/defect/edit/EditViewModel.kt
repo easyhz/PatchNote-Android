@@ -26,11 +26,11 @@ import com.easyhz.patchnote.core.model.image.toDefectImages
 import com.easyhz.patchnote.domain.usecase.image.GetDefectImagesUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetTakePictureUriUseCase
 import com.easyhz.patchnote.domain.usecase.image.RotateImageUseCase
-import com.easyhz.patchnote.ui.screen.defect.edit.contract.DefectEditIntent
-import com.easyhz.patchnote.ui.screen.defect.edit.contract.DefectEditSideEffect
-import com.easyhz.patchnote.ui.screen.defect.edit.contract.DefectEditState
-import com.easyhz.patchnote.ui.screen.defect.edit.contract.DefectEditState.Companion.deleteImage
-import com.easyhz.patchnote.ui.screen.defect.edit.contract.DefectEditState.Companion.updateImages
+import com.easyhz.patchnote.ui.screen.defect.edit.contract.EditIntent
+import com.easyhz.patchnote.ui.screen.defect.edit.contract.EditSideEffect
+import com.easyhz.patchnote.ui.screen.defect.edit.contract.EditState
+import com.easyhz.patchnote.ui.screen.defect.edit.contract.EditState.Companion.deleteImage
+import com.easyhz.patchnote.ui.screen.defect.edit.contract.EditState.Companion.updateImages
 import kotlinx.coroutines.launch
 
 abstract class EditViewModel(
@@ -41,8 +41,8 @@ abstract class EditViewModel(
     private val getTakePictureUriUseCase: GetTakePictureUriUseCase,
     private val rotateImageUseCase: RotateImageUseCase,
     private val getDefectImagesUseCase: GetDefectImagesUseCase,
-): BaseViewModel<DefectEditState, DefectEditIntent, DefectEditSideEffect>(
-    initialState = DefectEditState.init()
+): BaseViewModel<EditState, EditIntent, EditSideEffect>(
+    initialState = EditState.init()
 ) {
     private var takePictureUri = mutableStateOf(Uri.EMPTY)
     var hasUploadHistory by mutableStateOf(false)
@@ -54,20 +54,20 @@ abstract class EditViewModel(
     abstract suspend fun fetchDefect(defectId: String, onSuccess: (DefectItem) -> Unit, onFailure: (Throwable) -> Unit)
 
 
-    override fun handleIntent(intent: DefectEditIntent) {
+    override fun handleIntent(intent: EditIntent) {
         when(intent) {
-            is DefectEditIntent.ChangeEntryContent -> { reduce { copy(entryContent = intent.value) } }
-            is DefectEditIntent.ChangeStateImageBottomSheet -> { changeStateImageBottomSheet(intent.isShow) }
-            is DefectEditIntent.ClickImageBottomSheet -> { onClickImageBottomSheet(intent.imageBottomSheetType) }
-            is DefectEditIntent.PickImages -> { updateEntryImages(intent.images) }
-            is DefectEditIntent.TakePicture -> { updateTakePicture(intent.isUsed) }
-            is DefectEditIntent.DeleteImage -> { deleteEntryImage(intent.image) }
-            is DefectEditIntent.ClickReceipt -> { checkDefect(intent.entryItem, intent.invalidEntry) }
-            is DefectEditIntent.NavigateToUp -> { handleNavigateToUp() }
-            is DefectEditIntent.SetDialog -> { setDialog(intent.message) }
-            is DefectEditIntent.SetLoading -> { setLoading(intent.isLoading) }
-            is DefectEditIntent.UpdateDefect -> { updateDefect() }
-            is DefectEditIntent.HideEntryDialog -> { hideEntryDialog() }
+            is EditIntent.ChangeEntryContent -> { reduce { copy(entryContent = intent.value) } }
+            is EditIntent.ChangeStateImageBottomSheet -> { changeStateImageBottomSheet(intent.isShow) }
+            is EditIntent.ClickImageBottomSheet -> { onClickImageBottomSheet(intent.imageBottomSheetType) }
+            is EditIntent.PickImages -> { updateEntryImages(intent.images) }
+            is EditIntent.TakePicture -> { updateTakePicture(intent.isUsed) }
+            is EditIntent.DeleteImage -> { deleteEntryImage(intent.image) }
+            is EditIntent.ClickReceipt -> { checkDefect(intent.entryItem, intent.invalidEntry) }
+            is EditIntent.NavigateToUp -> { handleNavigateToUp() }
+            is EditIntent.SetDialog -> { setDialog(intent.message) }
+            is EditIntent.SetLoading -> { setLoading(intent.isLoading) }
+            is EditIntent.UpdateDefect -> { updateDefect() }
+            is EditIntent.HideEntryDialog -> { hideEntryDialog() }
         }
     }
 
@@ -96,7 +96,7 @@ abstract class EditViewModel(
                     CategoryType.WORK_TYPE to TextFieldValue(defectItem.workType),
                 )
                 reduce { copy(images = it, isSuccessGetData = true, isLoading = false) }
-                postSideEffect { DefectEditSideEffect.SendEntryItem(entryItem) }
+                postSideEffect { EditSideEffect.SendEntryItem(entryItem) }
             }.onFailure {
                 logger.e(tag, "setUp : $it")
                 setLoading(false)
@@ -121,7 +121,7 @@ abstract class EditViewModel(
 
     /* 갤러리 실행 */
     private fun launchGallery() {
-        postSideEffect { DefectEditSideEffect.NavigateToGallery }
+        postSideEffect { EditSideEffect.NavigateToGallery }
     }
 
     /* 카메라 실행 : uri 생성 */
@@ -129,7 +129,7 @@ abstract class EditViewModel(
         getTakePictureUriUseCase.invoke(Unit)
             .onSuccess {
                 takePictureUri.value = it
-                postSideEffect { DefectEditSideEffect.NavigateToCamera(it) }
+                postSideEffect { EditSideEffect.NavigateToCamera(it) }
             }
             .onFailure {
                 logger.e(tag, "launchCamera : $it")
@@ -207,7 +207,7 @@ abstract class EditViewModel(
 
     /* 뒤로가기 */
     fun navigateUp() {
-        postSideEffect { DefectEditSideEffect.NavigateToUp }
+        postSideEffect { EditSideEffect.NavigateToUp }
     }
 
     /* 홈으로 */
@@ -217,7 +217,7 @@ abstract class EditViewModel(
                 setLoading(true)
                 fetchDefect(
                     defectId = currentState.defectItem?.id!!,
-                    onSuccess = { postSideEffect { DefectEditSideEffect.NavigateToDefectDetail(it) } },
+                    onSuccess = { postSideEffect { EditSideEffect.NavigateToDefectDetail(it) } },
                     onFailure = {
                         logger.e(tag, "navigateToDefectDetail : $it")
                         navigateUp()
@@ -232,7 +232,7 @@ abstract class EditViewModel(
 
     /* 포커스 해제 */
     private fun clearFocus() {
-        postSideEffect { DefectEditSideEffect.ClearFocus }
+        postSideEffect { EditSideEffect.ClearFocus }
     }
 
     /* 에러 다이얼로그 */

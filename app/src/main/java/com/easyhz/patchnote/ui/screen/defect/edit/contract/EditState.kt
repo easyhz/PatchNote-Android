@@ -7,7 +7,7 @@ import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.core.model.image.DefectImage
 
-data class DefectEditState(
+data class EditState(
     val isLoading: Boolean,
     val defectItem: DefectItem?,
     val entryContent: String,
@@ -19,7 +19,7 @@ data class DefectEditState(
     val entryItem: LinkedHashMap<CategoryType, TextFieldValue>,
 ): UiState() {
     companion object {
-        fun init() = DefectEditState(
+        fun init() = EditState(
             isLoading = true,
             defectItem = null,
             entryContent = "",
@@ -31,10 +31,10 @@ data class DefectEditState(
             entryItem = linkedMapOf()
         )
 
-        fun DefectEditState.updateImages(newImages: List<DefectImage>): DefectEditState =
+        fun EditState.updateImages(newImages: List<DefectImage>): EditState =
             this.copy(images = this.images + newImages)
 
-        fun DefectEditState.deleteImage(image: DefectImage): DefectEditState =
+        fun EditState.deleteImage(image: DefectImage): EditState =
             this.copy(images = this.images.filter { it.id != image.id })
     }
 }

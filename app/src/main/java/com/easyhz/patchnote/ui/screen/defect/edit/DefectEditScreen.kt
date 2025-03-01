@@ -39,8 +39,8 @@ import com.easyhz.patchnote.ui.screen.defect.common.contract.DefectSideEffect
 import com.easyhz.patchnote.ui.screen.defect.defectEntry.component.DefectCategoryField
 import com.easyhz.patchnote.ui.screen.defect.defectEntry.component.DefectContentField
 import com.easyhz.patchnote.ui.screen.defect.defectEntry.component.DefectImageField
-import com.easyhz.patchnote.ui.screen.defect.edit.contract.DefectEditIntent
-import com.easyhz.patchnote.ui.screen.defect.edit.contract.DefectEditSideEffect
+import com.easyhz.patchnote.ui.screen.defect.edit.contract.EditIntent
+import com.easyhz.patchnote.ui.screen.defect.edit.contract.EditSideEffect
 import com.easyhz.patchnote.ui.theme.LocalSnackBarHostState
 import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.MainText
@@ -65,13 +65,13 @@ fun DefectEditScreen(
     val galleryLauncher =
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.PickMultipleVisualMedia(10),
-            onResult = { viewModel.postIntent(DefectEditIntent.PickImages(it)) }
+            onResult = { viewModel.postIntent(EditIntent.PickImages(it)) }
         )
 
     val cameraLauncher =
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.TakePicture(),
-            onResult = { viewModel.postIntent(DefectEditIntent.TakePicture(it)) }
+            onResult = { viewModel.postIntent(EditIntent.TakePicture(it)) }
         )
     PatchNoteScaffold(
         topBar = {
@@ -80,7 +80,7 @@ fun DefectEditScreen(
                     iconId = R.drawable.ic_close_leading,
                     iconAlignment = Alignment.CenterStart,
                     tint = MainText,
-                    onClick = { viewModel.postIntent(DefectEditIntent.NavigateToUp) }
+                    onClick = { viewModel.postIntent(EditIntent.NavigateToUp) }
                 ),
                 title = TopBarType.TopBarTitle(
                     stringId = R.string.defect_entry_title
@@ -143,24 +143,24 @@ fun DefectEditScreen(
                 modifier = Modifier.padding(horizontal = 20.dp),
                 value = uiState.entryContent,
                 onValueChange = {
-                    viewModel.postIntent(DefectEditIntent.ChangeEntryContent(it))
+                    viewModel.postIntent(EditIntent.ChangeEntryContent(it))
                 },
                 onNext = { focusManager.moveFocus(FocusDirection.Down) }
             )
             DefectImageField(
                 images = uiState.images,
-                onClickAdd = { viewModel.postIntent(DefectEditIntent.ChangeStateImageBottomSheet(true)) },
-                onClickDelete = { viewModel.postIntent(DefectEditIntent.DeleteImage(it)) }
+                onClickAdd = { viewModel.postIntent(EditIntent.ChangeStateImageBottomSheet(true)) },
+                onClickDelete = { viewModel.postIntent(EditIntent.DeleteImage(it)) }
             )
             Spacer(modifier = Modifier.imePadding())
         }
         if (uiState.isShowImageBottomSheet) {
             ImageBottomSheet(
                 onDismissRequest = {
-                    viewModel.postIntent(DefectEditIntent.ChangeStateImageBottomSheet(false))
+                    viewModel.postIntent(EditIntent.ChangeStateImageBottomSheet(false))
                 },
                 onClick = {
-                    viewModel.postIntent(DefectEditIntent.ClickImageBottomSheet(it))
+                    viewModel.postIntent(EditIntent.ClickImageBottomSheet(it))
                 }
             )
         }
@@ -173,11 +173,11 @@ fun DefectEditScreen(
                     text = stringResource(R.string.dialog_button),
                     style = SemiBold18.copy(color = MainBackground),
                     backgroundColor = Primary,
-                    onClick = { viewModel.postIntent(DefectEditIntent.SetDialog(null)) }
+                    onClick = { viewModel.postIntent(EditIntent.SetDialog(null)) }
                 ),
                 negativeButton = null
             ) {
-                viewModel.postIntent(DefectEditIntent.SetDialog(null))
+                viewModel.postIntent(EditIntent.SetDialog(null))
             }
         }
 
@@ -189,13 +189,13 @@ fun DefectEditScreen(
                     text = stringResource(R.string.defect_edit_dialog_positive),
                     style = SemiBold18.copy(color = MainBackground),
                     backgroundColor = Primary,
-                    onClick = { viewModel.postIntent(DefectEditIntent.UpdateDefect) }
+                    onClick = { viewModel.postIntent(EditIntent.UpdateDefect) }
                 ),
                 negativeButton = BasicDialogButton(
                     text = stringResource(R.string.defect_edit_dialog_negative),
                     style = SemiBold18.copy(color = MainText),
                     backgroundColor = SubBackground,
-                    onClick = { viewModel.postIntent(DefectEditIntent.HideEntryDialog) }
+                    onClick = { viewModel.postIntent(EditIntent.HideEntryDialog) }
                 )
             )
         }
@@ -208,28 +208,28 @@ fun DefectEditScreen(
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {
-            is DefectEditSideEffect.ClearFocus -> {
+            is EditSideEffect.ClearFocus -> {
                 focusManager.clearFocus()
             }
-            is DefectEditSideEffect.NavigateToGallery -> {
+            is EditSideEffect.NavigateToGallery -> {
                 galleryLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
-            is DefectEditSideEffect.NavigateToCamera -> {
+            is EditSideEffect.NavigateToCamera -> {
                 cameraLauncher.launch(sideEffect.uri)
             }
-            is DefectEditSideEffect.NavigateToUp -> {
+            is EditSideEffect.NavigateToUp -> {
                 navigateToUp()
             }
-            is DefectEditSideEffect.NavigateToDefectDetail -> {
+            is EditSideEffect.NavigateToDefectDetail -> {
                 navigateToDefectDetail(sideEffect.defectItem)
             }
-            is DefectEditSideEffect.ShowSnackBar -> {
+            is EditSideEffect.ShowSnackBar -> {
                 snackBarHost.showSnackbar(
                     message = sideEffect.value,
                     withDismissAction = true
                 )
             }
-            is DefectEditSideEffect.SendEntryItem -> {
+            is EditSideEffect.SendEntryItem -> {
                 defectViewModel.postIntent(DefectIntent.SendEntryItem(sideEffect.entryItem))
             }
         }
@@ -238,13 +238,13 @@ fun DefectEditScreen(
     defectViewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {
             is DefectSideEffect.ValidateEntryItem -> {
-                viewModel.postIntent(DefectEditIntent.ClickReceipt(defectState.entryItem, sideEffect.invalidEntry))
+                viewModel.postIntent(EditIntent.ClickReceipt(defectState.entryItem, sideEffect.invalidEntry))
             }
             is DefectSideEffect.SendError -> {
-                viewModel.postIntent(DefectEditIntent.SetDialog(sideEffect.message))
+                viewModel.postIntent(EditIntent.SetDialog(sideEffect.message))
             }
             is DefectSideEffect.SendLoading -> {
-                viewModel.postIntent(DefectEditIntent.SetLoading(sideEffect.isLoading))
+                viewModel.postIntent(EditIntent.SetLoading(sideEffect.isLoading))
             }
             else -> { }
         }

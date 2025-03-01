@@ -20,7 +20,7 @@ import com.easyhz.patchnote.domain.usecase.image.GetDefectImagesUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetTakePictureUriUseCase
 import com.easyhz.patchnote.domain.usecase.image.RotateImageUseCase
 import com.easyhz.patchnote.ui.screen.defect.edit.EditViewModel
-import com.easyhz.patchnote.ui.screen.defect.edit.contract.DefectEditSideEffect
+import com.easyhz.patchnote.ui.screen.defect.edit.contract.EditSideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -65,7 +65,7 @@ class OfflineDefectEditViewModel @Inject constructor(
             }
             reduce { copy(images = defectImages, isSuccessGetData = true) }
             delay(500)
-            postSideEffect { DefectEditSideEffect.SendEntryItem(entryItem) }
+            postSideEffect { EditSideEffect.SendEntryItem(entryItem) }
             setLoading(false)
         }
     }
