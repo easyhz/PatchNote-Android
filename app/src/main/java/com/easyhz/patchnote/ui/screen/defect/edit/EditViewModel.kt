@@ -23,7 +23,6 @@ import com.easyhz.patchnote.core.model.error.DialogAction
 import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.core.model.image.DefectImage
 import com.easyhz.patchnote.core.model.image.toDefectImages
-import com.easyhz.patchnote.domain.usecase.defect.FetchDefectUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetDefectImagesUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetTakePictureUriUseCase
 import com.easyhz.patchnote.domain.usecase.image.RotateImageUseCase
@@ -42,13 +41,18 @@ abstract class EditViewModel(
     private val getTakePictureUriUseCase: GetTakePictureUriUseCase,
     private val rotateImageUseCase: RotateImageUseCase,
     private val getDefectImagesUseCase: GetDefectImagesUseCase,
-    private val fetchDefectUseCase: FetchDefectUseCase,
 ): BaseViewModel<DefectEditState, DefectEditIntent, DefectEditSideEffect>(
     initialState = DefectEditState.init()
 ) {
-    abstract val tag: String
     private var takePictureUri = mutableStateOf(Uri.EMPTY)
     var hasUploadHistory by mutableStateOf(false)
+
+    abstract val tag: String
+
+    abstract fun updateDefect()
+
+    abstract suspend fun fetchDefect(defectId: String, onSuccess: (DefectItem) -> Unit, onFailure: (Throwable) -> Unit)
+
 
     override fun handleIntent(intent: DefectEditIntent) {
         when(intent) {
@@ -79,7 +83,7 @@ abstract class EditViewModel(
         setUp(defectItem)
     }
 
-    private fun setUp(defectItem: DefectItem) {
+    open fun setUp(defectItem: DefectItem) {
         viewModelScope.launch {
             setLoading(true)
             getDefectImagesUseCase.invoke(defectItem.beforeImageUrls).onSuccess {
@@ -100,6 +104,7 @@ abstract class EditViewModel(
             }
         }
     }
+
 
     /* 이미지 바텀시트 상태 변경 */
     private fun changeStateImageBottomSheet(isShow: Boolean) {
@@ -157,8 +162,6 @@ abstract class EditViewModel(
         reduce { copy(entryItem = entryItem, isShowEntryDialog = true) }
     }
 
-    abstract fun updateDefect()
-
     fun getEntryParam(): EntryDefectParam {
         val entryItem = currentState.entryItem
         return EntryDefectParam(
@@ -203,7 +206,7 @@ abstract class EditViewModel(
     }
 
     /* 뒤로가기 */
-    private fun navigateUp() {
+    fun navigateUp() {
         postSideEffect { DefectEditSideEffect.NavigateToUp }
     }
 
@@ -212,14 +215,15 @@ abstract class EditViewModel(
         viewModelScope.launch {
             if (currentState.defectItem != null && currentState.defectItem?.id != null) {
                 setLoading(true)
-                fetchDefectUseCase.invoke(currentState.defectItem?.id!!).onSuccess {
-                    postSideEffect { DefectEditSideEffect.NavigateToDefectDetail(it.defectItem) }
-                }.onFailure {
-                    logger.e(tag, "navigateToDefectDetail : $it")
-                    navigateUp()
-                }.also {
-                    setLoading(false)
-                }
+                fetchDefect(
+                    defectId = currentState.defectItem?.id!!,
+                    onSuccess = { postSideEffect { DefectEditSideEffect.NavigateToDefectDetail(it) } },
+                    onFailure = {
+                        logger.e(tag, "navigateToDefectDetail : $it")
+                        navigateUp()
+                    }
+                )
+                setLoading(false)
             } else {
                 navigateUp()
             }
