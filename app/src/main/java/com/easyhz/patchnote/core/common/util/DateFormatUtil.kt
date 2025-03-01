@@ -84,11 +84,6 @@ object DateFormatUtil {
         return requestDate
     }
 
-    // 날짜를 분리해주는 유틸 함수
-    private fun splitDate(date: String): Triple<String, String, String> {
-        return Triple(date.substring(0, 4), date.substring(5, 7), date.substring(8, 10))
-    }
-
 }
 
 fun LocalDateTime.toDateString(): String {
