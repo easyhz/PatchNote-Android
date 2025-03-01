@@ -98,7 +98,11 @@ class OfflineDefectDetailViewModel @Inject constructor(
             }
             DefectDetailBottomSheet.EDIT -> {
                 setBottomSheet(false)
-//                postSideEffect { OfflineDefectDetailSideEffect.NavigateToDefectEdit(currentState.defectItem!!) }
+                if (currentState.defectItem == null) {
+                    navigateToUp()
+                    return
+                }
+                postSideEffect { OfflineDefectDetailSideEffect.NavigateToDefectEdit(currentState.defectItem!!) }
             }
         }
     }
