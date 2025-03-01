@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.util.serializable.SerializableHelper
+import com.easyhz.patchnote.core.common.util.toDateString
 import com.easyhz.patchnote.core.designSystem.util.bottomSheet.DefectDetailBottomSheet
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectMainItem
@@ -74,7 +75,7 @@ class DefectDetailViewModel @Inject constructor(
                 part = item.part,
                 workType = item.workType,
                 requesterName = item.requesterName,
-                requestDate = item.requestDate
+                requestDate = item.requestDate.toDateString()
             )
             postSideEffect { DetailSideEffect.NavigateToDefectCompletion(defectMainItem) }
         }

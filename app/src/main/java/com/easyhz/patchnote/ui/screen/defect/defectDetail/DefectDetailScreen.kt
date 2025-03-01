@@ -16,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
+import com.easyhz.patchnote.core.common.util.toDateTimeString
 import com.easyhz.patchnote.core.designSystem.component.bottomSheet.ListBottomSheet
 import com.easyhz.patchnote.core.designSystem.component.button.MainButton
 import com.easyhz.patchnote.core.designSystem.component.dialog.BasicDialog
@@ -103,11 +104,11 @@ fun DefectDetailScreen(
                     workType = uiState.defectItem!!.workType,
                     requester = DefectUser.create(
                         uiState.defectItem!!.requesterName,
-                        uiState.defectItem!!.requestDate
+                        uiState.defectItem!!.requestDate.toDateTimeString()
                     ),
                     worker = DefectUser.create(
                         uiState.defectItem!!.workerName,
-                        uiState.defectItem!!.requestDate
+                        uiState.defectItem!!.requestDate.toDateTimeString()
                     )
                 )
             }

@@ -28,6 +28,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.util.DateFormatUtil.displayDate
+import com.easyhz.patchnote.core.common.util.toDateString
 import com.easyhz.patchnote.core.designSystem.component.chip.FilterChip
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectProgress
@@ -41,6 +42,7 @@ import com.easyhz.patchnote.ui.theme.Regular14
 import com.easyhz.patchnote.ui.theme.SemiBold16
 import com.easyhz.patchnote.ui.theme.SubBackground
 import com.easyhz.patchnote.ui.theme.SubText
+import java.time.LocalDateTime
 
 @Composable
 fun HomeCard(
@@ -86,8 +88,8 @@ fun HomeCard(
                 Text(
                     text = displayDate(
                         progress = defectItem.progress,
-                        requestDate = defectItem.requestDate,
-                        completionDate = defectItem.completionDate
+                        requestDate = defectItem.requestDate.toDateString(),
+                        completionDate = defectItem.completionDate?.toDateString()
                     ),
                     style = Regular14,
                     color = SubText
@@ -176,7 +178,7 @@ private fun HomeCardPreview() {
             part = "part",
             workType = "workType",
             progress = DefectProgress.REQUESTED,
-            requestDate = "2021-10-01",
+            requestDate = LocalDateTime.of(2021, 1, 1, 0, 0),
             beforeDescription = "description",
             afterDescription = "",
             afterImageUrls = emptyList(),
@@ -186,7 +188,7 @@ private fun HomeCardPreview() {
             workerId = "",
             workerName = "",
             workerPhone = "",
-            completionDate = "",
+            completionDate = LocalDateTime.of(2021, 1, 1, 0, 0),
             thumbnailUrl = "",
             beforeImageSizes = emptyList(),
             afterImageSizes = emptyList(),
