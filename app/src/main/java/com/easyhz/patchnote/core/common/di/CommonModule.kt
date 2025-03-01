@@ -1,5 +1,6 @@
 package com.easyhz.patchnote.core.common.di
 
+import com.easyhz.patchnote.core.common.util.serializable.LocalDateTimeAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -15,5 +16,5 @@ object CommonModule {
     @Provides
     @Singleton
     fun provideMoshi(): Moshi =
-        Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        Moshi.Builder().add(KotlinJsonAdapterFactory()).add(LocalDateTimeAdapter()).build()
 }
