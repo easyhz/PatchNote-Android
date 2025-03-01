@@ -42,6 +42,9 @@ interface OfflineDefectDao {
     """)
     fun findOfflineDefects(teamId: String, requesterId: String): List<OfflineDefect>
 
+    @Query("SELECT * FROM OFFLINE_DEFECT WHERE id = :defectId")
+    fun findOfflineDefect(defectId: String): OfflineDefect
+
     /**
      * 하자 임시저장 저장
      */
@@ -69,4 +72,22 @@ interface OfflineDefectDao {
      */
     @Query("DELETE FROM OFFLINE_DEFECT WHERE id = :defectId")
     suspend fun deleteOfflineDefects(defectId: String)
+
+    /**
+     * 하자 이미지 삭제
+     */
+    @Query("DELETE FROM OFFLINE_DEFECT_IMAGE WHERE defectId = :defectId")
+    suspend fun deleteOfflineDefectImages(defectId: String)
+
+    /**
+     * 임시 하자 사진 삭제 후 업데이트
+     */
+    @Transaction
+    suspend fun updateOfflineDefect(
+        defect: OfflineDefectEntity,
+        images: List<OfflineDefectImageEntity>
+    ) {
+        deleteOfflineDefectImages(defect.id)
+        saveOfflineDefect(defect, images)
+    }
 }
