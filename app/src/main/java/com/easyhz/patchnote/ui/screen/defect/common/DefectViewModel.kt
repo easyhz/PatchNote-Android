@@ -82,7 +82,6 @@ class DefectViewModel @Inject constructor(
             }
 
             is DefectIntent.SendEntryItem -> {
-                println("SendEntryItem")
                 reduce { copy(entryItem = LinkedHashMap(intent.entryItem)) }
             }
         }
