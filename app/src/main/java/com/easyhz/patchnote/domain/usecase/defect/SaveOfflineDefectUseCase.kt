@@ -19,13 +19,14 @@ class SaveOfflineDefectUseCase @Inject constructor(
     private val imageRepository: ImageRepository,
     private val userRepository: UserRepository,
 ) : BaseUseCase<EntryDefectParam, Unit>() {
-    override suspend fun invoke(param: EntryDefectParam): Result<Unit> = withContext(dispatcher) {
-        runCatching {
+    override suspend fun invoke(param: EntryDefectParam): Result<Unit> = runCatching {
+        withContext(dispatcher) {
             val userDeferred = async { userRepository.getUserFromLocal() }
             val offlineImageUrisDeferred = async { imageRepository.saveOfflineImages(param.beforeImageUris) }
             val imageSizesDeferred = async { imageRepository.getImageSizes(param.beforeImageUris) }
-            val offlineImageUris = offlineImageUrisDeferred.await().getOrElse { emptyList() }
-            val imageSizes = imageSizesDeferred.await().getOrElse { emptyList() }
+
+            val offlineImageUris = offlineImageUrisDeferred.await().getOrThrow()
+            val imageSizes = imageSizesDeferred.await().getOrThrow()
             val user = userDeferred.await().getOrThrow()
 
             val entryDefect = param.toEntryDefect(

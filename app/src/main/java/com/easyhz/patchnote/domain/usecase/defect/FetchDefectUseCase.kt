@@ -17,8 +17,8 @@ class FetchDefectUseCase @Inject constructor(
     private val userRepository: UserRepository,
 ): BaseUseCase<String, Defect>() {
 
-    override suspend fun invoke(param: String): Result<Defect> = withContext(dispatcher) {
-        runCatching {
+    override suspend fun invoke(param: String): Result<Defect> = runCatching {
+        withContext(dispatcher) {
             val defectDeferred = async { defectRepository.fetchDefect(param) }
             val userIdDeferred = async { userRepository.getUserId() }
 

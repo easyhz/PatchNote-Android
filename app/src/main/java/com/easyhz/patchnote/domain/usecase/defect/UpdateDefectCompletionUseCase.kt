@@ -19,8 +19,8 @@ class UpdateDefectCompletionUseCase @Inject constructor(
     private val imageRepository: ImageRepository,
     private val userRepository: UserRepository,
 ): BaseUseCase<DefectCompletionParam, Unit>() {
-    override suspend fun invoke(param: DefectCompletionParam): Result<Unit>  = withContext(dispatcher) {
-        runCatching {
+    override suspend fun invoke(param: DefectCompletionParam): Result<Unit> = runCatching {
+        withContext(dispatcher) {
             val userDeferred = async { userRepository.getUserFromLocal() }
             val imageUrlsDeferred = async { imageRepository.uploadImages("${Storage.DEFECT}/${param.id}/After/", param.afterImageUris) }
             val imageSizesDeferred = async { imageRepository.getImageSizes(param.afterImageUris) }
