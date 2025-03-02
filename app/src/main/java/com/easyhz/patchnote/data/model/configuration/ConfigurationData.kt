@@ -10,4 +10,6 @@ data class ConfigurationData(
     var notionUrl: String = "",
     @PropertyName("settingPassword")
     val settingPassword: String = "",
+    @PropertyName("maintenanceNotice")
+    val maintenanceNotice: String = "",
 )

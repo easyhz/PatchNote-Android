@@ -25,4 +25,6 @@ sealed class AppError: Exception() {
         private fun readResolve(): Any = NoUserDataError
     }
 
+    data class DefaultError(override val message: String) : AppError()
+
 }
