@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
+import com.easyhz.patchnote.core.common.error.AppError
 import com.easyhz.patchnote.core.model.user.User
 import com.easyhz.patchnote.data.di.config.UserDataStore
 import com.easyhz.patchnote.data.di.config.UserKey
@@ -104,7 +105,7 @@ class UserLocalDataSourceImpl @Inject constructor(
     }
 
     private fun generateNullException(userKey: UserKey): Exception {
-        return Exception("${userKey.key} is null")
+        return AppError.DefaultError("${userKey.key} is null")
     }
 
 }
