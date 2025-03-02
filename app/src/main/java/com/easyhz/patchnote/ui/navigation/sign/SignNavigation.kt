@@ -80,17 +80,17 @@ fun NavController.navigateToSign() {
 }
 
 fun NavController.navigateToVerification(verificationId: String, phoneNumber: String) {
-    navigate(Sign.Verification(verificationId, phoneNumber))
+    navigate(Sign.Verification(verificationId = verificationId, phoneNumber = phoneNumber))
 }
 
 fun NavController.navigateToName(uid: String, phoneNumber: String) {
-    navigate(Sign.Name(uid, phoneNumber))
+    navigate(Sign.Name(uid = uid, phoneNumber = phoneNumber))
 }
 
 fun NavController.navigateToTeam(uid: String, phoneNumber: String, userName: String) {
-    navigate(Sign.Team(uid, phoneNumber, userName))
+    navigate(Sign.Team(uid = uid, phoneNumber = phoneNumber, userName = userName))
 }
 
 fun NavController.navigateToCreateTeam(uid: String, phoneNumber: String, userName: String) {
-    navigate(Sign.CreateTeam(uid, phoneNumber, userName))
+    navigate(Sign.CreateTeam(uid = uid, phoneNumber = phoneNumber, userName = userName))
 }
