@@ -20,8 +20,8 @@ class CreateDefectUseCase @Inject constructor(
     private val imageRepository: ImageRepository,
     private val userRepository: UserRepository,
 ): BaseUseCase<EntryDefectParam, Unit>() {
-    override suspend operator fun invoke(param: EntryDefectParam): Result<Unit> = withContext(dispatcher) {
-        runCatching {
+    override suspend operator fun invoke(param: EntryDefectParam): Result<Unit> = runCatching {
+        withContext(dispatcher) {
             val userDeferred = async { userRepository.getUserFromLocal() }
             val imageUrlsDeferred = async { imageRepository.uploadImages("${Storage.DEFECT}/${param.id}/Before/", param.beforeImageUris) }
             val thumbnailUrlDeferred = async {
