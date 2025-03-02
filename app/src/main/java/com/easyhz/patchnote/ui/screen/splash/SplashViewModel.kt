@@ -1,24 +1,32 @@
 package com.easyhz.patchnote.ui.screen.splash
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.easyhz.patchnote.BuildConfig
+import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.base.BaseViewModel
-import com.easyhz.patchnote.core.common.util.version.Version
-import com.easyhz.patchnote.domain.usecase.configuration.FetchConfigurationUseCase
-import com.easyhz.patchnote.domain.usecase.sign.IsLoginUseCase
-import com.easyhz.patchnote.domain.usecase.sign.UpdateUserUseCase
+import com.easyhz.patchnote.core.common.error.AppError
+import com.easyhz.patchnote.core.common.util.log.Logger
+import com.easyhz.patchnote.core.common.util.resource.ResourceHelper
+import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
+import com.easyhz.patchnote.core.model.app.AppStep
+import com.easyhz.patchnote.core.model.error.DialogAction
+import com.easyhz.patchnote.core.model.error.DialogMessage
+import com.easyhz.patchnote.domain.usecase.app.CheckAppStepUseCase
 import com.easyhz.patchnote.ui.screen.splash.contract.SplashIntent
 import com.easyhz.patchnote.ui.screen.splash.contract.SplashSideEffect
 import com.easyhz.patchnote.ui.screen.splash.contract.SplashState
+import com.easyhz.patchnote.ui.theme.MainBackground
+import com.easyhz.patchnote.ui.theme.Primary
+import com.easyhz.patchnote.ui.theme.SemiBold18
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel  @Inject constructor(
-    private val isLoginUseCase: IsLoginUseCase,
-    private val updateUserUseCase: UpdateUserUseCase,
-    private val fetchConfigurationUseCase: FetchConfigurationUseCase,
+    private val logger: Logger,
+    private val resourceHelper: ResourceHelper,
+    private val checkAppStepUseCase: CheckAppStepUseCase,
 ): BaseViewModel<SplashState, SplashIntent, SplashSideEffect>(
     SplashState.init()
 ) {
@@ -31,38 +39,50 @@ class SplashViewModel  @Inject constructor(
     }
 
     init {
-        fetchConfiguration()
+        checkAppStep()
     }
 
-    private fun isLogin() = viewModelScope.launch {
-        isLoginUseCase.invoke(Unit).onSuccess {
-            if (it) {
-                updateUser()
+    private fun checkAppStep() {
+        viewModelScope.launch {
+            checkAppStepUseCase.invoke(Unit).onSuccess {
+                when (it) {
+                    is AppStep.Update -> handleUpdate(it.appVersion)
+                    is AppStep.Maintenance -> handleMaintenance(it.message)
+                    is AppStep.Home -> navigateToHome()
+                    is AppStep.Onboarding -> navigateToOnboarding()
+                    is AppStep.Team -> { }
+                }
+            }.onFailure { e ->
+                logger.e(tag, "checkAppStep: ${e.message}")
+                handleError(e)
             }
-            else { navigateToOnboarding() }
-        }.onFailure { e ->
-            Log.e("MainViewModel", "isLogin: ${e.message}")
-            navigateToOnboarding()
-        }
-    }
-    private fun updateUser() = viewModelScope.launch {
-        updateUserUseCase.invoke(Unit).onSuccess {
-            navigateToHome()
-        }.onFailure {
-            Log.e("MainViewModel", "updateUser: ${it.message}")
         }
     }
 
-    /* fetchConfiguration */
-    private fun fetchConfiguration() = viewModelScope.launch {
-        fetchConfigurationUseCase.invoke(Unit).onSuccess {
-            val needsUpdate = Version.needsUpdate(it.androidVersion)
-            reduce { copy(needsUpdate = needsUpdate, appConfiguration = it) }
-            if (needsUpdate) return@launch
-            isLogin()
-        }.onFailure {
-            Log.e(tag, "fetchConfiguration : $it")
-        }
+    private fun handleUpdate(version: String) {
+        setDialog(
+            message = DialogMessage(
+                title = resourceHelper.getString(R.string.version_dialog_title),
+                message = resourceHelper.getString(R.string.version_dialog_message, version, BuildConfig.VERSION_NAME),
+                positiveButton = getDefaultPositiveButton(
+                    text = resourceHelper.getString(R.string.version_dialog_button),
+                    onClick = ::updateAppVersion
+                )
+            )
+        )
+    }
+
+    private fun handleMaintenance(message: String) {
+        setDialog(
+            message = DialogMessage(
+                title = message,
+                action = DialogAction.NavigateUp,
+                positiveButton = getDefaultPositiveButton(
+                    text = resourceHelper.getString(R.string.maintenance_dialog_button),
+                    onClick = ::navigateUp
+                )
+            )
+        )
     }
 
     private fun navigateToHome() {
@@ -76,6 +96,45 @@ class SplashViewModel  @Inject constructor(
     /* updateAppVersion */
     private fun updateAppVersion() {
         postSideEffect { SplashSideEffect.NavigateToUrl("https://play.google.com/store/apps/details?id=com.easyhz.patchnote") }
+    }
+
+    private fun navigateUp() {
+        postSideEffect { SplashSideEffect.NavigateUp }
+    }
+
+    /* 다이얼로그 */
+    private fun setDialog(message: DialogMessage?) {
+        reduce { copy(dialogMessage = message) }
+    }
+
+    private fun getDefaultPositiveButton(text: String, onClick: () -> Unit): BasicDialogButton {
+        return BasicDialogButton(
+            text = text,
+            style = SemiBold18.copy(color = MainBackground),
+            backgroundColor = Primary,
+            onClick = onClick
+        )
+    }
+
+    private fun handleError(e: Throwable) {
+        when(e) {
+            is AppError.DefaultError -> { navigateToOnboarding() }
+            else -> {
+                setDialog(
+                    message = DialogMessage(
+                        title = resourceHelper.getString(R.string.error_dialog_title),
+                        message = resourceHelper.getString(R.string.error_dialog_message),
+                        positiveButton = BasicDialogButton(
+                            text = resourceHelper.getString(R.string.error_dialog_button),
+                            style = SemiBold18.copy(color = MainBackground),
+                            backgroundColor = Primary,
+                            onClick = ::checkAppStep
+                        )
+                    )
+                )
+            }
+        }
+
     }
 
 }
