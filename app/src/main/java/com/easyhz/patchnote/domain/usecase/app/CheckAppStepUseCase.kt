@@ -11,7 +11,6 @@ import com.easyhz.patchnote.data.repository.configuration.ConfigurationRepositor
 import com.easyhz.patchnote.data.repository.user.UserRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -36,17 +35,20 @@ class CheckAppStepUseCase @Inject constructor(
      * - 앱 설정 정보
      * */
     private suspend fun fetchResults(): FetchResult = withContext(dispatcher) {
-        awaitAll(
-            async { userRepository.isLogin() },
-            async { userRepository.getUserFromLocal().getOrThrow() },
-            async { configurationRepository.fetchConfiguration().getOrThrow() },
-        ).let {
-            FetchResult(
-                isLogin = it[0] as Boolean,
-                user = it[1] as User,
-                configuration = it[2] as Configuration
-            )
-        }
+
+        val isLoginDeferred = async { userRepository.isLogin() }
+        val userDeferred = async { userRepository.getUserFromLocal().getOrThrow() }
+        val configurationDeferred = async { configurationRepository.fetchConfiguration().getOrThrow() }
+
+        val isLogin = isLoginDeferred.await()
+        val user = userDeferred.await()
+        val configuration = configurationDeferred.await()
+
+        FetchResult(
+            isLogin = isLogin,
+            user = user,
+            configuration = configuration
+        )
     }
 
     /** ✅ 앱 상태 결정 로직 분리 */
@@ -58,10 +60,11 @@ class CheckAppStepUseCase @Inject constructor(
             else -> AppStep.Onboarding
         }
     }
+
+    private data class FetchResult(
+        val isLogin: Boolean,
+        val user: User,
+        val configuration: Configuration
+    )
 }
 
-private data class FetchResult(
-    val isLogin: Boolean,
-    val user: User,
-    val configuration: Configuration
-)
