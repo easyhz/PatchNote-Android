@@ -18,7 +18,7 @@ data class OfflineDefectState(
         fun init() = OfflineDefectState(
             isRefreshing = false,
             isShowOnboardingDialog = false,
-            appConfiguration = Configuration("", "", ""),
+            appConfiguration = Configuration("", "", "", ""),
             isShowUploadDialog = false,
             isShowUploadSuccessDialog = false,
             isShowUploadProgressDialog = false,
