@@ -6,5 +6,6 @@ import com.easyhz.patchnote.data.model.configuration.ConfigurationData
 fun ConfigurationData.toModel() = Configuration(
     androidVersion = androidVersion,
     notionUrl = notionUrl,
-    settingPassword = settingPassword
+    settingPassword = settingPassword,
+    maintenanceNotice = maintenanceNotice
 )
