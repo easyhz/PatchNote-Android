@@ -30,9 +30,9 @@ class ImageRepositoryImpl @Inject constructor(
         PatchNoteFileProvider.getTakePictureUri(context, ioDispatcher)
 
     override suspend fun uploadImages(pathId: String, images: List<Uri>): Result<List<String>> =
-        withContext(ioDispatcher) {
-            runCatching {
-                if (images.isEmpty()) return@runCatching emptyList()
+        runCatching {
+            withContext(ioDispatcher) {
+                if (images.isEmpty()) return@withContext emptyList()
                 val semaphore = Semaphore(5)
 
                 coroutineScope {
@@ -59,8 +59,8 @@ class ImageRepositoryImpl @Inject constructor(
         }
 
     override suspend fun uploadThumbnail(pathId: String, imageUri: Uri): Result<String> =
-        withContext(ioDispatcher) {
-            runCatching {
+        runCatching {
+            withContext(ioDispatcher) {
                 val thumbnail = PatchNoteFileProvider.compress(
                     context = context,
                     imageUri = imageUri,
@@ -77,23 +77,23 @@ class ImageRepositoryImpl @Inject constructor(
         }
 
     override suspend fun getImageSizes(imageUri: List<Uri>): Result<List<ImageSize>> =
-        withContext(ioDispatcher) {
-            runCatching {
+        runCatching {
+            withContext(ioDispatcher) {
                 imageUri.map {
                     PatchNoteFileProvider.getImageDimensions(context, it)
                 }
             }
         }
 
-    override suspend fun rotateImage(imageUri: Uri): Result<Unit> = withContext(ioDispatcher) {
-        runCatching {
+    override suspend fun rotateImage(imageUri: Uri): Result<Unit> = runCatching {
+        withContext(ioDispatcher) {
             PatchNoteFileProvider.rotateAndSaveImage(context, imageUri)
         }
     }
 
     override suspend fun saveOfflineImages(imageUri: List<Uri>): Result<List<Uri?>> =
-        withContext(ioDispatcher) {
-            return@withContext runCatching {
+        runCatching {
+            withContext(ioDispatcher) {
                 imageUri.map {
                     PatchNoteFileProvider.compress(
                         context = context,
@@ -105,13 +105,16 @@ class ImageRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun getDefectImages(imageUrls: List<String>): Result<List<DefectImage>> = withContext(ioDispatcher) {
-        return@withContext runCatching {
-            imageUrls.map {
-                val id = Generate.randomUuid()
-                val uri = imageDataSource.downloadImage(context = context, imageUrl = it, id = id).getOrThrow()
-                DefectImage(id = id, uri = uri)
+    override suspend fun getDefectImages(imageUrls: List<String>): Result<List<DefectImage>> =
+        runCatching {
+            withContext(ioDispatcher) {
+                imageUrls.map {
+                    val id = Generate.randomUuid()
+                    val uri =
+                        imageDataSource.downloadImage(context = context, imageUrl = it, id = id)
+                            .getOrThrow()
+                    DefectImage(id = id, uri = uri)
+                }
             }
         }
-    }
 }
