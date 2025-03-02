@@ -55,8 +55,8 @@ class SignVerificationViewModel @Inject constructor(
     private fun checkAlreadyUser(uid: String, phoneNumber: String) = viewModelScope.launch {
         checkAlreadyUserUseCase.invoke(uid).onSuccess { signType ->
             when(signType) {
-                is SignType.NewUser -> navigateToName(uid, phoneNumber)
-                is SignType.TeamRequired -> navigateToTeam(signType.uid, signType.userName, signType.phoneNumber)
+                is SignType.NewUser -> navigateToName(uid = uid, phoneNumber = phoneNumber)
+                is SignType.TeamRequired -> navigateToTeam(uid = signType.uid, phoneNumber = signType.phoneNumber, userName = signType.userName)
                 is SignType.ExistingUser -> navigateToHome()
             }
         }.onFailure { e ->
@@ -70,7 +70,7 @@ class SignVerificationViewModel @Inject constructor(
     }
 
     private fun navigateToName(uid: String, phoneNumber: String) {
-        postSideEffect { VerificationSideEffect.NavigateToName(uid, phoneNumber) }
+        postSideEffect { VerificationSideEffect.NavigateToName(uid = uid, phoneNumber = phoneNumber) }
     }
 
     private fun navigateToHome() {
@@ -78,7 +78,7 @@ class SignVerificationViewModel @Inject constructor(
     }
 
     private fun navigateToTeam(uid: String, phoneNumber: String, userName: String) {
-        postSideEffect { VerificationSideEffect.NavigateToTeam(uid, phoneNumber, userName) }
+        postSideEffect { VerificationSideEffect.NavigateToTeam(uid = uid, phoneNumber = phoneNumber, userName = userName) }
     }
 
     private fun setLoading(isLoading: Boolean) {
