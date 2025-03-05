@@ -124,7 +124,8 @@ fun DefectDetailScreen(
         }
         if (uiState.isShowBottomSheet) {
             ListBottomSheet(
-                items = enumValues<DefectDetailBottomSheet>(),
+                items = if (uiState.defectItem?.progress != DefectProgress.DONE) enumValues<DefectDetailBottomSheet>()
+                else enumValues<DefectDetailBottomSheet>().filter { it != DefectDetailBottomSheet.EDIT }.toTypedArray(),
                 onDismissRequest = {
                     viewModel.postIntent(DetailIntent.ChangeStateBottomSheet(false))
                 },
