@@ -24,7 +24,7 @@ class CheckAppStepUseCase @Inject constructor(
         val fetchResult = fetchResults()
 
         determineAppStep(fetchResult)
-            .also { userRepository.updateUser(fetchResult.user) }
+            .also { userRepository.updateUserFromRemote() }
     }
 
     /**
