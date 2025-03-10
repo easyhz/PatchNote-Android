@@ -22,9 +22,8 @@ class CheckAppStepUseCase @Inject constructor(
 
     override suspend fun invoke(param: Unit): Result<AppStep> = runCatching {
         val fetchResult = fetchResults()
-
+        userRepository.updateUserFromRemote().getOrNull()
         determineAppStep(fetchResult)
-            .also { userRepository.updateUser(fetchResult.user) }
     }
 
     /**
@@ -37,7 +36,7 @@ class CheckAppStepUseCase @Inject constructor(
     private suspend fun fetchResults(): FetchResult = withContext(dispatcher) {
 
         val isLoginDeferred = async { userRepository.isLogin() }
-        val userDeferred = async { userRepository.getUserFromLocal().getOrThrow() }
+        val userDeferred = async { userRepository.getUserFromLocal().getOrNull() }
         val configurationDeferred = async { configurationRepository.fetchConfiguration().getOrThrow() }
 
         val isLogin = isLoginDeferred.await()
@@ -56,14 +55,14 @@ class CheckAppStepUseCase @Inject constructor(
         when {
             Version.needsUpdate(configuration.androidVersion) -> AppStep.Update(configuration.androidVersion)
             configuration.maintenanceNotice.isNotBlank() -> AppStep.Maintenance(configuration.maintenanceNotice)
-            isLogin && user.id.isNotBlank() && user.teamId.isNotBlank() -> AppStep.Home
+            isLogin && user?.id?.isNotBlank() == true && user.teamId.isNotBlank() -> AppStep.Home
             else -> AppStep.Onboarding
         }
     }
 
     private data class FetchResult(
         val isLogin: Boolean,
-        val user: User,
+        val user: User?,
         val configuration: Configuration
     )
 }
