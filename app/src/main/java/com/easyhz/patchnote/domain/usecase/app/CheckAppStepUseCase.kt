@@ -22,9 +22,8 @@ class CheckAppStepUseCase @Inject constructor(
 
     override suspend fun invoke(param: Unit): Result<AppStep> = runCatching {
         val fetchResult = fetchResults()
-
+        userRepository.updateUserFromRemote()
         determineAppStep(fetchResult)
-            .also { userRepository.updateUserFromRemote() }
     }
 
     /**
