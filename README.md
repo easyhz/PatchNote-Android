@@ -12,6 +12,19 @@
 
 <img width="300" alt="온보딩" src="https://github.com/user-attachments/assets/8ecad5ef-b304-4fdc-8cf7-de8ea1cebe95">
 
+## Stack
+```
+1. Jetpack Compose
+2. Hilt
+3. Glide
+4. Room
+etc.
+```
+
+## Documentation
+1. [Learning Point](https://github.com/easyhz/PatchNote-Android/blob/main/docs/LearningPoint.md)
+
+
 ## 문의
 
 >
