@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="team_selection_title">팀 선택</string>
+    <string name="team_selection_add">팀 추가하기</string>
+    <string name="team_selection_information">작업할 팀을 선택합니다. [설정 - 팀 선택]에서 자유롭게 변경 가능합니다.</string>
+</resources>
