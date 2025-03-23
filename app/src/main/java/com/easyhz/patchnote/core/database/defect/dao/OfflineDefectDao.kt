@@ -22,7 +22,6 @@ interface OfflineDefectDao {
     /**
      * 하자 임시저장 조회
      */
-    @Transaction
     @Query("""
         SELECT * 
         FROM OFFLINE_DEFECT 
@@ -32,7 +31,6 @@ interface OfflineDefectDao {
     """)
     fun findOfflineDefectsPagingSource(teamId: String, requesterId: String): PagingSource<Int, OfflineDefect>
 
-    @Transaction
     @Query("""
         SELECT * 
         FROM OFFLINE_DEFECT 
