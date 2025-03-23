@@ -1,5 +1,6 @@
 package com.easyhz.patchnote.data.model.sign.response
 
+import com.easyhz.patchnote.data.model.sign.common.TeamJoinDate
 import com.google.firebase.firestore.PropertyName
 
 data class UserResponse(
@@ -9,7 +10,10 @@ data class UserResponse(
     val name: String = "",
     @PropertyName("phone")
     val phone: String = "",
-    @get:PropertyName("teamID")
-    @set:PropertyName("teamID")
-    var teamId: String = "",
+    @get:PropertyName("teamIDs")
+    @set:PropertyName("teamIDs")
+    var teamIds: List<String> = emptyList(),
+    @get:PropertyName("teamJoinDates")
+    @set:PropertyName("teamJoinDates")
+    var teamJoinDates: List<TeamJoinDate> = emptyList(),
 )
