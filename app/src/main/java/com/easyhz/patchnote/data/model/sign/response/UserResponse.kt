@@ -1,6 +1,6 @@
 package com.easyhz.patchnote.data.model.sign.response
 
-import com.easyhz.patchnote.data.model.sign.common.TeamJoinDate
+import com.easyhz.patchnote.data.model.sign.common.TeamJoinDateData
 import com.google.firebase.firestore.PropertyName
 
 data class UserResponse(
@@ -15,5 +15,5 @@ data class UserResponse(
     var teamIds: List<String> = emptyList(),
     @get:PropertyName("teamJoinDates")
     @set:PropertyName("teamJoinDates")
-    var teamJoinDates: List<TeamJoinDate> = emptyList(),
+    var teamJoinDates: List<TeamJoinDateData> = emptyList(),
 )
