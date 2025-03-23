@@ -4,6 +4,7 @@ data class User(
     val id: String,
     val name: String,
     val phone: String,
+    val currentTeamId: String,
     val teamIds: List<String>,
     val teamJoinDates: List<TeamJoinDate> = emptyList()
 ) {
@@ -12,6 +13,7 @@ data class User(
             id = "",
             name = "",
             phone = "",
+            currentTeamId = "",
             teamIds = emptyList()
         )
     }
