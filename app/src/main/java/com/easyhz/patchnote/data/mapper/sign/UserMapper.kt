@@ -16,10 +16,13 @@ fun User.toRequest() = SaveUserRequest(
     teamJoinDates = teamJoinDates.map { it.toRequest() }
 )
 
-fun UserResponse.toModel() = User(
+fun UserResponse.toModel(
+    currentTeamId: String?
+) = User(
     id = id,
     name = name,
     phone = phone,
+    currentTeamId = currentTeamId,
     teamIds = teamIds,
     teamJoinDates = teamJoinDates.map { it.toModel() }
 )
