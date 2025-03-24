@@ -1,7 +1,9 @@
-<img src="https://github.com/user-attachments/assets/03cd71e2-0dc1-4718-b547-b91ccb1a1223" width=100/>
+<a href="https://play.google.com/store/apps/details?id=com.easyhz.patchnote">
+  <img src="https://github.com/user-attachments/assets/03cd71e2-0dc1-4718-b547-b91ccb1a1223" width=100/>
+</a>
 
+## [다운로드](https://play.google.com/store/apps/details?id=com.easyhz.patchnote)
 # 패치노트
-## 다운로드 : [패치노트](https://play.google.com/store/apps/details?id=com.easyhz.patchnote)
 
 ### 쉽고 빠른 하자 관리
 
