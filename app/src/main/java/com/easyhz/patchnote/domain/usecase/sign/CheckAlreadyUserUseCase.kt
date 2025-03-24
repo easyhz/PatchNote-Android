@@ -12,7 +12,7 @@ class CheckAlreadyUserUseCase @Inject constructor(
         val result = userRepository.getUserFromRemote(param).getOrNull()
             ?: return@runCatching SignType.NewUser
         userRepository.updateUser(result)
-        if (result.teamId.isBlank()) return@runCatching SignType.TeamRequired(result.id, result.phone, result.name)
-        SignType.ExistingUser(result.id, result.phone, result.name, result.teamId)
+        if (result.teamIds.isEmpty()) return@runCatching SignType.TeamRequired(result.id, result.phone, result.name)
+        SignType.ExistingUser(result.id, result.phone, result.name, result.currentTeamId)
     }
 }
