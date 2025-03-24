@@ -1,6 +1,7 @@
 <img src="https://github.com/user-attachments/assets/03cd71e2-0dc1-4718-b547-b91ccb1a1223" width=100/>
 
 # 패치노트
+## 다운로드 : [패치노트](https://play.google.com/store/apps/details?id=com.easyhz.patchnote)
 
 ### 쉽고 빠른 하자 관리
 
@@ -24,11 +25,3 @@ etc.
 ## Documentation
 1. [Learning Point](https://github.com/easyhz/PatchNote-Android/blob/main/docs/LearningPoint.md)
 
-
-## 문의
-
->
->**[1:1 문의](https://open.kakao.com/o/scxUP2Vg)**
->
-> 1:1 문의해 주세요
->
