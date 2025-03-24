@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -11,19 +12,41 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.designSystem.component.card.TeamCard
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
+import com.easyhz.patchnote.ui.screen.team.selection.contract.TeamSelectionState
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Primary
 import com.easyhz.patchnote.ui.theme.Regular16
 import com.easyhz.patchnote.ui.theme.SubText
 
+
+@Composable
+fun TeamSelectionScreen(
+    modifier: Modifier = Modifier,
+    viewModel: TeamSelectionViewModel = hiltViewModel(),
+    navigateUp: () -> Unit,
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    TeamSelectionScreen(
+        modifier = modifier,
+        uiState = uiState,
+        navigateUp = navigateUp,
+        onClickAdd = {  },
+        onClickTeam = { }
+    )
+}
+
 @Composable
 private fun TeamSelectionScreen(
     modifier: Modifier = Modifier,
+    uiState: TeamSelectionState,
     navigateUp: () -> Unit,
     onClickAdd: () -> Unit,
     onClickTeam: () -> Unit,
@@ -78,6 +101,7 @@ private fun TeamSelectionScreen(
 @Composable
 private fun TeamSelectionScreenPreview() {
     TeamSelectionScreen(
+        uiState = TeamSelectionState.init(),
         navigateUp = { },
         onClickAdd = { },
         onClickTeam = { }
