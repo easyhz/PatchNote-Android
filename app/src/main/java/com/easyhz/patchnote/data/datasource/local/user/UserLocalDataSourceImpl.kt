@@ -8,6 +8,8 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
 import com.easyhz.patchnote.core.common.error.AppError
+import com.easyhz.patchnote.core.common.util.serializable.SerializableHelper
+import com.easyhz.patchnote.core.common.util.serializable.deserializeList
 import com.easyhz.patchnote.core.model.user.User
 import com.easyhz.patchnote.data.di.config.UserDataStore
 import com.easyhz.patchnote.data.di.config.UserKey
@@ -20,7 +22,8 @@ import javax.inject.Inject
 
 class UserLocalDataSourceImpl @Inject constructor(
     @Dispatcher(PatchNoteDispatchers.IO) private val dispatcher: CoroutineDispatcher,
-    @UserDataStore private val dataStore: DataStore<Preferences>
+    @UserDataStore private val dataStore: DataStore<Preferences>,
+    private val serializableHelper: SerializableHelper,
 ): UserLocalDataSource {
     private val userId = stringPreferencesKey(UserKey.USER_ID.key)
     private val userName = stringPreferencesKey(UserKey.USER_NAME.key)
@@ -28,6 +31,7 @@ class UserLocalDataSourceImpl @Inject constructor(
     private val userTeamId = stringPreferencesKey(UserKey.USER_TEAM_ID.key)
     private val isFirstOpen = booleanPreferencesKey(UserKey.IS_FIRST_OPEN.key)
     private val userTeamName = stringPreferencesKey(UserKey.USER_TEAM_NAME.key)
+    private val userTeams = stringPreferencesKey(UserKey.USER_TEAMS.key)
     private val isOfflineFirstOpen = booleanPreferencesKey(UserKey.IS_OFFLINE_FIRST_OPEN.key)
 
     override suspend fun updateUser(user: User): Unit = withContext(dispatcher) {
@@ -35,7 +39,8 @@ class UserLocalDataSourceImpl @Inject constructor(
             preferences[userId] = user.id
             preferences[userName] = user.name
             preferences[userPhone] = user.phone
-            preferences[userTeamId] = user.teamId
+            preferences[userTeamId] = user.currentTeamId
+            preferences[userTeams] = serializableHelper.serialize(user.teamIds, List::class.java)
         }
     }
 
@@ -46,7 +51,8 @@ class UserLocalDataSourceImpl @Inject constructor(
                 id = preferences[userId] ?: throw generateNullException(UserKey.USER_ID),
                 name = preferences[userName] ?: throw generateNullException(UserKey.USER_NAME),
                 phone = preferences[userPhone] ?: throw generateNullException(UserKey.USER_PHONE),
-                teamId = preferences[userTeamId] ?: throw generateNullException(UserKey.USER_TEAM_ID)
+                currentTeamId = preferences[userTeamId] ?: throw generateNullException(UserKey.USER_TEAM_ID),
+                teamIds = serializableHelper.deserializeList(preferences[userTeams] ?: "") ?: emptyList()
             )
         }
     }

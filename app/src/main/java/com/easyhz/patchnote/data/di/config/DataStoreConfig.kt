@@ -34,7 +34,9 @@ internal enum class UserKey(
         key = "isFirstOpen"
     ), USER_TEAM_NAME(
         key = "teamName"
-    ), IS_OFFLINE_FIRST_OPEN(
+    ), USER_TEAMS(
+        key = "teams"
+    ),IS_OFFLINE_FIRST_OPEN(
         key = "isOfflineFirstOpen"
     )
 }
