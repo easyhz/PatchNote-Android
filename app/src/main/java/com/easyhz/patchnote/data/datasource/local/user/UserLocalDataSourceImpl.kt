@@ -39,7 +39,7 @@ class UserLocalDataSourceImpl @Inject constructor(
             preferences[userId] = user.id
             preferences[userName] = user.name
             preferences[userPhone] = user.phone
-            preferences[userTeamId] = user.currentTeamId
+            user.currentTeamId?.let { preferences[userTeamId] = it }
             preferences[userTeams] = serializableHelper.serialize(user.teamIds, List::class.java)
         }
     }
@@ -51,7 +51,7 @@ class UserLocalDataSourceImpl @Inject constructor(
                 id = preferences[userId] ?: throw generateNullException(UserKey.USER_ID),
                 name = preferences[userName] ?: throw generateNullException(UserKey.USER_NAME),
                 phone = preferences[userPhone] ?: throw generateNullException(UserKey.USER_PHONE),
-                currentTeamId = preferences[userTeamId] ?: throw generateNullException(UserKey.USER_TEAM_ID),
+                currentTeamId = preferences[userTeamId],
                 teamIds = serializableHelper.deserializeList(preferences[userTeams] ?: "") ?: emptyList()
             )
         }
@@ -63,6 +63,7 @@ class UserLocalDataSourceImpl @Inject constructor(
             preferences.remove(userName)
             preferences.remove(userPhone)
             preferences.remove(userTeamId)
+            preferences.remove(userTeams)
         }
     }
 
