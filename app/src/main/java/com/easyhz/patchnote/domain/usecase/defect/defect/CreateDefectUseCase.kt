@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.domain.usecase.defect
+package com.easyhz.patchnote.domain.usecase.defect.defect
 
 import com.easyhz.patchnote.core.common.base.BaseUseCase
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
@@ -36,7 +36,7 @@ class CreateDefectUseCase @Inject constructor(
             val user = userDeferred.await().getOrThrow()
 
             val entryDefect = param.toEntryDefect(
-                teamId = user.teamId,
+                teamId = user.currentTeamId!!,
                 requesterId = user.id,
                 requesterName = user.name,
                 requesterPhone = user.phone,
