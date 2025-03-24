@@ -25,6 +25,11 @@ sealed class AppError: Exception() {
         private fun readResolve(): Any = NoUserDataError
     }
 
+    data object NoTeamDataError : AppError() {
+        @JvmStatic
+        private fun readResolve(): Any = NoTeamDataError
+    }
+
     data class DefaultError(override val message: String) : AppError()
 
 }
