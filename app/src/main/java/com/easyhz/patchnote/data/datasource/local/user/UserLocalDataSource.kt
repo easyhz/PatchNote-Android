@@ -14,4 +14,7 @@ interface UserLocalDataSource {
     suspend fun deleteTeamName()
     suspend fun isOfflineFirstOpen(): Result<Boolean>
     suspend fun setIsOfflineFirstOpen(newValue: Boolean)
+
+    suspend fun setCurrentTeamId(newValue: String)
+    suspend fun getCurrentTeamId(): Result<String?>
 }

@@ -111,6 +111,19 @@ class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun setCurrentTeamId(newValue: String) {
+        dataStore.edit { preferences ->
+            preferences[userTeamId] = newValue
+        }
+    }
+
+    override suspend fun getCurrentTeamId(): Result<String?> {
+        return runCatching {
+            val preferences = dataStore.data.first()
+            preferences[userTeamId]
+        }
+    }
+
     private fun generateNullException(userKey: UserKey): Exception {
         return AppError.DefaultError("${userKey.key} is null")
     }
