@@ -22,6 +22,7 @@ import com.easyhz.patchnote.ui.navigation.setting.settingGraph
 import com.easyhz.patchnote.ui.navigation.sign.signGraph
 import com.easyhz.patchnote.ui.navigation.splash.Splash
 import com.easyhz.patchnote.ui.navigation.splash.splashGraph
+import com.easyhz.patchnote.ui.navigation.team.teamGraph
 import com.easyhz.patchnote.ui.navigation.util.BottomBar
 import com.easyhz.patchnote.ui.theme.LocalSnackBarHostState
 
@@ -71,6 +72,7 @@ fun PatchNoteApp(
                 dataManagementGraph(navController)
                 defectGraph(navController)
                 settingGraph(navController)
+                teamGraph(navController)
             }
         }
     }
