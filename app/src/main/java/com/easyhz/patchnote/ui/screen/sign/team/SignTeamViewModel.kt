@@ -28,7 +28,7 @@ class SignTeamViewModel @Inject constructor(
     private val updateTeamNameUseCase: UpdateTeamNameUseCase,
 ): BaseViewModel<SignTeamState, SignTeamIntent, SignTeamSideEffect>(
     initialState = SignTeamState.init()
-){
+) {
     override fun handleIntent(intent: SignTeamIntent) {
         when(intent) {
             is SignTeamIntent.ChangeTeamCodeText -> changeTeamCodeText(intent.text)
@@ -89,11 +89,12 @@ class SignTeamViewModel @Inject constructor(
             id = currentState.uid,
             name = currentState.userName,
             phone = currentState.phoneNumber,
-            teamId = currentState.teamId
+            currentTeamId = null,
+            teamIds = listOf(currentState.teamId),
         )
         saveUserUseCase.invoke(userRequest).onSuccess {
             updateTeamNameUseCase.invoke(currentState.teamName)
-            navigateToHome()
+            navigateToTeamSelection()
         }.onFailure { e ->
             showSnackBar(context, e.handleError()) {
                 SignTeamSideEffect.ShowSnackBar(it)
@@ -111,8 +112,8 @@ class SignTeamViewModel @Inject constructor(
         postSideEffect { SignTeamSideEffect.NavigateToUp }
     }
 
-    private fun navigateToHome() {
-        postSideEffect { SignTeamSideEffect.NavigateToHome }
+    private fun navigateToTeamSelection() {
+        postSideEffect { SignTeamSideEffect.NavigateToTeamSelection }
     }
 
     private fun navigateToCreateTeam() {

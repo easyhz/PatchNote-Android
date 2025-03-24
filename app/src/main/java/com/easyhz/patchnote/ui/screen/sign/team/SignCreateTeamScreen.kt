@@ -29,7 +29,7 @@ import com.easyhz.patchnote.ui.theme.MainText
 fun SignCreateTeamScreen(
     modifier: Modifier = Modifier,
     viewModel: SignCreateTeamViewModel = hiltViewModel(),
-    navigateToHome: () -> Unit,
+    navigateToTeamSelection: () -> Unit,
     navigateToUp: () -> Unit,
 ) {
     val snackBarHost = LocalSnackBarHostState.current
@@ -76,7 +76,7 @@ fun SignCreateTeamScreen(
                     withDismissAction = true
                 )
             }
-            is SignCreateTeamSideEffect.NavigateToHome -> navigateToHome()
+            is SignCreateTeamSideEffect.NavigateToTeamSelection -> navigateToTeamSelection()
             is SignCreateTeamSideEffect.NavigateToUp -> navigateToUp()
         }
     }

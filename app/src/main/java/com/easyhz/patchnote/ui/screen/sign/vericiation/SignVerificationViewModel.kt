@@ -57,7 +57,7 @@ class SignVerificationViewModel @Inject constructor(
             when(signType) {
                 is SignType.NewUser -> navigateToName(uid = uid, phoneNumber = phoneNumber)
                 is SignType.TeamRequired -> navigateToTeam(uid = signType.uid, phoneNumber = signType.phoneNumber, userName = signType.userName)
-                is SignType.ExistingUser -> navigateToHome()
+                is SignType.ExistingUser -> navigateToTeamSelection()
             }
         }.onFailure { e ->
             showSnackBar(context, e.handleError()) {
@@ -73,8 +73,8 @@ class SignVerificationViewModel @Inject constructor(
         postSideEffect { VerificationSideEffect.NavigateToName(uid = uid, phoneNumber = phoneNumber) }
     }
 
-    private fun navigateToHome() {
-        postSideEffect { VerificationSideEffect.NavigateToHome }
+    private fun navigateToTeamSelection() {
+        postSideEffect { VerificationSideEffect.NavigateToTeamSelection }
     }
 
     private fun navigateToTeam(uid: String, phoneNumber: String, userName: String) {

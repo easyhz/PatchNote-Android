@@ -65,7 +65,7 @@ class SignCreateTeamViewModel @Inject constructor(
             )
             createTeamUseCase.invoke(param).onSuccess {
                 updateTeamNameUseCase.invoke(currentState.teamNameText)
-                navigateToHome()
+                navigateToTeamSelection()
             }.onFailure { e ->
                 showSnackBar(context, e.handleError()) {
                     SignCreateTeamSideEffect.ShowSnackBar(it)
@@ -81,7 +81,8 @@ class SignCreateTeamViewModel @Inject constructor(
             id = currentState.uid,
             name = currentState.userName,
             phone = currentState.phoneNumber,
-            teamId = teamId
+            currentTeamId = null,
+            teamIds = listOf(teamId),
         )
     }
 
@@ -98,8 +99,8 @@ class SignCreateTeamViewModel @Inject constructor(
         postSideEffect { SignCreateTeamSideEffect.NavigateToUp }
     }
 
-    private fun navigateToHome() {
-        postSideEffect { SignCreateTeamSideEffect.NavigateToHome }
+    private fun navigateToTeamSelection() {
+        postSideEffect { SignCreateTeamSideEffect.NavigateToTeamSelection }
     }
 
     private fun setLoading(isLoading: Boolean) {

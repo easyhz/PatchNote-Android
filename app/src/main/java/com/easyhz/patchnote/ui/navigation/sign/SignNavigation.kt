@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navOptions
 import androidx.navigation.toRoute
-import com.easyhz.patchnote.ui.navigation.home.navigateToHome
+import com.easyhz.patchnote.ui.navigation.team.navigateToTeamSelection
 import com.easyhz.patchnote.ui.screen.sign.name.SignNameScreen
 import com.easyhz.patchnote.ui.screen.sign.phone.SignPhoneScreen
 import com.easyhz.patchnote.ui.screen.sign.team.SignCreateTeamScreen
@@ -38,7 +38,7 @@ internal fun NavGraphBuilder.signGraph(
                 navigateToUp = navController::navigateUp,
                 navigateToName = navController::navigateToName,
                 navigateToTeam = navController::navigateToTeam,
-                navigateToHome = { navController.navigateToHome(navOptions = navOptions) }
+                navigateToTeamSelection = { navController.navigateToTeamSelection(navOptions = navOptions) }
             )
         }
 
@@ -57,7 +57,7 @@ internal fun NavGraphBuilder.signGraph(
                 popUpTo(navController.graph.id) { inclusive = true }
             }
             SignTeamScreen(
-                navigateToHome = { navController.navigateToHome(navOptions = navOptions) },
+                navigateToTeamSelection = { navController.navigateToTeamSelection(navOptions = navOptions) },
                 navigateToCreateTeam = navController::navigateToCreateTeam,
                 navigateToUp = navController::navigateUp
             )
@@ -68,7 +68,7 @@ internal fun NavGraphBuilder.signGraph(
                 popUpTo(navController.graph.id) { inclusive = true }
             }
             SignCreateTeamScreen(
-                navigateToHome = {  navController.navigateToHome(navOptions = navOptions) },
+                navigateToTeamSelection = {  navController.navigateToTeamSelection(navOptions = navOptions) },
                 navigateToUp = navController::navigateUp,
             )
         }

@@ -29,6 +29,7 @@ fun SplashScreen(
     viewModel: SplashViewModel = hiltViewModel(),
     navigateToHome: () -> Unit,
     navigateToOnboarding: () -> Unit,
+    navigateToTeam: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -64,6 +65,7 @@ fun SplashScreen(
         when(sideEffect) {
             is SplashSideEffect.NavigateToHome -> { navigateToHome() }
             is SplashSideEffect.NavigateToOnboarding -> { navigateToOnboarding() }
+            is SplashSideEffect.NavigateToTeam -> { navigateToTeam() }
             is SplashSideEffect.NavigateUp -> { (context as Activity).finish() }
             is SplashSideEffect.NavigateToUrl -> {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(sideEffect.url))
