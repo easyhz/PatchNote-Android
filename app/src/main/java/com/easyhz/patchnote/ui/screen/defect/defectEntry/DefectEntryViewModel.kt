@@ -20,8 +20,8 @@ import com.easyhz.patchnote.core.model.error.DialogAction
 import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.core.model.image.DefectImage
 import com.easyhz.patchnote.core.model.image.toDefectImages
-import com.easyhz.patchnote.domain.usecase.defect.CreateDefectUseCase
-import com.easyhz.patchnote.domain.usecase.defect.SaveOfflineDefectUseCase
+import com.easyhz.patchnote.domain.usecase.defect.defect.CreateDefectUseCase
+import com.easyhz.patchnote.domain.usecase.defect.offline.SaveOfflineDefectUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetTakePictureUriUseCase
 import com.easyhz.patchnote.domain.usecase.image.RotateImageUseCase
 import com.easyhz.patchnote.ui.screen.defect.defectEntry.contract.DefectEntryIntent

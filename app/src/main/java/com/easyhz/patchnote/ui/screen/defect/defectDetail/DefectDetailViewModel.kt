@@ -12,7 +12,7 @@ import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectMainItem
 import com.easyhz.patchnote.core.model.error.DialogAction
 import com.easyhz.patchnote.core.model.error.DialogMessage
-import com.easyhz.patchnote.domain.usecase.defect.DeleteDefectUseCase
+import com.easyhz.patchnote.domain.usecase.defect.defect.DeleteDefectUseCase
 import com.easyhz.patchnote.domain.usecase.sign.GetUserIdUseCase
 import com.easyhz.patchnote.ui.screen.defect.defectDetail.contract.DetailIntent
 import com.easyhz.patchnote.ui.screen.defect.defectDetail.contract.DetailSideEffect

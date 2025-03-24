@@ -15,7 +15,7 @@ import com.easyhz.patchnote.core.model.filter.FilterValue
 import com.easyhz.patchnote.core.model.filter.FilterValue.Companion.asInt
 import com.easyhz.patchnote.core.model.filter.FilterValue.Companion.asLong
 import com.easyhz.patchnote.core.model.filter.FilterValue.Companion.asString
-import com.easyhz.patchnote.domain.usecase.defect.ExportDefectUseCase
+import com.easyhz.patchnote.domain.usecase.defect.defect.ExportDefectUseCase
 import com.easyhz.patchnote.ui.screen.defect.export.contract.DefectExportIntent
 import com.easyhz.patchnote.ui.screen.defect.export.contract.DefectExportSideEffect
 import com.easyhz.patchnote.ui.screen.defect.export.contract.DefectExportState
