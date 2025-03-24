@@ -10,8 +10,8 @@ import com.easyhz.patchnote.core.designSystem.util.bottomSheet.DefectDetailBotto
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.error.DialogAction
 import com.easyhz.patchnote.core.model.error.DialogMessage
-import com.easyhz.patchnote.domain.usecase.defect.DeleteOfflineDefectUseCase
-import com.easyhz.patchnote.domain.usecase.defect.UploadOfflineDefectToRemoteUseCase
+import com.easyhz.patchnote.domain.usecase.defect.offline.DeleteOfflineDefectUseCase
+import com.easyhz.patchnote.domain.usecase.defect.offline.UploadOfflineDefectToRemoteUseCase
 import com.easyhz.patchnote.ui.screen.defect.offline.detail.contract.OfflineDefectDetailIntent
 import com.easyhz.patchnote.ui.screen.defect.offline.detail.contract.OfflineDefectDetailSideEffect
 import com.easyhz.patchnote.ui.screen.defect.offline.detail.contract.OfflineDefectDetailState

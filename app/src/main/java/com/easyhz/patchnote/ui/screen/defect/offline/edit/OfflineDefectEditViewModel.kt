@@ -14,8 +14,8 @@ import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.error.DialogAction
 import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.core.model.image.DefectImage
-import com.easyhz.patchnote.domain.usecase.defect.FetchOfflineDefectUseCase
-import com.easyhz.patchnote.domain.usecase.defect.UpdateOfflineDefectUseCase
+import com.easyhz.patchnote.domain.usecase.defect.offline.FetchOfflineDefectUseCase
+import com.easyhz.patchnote.domain.usecase.defect.offline.UpdateOfflineDefectUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetDefectImagesUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetTakePictureUriUseCase
 import com.easyhz.patchnote.domain.usecase.image.RotateImageUseCase

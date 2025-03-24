@@ -11,7 +11,7 @@ import com.easyhz.patchnote.core.common.util.CrashlyticsLogger
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.filter.FilterParam
 import com.easyhz.patchnote.domain.usecase.configuration.UpdateEnteredPasswordUseCase
-import com.easyhz.patchnote.domain.usecase.defect.GetDefectsPagingSourceUseCase
+import com.easyhz.patchnote.domain.usecase.defect.defect.GetDefectsPagingSourceUseCase
 import com.easyhz.patchnote.domain.usecase.team.GetTeamNameUseCase
 import com.easyhz.patchnote.domain.usecase.user.IsFirstOpenUseCase
 import com.easyhz.patchnote.domain.usecase.user.SetIsFirstOpenUseCase
