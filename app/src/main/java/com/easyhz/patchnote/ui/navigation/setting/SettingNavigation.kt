@@ -12,9 +12,12 @@ import com.easyhz.patchnote.core.designSystem.util.transition.enterSlide
 import com.easyhz.patchnote.core.designSystem.util.transition.exitSlide
 import com.easyhz.patchnote.ui.navigation.dataManagement.navigateToDataManagement
 import com.easyhz.patchnote.ui.navigation.onboarding.navigateToOnboarding
+import com.easyhz.patchnote.ui.navigation.splash.Splash
+import com.easyhz.patchnote.ui.navigation.team.navigateToTeamSelection
 import com.easyhz.patchnote.ui.screen.setting.main.SettingScreen
 import com.easyhz.patchnote.ui.screen.setting.my_page.MyPageScreen
 import com.easyhz.patchnote.ui.screen.setting.reception.ReceptionSettingScreen
+import com.easyhz.patchnote.ui.screen.setting.team.TeamInformationScreen
 
 internal fun NavGraphBuilder.settingGraph(
     navController: NavController
@@ -30,6 +33,8 @@ internal fun NavGraphBuilder.settingGraph(
             navigateToUp = navController::navigateUp,
             navigateToMyPage = navController::navigateToMyPage,
             navigateToReceptionSetting = navController::navigateToReceptionSetting,
+            navigateToTeamSelection = navController::navigateToTeamSelection,
+            navigateToTeamInformation = navController::navigateToTeamInformation
         )
     }
 
@@ -48,6 +53,20 @@ internal fun NavGraphBuilder.settingGraph(
             navigateToUp = navController::navigateUp
         )
     }
+
+    composable<TeamInformation> {
+        TeamInformationScreen(
+            navigateUp = navController::navigateUp,
+            navigateToDataManagement = navController::navigateToDataManagement,
+            navigateToMember = { /* 멤버 목록  */ },
+            navigateToSplash = {
+                val navOptions = navOptions {
+                    popUpTo(navController.graph.id) { inclusive = true }
+                }
+                navController.navigate(Splash, navOptions)
+            }
+        )
+    }
 }
 
 fun NavController.navigateToSetting() {
@@ -60,4 +79,8 @@ fun NavController.navigateToMyPage() {
 
 fun NavController.navigateToReceptionSetting() {
     navigate(ReceptionSetting)
+}
+
+fun NavController.navigateToTeamInformation() {
+    navigate(TeamInformation)
 }

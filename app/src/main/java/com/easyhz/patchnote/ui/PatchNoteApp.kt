@@ -7,6 +7,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import com.easyhz.patchnote.core.designSystem.util.transition.SlideDirection
 import com.easyhz.patchnote.core.designSystem.util.transition.enterSlide
@@ -76,4 +78,8 @@ fun PatchNoteApp(
             }
         }
     }
+}
+
+fun NavController.navigateToSplash(navOptions: NavOptions?) {
+    navigate(Splash, navOptions)
 }
