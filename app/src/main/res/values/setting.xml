@@ -29,7 +29,7 @@
     <string name="logout_dialog_negative_button">취소</string>
 
     <string name="leave_team_dialog_title">팀 나가기</string>
-    <string name="leave_team_dialog_message">팀에서 나갈까요?\n작성한 정보는 사라지지 않습니다</string>
+    <string name="leave_team_dialog_message">%1s에서 나갈까요?\n작성한 정보는 사라지지 않습니다</string>
     <string name="leave_team_dialog_positive_button">나가기</string>
     <string name="leave_team_dialog_negative_button">취소</string>
 
@@ -42,5 +42,14 @@
         하자 접수 후, 접수 화면에 남을 항목을 선택합니다.
         \n선택한 항목은 접수 업로드 후에도 정보가 초기화되지 않습니다.
     </string>
+
+
+    <string name="setting_team_name">팀 이름</string>
+    <string name="setting_team_creation_date">생성일</string>
+    <string name="setting_team_invite_code">팀 초대 코드</string>
+    <string name="setting_team_admin">관리자</string>
+    <string name="setting_team_data_management">데이터 관리</string>
+    <string name="setting_team_member">팀원 목록</string>
+    <string name="setting_team_leave">팀 나가기</string>
 
 </resources>
