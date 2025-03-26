@@ -6,7 +6,7 @@ data class User(
     val phone: String,
     val currentTeamId: String?,
     val teamIds: List<String>,
-    val teamJoinDates: List<TeamJoinDate> = emptyList()
+    val teamJoinDates: List<TeamJoinDate>
 ) {
     companion object {
         val Empty = User(
@@ -14,7 +14,8 @@ data class User(
             name = "",
             phone = "",
             currentTeamId = "",
-            teamIds = emptyList()
+            teamIds = emptyList(),
+            teamJoinDates = emptyList()
         )
     }
 }
