@@ -27,20 +27,6 @@ enum class MyPageItem(
         override fun getValue(userInformation: UserInformation): String {
             return userInformation.user.phone
         }
-    }, TEAM_NAME(
-        titleResId = R.string.setting_my_page_team_name
-    ) {
-        override fun getValue(userInformation: UserInformation): String {
-            return userInformation.team.name
-        }
-    }, TEAM_INVITE_CODE(
-        titleResId = R.string.setting_my_page_team_invite_code,
-        iconResId = R.drawable.ic_clip_board,
-        enabledClick = true
-    ) {
-        override fun getValue(userInformation: UserInformation): String {
-            return userInformation.team.inviteCode
-        }
     }, LOGOUT(
         titleResId = R.string.setting_my_page_logout,
         enabledTitle = false,

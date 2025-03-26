@@ -55,7 +55,9 @@ fun SettingScreen(
     navigateToUp: () -> Unit,
     navigateToDataManagement: () -> Unit,
     navigateToMyPage: () -> Unit,
-    navigateToReceptionSetting: () -> Unit
+    navigateToReceptionSetting: () -> Unit,
+    navigateToTeamSelection: () -> Unit,
+    navigateToTeamInformation: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -171,9 +173,9 @@ fun SettingScreen(
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(sideEffect.url))
                 context.startActivity(intent)
             }
-            is SettingSideEffect.NavigateToTeamInformation -> {}
+            is SettingSideEffect.NavigateToTeamInformation -> navigateToTeamInformation()
             is SettingSideEffect.NavigateToDataManagement -> navigateToDataManagement()
-            is SettingSideEffect.NavigateToTeamSelection -> {}
+            is SettingSideEffect.NavigateToTeamSelection -> navigateToTeamSelection()
             is SettingSideEffect.NavigateToMyPage -> navigateToMyPage()
             is SettingSideEffect.NavigateToReceptionSetting -> navigateToReceptionSetting()
         }

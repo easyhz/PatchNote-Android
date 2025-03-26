@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.easyhz.patchnote.core.designSystem.util.extension.noRippleClickable
@@ -39,7 +40,7 @@ fun MyPageCard(
         modifier = modifier
             .fillMaxWidth()
             .then(
-                if (enabledClick && iconContent == null) Modifier.clickable { onClick() }
+                if (enabledClick && !enabledTitle) Modifier.clickable { onClick() }
                 else Modifier
             )
             .padding(horizontal = 20.dp, vertical = 8.dp),
@@ -63,7 +64,7 @@ fun MyPageCard(
                     .height(36.dp)
                     .weight(1f)
                     .then(
-                        if (enabledClick && iconContent != null) Modifier.noRippleClickable { onClick() }
+                        if (enabledClick && enabledTitle) Modifier.noRippleClickable { onClick() }
                         else Modifier
                     ),
                 contentAlignment = Alignment.CenterStart
@@ -71,7 +72,9 @@ fun MyPageCard(
                 Text(
                     text = if (enabledTitle) value else title,
                     style = Medium18,
-                    color = textColor
+                    color = textColor,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
                 )
                 androidx.compose.animation.AnimatedVisibility(
                     visible = enabledTitle && value.isBlank(),

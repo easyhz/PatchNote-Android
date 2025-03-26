@@ -14,11 +14,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -47,9 +44,7 @@ fun MyPageScreen(
     navigateToOnboarding: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val clipboardManager = LocalClipboardManager.current
     val snackBarHostState = LocalSnackBarHostState.current
-    val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
 
     PatchNoteScaffold(
@@ -135,14 +130,6 @@ fun MyPageScreen(
 
             is MyPageSideEffect.NavigateToOnboarding -> {
                 navigateToOnboarding()
-            }
-
-            is MyPageSideEffect.CopyTeamInviteCode -> {
-                clipboardManager.setText(AnnotatedString(sideEffect.inviteCode))
-                snackBarHostState.showSnackbar(
-                    message = context.getString(R.string.setting_my_page_team_invite_code_copy_success),
-                    withDismissAction = true
-                )
             }
 
             is MyPageSideEffect.ShowSnackBar -> {

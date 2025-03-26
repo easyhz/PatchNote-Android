@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.handleError
+import com.easyhz.patchnote.core.common.util.resource.ResourceHelper
 import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
 import com.easyhz.patchnote.core.model.error.DialogAction
 import com.easyhz.patchnote.core.model.error.DialogMessage
@@ -28,6 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val resourceHelper: ResourceHelper,
     private val fetchUserInformationUseCase: FetchUserInformationUseCase,
     private val logOutUseCase: LogOutUseCase,
     private val leaveTeamUseCase: LeaveTeamUseCase,
@@ -62,7 +64,6 @@ class MyPageViewModel @Inject constructor(
 
     private fun onClickMyPageItem(item: MyPageItem) {
         when (item) {
-            MyPageItem.TEAM_INVITE_CODE -> onClickTeamInviteCode()
             MyPageItem.LOGOUT, MyPageItem.LEAVE_TEAM, MyPageItem.WITHDRAW -> setDialogDetail(item)
             else -> {}
         }
@@ -78,10 +79,6 @@ class MyPageViewModel @Inject constructor(
         )
 
         handleDialog(dialogMessage)
-    }
-
-    private fun onClickTeamInviteCode() {
-        postSideEffect { MyPageSideEffect.CopyTeamInviteCode(currentState.userInformation.team.inviteCode) }
     }
 
     private fun logout() {
@@ -158,38 +155,37 @@ class MyPageViewModel @Inject constructor(
 
     private fun getDialogTitleAndMessageAndPositiveButton(item: MyPageItem): Triple<String, String, BasicDialogButton?> {
         val resId = when (item) {
-
             MyPageItem.LOGOUT -> Triple(
-                R.string.logout_dialog_title,
-                R.string.logout_dialog_message,
+                resourceHelper.getString(R.string.logout_dialog_title),
+                resourceHelper.getString(R.string.logout_dialog_message),
                 getDefaultPositiveButton(
-                    text = context.getString(R.string.logout_dialog_positive_button),
+                    text = resourceHelper.getString(R.string.logout_dialog_positive_button),
                     onClick = ::logout
                 )
             )
 
             MyPageItem.LEAVE_TEAM -> Triple(
-                R.string.leave_team_dialog_title,
-                R.string.leave_team_dialog_message,
+                resourceHelper.getString(R.string.leave_team_dialog_title),
+                resourceHelper.getString(R.string.leave_team_dialog_message, currentState.userInformation.team.name),
                 getDefaultPositiveButton(
-                    text = context.getString(R.string.leave_team_dialog_positive_button),
+                    text = resourceHelper.getString(R.string.leave_team_dialog_positive_button),
                     onClick = ::leaveTeam
                 )
             )
 
             MyPageItem.WITHDRAW -> Triple(
-                R.string.withdraw_dialog_title,
-                R.string.withdraw_dialog_message,
+                resourceHelper.getString(R.string.withdraw_dialog_title),
+                resourceHelper.getString(R.string.withdraw_dialog_message),
                 getDefaultPositiveButton(
-                    text = context.getString(R.string.withdraw_dialog_positive_button),
+                    text = resourceHelper.getString(R.string.withdraw_dialog_positive_button),
                     onClick = ::withdraw
                 )
             )
 
-            else -> Triple(0, 0, null)
+            else -> Triple("", "", null)
         }
 
-        return Triple(context.getString(resId.first), context.getString(resId.second), resId.third)
+        return resId
     }
 
     private fun getDefaultPositiveButton(text: String, onClick: () -> Unit): BasicDialogButton {
