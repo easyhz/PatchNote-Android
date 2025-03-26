@@ -18,4 +18,5 @@ interface AuthDataSource {
     suspend fun getUser(uid: String): Result<UserResponse>
     suspend fun deleteUser(uid: String): Result<Unit>
     suspend fun leaveTeam(uid: String, teamId: String): Result<Unit>
+    suspend fun fetchUsers(teamId: String): Result<List<UserResponse>>
 }
