@@ -38,6 +38,7 @@ fun TeamSelectionScreen(
     viewModel: TeamSelectionViewModel = hiltViewModel(),
     navigateUp: () -> Unit,
     navigateToHome: () -> Unit,
+    navigateToSignTeam: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -52,9 +53,7 @@ fun TeamSelectionScreen(
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is TeamSelectionSideEffect.NavigateUp -> navigateUp()
-            is TeamSelectionSideEffect.NavigateToTeamSign -> {
-                // TODO: navigateToTeamSign()
-            }
+            is TeamSelectionSideEffect.NavigateToSignTeam -> navigateToSignTeam()
             is TeamSelectionSideEffect.NavigateToHome -> navigateToHome()
         }
 

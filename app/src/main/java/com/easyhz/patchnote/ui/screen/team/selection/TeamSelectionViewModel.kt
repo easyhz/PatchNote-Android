@@ -31,7 +31,7 @@ class TeamSelectionViewModel @Inject constructor(
                 navigateToUp()
             }
             is TeamSelectionIntent.NavigateToTeamSign -> {
-                navigateToTeamSign()
+                navigateToSignTeam()
             }
         }
     }
@@ -69,8 +69,8 @@ class TeamSelectionViewModel @Inject constructor(
         postSideEffect { TeamSelectionSideEffect.NavigateUp }
     }
 
-    private fun navigateToTeamSign() {
-        postSideEffect { TeamSelectionSideEffect.NavigateToTeamSign }
+    private fun navigateToSignTeam() {
+        postSideEffect { TeamSelectionSideEffect.NavigateToSignTeam }
     }
 
     private fun navigateToHome() {

@@ -4,6 +4,6 @@ import com.easyhz.patchnote.core.common.base.UiSideEffect
 
 sealed class TeamSelectionSideEffect: UiSideEffect() {
     data object NavigateUp: TeamSelectionSideEffect()
-    data object NavigateToTeamSign: TeamSelectionSideEffect()
+    data object NavigateToSignTeam: TeamSelectionSideEffect()
     data object NavigateToHome: TeamSelectionSideEffect()
 }
