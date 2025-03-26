@@ -8,5 +8,5 @@ import com.easyhz.patchnote.core.common.base.UiIntent
  */
 
 sealed class TeamMemberIntent : UiIntent() {
-
+    data object NavigateUp : TeamMemberIntent()
 }
