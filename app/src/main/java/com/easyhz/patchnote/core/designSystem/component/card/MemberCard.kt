@@ -17,6 +17,7 @@ import com.easyhz.patchnote.ui.theme.Medium18
 fun MemberCard(
     modifier: Modifier = Modifier,
     name: String,
+    trailing: @Composable (() -> Unit)? = null
 ) {
     Row(
         modifier = modifier.fillMaxWidth().heightIn(min = 48.dp).padding(horizontal = 20.dp),
@@ -29,6 +30,7 @@ fun MemberCard(
             overflow = TextOverflow.Ellipsis,
             maxLines = 1
         )
+        trailing?.invoke()
     }
 }
 
@@ -37,6 +39,11 @@ fun MemberCard(
 @Composable
 private fun Preview() {
     MemberCard(
-        name = "Name"
-    )
+        name = "Name",
+    ) {
+        Text(
+            text = "Trailing",
+            style = Medium18
+        )
+    }
 }
