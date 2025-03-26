@@ -1,15 +1,13 @@
 package com.easyhz.patchnote.ui.screen.sign.team
 
 import android.content.Context
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.handleError
-import com.easyhz.patchnote.core.model.user.User
-import com.easyhz.patchnote.domain.usecase.sign.GetUserUseCase
+import com.easyhz.patchnote.core.model.user.TeamJoinDate
 import com.easyhz.patchnote.domain.usecase.sign.SaveUserUseCase
 import com.easyhz.patchnote.domain.usecase.team.FindTeamByCodeUseCase
-import com.easyhz.patchnote.domain.usecase.team.UpdateTeamNameUseCase
+import com.easyhz.patchnote.domain.usecase.user.GetUserUseCase
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignTeamIntent
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignTeamSideEffect
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignTeamState
@@ -21,11 +19,9 @@ import javax.inject.Inject
 @HiltViewModel
 class SignTeamViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val savedStateHandle: SavedStateHandle,
     private val findTeamByCodeUseCase: FindTeamByCodeUseCase,
     private val saveUserUseCase: SaveUserUseCase,
     private val getUserUseCase: GetUserUseCase,
-    private val updateTeamNameUseCase: UpdateTeamNameUseCase,
 ): BaseViewModel<SignTeamState, SignTeamIntent, SignTeamSideEffect>(
     initialState = SignTeamState.init()
 ) {
@@ -45,21 +41,14 @@ class SignTeamViewModel @Inject constructor(
     }
 
     private fun init() {
-        val uid: String? = savedStateHandle["uid"]
-        val phoneNumber: String? = savedStateHandle["phoneNumber"]
-        val userName: String? = savedStateHandle["userName"]
-        if (uid.isNullOrBlank() || phoneNumber.isNullOrBlank() || userName.isNullOrBlank()) {
-            getUser()
-        } else {
-            reduce { copy(uid = uid, phoneNumber = phoneNumber, userName = userName) }
-        }
-    }
-
-    private fun getUser() = viewModelScope.launch {
-        getUserUseCase.invoke(Unit).onSuccess {
-            reduce { copy(uid = it.id, phoneNumber = it.phone, userName = it.name) }
-        }.onFailure {
-            navigateToUp()
+        viewModelScope.launch {
+            getUserUseCase.invoke(Unit).onSuccess {
+                reduce { copy(user = it) }
+            }.onFailure {
+                navigateToUp()
+            }.also {
+                setLoading(false)
+            }
         }
     }
 
@@ -85,15 +74,12 @@ class SignTeamViewModel @Inject constructor(
     private fun saveUser() = viewModelScope.launch {
         hideTeamDialog()
         setLoading(true)
-        val userRequest = User(
-            id = currentState.uid,
-            name = currentState.userName,
-            phone = currentState.phoneNumber,
-            currentTeamId = null,
-            teamIds = listOf(currentState.teamId),
+        val teamId = currentState.teamId
+        val userRequest = currentState.user.copy(
+            teamIds = currentState.user.teamIds + teamId,
+            teamJoinDates = currentState.user.teamJoinDates + TeamJoinDate.create(teamId = teamId)
         )
         saveUserUseCase.invoke(userRequest).onSuccess {
-            updateTeamNameUseCase.invoke(currentState.teamName)
             navigateToTeamSelection()
         }.onFailure { e ->
             showSnackBar(context, e.handleError()) {

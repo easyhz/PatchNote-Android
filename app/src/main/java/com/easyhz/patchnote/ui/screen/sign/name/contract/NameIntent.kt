@@ -5,5 +5,5 @@ import com.easyhz.patchnote.core.common.base.UiIntent
 sealed class NameIntent: UiIntent() {
     data class ChangeNameText(val text: String): NameIntent()
     data object NavigateToUp: NameIntent()
-    data object NavigateToTeam: NameIntent()
+    data object ClickNextButton: NameIntent()
 }

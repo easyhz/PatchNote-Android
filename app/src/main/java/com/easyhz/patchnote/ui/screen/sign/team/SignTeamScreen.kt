@@ -46,7 +46,7 @@ fun SignTeamScreen(
     modifier: Modifier = Modifier,
     viewModel: SignTeamViewModel = hiltViewModel(),
     navigateToTeamSelection: () -> Unit,
-    navigateToCreateTeam: (uid: String, phoneNumber: String, userName: String) -> Unit,
+    navigateToCreateTeam: () -> Unit,
     navigateToUp: () -> Unit,
 ) {
     val snackBarHost = LocalSnackBarHostState.current
@@ -133,7 +133,7 @@ fun SignTeamScreen(
                 )
             }
             is SignTeamSideEffect.NavigateToTeamSelection -> navigateToTeamSelection()
-            is SignTeamSideEffect.NavigateToCreateTeam -> navigateToCreateTeam(uiState.uid, uiState.phoneNumber, uiState.userName)
+            is SignTeamSideEffect.NavigateToCreateTeam -> navigateToCreateTeam()
             is SignTeamSideEffect.NavigateToUp -> navigateToUp()
         }
     }

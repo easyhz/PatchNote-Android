@@ -1,11 +1,10 @@
 package com.easyhz.patchnote.ui.screen.sign.team.contract
 
 import com.easyhz.patchnote.core.common.base.UiState
+import com.easyhz.patchnote.core.model.user.User
 
 data class SignTeamState(
-    val uid: String,
-    val phoneNumber: String,
-    val userName: String,
+    val user: User,
     val teamCodeText: String,
     val teamName: String,
     val teamId: String,
@@ -15,14 +14,12 @@ data class SignTeamState(
 ): UiState() {
     companion object {
         fun init() = SignTeamState(
-            uid = "",
-            phoneNumber = "",
-            userName = "",
+            user = User.Empty,
             teamCodeText = "",
             teamName = "",
             teamId = "",
             enabledButton = false,
-            isLoading = false,
+            isLoading = true,
             isShowTeamDialog = false,
         )
     }

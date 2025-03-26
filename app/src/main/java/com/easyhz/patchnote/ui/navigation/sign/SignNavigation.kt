@@ -43,10 +43,7 @@ internal fun NavGraphBuilder.signGraph(
         }
 
         composable<Sign.Name> {
-            val args = it.toRoute<Sign.Name>()
             SignNameScreen(
-                uid = args.uid,
-                phoneNumber = args.phoneNumber,
                 navigateToUp = navController::navigateUp,
                 navigateToTeam = navController::navigateToTeam
             )
@@ -87,10 +84,10 @@ fun NavController.navigateToName(uid: String, phoneNumber: String) {
     navigate(Sign.Name(uid = uid, phoneNumber = phoneNumber))
 }
 
-fun NavController.navigateToTeam(uid: String, phoneNumber: String, userName: String) {
-    navigate(Sign.Team(uid = uid, phoneNumber = phoneNumber, userName = userName))
+fun NavController.navigateToTeam() {
+    navigate(Sign.Team)
 }
 
-fun NavController.navigateToCreateTeam(uid: String, phoneNumber: String, userName: String) {
-    navigate(Sign.CreateTeam(uid = uid, phoneNumber = phoneNumber, userName = userName))
+fun NavController.navigateToCreateTeam() {
+    navigate(Sign.CreateTeam)
 }

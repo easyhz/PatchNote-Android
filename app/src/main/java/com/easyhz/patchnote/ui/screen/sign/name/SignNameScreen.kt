@@ -25,10 +25,8 @@ import com.easyhz.patchnote.ui.theme.MainText
 fun SignNameScreen(
     modifier: Modifier = Modifier,
     viewModel: SignNameViewModel = hiltViewModel(),
-    uid: String,
-    phoneNumber: String,
     navigateToUp: () -> Unit,
-    navigateToTeam: (uid: String, phoneNumber: String, userName: String) -> Unit
+    navigateToTeam: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackBarHost = LocalSnackBarHostState.current
@@ -56,7 +54,7 @@ fun SignNameScreen(
             onValueChange = { viewModel.postIntent(NameIntent.ChangeNameText(it)) },
             enabledButton = uiState.enabledButton,
         ) {
-            viewModel.postIntent(NameIntent.NavigateToTeam)
+            viewModel.postIntent(NameIntent.ClickNextButton)
         }
 
     }
@@ -68,7 +66,7 @@ fun SignNameScreen(
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {
             is NameSideEffect.NavigateToUp -> navigateToUp()
-            is NameSideEffect.NavigateToTeam -> { navigateToTeam(uid, phoneNumber, sideEffect.userName) }
+            is NameSideEffect.NavigateToTeam -> { navigateToTeam() }
             is NameSideEffect.ShowSnackBar -> {
                 snackBarHost.showSnackbar(
                     message = sideEffect.message,
