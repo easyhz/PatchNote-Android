@@ -12,6 +12,7 @@ import com.easyhz.patchnote.ui.screen.sign.name.contract.NameSideEffect
 import com.easyhz.patchnote.ui.screen.sign.name.contract.NameState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -58,7 +59,8 @@ class SignNameViewModel @Inject constructor(
                 name = currentState.nameText,
                 currentTeamId = null,
                 teamIds = emptyList(),
-                teamJoinDates = emptyList()
+                teamJoinDates = emptyList(),
+                creationTime = LocalDateTime.now()
             )
             saveUserUseCase.invoke(userRequest).onSuccess {
                 navigateToTeam()

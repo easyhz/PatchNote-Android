@@ -20,6 +20,7 @@
     <string name="setting_my_page_team_invite_code">팀 초대 코드</string>
     <string name="setting_my_page_logout">로그아웃</string>
     <string name="setting_my_page_leave_team">팀 나가기</string>
+    <string name="setting_my_page_creation_date">서비스 가입일</string>
     <string name="setting_my_page_withdraw">서비스 탈퇴</string>
     <string name="setting_my_page_team_invite_code_copy_success">팀 초대 코드를 복사하였습니다.</string>
 

@@ -24,7 +24,8 @@ fun UserResponse.toModel(
     phone = phone,
     currentTeamId = currentTeamId,
     teamIds = teamIds,
-    teamJoinDates = teamJoinDates.map { it.toModel() }
+    teamJoinDates = teamJoinDates.map { it.toModel() },
+    creationTime = DateFormatUtil.formatTimestampToDateTime(creationTime) ?: LocalDateTime.now()
 )
 
 private fun TeamJoinDateData.toModel() = TeamJoinDate(

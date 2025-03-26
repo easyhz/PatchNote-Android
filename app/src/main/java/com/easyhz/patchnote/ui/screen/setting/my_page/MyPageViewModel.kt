@@ -12,7 +12,6 @@ import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.core.model.setting.MyPageItem
 import com.easyhz.patchnote.domain.usecase.setting.FetchUserInformationUseCase
 import com.easyhz.patchnote.domain.usecase.sign.LogOutUseCase
-import com.easyhz.patchnote.domain.usecase.team.LeaveTeamUseCase
 import com.easyhz.patchnote.domain.usecase.team.WithdrawUseCase
 import com.easyhz.patchnote.ui.screen.setting.my_page.contract.MyPageIntent
 import com.easyhz.patchnote.ui.screen.setting.my_page.contract.MyPageSideEffect
@@ -29,7 +28,6 @@ class MyPageViewModel @Inject constructor(
     private val resourceHelper: ResourceHelper,
     private val fetchUserInformationUseCase: FetchUserInformationUseCase,
     private val logOutUseCase: LogOutUseCase,
-    private val leaveTeamUseCase: LeaveTeamUseCase,
     private val withdrawUseCase: WithdrawUseCase,
 ) : BaseViewModel<MyPageState, MyPageIntent, MyPageSideEffect>(
     initialState = MyPageState.init(),
@@ -61,7 +59,7 @@ class MyPageViewModel @Inject constructor(
 
     private fun onClickMyPageItem(item: MyPageItem) {
         when (item) {
-            MyPageItem.LOGOUT, MyPageItem.LEAVE_TEAM, MyPageItem.WITHDRAW -> setDialogDetail(item)
+            MyPageItem.LOGOUT, MyPageItem.WITHDRAW -> setDialogDetail(item)
             else -> {}
         }
     }
@@ -86,24 +84,6 @@ class MyPageViewModel @Inject constructor(
                 navigateToOnboarding()
             }.onFailure { e ->
                 Log.e(tag, "logout failed", e)
-                showSnackBar(resourceHelper, e.handleError()) {
-                    MyPageSideEffect.ShowSnackBar(it)
-                }
-            }.also {
-                setLoading(false)
-            }
-        }
-    }
-
-    private fun leaveTeam() {
-        handleDialog(null)
-        viewModelScope.launch {
-            val uid = currentState.userInformation.user.id
-            setLoading(true)
-            leaveTeamUseCase.invoke(uid).onSuccess {
-                navigateToOnboarding()
-            }.onFailure { e ->
-                Log.e(tag, "leave team failed", e)
                 showSnackBar(resourceHelper, e.handleError()) {
                     MyPageSideEffect.ShowSnackBar(it)
                 }
@@ -158,15 +138,6 @@ class MyPageViewModel @Inject constructor(
                 getDefaultPositiveButton(
                     text = resourceHelper.getString(R.string.logout_dialog_positive_button),
                     onClick = ::logout
-                )
-            )
-
-            MyPageItem.LEAVE_TEAM -> Triple(
-                resourceHelper.getString(R.string.leave_team_dialog_title),
-                resourceHelper.getString(R.string.leave_team_dialog_message, currentState.userInformation.team.name),
-                getDefaultPositiveButton(
-                    text = resourceHelper.getString(R.string.leave_team_dialog_positive_button),
-                    onClick = ::leaveTeam
                 )
             )
 
