@@ -89,4 +89,9 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun setIsOfflineFirstOpen(newValue: Boolean) {
         userLocalDataSource.setIsOfflineFirstOpen(newValue)
     }
+
+    override suspend fun saveTeamFromLocal(teamId: String, teamName: String): Result<Unit> = runCatching {
+        userLocalDataSource.setCurrentTeamId(teamId)
+        userLocalDataSource.updateTeamName(teamName)
+    }
 }

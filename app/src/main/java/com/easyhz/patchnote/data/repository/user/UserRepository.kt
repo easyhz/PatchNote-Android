@@ -20,4 +20,6 @@ interface UserRepository {
 
     suspend fun isOfflineFirstOpen(): Result<Boolean>
     suspend fun setIsOfflineFirstOpen(newValue: Boolean)
+
+    suspend fun saveTeamFromLocal(teamId: String, teamName: String): Result<Unit>
 }
