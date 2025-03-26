@@ -1,6 +1,7 @@
 package com.easyhz.patchnote.data.model.sign.request
 
 import com.easyhz.patchnote.data.model.sign.common.TeamJoinDateData
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName
 
 
@@ -17,4 +18,6 @@ data class SaveUserRequest(
     @get:PropertyName("teamJoinDates")
     @set:PropertyName("teamJoinDates")
     var teamJoinDates: List<TeamJoinDateData> = emptyList(),
+    @PropertyName("creationTime")
+    val creationTime: Timestamp = Timestamp.now(),
 )
