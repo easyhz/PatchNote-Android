@@ -7,7 +7,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import com.easyhz.patchnote.ui.navigation.home.navigateToHome
 import com.easyhz.patchnote.ui.navigation.sign.navigateToTeam
+import com.easyhz.patchnote.ui.navigation.team.screen.TeamMember
 import com.easyhz.patchnote.ui.navigation.team.screen.TeamSelection
+import com.easyhz.patchnote.ui.screen.team.member.TeamMemberScreen
 import com.easyhz.patchnote.ui.screen.team.selection.TeamSelectionScreen
 
 fun NavGraphBuilder.teamGraph(
@@ -23,8 +25,18 @@ fun NavGraphBuilder.teamGraph(
             navigateToSignTeam = { navController.navigateToTeam() }
         )
     }
+
+    composable<TeamMember> {
+        TeamMemberScreen(
+            navigateUp = navController::navigateUp
+        )
+    }
 }
 
 fun NavController.navigateToTeamSelection(navOptions: NavOptions? = null) {
     navigate(TeamSelection, navOptions)
+}
+
+fun NavController.navigateToTeamMember(navOptions: NavOptions? = null) {
+    navigate(TeamMember, navOptions)
 }

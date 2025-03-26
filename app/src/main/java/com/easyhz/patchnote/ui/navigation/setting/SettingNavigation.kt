@@ -13,6 +13,7 @@ import com.easyhz.patchnote.core.designSystem.util.transition.exitSlide
 import com.easyhz.patchnote.ui.navigation.dataManagement.navigateToDataManagement
 import com.easyhz.patchnote.ui.navigation.onboarding.navigateToOnboarding
 import com.easyhz.patchnote.ui.navigation.splash.Splash
+import com.easyhz.patchnote.ui.navigation.team.navigateToTeamMember
 import com.easyhz.patchnote.ui.navigation.team.navigateToTeamSelection
 import com.easyhz.patchnote.ui.screen.setting.main.SettingScreen
 import com.easyhz.patchnote.ui.screen.setting.my_page.MyPageScreen
@@ -58,7 +59,7 @@ internal fun NavGraphBuilder.settingGraph(
         TeamInformationScreen(
             navigateUp = navController::navigateUp,
             navigateToDataManagement = navController::navigateToDataManagement,
-            navigateToMember = { /* 멤버 목록  */ },
+            navigateToMember = navController::navigateToTeamMember,
             navigateToSplash = {
                 val navOptions = navOptions {
                     popUpTo(navController.graph.id) { inclusive = true }
