@@ -7,7 +7,9 @@
     <string name="setting_major_etc">기타</string>
 
     <string name="setting_about">패치노트 사용법</string>
+    <string name="setting_team_information">팀 정보</string>
     <string name="setting_data_management">데이터 관리</string>
+    <string name="setting_team_list">팀 선택</string>
     <string name="setting_my_page">내 정보</string>
     <string name="setting_reception_settings">접수 설정</string>
     <string name="setting_block">차단하기</string>

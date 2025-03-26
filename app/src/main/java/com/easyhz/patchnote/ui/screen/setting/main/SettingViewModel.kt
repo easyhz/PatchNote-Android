@@ -7,6 +7,7 @@ import com.easyhz.patchnote.core.model.setting.EtcSettingItem
 import com.easyhz.patchnote.core.model.setting.MySettingItem
 import com.easyhz.patchnote.core.model.setting.SettingItem
 import com.easyhz.patchnote.core.model.setting.TeamSettingItem
+import com.easyhz.patchnote.core.model.user.TeamJoinDate
 import com.easyhz.patchnote.domain.usecase.configuration.FetchConfigurationUseCase
 import com.easyhz.patchnote.ui.screen.setting.main.contract.SettingIntent
 import com.easyhz.patchnote.ui.screen.setting.main.contract.SettingSideEffect
@@ -43,7 +44,9 @@ class SettingViewModel @Inject constructor(
 
     private fun handleTeamSettingItem(settingItem: TeamSettingItem) {
         when(settingItem) {
+            TeamSettingItem.TEAM_INFORMATION -> navigateToTeamInformation()
             TeamSettingItem.DATA_MANAGEMENT -> navigateToDataManagement()
+            TeamSettingItem.TEAM_LIST -> navigateToTeamSelection()
         }
     }
 
@@ -73,8 +76,16 @@ class SettingViewModel @Inject constructor(
         }
     }
 
+    private fun navigateToTeamInformation() {
+        postSideEffect { SettingSideEffect.NavigateToTeamInformation }
+    }
+
     private fun navigateToDataManagement() {
         postSideEffect { SettingSideEffect.NavigateToDataManagement }
+    }
+
+    private fun navigateToTeamSelection() {
+        postSideEffect { SettingSideEffect.NavigateToTeamSelection }
     }
 
     private fun navigateToMyPage() {

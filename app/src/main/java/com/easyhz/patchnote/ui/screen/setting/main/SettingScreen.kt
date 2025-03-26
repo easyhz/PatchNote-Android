@@ -171,7 +171,9 @@ fun SettingScreen(
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(sideEffect.url))
                 context.startActivity(intent)
             }
+            is SettingSideEffect.NavigateToTeamInformation -> {}
             is SettingSideEffect.NavigateToDataManagement -> navigateToDataManagement()
+            is SettingSideEffect.NavigateToTeamSelection -> {}
             is SettingSideEffect.NavigateToMyPage -> navigateToMyPage()
             is SettingSideEffect.NavigateToReceptionSetting -> navigateToReceptionSetting()
         }
