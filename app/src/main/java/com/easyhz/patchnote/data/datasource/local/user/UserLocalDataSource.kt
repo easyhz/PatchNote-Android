@@ -1,5 +1,6 @@
 package com.easyhz.patchnote.data.datasource.local.user
 
+import com.easyhz.patchnote.core.model.team.Team
 import com.easyhz.patchnote.core.model.user.User
 import kotlinx.coroutines.flow.Flow
 
@@ -17,4 +18,5 @@ interface UserLocalDataSource {
 
     suspend fun setCurrentTeamId(newValue: String)
     suspend fun getCurrentTeamId(): Result<String?>
+    suspend fun deleteCurrentTeamId()
 }

@@ -68,6 +68,7 @@ class UserLocalDataSourceImpl @Inject constructor(
             preferences.remove(userPhone)
             preferences.remove(userTeamId)
             preferences.remove(userTeams)
+            preferences.remove(userTeamJoinDates)
         }
     }
 
@@ -128,8 +129,13 @@ class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteCurrentTeamId() {
+        dataStore.edit { preferences ->
+            preferences.remove(userTeamId)
+        }
+    }
+
     private fun generateNullException(userKey: UserKey): Exception {
         return AppError.DefaultError("${userKey.key} is null")
     }
-
 }
