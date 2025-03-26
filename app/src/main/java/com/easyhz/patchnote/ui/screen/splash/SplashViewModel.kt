@@ -63,7 +63,7 @@ class SplashViewModel  @Inject constructor(
         setDialog(
             message = DialogMessage(
                 title = resourceHelper.getString(R.string.version_dialog_title),
-                message = resourceHelper.getString(R.string.version_dialog_message, version, BuildConfig.VERSION_NAME),
+                message = resourceHelper.getString(R.string.version_dialog_message, version.toVersion(), BuildConfig.VERSION_NAME.toVersion()),
                 positiveButton = getDefaultPositiveButton(
                     text = resourceHelper.getString(R.string.version_dialog_button),
                     onClick = ::updateAppVersion
@@ -138,7 +138,10 @@ class SplashViewModel  @Inject constructor(
                 )
             }
         }
+    }
 
+    private fun String.toVersion(): String {
+        return "v$this"
     }
 
 }
