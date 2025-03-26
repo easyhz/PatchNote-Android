@@ -2,6 +2,7 @@ package com.easyhz.patchnote.ui.screen.team.selection
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,10 +16,15 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.easyhz.patchnote.R
+import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.card.TeamCard
+import com.easyhz.patchnote.core.designSystem.component.loading.LoadingIndicator
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
+import com.easyhz.patchnote.core.model.team.Team
+import com.easyhz.patchnote.ui.screen.team.selection.contract.TeamSelectionIntent
+import com.easyhz.patchnote.ui.screen.team.selection.contract.TeamSelectionSideEffect
 import com.easyhz.patchnote.ui.screen.team.selection.contract.TeamSelectionState
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Primary
@@ -31,16 +37,28 @@ fun TeamSelectionScreen(
     modifier: Modifier = Modifier,
     viewModel: TeamSelectionViewModel = hiltViewModel(),
     navigateUp: () -> Unit,
+    navigateToHome: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     TeamSelectionScreen(
         modifier = modifier,
         uiState = uiState,
-        navigateUp = navigateUp,
-        onClickAdd = {  },
-        onClickTeam = { }
+        navigateUp = { viewModel.postIntent(TeamSelectionIntent.NavigateUp) },
+        onClickAdd = { viewModel.postIntent(TeamSelectionIntent.NavigateToTeamSign) },
+        onClickTeam = { viewModel.postIntent(TeamSelectionIntent.SelectTeam(it)) }
     )
+
+    viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is TeamSelectionSideEffect.NavigateUp -> navigateUp()
+            is TeamSelectionSideEffect.NavigateToTeamSign -> {
+                // TODO: navigateToTeamSign()
+            }
+            is TeamSelectionSideEffect.NavigateToHome -> navigateToHome()
+        }
+
+    }
 }
 
 @Composable
@@ -49,7 +67,7 @@ private fun TeamSelectionScreen(
     uiState: TeamSelectionState,
     navigateUp: () -> Unit,
     onClickAdd: () -> Unit,
-    onClickTeam: () -> Unit,
+    onClickTeam: (Team) -> Unit,
 ) {
     PatchNoteScaffold(
         topBar = {
@@ -77,10 +95,10 @@ private fun TeamSelectionScreen(
                     onClick = { onClickAdd() }
                 )
             }
-            items(5) {
+            items(uiState.teams, key = { it.id }) {
                 TeamCard(
-                    teamName = "팀 $it",
-                    onClick = { onClickTeam() }
+                    teamName = it.name,
+                    onClick = { onClickTeam(it) }
                 )
             }
             item {
@@ -95,6 +113,9 @@ private fun TeamSelectionScreen(
             }
         }
     }
+    LoadingIndicator(
+        isLoading = uiState.isLoading
+    )
 }
 
 @Preview
