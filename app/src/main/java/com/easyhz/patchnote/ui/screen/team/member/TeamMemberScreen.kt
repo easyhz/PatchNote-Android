@@ -112,7 +112,7 @@ private fun String.toDisplay(phoneNumber: String): String {
     return if (phoneNumber.isEmpty()) {
         this
     } else {
-        "$this (${phoneNumber.takeLast(4)})"
+        "$this(${phoneNumber.takeLast(4)})"
     }
 }
 
