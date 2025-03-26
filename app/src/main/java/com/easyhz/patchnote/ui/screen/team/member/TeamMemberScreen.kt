@@ -87,7 +87,7 @@ private fun TeamMemberScreen(
         ) {
             itemsIndexed(uiState.members, key = { _, it -> it.id }) { index, member ->
                 MemberCard(
-                    name = member.name,
+                    name = member.name.toDisplay(member.phone),
                     trailing = if (index == 0) {
                         {
                             Text(
@@ -106,6 +106,14 @@ private fun TeamMemberScreen(
     LoadingIndicator(
         isLoading = uiState.isLoading,
     )
+}
+
+private fun String.toDisplay(phoneNumber: String): String {
+    return if (phoneNumber.isEmpty()) {
+        this
+    } else {
+        "$this (${phoneNumber.takeLast(4)})"
+    }
 }
 
 @Preview

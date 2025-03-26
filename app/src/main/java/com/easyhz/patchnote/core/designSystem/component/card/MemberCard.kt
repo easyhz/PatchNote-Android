@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Medium18
 
 @Composable
@@ -28,7 +29,8 @@ fun MemberCard(
             text = name,
             style = Medium18,
             overflow = TextOverflow.Ellipsis,
-            maxLines = 1
+            maxLines = 1,
+            color = MainText
         )
         trailing?.invoke()
     }
