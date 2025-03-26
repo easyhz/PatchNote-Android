@@ -15,11 +15,13 @@ interface UserRepository {
     suspend fun updateUserFromRemote(): Result<Unit>
     suspend fun isFirstOpen(): Result<Boolean>
     suspend fun setIsFirstOpen(isFirstOpen: Boolean): Unit
-    suspend fun deleteTeam(userId: String): Result<Unit>
+    suspend fun leaveTeam(uid: String, teamId: String): Result<Unit>
     suspend fun updateTeamName(teamName: String): Result<Unit>
 
     suspend fun isOfflineFirstOpen(): Result<Boolean>
     suspend fun setIsOfflineFirstOpen(newValue: Boolean)
 
     suspend fun saveTeamFromLocal(teamId: String, teamName: String): Result<Unit>
+
+    suspend fun fetchUser(uid: String): Result<User>
 }
