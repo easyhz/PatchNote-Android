@@ -10,6 +10,7 @@ import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
 import com.easyhz.patchnote.core.common.error.AppError
 import com.easyhz.patchnote.core.common.util.serializable.SerializableHelper
 import com.easyhz.patchnote.core.common.util.serializable.deserializeList
+import com.easyhz.patchnote.core.common.util.serializable.serializeList
 import com.easyhz.patchnote.core.model.user.User
 import com.easyhz.patchnote.data.di.config.UserDataStore
 import com.easyhz.patchnote.data.di.config.UserKey
@@ -32,6 +33,7 @@ class UserLocalDataSourceImpl @Inject constructor(
     private val isFirstOpen = booleanPreferencesKey(UserKey.IS_FIRST_OPEN.key)
     private val userTeamName = stringPreferencesKey(UserKey.USER_TEAM_NAME.key)
     private val userTeams = stringPreferencesKey(UserKey.USER_TEAMS.key)
+    private val userTeamJoinDates = stringPreferencesKey(UserKey.USER_TEAM_JOIN_DATES.key)
     private val isOfflineFirstOpen = booleanPreferencesKey(UserKey.IS_OFFLINE_FIRST_OPEN.key)
 
     override suspend fun updateUser(user: User): Unit = withContext(dispatcher) {
@@ -41,6 +43,7 @@ class UserLocalDataSourceImpl @Inject constructor(
             preferences[userPhone] = user.phone
             user.currentTeamId?.let { preferences[userTeamId] = it }
             preferences[userTeams] = serializableHelper.serialize(user.teamIds, List::class.java)
+            preferences[userTeamJoinDates] = serializableHelper.serializeList(user.teamJoinDates)
         }
     }
 
@@ -52,7 +55,8 @@ class UserLocalDataSourceImpl @Inject constructor(
                 name = preferences[userName] ?: throw generateNullException(UserKey.USER_NAME),
                 phone = preferences[userPhone] ?: throw generateNullException(UserKey.USER_PHONE),
                 currentTeamId = preferences[userTeamId],
-                teamIds = serializableHelper.deserializeList(preferences[userTeams] ?: "") ?: emptyList()
+                teamIds = serializableHelper.deserializeList(preferences[userTeams] ?: "") ?: emptyList(),
+                teamJoinDates = serializableHelper.deserializeList(preferences[userTeamJoinDates] ?: "") ?: emptyList()
             )
         }
     }
