@@ -1,11 +1,10 @@
 package com.easyhz.patchnote.ui.screen.sign.team
 
-import android.content.Context
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.handleError
 import com.easyhz.patchnote.core.common.util.Generate
+import com.easyhz.patchnote.core.common.util.resource.ResourceHelper
 import com.easyhz.patchnote.core.model.team.CreateTeamParam
 import com.easyhz.patchnote.core.model.team.Team
 import com.easyhz.patchnote.core.model.user.TeamJoinDate
@@ -17,14 +16,13 @@ import com.easyhz.patchnote.ui.screen.sign.team.contract.SignCreateTeamIntent
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignCreateTeamSideEffect
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignCreateTeamState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class SignCreateTeamViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val resourceHelper: ResourceHelper,
     private val getUserUseCase: GetUserUseCase,
     private val createTeamUseCase: CreateTeamUseCase,
     private val updateTeamNameUseCase: UpdateTeamNameUseCase,
@@ -71,7 +69,7 @@ class SignCreateTeamViewModel @Inject constructor(
                 updateTeamNameUseCase.invoke(currentState.teamNameText)
                 navigateToTeamSelection()
             }.onFailure { e ->
-                showSnackBar(context, e.handleError()) {
+                showSnackBar(resourceHelper, e.handleError()) {
                     SignCreateTeamSideEffect.ShowSnackBar(it)
                 }
             }.also {

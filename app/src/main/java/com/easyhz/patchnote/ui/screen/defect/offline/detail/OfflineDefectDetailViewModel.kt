@@ -1,10 +1,10 @@
 package com.easyhz.patchnote.ui.screen.defect.offline.detail
 
-import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.base.BaseViewModel
+import com.easyhz.patchnote.core.common.util.resource.ResourceHelper
 import com.easyhz.patchnote.core.common.util.serializable.SerializableHelper
 import com.easyhz.patchnote.core.designSystem.util.bottomSheet.DefectDetailBottomSheet
 import com.easyhz.patchnote.core.model.defect.DefectItem
@@ -16,13 +16,12 @@ import com.easyhz.patchnote.ui.screen.defect.offline.detail.contract.OfflineDefe
 import com.easyhz.patchnote.ui.screen.defect.offline.detail.contract.OfflineDefectDetailSideEffect
 import com.easyhz.patchnote.ui.screen.defect.offline.detail.contract.OfflineDefectDetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class OfflineDefectDetailViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val resourceHelper: ResourceHelper,
     private val savedStateHandle: SavedStateHandle,
     private val serializableHelper: SerializableHelper,
     private val deleteOfflineDefectUseCase: DeleteOfflineDefectUseCase,
@@ -72,8 +71,8 @@ class OfflineDefectDetailViewModel @Inject constructor(
         }.onFailure {
             setErrorDialog(
                 DialogMessage(
-                    title = context.getString(R.string.offline_defect_upload_error),
-                    message = context.getString(R.string.offline_defect_upload_error_content)
+                    title = resourceHelper.getString(R.string.offline_defect_upload_error),
+                    message = resourceHelper.getString(R.string.offline_defect_upload_error_content)
                 )
             )
         }.also {
@@ -122,15 +121,15 @@ class OfflineDefectDetailViewModel @Inject constructor(
         deleteOfflineDefectUseCase.invoke(currentState.defectItem!!.id).onSuccess {
             setErrorDialog(
                 DialogMessage(
-                    title = context.getString(R.string.defect_delete_success),
+                    title = resourceHelper.getString(R.string.defect_delete_success),
                     action = DialogAction.NavigateUp
                 )
             )
         }.onFailure {
             setErrorDialog(
                 DialogMessage(
-                    title = context.getString(R.string.defect_delete_error),
-                    message = context.getString(R.string.defect_delete_error_content)
+                    title = resourceHelper.getString(R.string.defect_delete_error),
+                    message = resourceHelper.getString(R.string.defect_delete_error_content)
                 )
             )
         }.also {

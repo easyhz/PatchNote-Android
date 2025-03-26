@@ -1,23 +1,22 @@
 package com.easyhz.patchnote.ui.screen.sign.name
 
-import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.handleError
+import com.easyhz.patchnote.core.common.util.resource.ResourceHelper
 import com.easyhz.patchnote.core.model.user.User
 import com.easyhz.patchnote.domain.usecase.sign.SaveUserUseCase
 import com.easyhz.patchnote.ui.screen.sign.name.contract.NameIntent
 import com.easyhz.patchnote.ui.screen.sign.name.contract.NameSideEffect
 import com.easyhz.patchnote.ui.screen.sign.name.contract.NameState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignNameViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val resourceHelper: ResourceHelper,
     private val savedStateHandle: SavedStateHandle,
     private val saveUserUseCase: SaveUserUseCase,
 ): BaseViewModel<NameState, NameIntent, NameSideEffect>(
@@ -64,7 +63,7 @@ class SignNameViewModel @Inject constructor(
             saveUserUseCase.invoke(userRequest).onSuccess {
                 navigateToTeam()
             }.onFailure { e ->
-                showSnackBar(context, e.handleError()) {
+                showSnackBar(resourceHelper, e.handleError()) {
                     NameSideEffect.ShowSnackBar(it)
                 }
             }.also {

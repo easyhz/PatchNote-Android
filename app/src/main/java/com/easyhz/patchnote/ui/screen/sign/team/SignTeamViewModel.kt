@@ -1,9 +1,9 @@
 package com.easyhz.patchnote.ui.screen.sign.team
 
-import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.handleError
+import com.easyhz.patchnote.core.common.util.resource.ResourceHelper
 import com.easyhz.patchnote.core.model.user.TeamJoinDate
 import com.easyhz.patchnote.domain.usecase.sign.SaveUserUseCase
 import com.easyhz.patchnote.domain.usecase.team.FindTeamByCodeUseCase
@@ -12,13 +12,12 @@ import com.easyhz.patchnote.ui.screen.sign.team.contract.SignTeamIntent
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignTeamSideEffect
 import com.easyhz.patchnote.ui.screen.sign.team.contract.SignTeamState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignTeamViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val resourceHelper: ResourceHelper,
     private val findTeamByCodeUseCase: FindTeamByCodeUseCase,
     private val saveUserUseCase: SaveUserUseCase,
     private val getUserUseCase: GetUserUseCase,
@@ -63,7 +62,7 @@ class SignTeamViewModel @Inject constructor(
             reduce { copy(teamName = it.name, teamId = it.id) }
             setDialog(true)
         }.onFailure { e ->
-            showSnackBar(context, e.handleError()) {
+            showSnackBar(resourceHelper, e.handleError()) {
                 SignTeamSideEffect.ShowSnackBar(it)
             }
         }.also {
@@ -82,7 +81,7 @@ class SignTeamViewModel @Inject constructor(
         saveUserUseCase.invoke(userRequest).onSuccess {
             navigateToTeamSelection()
         }.onFailure { e ->
-            showSnackBar(context, e.handleError()) {
+            showSnackBar(resourceHelper, e.handleError()) {
                 SignTeamSideEffect.ShowSnackBar(it)
             }
         }.also {

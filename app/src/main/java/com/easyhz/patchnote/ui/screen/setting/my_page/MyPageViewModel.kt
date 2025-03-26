@@ -1,6 +1,5 @@
 package com.easyhz.patchnote.ui.screen.setting.my_page
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.R
@@ -22,13 +21,11 @@ import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.Red
 import com.easyhz.patchnote.ui.theme.SemiBold18
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val resourceHelper: ResourceHelper,
     private val fetchUserInformationUseCase: FetchUserInformationUseCase,
     private val logOutUseCase: LogOutUseCase,
@@ -89,7 +86,7 @@ class MyPageViewModel @Inject constructor(
                 navigateToOnboarding()
             }.onFailure { e ->
                 Log.e(tag, "logout failed", e)
-                showSnackBar(context, e.handleError()) {
+                showSnackBar(resourceHelper, e.handleError()) {
                     MyPageSideEffect.ShowSnackBar(it)
                 }
             }.also {
@@ -107,7 +104,7 @@ class MyPageViewModel @Inject constructor(
                 navigateToOnboarding()
             }.onFailure { e ->
                 Log.e(tag, "leave team failed", e)
-                showSnackBar(context, e.handleError()) {
+                showSnackBar(resourceHelper, e.handleError()) {
                     MyPageSideEffect.ShowSnackBar(it)
                 }
             }.also {
@@ -125,7 +122,7 @@ class MyPageViewModel @Inject constructor(
                 navigateToOnboarding()
             }.onFailure { e ->
                 Log.e(tag, "withdraw failed", e)
-                showSnackBar(context, e.handleError()) {
+                showSnackBar(resourceHelper, e.handleError()) {
                     MyPageSideEffect.ShowSnackBar(it)
                 }
             }.also {

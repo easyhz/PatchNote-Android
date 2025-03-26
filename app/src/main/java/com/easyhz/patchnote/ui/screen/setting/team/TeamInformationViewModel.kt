@@ -1,6 +1,5 @@
 package com.easyhz.patchnote.ui.screen.setting.team
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.R
@@ -14,16 +13,15 @@ import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.core.model.setting.TeamItem
 import com.easyhz.patchnote.domain.usecase.team.FetchTeamUseCase
 import com.easyhz.patchnote.domain.usecase.team.LeaveTeamUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import com.easyhz.patchnote.ui.screen.setting.team.contract.TeamInformationIntent
 import com.easyhz.patchnote.ui.screen.setting.team.contract.TeamInformationSideEffect
 import com.easyhz.patchnote.ui.screen.setting.team.contract.TeamInformationState
 import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.Red
 import com.easyhz.patchnote.ui.theme.SemiBold18
-import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Date: 2025. 3. 26.
@@ -32,7 +30,6 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class TeamInformationViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val logger: Logger,
     private val resourceHelper: ResourceHelper,
     private val fetchTeamUseCase: FetchTeamUseCase,
@@ -122,7 +119,7 @@ class TeamInformationViewModel @Inject constructor(
                 navigateToSplash()
             }.onFailure { e ->
                 handleError(message = "leaveTeam", throwable = e)
-                showSnackBar(context, e.handleError()) {
+                showSnackBar(resourceHelper, e.handleError()) {
                     TeamInformationSideEffect.ShowSnackBar(it)
                 }
             }.also {
