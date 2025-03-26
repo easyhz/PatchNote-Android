@@ -1,6 +1,5 @@
 package com.easyhz.patchnote.ui.screen.defect.defectEntry
 
-import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,6 +12,7 @@ import com.easyhz.patchnote.core.common.error.handleError
 import com.easyhz.patchnote.core.common.util.Generate
 import com.easyhz.patchnote.core.common.util.getPostposition
 import com.easyhz.patchnote.core.common.util.log.Logger
+import com.easyhz.patchnote.core.common.util.resource.ResourceHelper
 import com.easyhz.patchnote.core.designSystem.component.bottomSheet.ImageBottomSheetType
 import com.easyhz.patchnote.core.model.category.CategoryType
 import com.easyhz.patchnote.core.model.defect.EntryDefectParam
@@ -20,8 +20,8 @@ import com.easyhz.patchnote.core.model.error.DialogAction
 import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.core.model.image.DefectImage
 import com.easyhz.patchnote.core.model.image.toDefectImages
-import com.easyhz.patchnote.domain.usecase.defect.CreateDefectUseCase
-import com.easyhz.patchnote.domain.usecase.defect.SaveOfflineDefectUseCase
+import com.easyhz.patchnote.domain.usecase.defect.defect.CreateDefectUseCase
+import com.easyhz.patchnote.domain.usecase.defect.offline.SaveOfflineDefectUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetTakePictureUriUseCase
 import com.easyhz.patchnote.domain.usecase.image.RotateImageUseCase
 import com.easyhz.patchnote.ui.screen.defect.defectEntry.contract.DefectEntryIntent
@@ -30,13 +30,12 @@ import com.easyhz.patchnote.ui.screen.defect.defectEntry.contract.DefectEntrySta
 import com.easyhz.patchnote.ui.screen.defect.defectEntry.contract.DefectEntryState.Companion.deleteImage
 import com.easyhz.patchnote.ui.screen.defect.defectEntry.contract.DefectEntryState.Companion.updateImages
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DefectEntryViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val resourceHelper: ResourceHelper,
     private val logger: Logger,
     private val getTakePictureUriUseCase: GetTakePictureUriUseCase,
     private val createDefectUseCase: CreateDefectUseCase,
@@ -94,7 +93,7 @@ class DefectEntryViewModel @Inject constructor(
             }
             .onFailure {
                 logger.e(tag, "launchCamera : $it")
-                setDialog(DialogMessage(title = context.getString(it.handleError())))
+                setDialog(DialogMessage(title = resourceHelper.getString(it.handleError())))
             }
     }
 
@@ -132,7 +131,7 @@ class DefectEntryViewModel @Inject constructor(
                 .onSuccess {
                     setDialog(
                         DialogMessage(
-                            title = context.getString(R.string.success_create_defect),
+                            title = resourceHelper.getString(R.string.success_create_defect),
                             action = DialogAction.Clear
                         )
                     )
@@ -140,7 +139,7 @@ class DefectEntryViewModel @Inject constructor(
                 }
                 .onFailure {
                     logger.e(tag, "createDefect : $it")
-                    setDialog(DialogMessage(title = context.getString(R.string.error_create_defect_failure)))
+                    setDialog(DialogMessage(title = resourceHelper.getString(R.string.error_create_defect_failure)))
                 }.also {
                     setLoading(false)
                 }
@@ -155,13 +154,13 @@ class DefectEntryViewModel @Inject constructor(
                 .onSuccess {
                     setDialog(
                         DialogMessage(
-                            title = context.getString(R.string.success_create_offline_defect),
+                            title = resourceHelper.getString(R.string.success_create_offline_defect),
                             action = DialogAction.Clear
                         )
                     )
                 }.onFailure {
                     logger.e(tag, "saveOfflineDefect : $it")
-                    setDialog(DialogMessage(title = context.getString(R.string.error_create_defect_failure)))
+                    setDialog(DialogMessage(title = resourceHelper.getString(R.string.error_create_defect_failure)))
                 }.also {
                     setLoading(false)
                 }
@@ -186,8 +185,8 @@ class DefectEntryViewModel @Inject constructor(
     /* 하자 등록 유효성 검사 */
     private fun isValidDefect(invalidEntry: CategoryType?): Boolean {
         invalidEntry?.let { type ->
-            val valueString = context.getString(type.nameId) + getPostposition(type)
-            setDialog(DialogMessage(title = context.getString(R.string.category_empty, valueString)))
+            val valueString = resourceHelper.getString(type.nameId) + getPostposition(type)
+            setDialog(DialogMessage(title = resourceHelper.getString(R.string.category_empty, valueString)))
             return false
         }
 
@@ -197,7 +196,7 @@ class DefectEntryViewModel @Inject constructor(
     /* 이미지 유효성 검사 */
     private fun isValidImage(): Boolean {
         if (currentState.images.isEmpty()) {
-            setDialog(DialogMessage(title = context.getString(R.string.defect_entry_image_placeholder)))
+            setDialog(DialogMessage(title = resourceHelper.getString(R.string.defect_entry_image_placeholder)))
             return false
         }
 

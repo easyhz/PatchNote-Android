@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.domain.usecase.defect
+package com.easyhz.patchnote.domain.usecase.defect.offline
 
 import androidx.core.net.toUri
 import com.easyhz.patchnote.core.common.constant.Storage
@@ -33,7 +33,7 @@ class UploadAllOfflineDefectToRemoteUseCase @Inject constructor(
     ): Flow<OfflineDefectProgress> = channelFlow {
         val user = userRepository.getUserFromLocal().getOrThrow()
 
-        val defects = defectRepository.findOfflineDefects(user.teamId, user.id)
+        val defects = defectRepository.findOfflineDefects(user.currentTeamId!!, user.id)
         val total = defects.size
 
         send(OfflineDefectProgress(total = total, uploaded = 0))

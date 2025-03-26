@@ -8,8 +8,8 @@ import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.util.log.Logger
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.domain.usecase.configuration.FetchConfigurationUseCase
-import com.easyhz.patchnote.domain.usecase.defect.GetOfflineDefectsPagingSourceUseCase
-import com.easyhz.patchnote.domain.usecase.defect.UploadAllOfflineDefectToRemoteUseCase
+import com.easyhz.patchnote.domain.usecase.defect.offline.GetOfflineDefectsPagingSourceUseCase
+import com.easyhz.patchnote.domain.usecase.defect.offline.UploadAllOfflineDefectToRemoteUseCase
 import com.easyhz.patchnote.domain.usecase.user.IsOfflineFirstOpenUseCase
 import com.easyhz.patchnote.domain.usecase.user.SetIsOfflineFirstOpenUseCase
 import com.easyhz.patchnote.ui.screen.defect.offline.defect.contract.OfflineDefectIntent

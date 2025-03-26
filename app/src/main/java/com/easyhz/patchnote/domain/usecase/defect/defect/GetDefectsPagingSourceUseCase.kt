@@ -1,4 +1,4 @@
-package com.easyhz.patchnote.domain.usecase.defect
+package com.easyhz.patchnote.domain.usecase.defect.defect
 
 import androidx.paging.PagingData
 import com.easyhz.patchnote.core.common.error.AppError
@@ -18,7 +18,7 @@ class GetDefectsPagingSourceUseCase @Inject constructor(
         val user = userRepository.getUserFromLocal().getOrElse {
             return flow { throw AppError.NoUserDataError }
         }
-        if (user.teamId.isBlank()) return flow { throw AppError.NoUserDataError }
+        if (user.currentTeamId.isNullOrBlank()) return flow { throw AppError.NoTeamDataError }
         return defectRepository.getDefectsPagingSource(filterParam = filterParam, user = user)
     }
 }

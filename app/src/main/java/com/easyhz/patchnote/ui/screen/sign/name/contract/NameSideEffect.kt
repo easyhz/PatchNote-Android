@@ -4,6 +4,6 @@ import com.easyhz.patchnote.core.common.base.UiSideEffect
 
 sealed class NameSideEffect: UiSideEffect() {
     data object NavigateToUp: NameSideEffect()
-    data class NavigateToTeam(val userName: String): NameSideEffect()
+    data object NavigateToTeam: NameSideEffect()
     data class ShowSnackBar(val message: String): NameSideEffect()
 }

@@ -7,7 +7,9 @@
     <string name="setting_major_etc">기타</string>
 
     <string name="setting_about">패치노트 사용법</string>
+    <string name="setting_team_information">팀 정보</string>
     <string name="setting_data_management">데이터 관리</string>
+    <string name="setting_team_list">팀 선택</string>
     <string name="setting_my_page">내 정보</string>
     <string name="setting_reception_settings">접수 설정</string>
     <string name="setting_block">차단하기</string>
@@ -18,6 +20,7 @@
     <string name="setting_my_page_team_invite_code">팀 초대 코드</string>
     <string name="setting_my_page_logout">로그아웃</string>
     <string name="setting_my_page_leave_team">팀 나가기</string>
+    <string name="setting_my_page_creation_date">서비스 가입일</string>
     <string name="setting_my_page_withdraw">서비스 탈퇴</string>
     <string name="setting_my_page_team_invite_code_copy_success">팀 초대 코드를 복사하였습니다.</string>
 
@@ -27,7 +30,7 @@
     <string name="logout_dialog_negative_button">취소</string>
 
     <string name="leave_team_dialog_title">팀 나가기</string>
-    <string name="leave_team_dialog_message">팀에서 나갈까요?\n작성한 정보는 사라지지 않습니다</string>
+    <string name="leave_team_dialog_message">%1s에서 나갈까요?\n작성한 정보는 사라지지 않습니다</string>
     <string name="leave_team_dialog_positive_button">나가기</string>
     <string name="leave_team_dialog_negative_button">취소</string>
 

@@ -1,5 +1,7 @@
 package com.easyhz.patchnote.core.model.team
 
+import java.time.LocalDateTime
+
 /**
  * team
  *
@@ -13,6 +15,7 @@ data class Team(
     val name: String,
     val adminId: String,
     val inviteCode: String,
+    val creationTime: LocalDateTime,
 ) {
     companion object {
         val Empty = Team(
@@ -20,6 +23,7 @@ data class Team(
             name = "",
             adminId = "",
             inviteCode = "",
+            creationTime = LocalDateTime.now(),
         )
     }
 }

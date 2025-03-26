@@ -1,10 +1,10 @@
 package com.easyhz.patchnote.ui.screen.defect.defectDetail
 
-import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.base.BaseViewModel
+import com.easyhz.patchnote.core.common.util.resource.ResourceHelper
 import com.easyhz.patchnote.core.common.util.serializable.SerializableHelper
 import com.easyhz.patchnote.core.common.util.toDateString
 import com.easyhz.patchnote.core.designSystem.util.bottomSheet.DefectDetailBottomSheet
@@ -12,19 +12,18 @@ import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectMainItem
 import com.easyhz.patchnote.core.model.error.DialogAction
 import com.easyhz.patchnote.core.model.error.DialogMessage
-import com.easyhz.patchnote.domain.usecase.defect.DeleteDefectUseCase
+import com.easyhz.patchnote.domain.usecase.defect.defect.DeleteDefectUseCase
 import com.easyhz.patchnote.domain.usecase.sign.GetUserIdUseCase
 import com.easyhz.patchnote.ui.screen.defect.defectDetail.contract.DetailIntent
 import com.easyhz.patchnote.ui.screen.defect.defectDetail.contract.DetailSideEffect
 import com.easyhz.patchnote.ui.screen.defect.defectDetail.contract.DetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DefectDetailViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val resourceHelper: ResourceHelper,
     private val savedStateHandle: SavedStateHandle,
     private val serializableHelper: SerializableHelper,
     private val deleteDefectUseCase: DeleteDefectUseCase,
@@ -113,15 +112,15 @@ class DefectDetailViewModel @Inject constructor(
         deleteDefectUseCase.invoke(currentState.defectItem!!.id).onSuccess {
             setErrorDialog(
                 DialogMessage(
-                    title = context.getString(R.string.defect_delete_success),
+                    title = resourceHelper.getString(R.string.defect_delete_success),
                     action = DialogAction.NavigateUp
                 )
             )
         }.onFailure {
             setErrorDialog(
                 DialogMessage(
-                    title = context.getString(R.string.defect_delete_error),
-                    message = context.getString(R.string.defect_delete_error_content)
+                    title = resourceHelper.getString(R.string.defect_delete_error),
+                    message = resourceHelper.getString(R.string.defect_delete_error_content)
                 )
             )
         }.also {

@@ -1,6 +1,5 @@
 package com.easyhz.patchnote.ui.screen.defect.common
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.text.input.TextFieldValue
@@ -9,6 +8,7 @@ import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.AppError
 import com.easyhz.patchnote.core.common.error.handleError
+import com.easyhz.patchnote.core.common.util.resource.ResourceHelper
 import com.easyhz.patchnote.core.common.util.search.SearchHelper
 import com.easyhz.patchnote.core.common.util.toLinkedHashMap
 import com.easyhz.patchnote.core.model.category.CategoryType
@@ -26,14 +26,13 @@ import com.easyhz.patchnote.ui.screen.defect.common.contract.DefectState.Compani
 import com.easyhz.patchnote.ui.screen.defect.common.contract.DefectState.Companion.updateEntryItemValue
 import com.easyhz.patchnote.ui.screen.defect.common.contract.DefectState.Companion.updateSearchCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DefectViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val resourceHelper: ResourceHelper,
     private val fetchCategoryUseCase: FetchCategoryUseCase,
     private val getReceptionSettingUseCase: GetReceptionSettingUseCase,
 ) : BaseViewModel<DefectState, DefectIntent, DefectSideEffect>(
@@ -124,8 +123,8 @@ class DefectViewModel @Inject constructor(
             else -> error.handleError()
         }
         val message = DialogMessage(
-            title = context.getString(R.string.error_fetch_category_title),
-            message = context.getString(errorMessage),
+            title = resourceHelper.getString(R.string.error_fetch_category_title),
+            message = resourceHelper.getString(errorMessage),
             action = DialogAction.NavigateUp
         )
         sendError(message = message)

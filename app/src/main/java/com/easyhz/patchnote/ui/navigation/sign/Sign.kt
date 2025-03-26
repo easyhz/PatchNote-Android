@@ -23,17 +23,9 @@ internal object Sign: Parcelable {
     )
 
     @Serializable
-    data class Team(
-        val uid: String,
-        val phoneNumber: String,
-        val userName: String
-    )
+    data object Team
 
     @Serializable
-    data class CreateTeam(
-        val uid: String,
-        val phoneNumber: String,
-        val userName: String
-    )
+    data object CreateTeam
 
 }

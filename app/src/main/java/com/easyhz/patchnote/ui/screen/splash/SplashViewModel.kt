@@ -50,7 +50,7 @@ class SplashViewModel  @Inject constructor(
                     is AppStep.Maintenance -> handleMaintenance(it.message)
                     is AppStep.Home -> navigateToHome()
                     is AppStep.Onboarding -> navigateToOnboarding()
-                    is AppStep.Team -> { }
+                    is AppStep.Team -> navigateToTeam()
                 }
             }.onFailure { e ->
                 logger.e(tag, "checkAppStep: ${e.message}")
@@ -63,7 +63,7 @@ class SplashViewModel  @Inject constructor(
         setDialog(
             message = DialogMessage(
                 title = resourceHelper.getString(R.string.version_dialog_title),
-                message = resourceHelper.getString(R.string.version_dialog_message, version, BuildConfig.VERSION_NAME),
+                message = resourceHelper.getString(R.string.version_dialog_message, version.toVersion(), BuildConfig.VERSION_NAME.toVersion()),
                 positiveButton = getDefaultPositiveButton(
                     text = resourceHelper.getString(R.string.version_dialog_button),
                     onClick = ::updateAppVersion
@@ -91,6 +91,10 @@ class SplashViewModel  @Inject constructor(
 
     private fun navigateToOnboarding() {
         postSideEffect { SplashSideEffect.NavigateToOnboarding }
+    }
+
+    private fun navigateToTeam() {
+        postSideEffect { SplashSideEffect.NavigateToTeam }
     }
 
     /* updateAppVersion */
@@ -134,7 +138,10 @@ class SplashViewModel  @Inject constructor(
                 )
             }
         }
+    }
 
+    private fun String.toVersion(): String {
+        return "v$this"
     }
 
 }

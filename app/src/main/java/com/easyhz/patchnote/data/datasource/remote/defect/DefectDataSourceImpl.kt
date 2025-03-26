@@ -57,7 +57,7 @@ class DefectDataSourceImpl @Inject constructor(
                 .indexSearchDate(REQUEST_DATE, index.requestDate)
                 .indexSearch(WORKER_NAME, index.workerName)
                 .indexSearch(COMPLETION_DATE_STR, index.completionDate)
-                .whereEqualTo(TEAM_ID, user.teamId)
+                .whereEqualTo(TEAM_ID, user.currentTeamId)
                 .whereEqualTo(IS_DELETED, false)
                 .orderBy(REQUEST_DATE, Direction.DESCENDING)
                 .paging(paging)

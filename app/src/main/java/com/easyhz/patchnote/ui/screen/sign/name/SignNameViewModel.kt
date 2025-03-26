@@ -1,23 +1,25 @@
 package com.easyhz.patchnote.ui.screen.sign.name
 
-import android.content.Context
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.handleError
+import com.easyhz.patchnote.core.common.util.resource.ResourceHelper
 import com.easyhz.patchnote.core.model.user.User
 import com.easyhz.patchnote.domain.usecase.sign.SaveUserUseCase
 import com.easyhz.patchnote.ui.screen.sign.name.contract.NameIntent
 import com.easyhz.patchnote.ui.screen.sign.name.contract.NameSideEffect
 import com.easyhz.patchnote.ui.screen.sign.name.contract.NameState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class SignNameViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val saveUserUseCase: SaveUserUseCase
+    private val resourceHelper: ResourceHelper,
+    private val savedStateHandle: SavedStateHandle,
+    private val saveUserUseCase: SaveUserUseCase,
 ): BaseViewModel<NameState, NameIntent, NameSideEffect>(
     initialState = NameState.init()
 ) {
@@ -25,39 +27,59 @@ class SignNameViewModel @Inject constructor(
         when(intent) {
             is NameIntent.ChangeNameText -> { changeNameText(intent.text) }
             is NameIntent.NavigateToUp -> { navigateToUp() }
-            is NameIntent.NavigateToTeam -> { navigateToTeam() }
+            is NameIntent.ClickNextButton -> { saveUser() }
         }
     }
 
+    init {
+        init()
+    }
+
+    private fun init() {
+        val uid: String? = savedStateHandle["uid"]
+        val phoneNumber: String? = savedStateHandle["phoneNumber"]
+        if (uid.isNullOrBlank() || phoneNumber.isNullOrBlank()) {
+            navigateToUp()
+            return
+        }
+        reduce { copy(uid = uid, phoneNumber = phoneNumber) }
+    }
+
+
     private fun changeNameText(text: String) {
         reduce { copy(nameText = text, enabledButton = text.isNotBlank()) }
+    }
+
+    private fun saveUser() {
+        viewModelScope.launch {
+            setLoading(true)
+            val userRequest = User(
+                id = currentState.uid,
+                phone = currentState.phoneNumber,
+                name = currentState.nameText,
+                currentTeamId = null,
+                teamIds = emptyList(),
+                teamJoinDates = emptyList(),
+                creationTime = LocalDateTime.now()
+            )
+            saveUserUseCase.invoke(userRequest).onSuccess {
+                navigateToTeam()
+            }.onFailure { e ->
+                showSnackBar(resourceHelper, e.handleError()) {
+                    NameSideEffect.ShowSnackBar(it)
+                }
+            }.also {
+                setLoading(false)
+            }
+        }
     }
 
     private fun navigateToUp() {
         postSideEffect { NameSideEffect.NavigateToUp }
     }
 
-    private fun saveUser(uid: String, phoneNumber: String) = viewModelScope.launch {
-        setLoading(true)
-        val userRequest = User(
-            id = uid,
-            name = currentState.nameText,
-            phone = phoneNumber,
-            teamId = ""
-        )
-        saveUserUseCase.invoke(userRequest).onSuccess {
-//            postSideEffect { NameSideEffect.NavigateToHome }
-        }.onFailure { e ->
-            showSnackBar(context, e.handleError()) {
-                NameSideEffect.ShowSnackBar(it)
-            }
-        }.also {
-            setLoading(false)
-        }
-    }
-
     private fun navigateToTeam() {
-        postSideEffect { NameSideEffect.NavigateToTeam(currentState.nameText) }
+        postSideEffect { NameSideEffect.NavigateToTeam }
     }
 
     private fun setLoading(isLoading: Boolean) {

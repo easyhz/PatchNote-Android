@@ -24,10 +24,16 @@ enum class MajorSettingItem(
 }
 
 enum class TeamSettingItem: SettingItem {
-    DATA_MANAGEMENT {
+    TEAM_INFORMATION {
+       override val stringResId: Int
+           get() = R.string.setting_team_information
+    }, DATA_MANAGEMENT {
         override val stringResId: Int
             get() = R.string.setting_data_management
-    };
+    }, TEAM_LIST {
+        override val stringResId: Int
+            get() = R.string.setting_team_list
+    }, ;
 }
 
 enum class MySettingItem: SettingItem {

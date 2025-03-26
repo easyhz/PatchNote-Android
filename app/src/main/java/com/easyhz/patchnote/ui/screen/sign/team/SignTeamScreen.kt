@@ -45,8 +45,8 @@ import com.easyhz.patchnote.ui.theme.SubBackground
 fun SignTeamScreen(
     modifier: Modifier = Modifier,
     viewModel: SignTeamViewModel = hiltViewModel(),
-    navigateToHome: () -> Unit,
-    navigateToCreateTeam: (uid: String, phoneNumber: String, userName: String) -> Unit,
+    navigateToTeamSelection: () -> Unit,
+    navigateToCreateTeam: () -> Unit,
     navigateToUp: () -> Unit,
 ) {
     val snackBarHost = LocalSnackBarHostState.current
@@ -132,8 +132,8 @@ fun SignTeamScreen(
                     withDismissAction = true
                 )
             }
-            is SignTeamSideEffect.NavigateToHome -> navigateToHome()
-            is SignTeamSideEffect.NavigateToCreateTeam -> navigateToCreateTeam(uiState.uid, uiState.phoneNumber, uiState.userName)
+            is SignTeamSideEffect.NavigateToTeamSelection -> navigateToTeamSelection()
+            is SignTeamSideEffect.NavigateToCreateTeam -> navigateToCreateTeam()
             is SignTeamSideEffect.NavigateToUp -> navigateToUp()
         }
     }

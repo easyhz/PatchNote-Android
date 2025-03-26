@@ -52,10 +52,16 @@ class CheckAppStepUseCase @Inject constructor(
 
     /** ✅ 앱 상태 결정 로직 분리 */
     private fun determineAppStep(fetchResult: FetchResult): AppStep = with(fetchResult) {
-        when {
-            Version.needsUpdate(configuration.androidVersion) -> AppStep.Update(configuration.androidVersion)
-            configuration.maintenanceNotice.isNotBlank() -> AppStep.Maintenance(configuration.maintenanceNotice)
-            isLogin && user?.id?.isNotBlank() == true && user.teamId.isNotBlank() -> AppStep.Home
+        val requiresUpdate = Version.needsUpdate(configuration.androidVersion)
+        val isMaintenance = configuration.maintenanceNotice.isNotBlank()
+        val isLoggedIn = isLogin && user?.id?.isNotBlank() == true
+        val hasNoTeam = user?.currentTeamId.isNullOrBlank()
+
+        return when {
+            requiresUpdate -> AppStep.Update(configuration.androidVersion)
+            isMaintenance -> AppStep.Maintenance(configuration.maintenanceNotice)
+            isLoggedIn && hasNoTeam -> AppStep.Team
+            isLoggedIn && !hasNoTeam -> AppStep.Home
             else -> AppStep.Onboarding
         }
     }

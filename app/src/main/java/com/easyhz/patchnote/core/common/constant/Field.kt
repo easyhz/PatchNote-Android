@@ -18,4 +18,7 @@ object Field {
     const val DELETION_DATE = "deletionDate"
     const val INVITE_CODE = "inviteCode"
     const val TEAM_ID = "teamID"
+    const val TEAM_ID_LIST = "teamIDs"
+    const val TEAM_JOIN_DATES = "teamJoinDates"
+    const val USER_NAME = "name"
 }

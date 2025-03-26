@@ -1,9 +1,9 @@
 package com.easyhz.patchnote.ui.screen.sign.vericiation
 
-import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.handleError
+import com.easyhz.patchnote.core.common.util.resource.ResourceHelper
 import com.easyhz.patchnote.core.model.sign.SignType
 import com.easyhz.patchnote.data.model.sign.param.SignInWithPhoneParam
 import com.easyhz.patchnote.domain.usecase.sign.CheckAlreadyUserUseCase
@@ -12,13 +12,12 @@ import com.easyhz.patchnote.ui.screen.sign.vericiation.contract.VerificationInte
 import com.easyhz.patchnote.ui.screen.sign.vericiation.contract.VerificationSideEffect
 import com.easyhz.patchnote.ui.screen.sign.vericiation.contract.VerificationState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignVerificationViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val resourceHelper: ResourceHelper,
     private val signInWithPhoneUseCase: SignInWithPhoneUseCase,
     private val checkAlreadyUserUseCase: CheckAlreadyUserUseCase,
 ): BaseViewModel<VerificationState, VerificationIntent, VerificationSideEffect>(
@@ -46,7 +45,7 @@ class SignVerificationViewModel @Inject constructor(
         signInWithPhoneUseCase.invoke(param).onSuccess {
             checkAlreadyUser(it, phoneNumber)
         }.onFailure { e ->
-            showSnackBar(context, e.handleError()) {
+            showSnackBar(resourceHelper, e.handleError()) {
                 VerificationSideEffect.ShowSnackBar(it)
             }
         }
@@ -56,11 +55,11 @@ class SignVerificationViewModel @Inject constructor(
         checkAlreadyUserUseCase.invoke(uid).onSuccess { signType ->
             when(signType) {
                 is SignType.NewUser -> navigateToName(uid = uid, phoneNumber = phoneNumber)
-                is SignType.TeamRequired -> navigateToTeam(uid = signType.uid, phoneNumber = signType.phoneNumber, userName = signType.userName)
-                is SignType.ExistingUser -> navigateToHome()
+                is SignType.TeamRequired -> navigateToTeam()
+                is SignType.ExistingUser -> navigateToTeamSelection()
             }
         }.onFailure { e ->
-            showSnackBar(context, e.handleError()) {
+            showSnackBar(resourceHelper, e.handleError()) {
                 VerificationSideEffect.ShowSnackBar(it)
             }
         }.also {
@@ -73,12 +72,12 @@ class SignVerificationViewModel @Inject constructor(
         postSideEffect { VerificationSideEffect.NavigateToName(uid = uid, phoneNumber = phoneNumber) }
     }
 
-    private fun navigateToHome() {
-        postSideEffect { VerificationSideEffect.NavigateToHome }
+    private fun navigateToTeamSelection() {
+        postSideEffect { VerificationSideEffect.NavigateToTeamSelection }
     }
 
-    private fun navigateToTeam(uid: String, phoneNumber: String, userName: String) {
-        postSideEffect { VerificationSideEffect.NavigateToTeam(uid = uid, phoneNumber = phoneNumber, userName = userName) }
+    private fun navigateToTeam() {
+        postSideEffect { VerificationSideEffect.NavigateToTeam }
     }
 
     private fun setLoading(isLoading: Boolean) {

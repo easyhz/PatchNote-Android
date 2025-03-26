@@ -3,6 +3,8 @@ package com.easyhz.patchnote.ui.screen.dataManagement
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
+import com.easyhz.patchnote.core.common.error.AppError
+import com.easyhz.patchnote.core.common.util.log.Logger
 import com.easyhz.patchnote.core.model.category.DeleteCategory
 import com.easyhz.patchnote.domain.usecase.category.DeleteCategoryUseCase
 import com.easyhz.patchnote.domain.usecase.category.FetchCategoryUseCase
@@ -15,6 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DataManagementViewModel @Inject constructor(
+    private val logger: Logger,
     private val fetchCategoryUseCase: FetchCategoryUseCase,
     private val deleteCategoryUseCase: DeleteCategoryUseCase
 ) : BaseViewModel<DataState, DataIntent, DataSideEffect>(
@@ -40,7 +43,7 @@ class DataManagementViewModel @Inject constructor(
         fetchCategoryUseCase.invoke(Unit).onSuccess {
             reduce { copy(category = it) }
         }.onFailure {
-            Log.e(tag, "fetchCategory : ${it.message}", it)
+            handleError("fetchCategory", it)
         }
     }
 
@@ -56,7 +59,7 @@ class DataManagementViewModel @Inject constructor(
         deleteCategoryUseCase.invoke(param).onSuccess {
             println(">> 성공")
         }.onFailure {
-            Log.e(tag, "fetchCategory : ${it.message}", it)
+            handleError("deleteCategory", it)
         }.also {
             hideDeleteDialog()
             fetchCategory()
@@ -92,6 +95,18 @@ class DataManagementViewModel @Inject constructor(
                 deleteCategory = null,
                 deleteCategoryItemIndex = null
             )
+        }
+    }
+
+    private fun handleError(message: String, throwable: Throwable) {
+        logger.e(tag, "$message : ${throwable.message}", throwable)
+        when (throwable) {
+            AppError.NoTeamDataError -> {
+                // TODO 팀 데이터 없음 에러 처리
+            }
+            else -> {
+                Log.e(tag, "handleError : ${throwable.message}", throwable)
+            }
         }
     }
 }

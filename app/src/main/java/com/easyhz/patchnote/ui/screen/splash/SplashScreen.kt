@@ -6,8 +6,10 @@ import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -22,6 +24,8 @@ import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.dialog.BasicDialog
 import com.easyhz.patchnote.ui.screen.splash.contract.SplashSideEffect
 import com.easyhz.patchnote.ui.theme.MainBackground
+import com.easyhz.patchnote.ui.theme.Medium14
+import com.easyhz.patchnote.ui.theme.SubText
 
 @Composable
 fun SplashScreen(
@@ -29,6 +33,7 @@ fun SplashScreen(
     viewModel: SplashViewModel = hiltViewModel(),
     navigateToHome: () -> Unit,
     navigateToOnboarding: () -> Unit,
+    navigateToTeam: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -47,6 +52,14 @@ fun SplashScreen(
                 ),
                 contentDescription = "logo",
             )
+
+            Text(
+                modifier = Modifier.align(Alignment.BottomEnd).padding(20.dp),
+                text = uiState.version,
+                style = Medium14.copy(
+                    color = SubText
+                )
+            )
         }
     }
 
@@ -64,6 +77,7 @@ fun SplashScreen(
         when(sideEffect) {
             is SplashSideEffect.NavigateToHome -> { navigateToHome() }
             is SplashSideEffect.NavigateToOnboarding -> { navigateToOnboarding() }
+            is SplashSideEffect.NavigateToTeam -> { navigateToTeam() }
             is SplashSideEffect.NavigateUp -> { (context as Activity).finish() }
             is SplashSideEffect.NavigateToUrl -> {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(sideEffect.url))

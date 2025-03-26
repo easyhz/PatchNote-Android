@@ -38,7 +38,7 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUserFromRemote(uid: String): Result<User> {
-        return authDataSource.getUser(uid).map { it.toModel() }
+        return authDataSource.getUser(uid).map { it.toModel(null) }
     }
 
     override suspend fun deleteUserFromLocal() {
@@ -51,11 +51,17 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun updateUserFromRemote(): Result<Unit> = runCatching {
         val uid = authDataSource.getUserId() ?: return Result.failure(Exception("User not found"))
+        val currentTeamId = userLocalDataSource.getCurrentTeamId().getOrNull()
         val user = authDataSource.getUser(uid).getOrThrow()
-        val teamName = teamRemoteDateSource.findTeamById(user.teamId).getOrThrow()
+        val teamId = if(!currentTeamId.isNullOrBlank() && currentTeamId in user.teamIds) {
+            val teamName = teamRemoteDateSource.findTeamById(currentTeamId).getOrThrow()
+            userLocalDataSource.updateTeamName(teamName.name)
+            currentTeamId
+        } else {
+            null
+        }
 
-        userLocalDataSource.updateUser(user.toModel())
-        userLocalDataSource.updateTeamName(teamName.name)
+        userLocalDataSource.updateUser(user.toModel(teamId))
     }
 
     override suspend fun setIsFirstOpen(isFirstOpen: Boolean) {
@@ -66,10 +72,10 @@ class UserRepositoryImpl @Inject constructor(
         return userLocalDataSource.isFirstOpen()
     }
 
-    override suspend fun deleteTeam(userId: String): Result<Unit> = runCatching {
+    override suspend fun leaveTeam(uid: String, teamId: String): Result<Unit> = runCatching {
         userLocalDataSource.deleteTeamName()
-        userLocalDataSource.deleteUser()
-        authDataSource.deleteTeamId(userId)
+        userLocalDataSource.deleteCurrentTeamId()
+        authDataSource.leaveTeam(uid = uid, teamId = teamId)
     }
 
     override suspend fun updateTeamName(teamName: String): Result<Unit> = runCatching {
@@ -82,5 +88,14 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun setIsOfflineFirstOpen(newValue: Boolean) {
         userLocalDataSource.setIsOfflineFirstOpen(newValue)
+    }
+
+    override suspend fun saveTeamFromLocal(teamId: String, teamName: String): Result<Unit> = runCatching {
+        userLocalDataSource.setCurrentTeamId(teamId)
+        userLocalDataSource.updateTeamName(teamName)
+    }
+
+    override suspend fun fetchUser(uid: String): Result<User> {
+        return authDataSource.getUser(uid).map { it.toModel(null) }
     }
 }

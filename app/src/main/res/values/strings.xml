@@ -41,7 +41,7 @@
     <string name="dialog_setting_password_error_subtitle">비밀번호가 틀렸습니다.</string>
     <string name="dialog_setting_password_error_button">확인</string>
 
-    <string name="dialog_block_title">차단하기</string>
+    <string name="dialog_block_title">유저 차단하기</string>
     <string name="dialog_block_subtitle">차단할 유저의 id를 입력해주세요</string>
     <string name="dialog_block_placeholder">차단할 유저의 id를 입력해주세요</string>
     <string name="dialog_block_positive">확인</string>

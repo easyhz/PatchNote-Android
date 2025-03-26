@@ -9,8 +9,8 @@ import com.easyhz.patchnote.core.common.util.serializable.SerializableHelper
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.error.DialogAction
 import com.easyhz.patchnote.core.model.error.DialogMessage
-import com.easyhz.patchnote.domain.usecase.defect.CreateDefectUseCase
-import com.easyhz.patchnote.domain.usecase.defect.FetchDefectUseCase
+import com.easyhz.patchnote.domain.usecase.defect.defect.CreateDefectUseCase
+import com.easyhz.patchnote.domain.usecase.defect.defect.FetchDefectUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetDefectImagesUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetTakePictureUriUseCase
 import com.easyhz.patchnote.domain.usecase.image.RotateImageUseCase

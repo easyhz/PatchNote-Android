@@ -12,7 +12,9 @@ import java.util.Locale
 
 object DateFormatUtil {
     private const val PATTERN = "yyyy.MM.dd"
+    private const val PATTERN_DATE_TIME = "yyyy.MM.dd HH:mm"
     private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern(PATTERN)
+    private val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern(PATTERN_DATE_TIME)
 
 
     fun formatTimestampToDateString(timestamp: Timestamp): String {
@@ -84,6 +86,10 @@ object DateFormatUtil {
         return requestDate
     }
 
+    fun convertStringToDateTime(string: String): LocalDateTime {
+        val localDate = LocalDateTime.parse(string, dateTimeFormatter)
+        return localDate
+    }
 }
 
 fun LocalDateTime.toDateString(): String {

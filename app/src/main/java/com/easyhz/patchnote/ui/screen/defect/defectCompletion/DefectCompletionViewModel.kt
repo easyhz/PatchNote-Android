@@ -1,6 +1,5 @@
 package com.easyhz.patchnote.ui.screen.defect.defectCompletion
 
-import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
@@ -9,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.R
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.handleError
+import com.easyhz.patchnote.core.common.util.resource.ResourceHelper
 import com.easyhz.patchnote.core.common.util.serializable.SerializableHelper
 import com.easyhz.patchnote.core.designSystem.component.bottomSheet.ImageBottomSheetType
 import com.easyhz.patchnote.core.model.defect.DefectCompletionParam
@@ -17,8 +17,8 @@ import com.easyhz.patchnote.core.model.error.DialogAction
 import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.core.model.image.DefectImage
 import com.easyhz.patchnote.core.model.image.toDefectImages
-import com.easyhz.patchnote.domain.usecase.defect.FetchDefectUseCase
-import com.easyhz.patchnote.domain.usecase.defect.UpdateDefectCompletionUseCase
+import com.easyhz.patchnote.domain.usecase.defect.defect.FetchDefectUseCase
+import com.easyhz.patchnote.domain.usecase.defect.defect.UpdateDefectCompletionUseCase
 import com.easyhz.patchnote.domain.usecase.image.GetTakePictureUriUseCase
 import com.easyhz.patchnote.domain.usecase.image.RotateImageUseCase
 import com.easyhz.patchnote.ui.screen.defect.defectCompletion.contract.DefectCompletionIntent
@@ -27,13 +27,12 @@ import com.easyhz.patchnote.ui.screen.defect.defectCompletion.contract.DefectCom
 import com.easyhz.patchnote.ui.screen.defect.defectCompletion.contract.DefectCompletionState.Companion.deleteImage
 import com.easyhz.patchnote.ui.screen.defect.defectCompletion.contract.DefectCompletionState.Companion.updateImages
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DefectCompletionViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val resourceHelper: ResourceHelper,
     private val savedStateHandle: SavedStateHandle,
     private val serializableHelper: SerializableHelper,
     private val getTakePictureUriUseCase: GetTakePictureUriUseCase,
@@ -135,7 +134,7 @@ class DefectCompletionViewModel @Inject constructor(
             }
             .onFailure {
                 Log.e(tag, "launchCamera : $it")
-                setDialog(DialogMessage(title = context.getString(it.handleError())))
+                setDialog(DialogMessage(title = resourceHelper.getString(it.handleError())))
             }
     }
 
@@ -184,10 +183,10 @@ class DefectCompletionViewModel @Inject constructor(
             afterImageUris = currentState.images.map { it.uri }
         )
         updateDefectCompletionUseCase.invoke(param).onSuccess {
-            setDialog(DialogMessage(title = context.getString(R.string.defect_completion_dialog_title), action = DialogAction.CustomAction))
+            setDialog(DialogMessage(title = resourceHelper.getString(R.string.defect_completion_dialog_title), action = DialogAction.CustomAction))
         }.onFailure {
             Log.e(tag, "clickCompletion : $it")
-            setDialog(DialogMessage(title = context.getString(R.string.error_create_defect_completion_failure)))
+            setDialog(DialogMessage(title = resourceHelper.getString(R.string.error_create_defect_completion_failure)))
         }.also {
             setLoading(false)
         }

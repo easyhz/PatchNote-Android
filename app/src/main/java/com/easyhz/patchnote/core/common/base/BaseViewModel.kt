@@ -1,9 +1,9 @@
 package com.easyhz.patchnote.core.common.base
 
-import android.content.Context
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.easyhz.patchnote.core.common.util.resource.ResourceHelper
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -66,12 +66,12 @@ abstract class BaseViewModel<State: UiState, Intent: UiIntent, SideEffect: UiSid
     fun postSideEffect(builder: () -> SideEffect) = viewModelScope.launch { _sideEffect.emit(builder()) }
 
     fun showSnackBar(
-        context: Context,
+        resourceHelper: ResourceHelper,
         @StringRes value: Int,
         vararg formatArgs: Any,
         sideEffect: (String) -> SideEffect
     ) {
-        val snackBarString = context.getString(value, *formatArgs)
+        val snackBarString = resourceHelper.getString(value, *formatArgs)
         postSideEffect { sideEffect(snackBarString) }
     }
 }

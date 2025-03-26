@@ -1,12 +1,12 @@
 package com.easyhz.patchnote.ui.screen.defect.export
 
-import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.handleError
 import com.easyhz.patchnote.core.common.util.DateFormatUtil
+import com.easyhz.patchnote.core.common.util.resource.ResourceHelper
 import com.easyhz.patchnote.core.common.util.toLinkedHashMap
 import com.easyhz.patchnote.core.model.filter.Filter
 import com.easyhz.patchnote.core.model.filter.FilterParam
@@ -15,20 +15,19 @@ import com.easyhz.patchnote.core.model.filter.FilterValue
 import com.easyhz.patchnote.core.model.filter.FilterValue.Companion.asInt
 import com.easyhz.patchnote.core.model.filter.FilterValue.Companion.asLong
 import com.easyhz.patchnote.core.model.filter.FilterValue.Companion.asString
-import com.easyhz.patchnote.domain.usecase.defect.ExportDefectUseCase
+import com.easyhz.patchnote.domain.usecase.defect.defect.ExportDefectUseCase
 import com.easyhz.patchnote.ui.screen.defect.export.contract.DefectExportIntent
 import com.easyhz.patchnote.ui.screen.defect.export.contract.DefectExportSideEffect
 import com.easyhz.patchnote.ui.screen.defect.export.contract.DefectExportState
 import com.easyhz.patchnote.ui.screen.defect.export.contract.DefectExportState.Companion.updateFilterItemValue
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DefectExportViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val resourceHelper: ResourceHelper,
     private val exportDefectUseCase: ExportDefectUseCase,
 ): BaseViewModel<DefectExportState, DefectExportIntent, DefectExportSideEffect>(
     DefectExportState.init()
@@ -105,7 +104,7 @@ class DefectExportViewModel @Inject constructor(
                 postSideEffect { DefectExportSideEffect.ShareIntent(it) }
             }.onFailure { e ->
                 Log.e(tag, "exportDefect : $e", e)
-                showSnackBar(context, e.handleError()) {
+                showSnackBar(resourceHelper, e.handleError()) {
                     DefectExportSideEffect.ShowSnackBar(it)
                 }
             }.also {

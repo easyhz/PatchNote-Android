@@ -12,7 +12,7 @@ class FetchUserInformationUseCase @Inject constructor(
 ):BaseUseCase<Unit, UserInformation>() {
     override suspend fun invoke(param: Unit): Result<UserInformation> = runCatching {
         val user = userRepository.getUserFromLocal().getOrThrow()
-        val team = teamRepository.findTeamById(user.teamId).getOrThrow()
+        val team = teamRepository.findTeamById(user.currentTeamId!!).getOrThrow()
 
         UserInformation(user, team)
     }
