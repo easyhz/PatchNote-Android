@@ -6,15 +6,13 @@ import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.handleError
 import com.easyhz.patchnote.core.common.util.log.Logger
 import com.easyhz.patchnote.domain.usecase.team.FetchTeamMemberUseCase
-import com.easyhz.patchnote.ui.screen.dataEntry.contract.DataEntrySideEffect
-import com.easyhz.patchnote.ui.screen.setting.team.contract.TeamInformationIntent
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import com.easyhz.patchnote.ui.screen.team.member.contract.TeamMemberIntent
 import com.easyhz.patchnote.ui.screen.team.member.contract.TeamMemberSideEffect
 import com.easyhz.patchnote.ui.screen.team.member.contract.TeamMemberState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Date: 2025. 3. 26.
@@ -49,6 +47,8 @@ class TeamMemberViewModel @Inject constructor(
                 showSnackBar(context, e.handleError()) {
                     TeamMemberSideEffect.ShowSnackBar(it)
                 }
+            }.also {
+                reduce { copy(isLoading = false) }
             }
         }
     }
