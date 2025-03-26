@@ -1,12 +1,13 @@
 package com.easyhz.patchnote.data.datasource.remote.auth
 
 import android.app.Activity
+import com.easyhz.patchnote.core.common.constant.Collection.USERS
+import com.easyhz.patchnote.core.common.constant.Field.TEAM_ID_LIST
+import com.easyhz.patchnote.core.common.constant.Field.TEAM_JOIN_DATES
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
-import com.easyhz.patchnote.core.common.util.setHandler
-import com.easyhz.patchnote.core.common.constant.Collection.USERS
-import com.easyhz.patchnote.core.common.constant.Field.TEAM_ID
 import com.easyhz.patchnote.core.common.util.documentHandler
+import com.easyhz.patchnote.core.common.util.setHandler
 import com.easyhz.patchnote.data.model.sign.request.SaveUserRequest
 import com.easyhz.patchnote.data.model.sign.response.UserResponse
 import com.google.firebase.auth.AuthResult
@@ -14,7 +15,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.tasks.await
@@ -68,7 +68,22 @@ class AuthDataSourceImpl @Inject constructor(
         firestore.collection(USERS).document(uid).delete()
     }
 
-    override suspend fun deleteTeamId(uid: String): Result<Unit> = setHandler(dispatcher) {
-        firestore.collection(USERS).document(uid).update(TEAM_ID, FieldValue.delete())
+    override suspend fun leaveTeam(uid: String, teamId: String): Result<Unit> = setHandler(dispatcher) {
+        firestore.runTransaction { transaction ->
+            val docRef = firestore.collection(USERS).document(uid)
+            val user = transaction.get(docRef).toObject(UserResponse::class.java)
+                ?: throw IllegalStateException("User not found")
+
+            val teamIdList = user.teamIds.toMutableList()
+            teamIdList.remove(teamId)
+
+            val mutableJoinDates = user.teamJoinDates.toMutableList()
+            mutableJoinDates.removeIf { it.teamId == teamId }
+
+            transaction.update(docRef, TEAM_ID_LIST, teamIdList)
+            transaction.update(docRef, TEAM_JOIN_DATES, mutableJoinDates)
+
+            null
+        }
     }
 }
