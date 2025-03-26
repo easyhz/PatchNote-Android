@@ -24,6 +24,7 @@ import com.easyhz.patchnote.core.model.user.User
 import com.easyhz.patchnote.ui.screen.team.member.contract.TeamMemberIntent
 import com.easyhz.patchnote.ui.screen.team.member.contract.TeamMemberSideEffect
 import com.easyhz.patchnote.ui.screen.team.member.contract.TeamMemberState
+import com.easyhz.patchnote.ui.theme.LocalSnackBarHostState
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Medium18
 import com.easyhz.patchnote.ui.theme.SubText
@@ -40,6 +41,7 @@ fun TeamMemberScreen(
     navigateUp: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackBarHostState = LocalSnackBarHostState.current
 
     TeamMemberScreen(
         modifier = modifier,
@@ -50,6 +52,12 @@ fun TeamMemberScreen(
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is TeamMemberSideEffect.NavigateUp -> navigateUp()
+            is TeamMemberSideEffect.ShowSnackBar -> {
+                snackBarHostState.showSnackbar(
+                    message = sideEffect.value,
+                    withDismissAction = true
+                )
+            }
         }
     }
 }

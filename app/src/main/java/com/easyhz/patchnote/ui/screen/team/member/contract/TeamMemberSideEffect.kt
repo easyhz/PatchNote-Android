@@ -9,4 +9,5 @@ import com.easyhz.patchnote.core.common.base.UiSideEffect
 
 sealed class TeamMemberSideEffect : UiSideEffect() {
     data object NavigateUp : TeamMemberSideEffect()
+    data class ShowSnackBar(val value: String) : TeamMemberSideEffect()
 }
