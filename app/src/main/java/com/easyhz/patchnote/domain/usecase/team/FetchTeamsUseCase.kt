@@ -5,6 +5,7 @@ import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
 import com.easyhz.patchnote.core.common.error.AppError
 import com.easyhz.patchnote.core.model.team.Team
+import com.easyhz.patchnote.core.model.user.TeamJoinDate
 import com.easyhz.patchnote.data.repository.team.TeamRepository
 import com.easyhz.patchnote.data.repository.user.UserRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -22,9 +23,12 @@ class FetchTeamsUseCase @Inject constructor(
         val uid = userRepository.getUserId() ?: throw AppError.NoUserDataError
         val user = userRepository.getUserFromRemote(uid).getOrThrow()
         coroutineScope {
-            user.teamIds.map { teamId ->
+            user.teamJoinDates.sortedWith(
+                compareByDescending<TeamJoinDate> { it.joinDate }
+                    .thenBy { it.teamId }
+            ).map { joinDate ->
                 async(dispatcher) {
-                    teamRepository.findTeamById(teamId).getOrThrow()
+                    teamRepository.findTeamById(joinDate.teamId).getOrThrow()
                 }
             }.awaitAll()
         }
