@@ -176,4 +176,7 @@ dependencies {
 
     // compressor
     implementation(libs.image.compressor)
+
+    // clarity
+    implementation(libs.clarity)
 }
