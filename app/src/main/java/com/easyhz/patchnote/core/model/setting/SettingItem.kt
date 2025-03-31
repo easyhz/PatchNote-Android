@@ -1,10 +1,14 @@
 package com.easyhz.patchnote.core.model.setting
 
 import androidx.annotation.StringRes
+import com.easyhz.patchnote.BuildConfig
 import com.easyhz.patchnote.R
 
 interface SettingItem {
     val stringResId: Int
+    val enabledClick: Boolean
+        get() = true
+    fun getValue(): String? = null
 }
 
 enum class MajorSettingItem(
@@ -69,7 +73,15 @@ enum class EtcSettingItem: SettingItem {
         override fun getValue(): String? {
             return null
         }
-    };
+    }, VERSION {
+        override val stringResId: Int
+            get() = R.string.setting_version
 
-    abstract fun getValue(): String?
+        override val enabledClick: Boolean
+            get() = false
+
+        override fun getValue(): String {
+            return "v${BuildConfig.VERSION_NAME}"
+        }
+    };
 }
