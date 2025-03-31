@@ -8,22 +8,25 @@ import com.easyhz.patchnote.core.model.setting.MySettingItem
 import com.easyhz.patchnote.core.model.setting.SettingItem
 import com.easyhz.patchnote.core.model.setting.TeamSettingItem
 import com.easyhz.patchnote.domain.usecase.configuration.FetchConfigurationUseCase
+import com.easyhz.patchnote.domain.usecase.team.GetTeamNameUseCase
 import com.easyhz.patchnote.ui.screen.setting.main.contract.SettingIntent
 import com.easyhz.patchnote.ui.screen.setting.main.contract.SettingSideEffect
 import com.easyhz.patchnote.ui.screen.setting.main.contract.SettingState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
     private val fetchConfigurationUseCase: FetchConfigurationUseCase,
-): BaseViewModel<SettingState, SettingIntent, SettingSideEffect>(
+    private val getTeamNameUseCase: GetTeamNameUseCase,
+) : BaseViewModel<SettingState, SettingIntent, SettingSideEffect>(
     initialState = SettingState.init()
 ) {
     private val tag = "SettingViewModel"
     override fun handleIntent(intent: SettingIntent) {
-        when(intent) {
+        when (intent) {
             is SettingIntent.ClickSettingItem -> onClickSettingItem(intent.settingItem)
             is SettingIntent.NavigateToUp -> navigateToUp()
             is SettingIntent.ChangeBlockText -> changeBlockInputDialogText(intent.text)
@@ -33,8 +36,22 @@ class SettingViewModel @Inject constructor(
         }
     }
 
+    init {
+        getTeamName()
+    }
+
+    private fun getTeamName() {
+        viewModelScope.launch {
+            getTeamNameUseCase.invoke()
+                .distinctUntilChanged()
+                .collect {
+                    reduce { copy(teamName = it) }
+                }
+        }
+    }
+
     private fun onClickSettingItem(settingItem: SettingItem) {
-        when(settingItem) {
+        when (settingItem) {
             is TeamSettingItem -> handleTeamSettingItem(settingItem)
             is MySettingItem -> handleMySettingItem(settingItem)
             is EtcSettingItem -> handleEtcSettingItem(settingItem)
@@ -42,7 +59,7 @@ class SettingViewModel @Inject constructor(
     }
 
     private fun handleTeamSettingItem(settingItem: TeamSettingItem) {
-        when(settingItem) {
+        when (settingItem) {
             TeamSettingItem.TEAM_INFORMATION -> navigateToTeamInformation()
             TeamSettingItem.DATA_MANAGEMENT -> navigateToDataManagement()
             TeamSettingItem.TEAM_LIST -> navigateToTeamSelection()
@@ -50,17 +67,18 @@ class SettingViewModel @Inject constructor(
     }
 
     private fun handleMySettingItem(settingItem: MySettingItem) {
-        when(settingItem) {
+        when (settingItem) {
             MySettingItem.MY_PAGE -> navigateToMyPage()
             MySettingItem.RECEPTION_SETTINGS -> navigateToReceptionSetting()
         }
     }
 
     private fun handleEtcSettingItem(settingItem: EtcSettingItem) {
-        when(settingItem) {
+        when (settingItem) {
             EtcSettingItem.ABOUT -> navigateToAbout()
             EtcSettingItem.SUPPORT -> navigateToSupport(settingItem.getValue())
             EtcSettingItem.BLOCK -> showInputDialog()
+            EtcSettingItem.VERSION -> {}
         }
     }
 
