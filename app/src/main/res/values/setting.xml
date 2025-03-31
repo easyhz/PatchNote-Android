@@ -14,6 +14,7 @@
     <string name="setting_reception_settings">접수 설정</string>
     <string name="setting_support">카카오톡 문의하기</string>
     <string name="setting_block">차단하기</string>
+    <string name="setting_version">버전</string>
 
     <string name="setting_my_page_name">이름</string>
     <string name="setting_my_page_phone">전화번호</string>
