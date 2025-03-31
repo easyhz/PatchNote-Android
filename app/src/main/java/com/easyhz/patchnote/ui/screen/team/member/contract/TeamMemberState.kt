@@ -1,7 +1,7 @@
 package com.easyhz.patchnote.ui.screen.team.member.contract
 
 import com.easyhz.patchnote.core.common.base.UiState
-import com.easyhz.patchnote.core.model.user.User
+import com.easyhz.patchnote.core.model.team.TeamMember
 
 /**
  * Date: 2025. 3. 26.
@@ -10,7 +10,7 @@ import com.easyhz.patchnote.core.model.user.User
 
 data class TeamMemberState(
     val isLoading: Boolean,
-    val members: List<User>,
+    val members: List<TeamMember>,
 ) : UiState() {
     companion object {
         fun init(): TeamMemberState = TeamMemberState(
