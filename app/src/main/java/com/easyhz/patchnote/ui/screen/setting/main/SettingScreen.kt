@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.easyhz.patchnote.R
+import com.easyhz.patchnote.core.common.helper.web.WebHelper
 import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.dialog.BasicDialog
 import com.easyhz.patchnote.core.designSystem.component.dialog.InputDialog
@@ -170,14 +171,16 @@ fun SettingScreen(
         when (sideEffect) {
             is SettingSideEffect.NavigateToUp -> navigateToUp()
             is SettingSideEffect.NavigateToAbout -> {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(sideEffect.url))
-                context.startActivity(intent)
+                WebHelper().openWebPage(context, sideEffect.url)
             }
             is SettingSideEffect.NavigateToTeamInformation -> navigateToTeamInformation()
             is SettingSideEffect.NavigateToDataManagement -> navigateToDataManagement()
             is SettingSideEffect.NavigateToTeamSelection -> navigateToTeamSelection()
             is SettingSideEffect.NavigateToMyPage -> navigateToMyPage()
             is SettingSideEffect.NavigateToReceptionSetting -> navigateToReceptionSetting()
+            is SettingSideEffect.NavigateToSupport -> {
+                WebHelper().openWebPage(context, sideEffect.url)
+            }
         }
     }
 }

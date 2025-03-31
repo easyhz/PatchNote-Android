@@ -50,8 +50,26 @@ enum class EtcSettingItem: SettingItem {
     ABOUT {
         override val stringResId: Int
             get() = R.string.setting_about
+
+        override fun getValue(): String? {
+            return null
+        }
+    }, SUPPORT {
+        override val stringResId: Int
+            get() = R.string.setting_support
+
+        override fun getValue(): String {
+            return "https://open.kakao.com/o/gI5mQ2Vg"
+        }
+
     }, BLOCK {
         override val stringResId: Int
             get() = R.string.setting_block
+
+        override fun getValue(): String? {
+            return null
+        }
     };
+
+    abstract fun getValue(): String?
 }

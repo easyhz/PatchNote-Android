@@ -10,4 +10,5 @@ sealed class SettingSideEffect: UiSideEffect() {
     data object NavigateToTeamSelection: SettingSideEffect()
     data object NavigateToMyPage: SettingSideEffect()
     data object NavigateToReceptionSetting: SettingSideEffect()
+    data class NavigateToSupport(val url: String): SettingSideEffect()
 }
