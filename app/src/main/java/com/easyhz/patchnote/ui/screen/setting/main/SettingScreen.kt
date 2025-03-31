@@ -1,12 +1,11 @@
 package com.easyhz.patchnote.ui.screen.setting.main
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -37,13 +36,16 @@ import com.easyhz.patchnote.core.designSystem.component.textField.BaseTextField
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
 import com.easyhz.patchnote.core.designSystem.util.dialog.BasicDialogButton
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
+import com.easyhz.patchnote.core.model.setting.EtcSettingItem
 import com.easyhz.patchnote.core.model.setting.MajorSettingItem
+import com.easyhz.patchnote.core.model.setting.TeamSettingItem
 import com.easyhz.patchnote.ui.screen.setting.main.contract.SettingIntent
 import com.easyhz.patchnote.ui.screen.setting.main.contract.SettingSideEffect
 import com.easyhz.patchnote.ui.theme.Bold20
 import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.MainText
-import com.easyhz.patchnote.ui.theme.Medium18
+import com.easyhz.patchnote.ui.theme.Medium14
+import com.easyhz.patchnote.ui.theme.Medium16
 import com.easyhz.patchnote.ui.theme.Primary
 import com.easyhz.patchnote.ui.theme.SemiBold18
 import com.easyhz.patchnote.ui.theme.SubBackground
@@ -101,19 +103,37 @@ fun SettingScreen(
                         )
                     }
                     major.items.forEach { item ->
-                        Box(
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .heightIn(min = 44.dp)
-                                .clickable { viewModel.postIntent(SettingIntent.ClickSettingItem(item)) }
+                                .clickable(item.enabledClick) { viewModel.postIntent(SettingIntent.ClickSettingItem(item)) }
                                 .padding(horizontal = 20.dp),
-                            contentAlignment = Alignment.CenterStart
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
+                                modifier = Modifier.weight(1f),
                                 text = stringResource(item.stringResId),
-                                style = Medium18,
+                                style = Medium16,
                                 color = SubText2,
                             )
+                            when(item) {
+                                TeamSettingItem.TEAM_INFORMATION -> {
+                                    Text(
+                                        text = uiState.teamName,
+                                        style = Medium14,
+                                        color = MainText,
+                                    )
+                                }
+                                EtcSettingItem.VERSION -> {
+                                    Text(
+                                        text = item.getValue() ?: "",
+                                        style = Medium14,
+                                        color = SubText2,
+                                    )
+                                }
+                            }
                         }
                     }
                 }
