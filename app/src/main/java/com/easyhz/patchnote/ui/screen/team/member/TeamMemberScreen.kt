@@ -2,7 +2,7 @@ package com.easyhz.patchnote.ui.screen.team.member
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,7 +19,7 @@ import com.easyhz.patchnote.core.designSystem.component.loading.LoadingIndicator
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.core.designSystem.component.topbar.TopBar
 import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
-import com.easyhz.patchnote.core.model.user.User
+import com.easyhz.patchnote.core.model.team.TeamMember
 import com.easyhz.patchnote.ui.screen.team.member.contract.TeamMemberIntent
 import com.easyhz.patchnote.ui.screen.team.member.contract.TeamMemberSideEffect
 import com.easyhz.patchnote.ui.screen.team.member.contract.TeamMemberState
@@ -85,10 +85,10 @@ private fun TeamMemberScreen(
         LazyColumn(
             modifier = modifier.padding(innerPadding)
         ) {
-            itemsIndexed(uiState.members, key = { _, it -> it.id }) { index, member ->
+            items(uiState.members, key = { it.id }) { member ->
                 MemberCard(
                     name = member.name.toDisplay(member.phone),
-                    trailing = if (index == 0) {
+                    trailing = if (member.isAdmin) {
                         {
                             Text(
                                 text = stringResource(R.string.setting_team_admin),
@@ -122,10 +122,11 @@ private fun TeamMemberScreenPreview() {
     TeamMemberScreen(
         uiState = TeamMemberState.init().copy(
             members = listOf(
-                User.Empty.copy(
+                TeamMember.Empty.copy(
                     id = "1",
-                    name = "Name1"
-                ), User.Empty.copy(
+                    name = "Name1",
+                    isAdmin = true
+                ), TeamMember.Empty.copy(
                     id = "2",
                     name = "Name1"
                 ),
