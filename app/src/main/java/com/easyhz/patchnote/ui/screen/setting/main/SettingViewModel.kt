@@ -7,7 +7,6 @@ import com.easyhz.patchnote.core.model.setting.EtcSettingItem
 import com.easyhz.patchnote.core.model.setting.MySettingItem
 import com.easyhz.patchnote.core.model.setting.SettingItem
 import com.easyhz.patchnote.core.model.setting.TeamSettingItem
-import com.easyhz.patchnote.core.model.user.TeamJoinDate
 import com.easyhz.patchnote.domain.usecase.configuration.FetchConfigurationUseCase
 import com.easyhz.patchnote.ui.screen.setting.main.contract.SettingIntent
 import com.easyhz.patchnote.ui.screen.setting.main.contract.SettingSideEffect
@@ -60,6 +59,7 @@ class SettingViewModel @Inject constructor(
     private fun handleEtcSettingItem(settingItem: EtcSettingItem) {
         when(settingItem) {
             EtcSettingItem.ABOUT -> navigateToAbout()
+            EtcSettingItem.SUPPORT -> navigateToSupport(settingItem.getValue())
             EtcSettingItem.BLOCK -> showInputDialog()
         }
     }
@@ -114,6 +114,11 @@ class SettingViewModel @Inject constructor(
 
     private fun navigateToReceptionSetting() {
         postSideEffect { SettingSideEffect.NavigateToReceptionSetting }
+    }
+
+    private fun navigateToSupport(url: String?) {
+        if (url.isNullOrBlank()) return
+        postSideEffect { SettingSideEffect.NavigateToSupport(url) }
     }
 
 }
