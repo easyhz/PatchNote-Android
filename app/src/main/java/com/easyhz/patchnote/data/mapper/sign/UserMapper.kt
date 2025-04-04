@@ -12,8 +12,8 @@ fun User.toRequest() = SaveUserRequest(
     id = id,
     name = name,
     phone = phone,
-    teamIds = teamIds,
-    teamJoinDates = teamJoinDates.map { it.toRequest() }
+    teamIds = teamIds.removeDuplicate(),
+    teamJoinDates = teamJoinDates.removeDuplicateTeamId().map { it.toRequest() },
 )
 
 fun UserResponse.toModel(
@@ -37,3 +37,10 @@ private fun TeamJoinDate.toRequest() = TeamJoinDateData(
     teamId = teamId,
     joinDate = DateFormatUtil.localDateTimeToTimestamp(joinDate)
 )
+
+private fun <T> List<T>.removeDuplicate(): List<T> {
+    return LinkedHashSet(this).toList()
+}
+
+private fun List<TeamJoinDate>.removeDuplicateTeamId(): List<TeamJoinDate> =
+    this.distinctBy { it.teamId }
