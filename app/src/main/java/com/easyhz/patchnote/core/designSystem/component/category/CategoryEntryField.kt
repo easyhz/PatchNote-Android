@@ -37,8 +37,6 @@ fun CategoryEntryField(
     onClickDelete: () -> Unit,
     onNext: () -> Unit
 ) {
-    val postposition = getPostposition(selectedCategoryType)
-
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -69,7 +67,7 @@ fun CategoryEntryField(
             value = value,
             onValueChange = { onValueChange(it) },
             title = null,
-            placeholder = getPlaceholderText(selectedCategoryType, postposition),
+            placeholder = getPlaceholderText(selectedCategoryType),
             singleLine = true,
             isFilled = false,
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -83,8 +81,8 @@ fun CategoryEntryField(
 }
 
 @Composable
-private fun getPlaceholderText(selectedCategoryType: CategoryType, postposition: String): String {
-    return stringResource(R.string.data_entry_placeholder, stringResource(selectedCategoryType.nameId) + postposition)
+private fun getPlaceholderText(selectedCategoryType: CategoryType): String {
+    return stringResource(R.string.data_entry_placeholder, getPostposition(stringResource(selectedCategoryType.nameId)))
 }
 
 @Preview

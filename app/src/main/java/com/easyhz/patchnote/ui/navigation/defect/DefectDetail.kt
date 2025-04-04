@@ -10,7 +10,7 @@ import kotlin.reflect.typeOf
 
 @Serializable
 data class DefectDetail(
-    val defectItem: DefectItemArgs? = null,
+    val defectItem: DefectItemArgs,
     val isRefresh: Boolean = false
 ) {
     companion object {
