@@ -106,7 +106,8 @@ fun NavController.navigateToDefectEntry() {
     navigate(DefectEntry)
 }
 
-fun NavController.navigateToDefectDetail(defectItem: DefectItem, isRefresh: Boolean = false, navOptions: NavOptions? = null) {
+fun NavController.navigateToDefectDetail(defectItem: DefectItem? = null, isRefresh: Boolean = false, navOptions: NavOptions? = null) {
+    if (defectItem == null) return
     navigate(DefectDetail(defectItem = defectItem.toArgs(), isRefresh = isRefresh), navOptions = navOptions)
 }
 
