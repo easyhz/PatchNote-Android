@@ -181,7 +181,7 @@ abstract class EditViewModel(
     /* 하자 등록 유효성 검사 */
     private fun isValidDefect(invalidEntry: CategoryType?): Boolean {
         invalidEntry?.let { type ->
-            val valueString = resourceHelper.getString(type.nameId) + getPostposition(type)
+            val valueString = getPostposition(resourceHelper.getString(type.nameId))
             setDialog(DialogMessage(title = resourceHelper.getString(R.string.category_empty, valueString)))
             return false
         }

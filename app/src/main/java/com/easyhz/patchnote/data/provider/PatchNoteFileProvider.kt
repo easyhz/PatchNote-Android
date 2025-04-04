@@ -18,11 +18,9 @@ import id.zelory.compressor.constraint.default
 import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.io.InputStream
 
 class PatchNoteFileProvider : FileProvider(R.xml.file_path) {
     companion object {

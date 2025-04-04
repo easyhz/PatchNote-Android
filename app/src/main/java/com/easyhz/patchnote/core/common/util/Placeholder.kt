@@ -1,14 +1,13 @@
 package com.easyhz.patchnote.core.common.util
 
-import com.easyhz.patchnote.core.model.category.CategoryType
-import java.util.Locale
-
-fun getPostposition(selectedCategoryType: CategoryType): String {
-    return if (Locale.getDefault().language == "ko") {
-        when (selectedCategoryType) {
-            CategoryType.UNIT -> "를"
-            CategoryType.PART -> "를"
-            else -> "을"
-        }
-    } else ""
+fun getPostposition(word: String): String {
+    if (word.isEmpty()) return word
+    val lastChar = word.last()
+    if (lastChar in '\uAC00'..'\uD7A3') {
+        val code = lastChar.code - 0xAC00
+        val last = code % 28
+        val postposition = if (last == 0) "를" else "을"
+        return "$word$postposition"
+    }
+    return word
 }

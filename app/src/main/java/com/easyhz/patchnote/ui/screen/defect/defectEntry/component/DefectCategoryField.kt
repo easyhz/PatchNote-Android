@@ -31,7 +31,6 @@ fun DefectCategoryField(
     onFocusChanged: (FocusState) -> Unit,
     onNext: () -> Unit,
 ) {
-    val postposition = getPostposition(category)
     Box(modifier = modifier) {
         when(category) {
             CategoryType.BUILDING, CategoryType.UNIT -> {
@@ -44,7 +43,7 @@ fun DefectCategoryField(
                     title = stringResource(id = category.nameId),
                     placeholder = stringResource(
                         id = R.string.defect_entry_placeholder,
-                        (stringResource(id = category.nameId) + postposition)
+                        getPostposition(stringResource(id = category.nameId))
                     ),
                     singleLine = true,
                     isFilled = false,
@@ -69,7 +68,7 @@ fun DefectCategoryField(
                     title = stringResource(id = category.nameId),
                     placeholder = stringResource(
                         id = R.string.defect_entry_placeholder,
-                        (stringResource(id = category.nameId) + postposition)
+                        getPostposition((stringResource(id = category.nameId)))
                     ),
                     singleLine = true,
                     isFilled = false,
