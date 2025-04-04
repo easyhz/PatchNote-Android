@@ -47,7 +47,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "CLARITY_PROJECT_ID", localProperties["clarity.project.id.dev"].toString())
+        }
         release {
+            buildConfigField("String", "CLARITY_PROJECT_ID", localProperties["clarity.project.id.prod"].toString())
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -176,4 +180,7 @@ dependencies {
 
     // compressor
     implementation(libs.image.compressor)
+
+    // clarity
+    implementation(libs.clarity)
 }
