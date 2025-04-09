@@ -183,4 +183,6 @@ dependencies {
 
     // clarity
     implementation(libs.clarity)
+
+    implementation(libs.zoomable)
 }
