@@ -93,4 +93,8 @@
     <string name="defect_edit_dialog_positive">수정</string>
     <string name="defect_edit_dialog_negative">취소</string>
     <string name="defect_edit_success_dialog_title">하자 수정 성공</string>
+
+    <string name="image_detail_defect_information">하자 정보</string>
+    <string name="image_detail_save_all">전체 저장</string>
+    <string name="image_detail_save_one">저장</string>
 </resources>
