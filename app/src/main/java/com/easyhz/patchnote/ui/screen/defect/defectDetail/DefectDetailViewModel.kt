@@ -41,6 +41,7 @@ class DefectDetailViewModel @Inject constructor(
             is DetailIntent.ShowDeleteDialog -> setDeleteDialog(intent.isShow)
             is DetailIntent.SetLoading -> reduce { copy(isLoading = intent.isLoading) }
             is DetailIntent.DeleteDefect -> deleteDefect()
+            is DetailIntent.ClickImage -> onClickImage(intent.imageIndex, intent.tabIndex)
         }
     }
 
@@ -144,4 +145,12 @@ class DefectDetailViewModel @Inject constructor(
         reduce { copy(isLoading = isLoading) }
     }
 
+    private fun onClickImage(imageIndex: Int, tabIndex: Int) {
+        val images = when (tabIndex) {
+            0 -> currentState.defectItem?.beforeImageUrls
+            1 -> currentState.defectItem?.afterImageUrls
+            else -> emptyList()
+        } ?: emptyList()
+        postSideEffect { DetailSideEffect.NavigateToImageDetail(imageUrls = images, selectedImage = imageIndex) }
+    }
 }

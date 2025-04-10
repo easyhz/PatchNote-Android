@@ -13,4 +13,5 @@ sealed class DetailIntent: UiIntent() {
     data object DeleteDefect: DetailIntent()
     data class ShowDeleteDialog(val isShow: Boolean): DetailIntent()
     data class SetLoading(val isLoading: Boolean): DetailIntent()
+    data class ClickImage(val imageIndex: Int, val tabIndex: Int): DetailIntent()
 }

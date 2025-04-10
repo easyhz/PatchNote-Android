@@ -8,4 +8,5 @@ sealed class DetailSideEffect: UiSideEffect() {
     data object NavigateToUp: DetailSideEffect()
     data class NavigateToDefectCompletion(val defectMainItem: DefectMainItem): DetailSideEffect()
     data class NavigateToDefectEdit(val defectItem: DefectItem): DetailSideEffect()
+    data class NavigateToImageDetail(val imageUrls: List<String>, val selectedImage: Int): DetailSideEffect()
 }

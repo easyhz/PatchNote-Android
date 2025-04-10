@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,7 +46,8 @@ import com.easyhz.patchnote.ui.theme.SubText
 fun DetailField(
     modifier: Modifier = Modifier,
     isComplete: Boolean,
-    tabs: List<DefectContent>
+    tabs: List<DefectContent>,
+    onClickImage: (imageIndex: Int, tabIndex: Int) -> Unit,
 ) {
     val pagerState = rememberPagerState {
         tabs.size
@@ -154,6 +156,7 @@ fun DetailField(
                         verticalArrangement = Arrangement.spacedBy(20.dp)
                     ) {
                         DetailImage(
+                            modifier = Modifier.clickable { onClickImage(index, selectedIndex) },
                             url = url,
                             imageSize = tabs[page].imageSizes[index],
                         )
@@ -183,6 +186,7 @@ private fun DetailFieldPreview() {
                 emptyList(),
                 emptyList()
             ),
-        )
+        ),
+        onClickImage = { _, _ ->  }
     )
 }
