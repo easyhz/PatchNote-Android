@@ -16,7 +16,7 @@ data class ImageDetailState(
     companion object {
         fun init(): ImageDetailState = ImageDetailState(
             isLoading = true,
-            isDisplayInformation = false,
+            isDisplayInformation = true,
             images = emptyList(),
             currentImage = 0
         )
