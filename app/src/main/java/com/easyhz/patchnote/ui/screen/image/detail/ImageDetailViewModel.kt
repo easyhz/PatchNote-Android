@@ -48,7 +48,7 @@ class ImageDetailViewModel @Inject constructor(
     }
 
     private fun navigateUp() {
-        postSideEffect {  ImageDetailSideEffect.NavigateUp }
+        postSideEffect { ImageDetailSideEffect.NavigateUp }
     }
 
     private fun onClickDisplayButton(isChecked: Boolean) {
