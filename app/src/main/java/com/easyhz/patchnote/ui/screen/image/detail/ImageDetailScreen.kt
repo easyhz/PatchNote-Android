@@ -2,7 +2,10 @@ package com.easyhz.patchnote.ui.screen.image.detail
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -19,10 +22,11 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
-import com.easyhz.patchnote.core.model.image.DefectImage
 import com.easyhz.patchnote.ui.screen.image.detail.component.ImageDetailBottomBar
 import com.easyhz.patchnote.ui.screen.image.detail.component.ImageDetailBottomBarType
 import com.easyhz.patchnote.ui.screen.image.detail.component.ImageDetailTopBar
+import com.easyhz.patchnote.ui.screen.image.detail.contract.ImageDetailIntent
+import com.easyhz.patchnote.ui.screen.image.detail.contract.ImageDetailSideEffect
 import com.easyhz.patchnote.ui.screen.image.detail.contract.ImageDetailState
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.PlaceholderText
@@ -37,22 +41,22 @@ import net.engawapg.lib.zoomable.zoomable
 @Composable
 fun ImageDetailScreen(
     modifier: Modifier = Modifier,
-    viewModel: ImageDetailViewModel = hiltViewModel()
+    viewModel: ImageDetailViewModel = hiltViewModel(),
+    navigateUp: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     ImageDetailScreen(
         modifier = modifier,
         uiState = uiState,
-        navigateUp = { },
-        onClickDisplayButton = { },
-        onClickSave = { }
+        navigateUp = { viewModel.postIntent(ImageDetailIntent.NavigateUp) },
+        onClickDisplayButton = { viewModel.postIntent(ImageDetailIntent.ClickDisplayButton(it)) },
+        onClickSave = { type, currentImage -> viewModel.postIntent(ImageDetailIntent.ClickSaveButton(type, currentImage)) },
     )
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
-        TODO("Not yet implemented")
         when (sideEffect) {
-
+            is ImageDetailSideEffect.NavigateUp -> navigateUp()
         }
     }
 }
@@ -65,9 +69,14 @@ private fun ImageDetailScreen(
     uiState: ImageDetailState,
     navigateUp: () -> Unit,
     onClickDisplayButton: (Boolean) -> Unit,
-    onClickSave: (ImageDetailBottomBarType) -> Unit,
+    onClickSave: (ImageDetailBottomBarType, Int) -> Unit,
 ) {
     val zoomState = rememberZoomState()
+    val pagerState = rememberPagerState(
+        initialPage = uiState.currentImage,
+    ) {
+        uiState.images.size
+    }
 
     Scaffold(
         modifier = modifier,
@@ -86,40 +95,48 @@ private fun ImageDetailScreen(
         floatingActionButton = {
             ImageDetailBottomBar(
                 modifier = Modifier.padding(horizontal = 4.dp, vertical = 20.dp),
-                onClick = onClickSave
+                onClick = { onClickSave(it, pagerState.currentPage) }
             )
         },
         floatingActionButtonPosition = FabPosition.End
     ) {
-        GlideImage(
-            modifier = Modifier.fillMaxWidth().zoomable(
-                zoomState = zoomState,
-                onDoubleTap = { position ->
-                    val targetScale = when {
-                        zoomState.scale < 2f -> 2f
-                        zoomState.scale < 4f -> 4f
-                        else -> 1f
-                    }
-                    zoomState.changeScale(targetScale, position)
-                }
-            ),
-            model = uiState.currentImage?.uri,
-            contentDescription = null,
-            contentScale = ContentScale.FillWidth,
-            loading = placeholder(ColorPainter(PlaceholderText)),
-            failure = placeholder(ColorPainter(PlaceholderText)),
-            transition = CrossFade
-        )
+        HorizontalPager(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 500.dp),
+            state = pagerState,
+        ) {
+            GlideImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .zoomable(
+                        zoomState = zoomState,
+                        onDoubleTap = { position ->
+                            val targetScale = when {
+                                zoomState.scale < 2f -> 2f
+                                zoomState.scale < 4f -> 4f
+                                else -> 1f
+                            }
+                            zoomState.changeScale(targetScale, position)
+                        }
+                    ),
+                model = uiState.images[it],
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth,
+                loading = placeholder(ColorPainter(PlaceholderText)),
+                failure = placeholder(ColorPainter(PlaceholderText)),
+                transition = CrossFade
+            )
+        }
 
     }
 }
 
 private fun displayTitle(
-    currentImage: DefectImage?,
-    images: List<DefectImage>,
+    currentImage: Int,
+    images: List<String>,
 ): String {
-    if (currentImage == null) return "0/0"
-    return "${images.indexOf(currentImage) + 1}/${images.size}"
+    return "${currentImage + 1}/${images.size}"
 }
 
 @Preview
@@ -129,6 +146,6 @@ private fun ImageDetailScreenPreview() {
         uiState = ImageDetailState.init(),
         navigateUp = { },
         onClickDisplayButton = { },
-        onClickSave = { }
+        onClickSave = { _, _ -> },
     )
 }

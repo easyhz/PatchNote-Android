@@ -8,5 +8,5 @@ import com.easyhz.patchnote.core.common.base.UiSideEffect
  */
 
 sealed class ImageDetailSideEffect : UiSideEffect() {
-
+    data object NavigateUp : ImageDetailSideEffect()
 }

@@ -1,6 +1,7 @@
 package com.easyhz.patchnote.ui.screen.image.detail.contract
 
 import com.easyhz.patchnote.core.common.base.UiIntent
+import com.easyhz.patchnote.ui.screen.image.detail.component.ImageDetailBottomBarType
 
 /**
  * Date: 2025. 4. 9.
@@ -8,5 +9,8 @@ import com.easyhz.patchnote.core.common.base.UiIntent
  */
 
 sealed class ImageDetailIntent : UiIntent() {
-
+    data object NavigateUp : ImageDetailIntent()
+    data class ClickDisplayButton(val isChecked: Boolean) : ImageDetailIntent()
+    data class ClickSaveButton(val imageDetailBottomBarType: ImageDetailBottomBarType, val currentImage: Int) : ImageDetailIntent()
+    data class ChangedCurrentImage(val currentImage: Int) : ImageDetailIntent()
 }
