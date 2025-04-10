@@ -17,6 +17,7 @@ import com.easyhz.patchnote.ui.navigation.AppNavController
 import com.easyhz.patchnote.ui.navigation.dataManagement.dataManagementGraph
 import com.easyhz.patchnote.ui.navigation.defect.defectGraph
 import com.easyhz.patchnote.ui.navigation.home.homeGraph
+import com.easyhz.patchnote.ui.navigation.image.imageGraph
 import com.easyhz.patchnote.ui.navigation.offlineDefect.offlineDefectGraph
 import com.easyhz.patchnote.ui.navigation.onboarding.onboardingGraph
 import com.easyhz.patchnote.ui.navigation.rememberAppNavController
@@ -75,6 +76,7 @@ fun PatchNoteApp(
                 defectGraph(navController)
                 settingGraph(navController)
                 teamGraph(navController)
+                imageGraph(navController)
             }
         }
     }
