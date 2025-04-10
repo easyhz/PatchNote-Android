@@ -1,13 +1,14 @@
 package com.easyhz.patchnote.data.datasource.remote.image
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.core.net.toUri
 import com.easyhz.patchnote.core.common.constant.CacheDirectory.DOWNLOAD_IMAGES
 import com.easyhz.patchnote.core.common.constant.CacheDirectory.DOWNLOAD_IMAGE_PREFIX
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
-import com.easyhz.patchnote.core.common.util.Generate
+import com.easyhz.patchnote.core.common.helper.image.ImageDownloadHelper
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.storageMetadata
 import kotlinx.coroutines.CoroutineDispatcher
@@ -19,6 +20,7 @@ import javax.inject.Inject
 class ImageDataSourceImpl @Inject constructor(
     @Dispatcher(PatchNoteDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     private val storage: FirebaseStorage,
+    private val imageDownloadHelper: ImageDownloadHelper
 ) : ImageDataSource {
     override suspend fun uploadImage(pathId: String, imageUri: Uri, imageName: String): Result<String> = withContext(dispatcher) {
         runCatching {
@@ -46,5 +48,13 @@ class ImageDataSourceImpl @Inject constructor(
 
             file.toUri()
         }
+    }
+
+    override suspend fun saveImage(bitmap: Bitmap): Result<Unit> = runCatching {
+        imageDownloadHelper.saveImage(bitmap)
+    }
+
+    override suspend fun loadBitmapFromUrl(url: String): Result<Bitmap?> = runCatching {
+        imageDownloadHelper.loadBitmapFromUrl(url)
     }
 }
