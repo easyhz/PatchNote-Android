@@ -117,4 +117,17 @@ class ImageRepositoryImpl @Inject constructor(
                 }
             }
         }
+
+    override suspend fun downloadImage(images: List<String>): Result<Unit> = withContext(ioDispatcher) {
+        runCatching {
+            images.map { imageUrl ->
+                async {
+                    imageDataSource.loadBitmapFromUrl(imageUrl).getOrNull()
+                        ?.let { imageDataSource.saveImage(it).getOrNull() }
+                }
+            }.awaitAll()
+            Unit
+        }
+
+    }
 }

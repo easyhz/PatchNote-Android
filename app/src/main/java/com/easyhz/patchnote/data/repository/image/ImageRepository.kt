@@ -12,4 +12,6 @@ interface ImageRepository {
     suspend fun rotateImage(imageUri: Uri): Result<Unit>
     suspend fun saveOfflineImages(imageUri: List<Uri>): Result<List<Uri?>>
     suspend fun getDefectImages(imageUrls: List<String>): Result<List<DefectImage>>
+
+    suspend fun downloadImage(images: List<String>): Result<Unit>
 }
