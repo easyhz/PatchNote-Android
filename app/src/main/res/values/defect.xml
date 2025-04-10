@@ -97,4 +97,6 @@
     <string name="image_detail_defect_information">하자 정보</string>
     <string name="image_detail_save_all">전체 저장</string>
     <string name="image_detail_save_one">저장</string>
+    <string name="image_save_notification_title">사진 다운로드</string>
+    <string name="image_save_notification_description">다운로드 : %1s</string>
 </resources>
