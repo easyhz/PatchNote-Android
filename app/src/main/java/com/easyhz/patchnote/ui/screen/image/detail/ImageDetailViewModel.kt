@@ -58,8 +58,10 @@ class ImageDetailViewModel @Inject constructor(
                 intent.currentImage,
                 intent.activity
             )
-
             is ImageDetailIntent.ChangedCurrentImage -> changeCurrentImage(intent.currentImage)
+            is ImageDetailIntent.ToggleShowTopBar -> {
+                reduce { copy(isShowTopBar = !currentState.isShowTopBar) }
+            }
         }
     }
 

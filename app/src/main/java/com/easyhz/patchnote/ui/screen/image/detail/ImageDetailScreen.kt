@@ -2,6 +2,9 @@ package com.easyhz.patchnote.ui.screen.image.detail
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -24,6 +27,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
 import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
+import com.easyhz.patchnote.core.designSystem.util.extension.noRippleClickable
 import com.easyhz.patchnote.ui.screen.image.detail.component.ImageDetailBottomBar
 import com.easyhz.patchnote.ui.screen.image.detail.component.ImageDetailBottomBarType
 import com.easyhz.patchnote.ui.screen.image.detail.component.ImageDetailTopBar
@@ -54,6 +58,7 @@ fun ImageDetailScreen(
         modifier = modifier,
         uiState = uiState,
         navigateUp = { viewModel.postIntent(ImageDetailIntent.NavigateUp) },
+        toggleShowTopBar = { viewModel.postIntent(ImageDetailIntent.ToggleShowTopBar) },
         onClickDisplayButton = { viewModel.postIntent(ImageDetailIntent.ClickDisplayButton(it)) },
         onClickSave = { type, currentImage -> viewModel.postIntent(ImageDetailIntent.ClickSaveButton(type, currentImage, activity)) },
     )
@@ -76,6 +81,7 @@ private fun ImageDetailScreen(
     modifier: Modifier = Modifier,
     uiState: ImageDetailState,
     navigateUp: () -> Unit,
+    toggleShowTopBar: () -> Unit,
     onClickDisplayButton: (Boolean) -> Unit,
     onClickSave: (ImageDetailBottomBarType, Int) -> Unit,
 ) {
@@ -90,15 +96,21 @@ private fun ImageDetailScreen(
         modifier = modifier,
         containerColor = MainText,
         topBar = {
-            ImageDetailTopBar(
-                checked = uiState.isDisplayInformation,
-                title = displayTitle(
-                    currentImage = uiState.currentImage,
-                    images = uiState.images
-                ),
-                navigateUp = navigateUp,
-                onClickDisplayButton = onClickDisplayButton
-            )
+            AnimatedVisibility(
+                visible = uiState.isShowTopBar,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                ImageDetailTopBar(
+                    checked = uiState.isDisplayInformation,
+                    title = displayTitle(
+                        currentImage = uiState.currentImage,
+                        images = uiState.images
+                    ),
+                    navigateUp = navigateUp,
+                    onClickDisplayButton = onClickDisplayButton
+                )
+            }
         },
         floatingActionButton = {
             ImageDetailBottomBar(
@@ -119,6 +131,9 @@ private fun ImageDetailScreen(
                     .fillMaxWidth()
                     .zoomable(
                         zoomState = zoomState,
+                        onTap = { _ ->
+                            toggleShowTopBar()
+                        },
                         onDoubleTap = { position ->
                             val targetScale = when {
                                 zoomState.scale < 2f -> 2f
@@ -153,6 +168,7 @@ private fun ImageDetailScreenPreview() {
     ImageDetailScreen(
         uiState = ImageDetailState.init(),
         navigateUp = { },
+        toggleShowTopBar = { },
         onClickDisplayButton = { },
         onClickSave = { _, _ -> },
     )

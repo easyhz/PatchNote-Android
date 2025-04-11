@@ -14,6 +14,7 @@ data class ImageDetailState(
     val defectItem: DefectItem?,
     val images: List<String>,
     val currentImage: Int,
+    val isShowTopBar: Boolean
 ) : UiState() {
     companion object {
         fun init(): ImageDetailState = ImageDetailState(
@@ -21,7 +22,8 @@ data class ImageDetailState(
             isDisplayInformation = true,
             defectItem = null,
             images = emptyList(),
-            currentImage = 0
+            currentImage = 0,
+            isShowTopBar = true
         )
     }
 }
