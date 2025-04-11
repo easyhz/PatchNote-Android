@@ -50,7 +50,7 @@ fun DefectDetailScreen(
     navigateToUp: () -> Unit,
     navigateToDefectCompletion: (DefectMainItem) -> Unit,
     navigateToDefectEdit: (DefectItem) -> Unit,
-    navigateToImageDetail: (List<String>, Int) -> Unit,
+    navigateToImageDetail: (DefectItem, DefectProgress, Int) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -198,7 +198,7 @@ fun DefectDetailScreen(
                 navigateToDefectEdit(sideEffect.defectItem)
             }
             is DetailSideEffect.NavigateToImageDetail -> {
-                navigateToImageDetail(sideEffect.imageUrls, sideEffect.selectedImage)
+                navigateToImageDetail(sideEffect.defectItem, sideEffect.selectedTab, sideEffect.selectedImage)
             }
         }
     }

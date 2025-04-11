@@ -7,6 +7,8 @@ import androidx.navigation.compose.composable
 import com.easyhz.patchnote.core.designSystem.util.transition.SlideDirection
 import com.easyhz.patchnote.core.designSystem.util.transition.enterSlide
 import com.easyhz.patchnote.core.designSystem.util.transition.exitSlide
+import com.easyhz.patchnote.core.model.defect.DefectItem
+import com.easyhz.patchnote.core.model.defect.DefectProgress
 import com.easyhz.patchnote.ui.navigation.image.route.ImageDetail
 import com.easyhz.patchnote.ui.navigation.image.route.ImageDetailArgs
 import com.easyhz.patchnote.ui.screen.image.detail.ImageDetailScreen
@@ -28,13 +30,18 @@ internal fun NavGraphBuilder.imageGraph(
 }
 
 fun NavController.navigateToImageDetail(
-    images: List<String>,
+    defectItem: DefectItem? = null,
+    selectedTab: DefectProgress,
     currentImage: Int,
     navOptions: NavOptions? = null
 ) {
+    if (defectItem == null) {
+        return
+    }
     val route = ImageDetail(
         ImageDetailArgs.create(
-            images = images,
+            defectItem = defectItem,
+            selectedTab = selectedTab,
             currentImage = currentImage
         )
     )

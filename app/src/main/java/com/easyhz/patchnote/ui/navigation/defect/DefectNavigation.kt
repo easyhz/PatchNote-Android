@@ -62,8 +62,8 @@ internal fun NavGraphBuilder.defectGraph(
             },
             navigateToDefectCompletion = navController::navigateToDefectCompletion,
             navigateToDefectEdit = navController::navigateToDefectEdit,
-            navigateToImageDetail = { image, currentImage ->
-                navController.navigateToImageDetail(images = image, currentImage = currentImage)
+            navigateToImageDetail = { defectItem, selectedTab, currentImage ->
+                navController.navigateToImageDetail(defectItem = defectItem, selectedTab = selectedTab, currentImage = currentImage)
             }
         )
     }
