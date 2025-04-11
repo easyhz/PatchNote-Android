@@ -14,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,6 +40,8 @@ fun ImageDetailBottomBar(
     modifier: Modifier = Modifier,
     onClick: (ImageDetailBottomBarType) -> Unit,
 ) {
+    val haptic = LocalHapticFeedback.current
+
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -46,7 +50,10 @@ fun ImageDetailBottomBar(
         ImageDetailBottomBarType.entries.forEach { type ->
             ImageSaveButton(
                 title = stringResource(type.title),
-                onClick = { onClick(type) }
+                onClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                    onClick(type)
+                }
             )
         }
     }
