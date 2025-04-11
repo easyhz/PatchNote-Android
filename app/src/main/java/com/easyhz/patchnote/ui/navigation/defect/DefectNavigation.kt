@@ -17,6 +17,7 @@ import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectMainItem
 import com.easyhz.patchnote.ui.navigation.home.Home
 import com.easyhz.patchnote.ui.navigation.home.navigateToHome
+import com.easyhz.patchnote.ui.navigation.image.navigateToImageDetail
 import com.easyhz.patchnote.ui.screen.defect.defectCompletion.DefectCompletionScreen
 import com.easyhz.patchnote.ui.screen.defect.defectDetail.DefectDetailScreen
 import com.easyhz.patchnote.ui.screen.defect.defectEntry.DefectEntryScreen
@@ -61,6 +62,9 @@ internal fun NavGraphBuilder.defectGraph(
             },
             navigateToDefectCompletion = navController::navigateToDefectCompletion,
             navigateToDefectEdit = navController::navigateToDefectEdit,
+            navigateToImageDetail = { defectItem, selectedTab, currentImage ->
+                navController.navigateToImageDetail(defectItem = defectItem, selectedTab = selectedTab, currentImage = currentImage)
+            }
         )
     }
 

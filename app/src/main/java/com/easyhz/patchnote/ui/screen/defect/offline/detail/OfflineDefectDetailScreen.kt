@@ -112,7 +112,8 @@ fun OfflineDefectDetailScreen(
             item {
                 DetailField(
                     isComplete = uiState.defectItem!!.progress == DefectProgress.DONE,
-                    tabs = uiState.defectItem!!.createDefectContent()
+                    tabs = uiState.defectItem!!.createDefectContent(),
+                    onClickImage = { _, _ -> /* TODO:  */ },
                 )
             }
             item {

@@ -1,5 +1,6 @@
 package com.easyhz.patchnote.data.repository.image
 
+import android.graphics.Bitmap
 import android.net.Uri
 import com.easyhz.patchnote.core.model.image.DefectImage
 import com.easyhz.patchnote.core.model.image.ImageSize
@@ -12,4 +13,7 @@ interface ImageRepository {
     suspend fun rotateImage(imageUri: Uri): Result<Unit>
     suspend fun saveOfflineImages(imageUri: List<Uri>): Result<List<Uri?>>
     suspend fun getDefectImages(imageUrls: List<String>): Result<List<DefectImage>>
+
+    suspend fun loadBitmapFromUrl(imageUrl: String): Result<Bitmap?>
+    suspend fun saveImageToBitmap(bitmap: Bitmap): Result<Unit>
 }

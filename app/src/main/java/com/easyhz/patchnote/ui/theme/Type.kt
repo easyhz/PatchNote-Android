@@ -161,6 +161,21 @@ val SemiBold16 = TextStyle(
     )
 )
 
+val SemiBold14 = TextStyle(
+    fontFamily = Pretendard,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 14.sp,
+    letterSpacing = LetterSpacing,
+    textAlign = TextAlign.Justify,
+    platformStyle = PlatformTextStyle(
+        includeFontPadding = false,
+    ),
+    lineHeightStyle = LineHeightStyle(
+        alignment = LineHeightStyle.Alignment.Center,
+        trim = LineHeightStyle.Trim.None
+    )
+)
+
 val Medium10 = TextStyle(
     fontFamily = Pretendard,
     fontWeight = FontWeight.Medium,

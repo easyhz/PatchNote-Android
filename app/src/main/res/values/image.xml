@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="image_site">현장</string>
+    <string name="image_building_unit">동&amp;호</string>
+    <string name="image_space">공간</string>
+    <string name="image_part">부위</string>
+    <string name="image_work_type">공종</string>
+    <string name="image_work_request">접수</string>
+    <string name="image_work_completion">완료</string>
+</resources>

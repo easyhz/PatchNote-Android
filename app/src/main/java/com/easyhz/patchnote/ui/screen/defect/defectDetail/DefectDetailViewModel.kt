@@ -10,6 +10,7 @@ import com.easyhz.patchnote.core.common.util.toDateString
 import com.easyhz.patchnote.core.designSystem.util.bottomSheet.DefectDetailBottomSheet
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectMainItem
+import com.easyhz.patchnote.core.model.defect.DefectProgress
 import com.easyhz.patchnote.core.model.error.DialogAction
 import com.easyhz.patchnote.core.model.error.DialogMessage
 import com.easyhz.patchnote.domain.usecase.defect.defect.DeleteDefectUseCase
@@ -41,6 +42,7 @@ class DefectDetailViewModel @Inject constructor(
             is DetailIntent.ShowDeleteDialog -> setDeleteDialog(intent.isShow)
             is DetailIntent.SetLoading -> reduce { copy(isLoading = intent.isLoading) }
             is DetailIntent.DeleteDefect -> deleteDefect()
+            is DetailIntent.ClickImage -> onClickImage(intent.imageIndex, intent.tabIndex)
         }
     }
 
@@ -144,4 +146,13 @@ class DefectDetailViewModel @Inject constructor(
         reduce { copy(isLoading = isLoading) }
     }
 
+    private fun onClickImage(imageIndex: Int, tabIndex: Int) {
+        if (currentState.defectItem == null) return
+        val selectedTab = when (tabIndex) {
+            0 -> DefectProgress.REQUESTED
+            1 -> DefectProgress.DONE
+            else -> DefectProgress.REQUESTED
+        }
+        postSideEffect { DetailSideEffect.NavigateToImageDetail(defectItem = currentState.defectItem!!, selectedTab = selectedTab, selectedImage = imageIndex) }
+    }
 }
