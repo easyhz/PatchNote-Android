@@ -71,7 +71,6 @@ private fun DisplayButton(
         verticalAlignment = Alignment.CenterVertically
     ) {
         CheckBoxButton(
-            modifier = modifier,
             checked = checked,
             onCheckedChange = onClick
         )
