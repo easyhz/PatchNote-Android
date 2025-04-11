@@ -15,7 +15,11 @@ val Context.configurationDataStore: DataStore<Preferences> by preferencesDataSto
 )
 
 val Context.receptionSettingDataStore: DataStore<Preferences> by preferencesDataStore(
-    name = "PatchNote.reception.setting"
+    name = "PatchNote.setting.reception"
+)
+
+val Context.imageSettingDataStore: DataStore<Preferences> by preferencesDataStore(
+ name = "PatchNote.setting.image"
 )
 
 

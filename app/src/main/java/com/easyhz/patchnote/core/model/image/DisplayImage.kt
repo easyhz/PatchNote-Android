@@ -29,20 +29,36 @@ data class DisplayImage(
 
 enum class DisplayImageType(
     @StringRes val displayNameId: Int,
+    val alias: String,
+    val defaultOption: Boolean
 ) {
     SITE(
         displayNameId = R.string.image_site,
+        alias = "site",
+        defaultOption = true
     ), BUILDING_UNIT(
         displayNameId = R.string.image_building_unit,
+        alias = "buildingUnit",
+        defaultOption = true
     ), SPACE(
         displayNameId = R.string.image_space,
+        alias = "space",
+        defaultOption = true
     ), PART(
         displayNameId = R.string.image_part,
+        alias = "part",
+        defaultOption = false
     ), WORK_TYPE(
         displayNameId = R.string.image_work_type,
+        alias = "workType",
+        defaultOption = false
     ), REQUEST(
         displayNameId = R.string.image_work_request,
+        alias = "request",
+        defaultOption = true
     ), COMPLETION(
         displayNameId = R.string.image_work_completion,
+        alias = "completion",
+        defaultOption = false
     ),
 }

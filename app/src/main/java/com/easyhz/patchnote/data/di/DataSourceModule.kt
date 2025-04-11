@@ -4,6 +4,8 @@ import com.easyhz.patchnote.data.datasource.local.configuration.ConfigurationLoc
 import com.easyhz.patchnote.data.datasource.local.configuration.ConfigurationLocalDataSourceImpl
 import com.easyhz.patchnote.data.datasource.local.defect.DefectLocalDataSource
 import com.easyhz.patchnote.data.datasource.local.defect.DefectLocalDataSourceImpl
+import com.easyhz.patchnote.data.datasource.local.image.ImageLocalDataSource
+import com.easyhz.patchnote.data.datasource.local.image.ImageLocalDataSourceImpl
 import com.easyhz.patchnote.data.datasource.local.reception.ReceptionLocalDataSource
 import com.easyhz.patchnote.data.datasource.local.reception.ReceptionLocalDataSourceImpl
 import com.easyhz.patchnote.data.datasource.local.user.UserLocalDataSource
@@ -78,4 +80,9 @@ interface DataSourceModule {
     fun bindDefectLocalDataSource(
         defectLocalDataSourceImpl: DefectLocalDataSourceImpl
     ): DefectLocalDataSource
+
+    @Binds
+    fun bindImageLocalDataSource(
+        imageLocalDataSourceImpl: ImageLocalDataSourceImpl
+    ): ImageLocalDataSource
 }
