@@ -28,6 +28,7 @@ import com.easyhz.patchnote.ui.screen.image.detail.component.ImageDetailTopBar
 import com.easyhz.patchnote.ui.screen.image.detail.contract.ImageDetailIntent
 import com.easyhz.patchnote.ui.screen.image.detail.contract.ImageDetailSideEffect
 import com.easyhz.patchnote.ui.screen.image.detail.contract.ImageDetailState
+import com.easyhz.patchnote.ui.theme.LocalSnackBarHostState
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.PlaceholderText
 import net.engawapg.lib.zoomable.rememberZoomState
@@ -45,6 +46,7 @@ fun ImageDetailScreen(
     navigateUp: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackBarHostState = LocalSnackBarHostState.current
 
     ImageDetailScreen(
         modifier = modifier,
@@ -57,6 +59,10 @@ fun ImageDetailScreen(
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is ImageDetailSideEffect.NavigateUp -> navigateUp()
+            is ImageDetailSideEffect.ShowSnackBar -> snackBarHostState.showSnackbar(
+                message = sideEffect.value,
+                withDismissAction = true
+            )
         }
     }
 }

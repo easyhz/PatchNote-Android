@@ -1,6 +1,7 @@
 package com.easyhz.patchnote.data.repository.image
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
 import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
@@ -118,16 +119,11 @@ class ImageRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun downloadImage(images: List<String>): Result<Unit> = withContext(ioDispatcher) {
-        runCatching {
-            images.map { imageUrl ->
-                async {
-                    imageDataSource.loadBitmapFromUrl(imageUrl).getOrNull()
-                        ?.let { imageDataSource.saveImage(it).getOrNull() }
-                }
-            }.awaitAll()
-            Unit
-        }
+    override suspend fun loadBitmapFromUrl(imageUrl: String): Result<Bitmap?> {
+        return imageDataSource.loadBitmapFromUrl(imageUrl)
+    }
 
+    override suspend fun saveImageToBitmap(bitmap: Bitmap): Result<Unit> {
+        return imageDataSource.saveImage(bitmap)
     }
 }

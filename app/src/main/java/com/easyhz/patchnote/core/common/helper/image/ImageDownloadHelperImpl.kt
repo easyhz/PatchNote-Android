@@ -7,11 +7,13 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.net.HttpURLConnection
 import java.net.URL
+import javax.inject.Inject
 
-class ImageDownloadHelperImpl(
-    private val context: Context,
+class ImageDownloadHelperImpl @Inject constructor(
+    @ApplicationContext private val context: Context,
 ): ImageDownloadHelper {
 
     override fun saveImage(bitmap: Bitmap) {
