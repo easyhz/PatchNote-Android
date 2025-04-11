@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.easyhz.patchnote.core.designSystem.util.extension.noRippleClickable
 import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Medium18
@@ -35,7 +36,7 @@ fun SettingToggle(
     onCheckedChange: (Boolean) -> Unit
 ) {
     Row(
-        modifier = modifier.fillMaxWidth().height(56.dp),
+        modifier = modifier.fillMaxWidth().height(56.dp).noRippleClickable { onCheckedChange(!isChecked) },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
