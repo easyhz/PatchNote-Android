@@ -59,6 +59,7 @@ fun SettingScreen(
     navigateToDataManagement: () -> Unit,
     navigateToMyPage: () -> Unit,
     navigateToReceptionSetting: () -> Unit,
+    navigateToImageSetting: () -> Unit,
     navigateToTeamSelection: () -> Unit,
     navigateToTeamInformation: () -> Unit
 ) {
@@ -198,6 +199,7 @@ fun SettingScreen(
             is SettingSideEffect.NavigateToTeamSelection -> navigateToTeamSelection()
             is SettingSideEffect.NavigateToMyPage -> navigateToMyPage()
             is SettingSideEffect.NavigateToReceptionSetting -> navigateToReceptionSetting()
+            is SettingSideEffect.NavigateToImageSetting -> navigateToImageSetting()
             is SettingSideEffect.NavigateToSupport -> {
                 WebHelper().openWebPage(context, sideEffect.url)
             }
