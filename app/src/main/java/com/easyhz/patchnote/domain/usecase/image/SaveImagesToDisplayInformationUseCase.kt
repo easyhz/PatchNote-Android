@@ -33,7 +33,7 @@ class SaveImagesToDisplayInformationUseCase @Inject constructor(
                         overlay = param.displayInformation,
                         scaleRatio = param.scale
                     )
-                    val padding = 4f
+                    val padding = 8f
                     val image = mergeBitmaps(
                         base = bitmap,
                         overlay = overlayImage,
