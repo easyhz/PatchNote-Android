@@ -3,7 +3,9 @@ package com.easyhz.patchnote.data.repository.image
 import android.graphics.Bitmap
 import android.net.Uri
 import com.easyhz.patchnote.core.model.image.DefectImage
+import com.easyhz.patchnote.core.model.image.DisplayImageType
 import com.easyhz.patchnote.core.model.image.ImageSize
+import kotlinx.coroutines.flow.Flow
 
 interface ImageRepository {
     suspend fun getTakePictureUri(): Result<Uri>
@@ -16,4 +18,7 @@ interface ImageRepository {
 
     suspend fun loadBitmapFromUrl(imageUrl: String): Result<Bitmap?>
     suspend fun saveImageToBitmap(bitmap: Bitmap): Result<Unit>
+
+    fun getImageSetting(): Flow<LinkedHashMap<DisplayImageType, Boolean>>
+    suspend fun setImageSetting(categoryType: DisplayImageType, newValue: Boolean)
 }

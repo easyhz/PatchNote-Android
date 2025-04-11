@@ -70,6 +70,7 @@ class SettingViewModel @Inject constructor(
         when (settingItem) {
             MySettingItem.MY_PAGE -> navigateToMyPage()
             MySettingItem.RECEPTION_SETTINGS -> navigateToReceptionSetting()
+            MySettingItem.IMAGE_SETTINGS -> navigateToImageSetting()
         }
     }
 
@@ -132,6 +133,10 @@ class SettingViewModel @Inject constructor(
 
     private fun navigateToReceptionSetting() {
         postSideEffect { SettingSideEffect.NavigateToReceptionSetting }
+    }
+
+    private fun navigateToImageSetting() {
+        postSideEffect { SettingSideEffect.NavigateToImageSetting }
     }
 
     private fun navigateToSupport(url: String?) {

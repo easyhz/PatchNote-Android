@@ -14,3 +14,7 @@ annotation class ConfigurationDataStore
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class ReceptionSettingDataStore
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class ImageSettingDataStore

@@ -15,6 +15,7 @@ import com.easyhz.patchnote.ui.navigation.onboarding.navigateToOnboarding
 import com.easyhz.patchnote.ui.navigation.splash.Splash
 import com.easyhz.patchnote.ui.navigation.team.navigateToTeamMember
 import com.easyhz.patchnote.ui.navigation.team.navigateToTeamSelection
+import com.easyhz.patchnote.ui.screen.setting.image.ImageSettingScreen
 import com.easyhz.patchnote.ui.screen.setting.main.SettingScreen
 import com.easyhz.patchnote.ui.screen.setting.my_page.MyPageScreen
 import com.easyhz.patchnote.ui.screen.setting.reception.ReceptionSettingScreen
@@ -34,8 +35,10 @@ internal fun NavGraphBuilder.settingGraph(
             navigateToUp = navController::navigateUp,
             navigateToMyPage = navController::navigateToMyPage,
             navigateToReceptionSetting = navController::navigateToReceptionSetting,
+            navigateToImageSetting = navController::navigateToImageSetting,
             navigateToTeamSelection = navController::navigateToTeamSelection,
             navigateToTeamInformation = navController::navigateToTeamInformation
+
         )
     }
 
@@ -52,6 +55,12 @@ internal fun NavGraphBuilder.settingGraph(
     composable<ReceptionSetting> {
         ReceptionSettingScreen(
             navigateToUp = navController::navigateUp
+        )
+    }
+
+    composable<ImageSetting> {
+        ImageSettingScreen(
+            navigateUp = navController::navigateUp,
         )
     }
 
@@ -84,4 +93,8 @@ fun NavController.navigateToReceptionSetting() {
 
 fun NavController.navigateToTeamInformation() {
     navigate(TeamInformation)
+}
+
+fun NavController.navigateToImageSetting() {
+    navigate(ImageSetting)
 }

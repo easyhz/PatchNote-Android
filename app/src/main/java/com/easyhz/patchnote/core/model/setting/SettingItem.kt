@@ -47,6 +47,9 @@ enum class MySettingItem: SettingItem {
     }, RECEPTION_SETTINGS {
         override val stringResId: Int
             get() = R.string.setting_reception_settings
+    }, IMAGE_SETTINGS {
+        override val stringResId: Int
+            get() = R.string.setting_image_settings
     };
 }
 

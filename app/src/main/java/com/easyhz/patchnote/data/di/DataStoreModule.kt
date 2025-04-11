@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.easyhz.patchnote.data.di.config.ConfigurationDataStore
+import com.easyhz.patchnote.data.di.config.ImageSettingDataStore
 import com.easyhz.patchnote.data.di.config.ReceptionSettingDataStore
 import com.easyhz.patchnote.data.di.config.UserDataStore
 import com.easyhz.patchnote.data.di.config.configurationDataStore
+import com.easyhz.patchnote.data.di.config.imageSettingDataStore
 import com.easyhz.patchnote.data.di.config.receptionSettingDataStore
 import com.easyhz.patchnote.data.di.config.userDataStore
 import dagger.Module
@@ -44,5 +46,13 @@ abstract class DataStoreModule {
             @ApplicationContext context: Context
         ): DataStore<Preferences> =
             context.receptionSettingDataStore
+
+        @Singleton
+        @Provides
+        @ImageSettingDataStore
+        fun provideImageSettingDataStorePreferences(
+            @ApplicationContext context: Context
+        ): DataStore<Preferences> =
+            context.imageSettingDataStore
     }
 }
