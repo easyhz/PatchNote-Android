@@ -53,7 +53,6 @@ fun ReceptionSettingScreen(
         LazyColumn(
             modifier = modifier.padding(innerPadding).padding(horizontal = 20.dp),
             contentPadding = PaddingValues(vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(uiState.items.toList()) { (type, isChecked) ->
                 SettingToggle(
@@ -66,6 +65,7 @@ fun ReceptionSettingScreen(
             }
             item {
                 Text(
+                    modifier = Modifier.padding(vertical = 8.dp),
                     text = stringResource(R.string.setting_reception_settings_description),
                     color = SubText,
                     style = Regular16
