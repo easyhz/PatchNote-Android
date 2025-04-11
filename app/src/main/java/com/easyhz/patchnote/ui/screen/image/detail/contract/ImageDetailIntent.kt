@@ -1,5 +1,7 @@
 package com.easyhz.patchnote.ui.screen.image.detail.contract
 
+import android.app.Activity
+import android.content.Context
 import com.easyhz.patchnote.core.common.base.UiIntent
 import com.easyhz.patchnote.ui.screen.image.detail.component.ImageDetailBottomBarType
 
@@ -11,6 +13,6 @@ import com.easyhz.patchnote.ui.screen.image.detail.component.ImageDetailBottomBa
 sealed class ImageDetailIntent : UiIntent() {
     data object NavigateUp : ImageDetailIntent()
     data class ClickDisplayButton(val isChecked: Boolean) : ImageDetailIntent()
-    data class ClickSaveButton(val imageDetailBottomBarType: ImageDetailBottomBarType, val currentImage: Int) : ImageDetailIntent()
+    data class ClickSaveButton(val imageDetailBottomBarType: ImageDetailBottomBarType, val currentImage: Int, val activity: Activity) : ImageDetailIntent()
     data class ChangedCurrentImage(val currentImage: Int) : ImageDetailIntent()
 }

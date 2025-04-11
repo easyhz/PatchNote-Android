@@ -1,18 +1,19 @@
 package com.easyhz.patchnote.ui.screen.image.detail
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,6 +23,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.easyhz.patchnote.core.common.util.collectInSideEffectWithLifecycle
+import com.easyhz.patchnote.core.designSystem.component.scaffold.PatchNoteScaffold
 import com.easyhz.patchnote.ui.screen.image.detail.component.ImageDetailBottomBar
 import com.easyhz.patchnote.ui.screen.image.detail.component.ImageDetailBottomBarType
 import com.easyhz.patchnote.ui.screen.image.detail.component.ImageDetailTopBar
@@ -47,13 +49,13 @@ fun ImageDetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackBarHostState = LocalSnackBarHostState.current
-
+    val activity = LocalContext.current as Activity
     ImageDetailScreen(
         modifier = modifier,
         uiState = uiState,
         navigateUp = { viewModel.postIntent(ImageDetailIntent.NavigateUp) },
         onClickDisplayButton = { viewModel.postIntent(ImageDetailIntent.ClickDisplayButton(it)) },
-        onClickSave = { type, currentImage -> viewModel.postIntent(ImageDetailIntent.ClickSaveButton(type, currentImage)) },
+        onClickSave = { type, currentImage -> viewModel.postIntent(ImageDetailIntent.ClickSaveButton(type, currentImage, activity)) },
     )
 
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
@@ -84,7 +86,7 @@ private fun ImageDetailScreen(
         uiState.images.size
     }
 
-    Scaffold(
+    PatchNoteScaffold(
         modifier = modifier,
         containerColor = MainText,
         topBar = {
