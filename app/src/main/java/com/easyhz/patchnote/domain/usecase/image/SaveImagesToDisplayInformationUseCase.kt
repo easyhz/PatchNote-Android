@@ -26,11 +26,16 @@ class SaveImagesToDisplayInformationUseCase @Inject constructor(
         runCatching {
             param.images.map { imageUrl ->
                 async {
-                    val bitmap = imageRepository.loadBitmapFromUrl(imageUrl).getOrNull()
-                    val overlayImage = scaleBitmap(param.displayInformation, param.scale)
+                    val bitmap =
+                        imageRepository.loadBitmapFromUrl(imageUrl).getOrNull() ?: return@async null
+                    val overlayImage = scaleBitmap(
+                        base = bitmap,
+                        overlay = param.displayInformation,
+                        scaleRatio = param.scale
+                    )
                     val padding = 4f
                     val image = mergeBitmaps(
-                        base = bitmap ?: return@async null,
+                        base = bitmap,
                         overlay = overlayImage,
                         offsetX = padding,
                         offsetY = bitmap.height - overlayImage.height - padding
@@ -42,10 +47,12 @@ class SaveImagesToDisplayInformationUseCase @Inject constructor(
         }
     }
 
-    private fun scaleBitmap(bitmap: Bitmap, scale: Float): Bitmap {
-        val newWidth = (bitmap.width * scale).toInt()
-        val newHeight = (bitmap.height * scale).toInt()
-        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
+    private fun scaleBitmap(base: Bitmap, overlay: Bitmap, scaleRatio: Float): Bitmap {
+        val scaledWidth = (base.width * scaleRatio).toInt()
+        val scaleFactor = scaledWidth.toFloat() / overlay.width
+        val scaledHeight = (overlay.height * scaleFactor).toInt()
+
+        return Bitmap.createScaledBitmap(overlay, scaledWidth, scaledHeight, true)
     }
 
     private fun mergeBitmaps(
