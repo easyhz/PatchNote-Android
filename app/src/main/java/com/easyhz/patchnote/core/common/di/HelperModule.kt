@@ -1,5 +1,7 @@
 package com.easyhz.patchnote.core.common.di
 
+import com.easyhz.patchnote.core.common.helper.capture.CaptureHelper
+import com.easyhz.patchnote.core.common.helper.capture.CaptureHelperImpl
 import com.easyhz.patchnote.core.common.helper.image.ImageDownloadHelper
 import com.easyhz.patchnote.core.common.helper.image.ImageDownloadHelperImpl
 import com.easyhz.patchnote.core.common.util.log.AppLogger
@@ -40,4 +42,9 @@ internal interface HelperModule {
     fun bindImageDownloadHelper(
         imageDownloadHelperImpl: ImageDownloadHelperImpl
     ): ImageDownloadHelper
+
+    @Binds
+    fun bindCaptureHelper(
+        captureHelperImpl: CaptureHelperImpl
+    ): CaptureHelper
 }
