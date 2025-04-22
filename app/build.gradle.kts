@@ -27,7 +27,7 @@ android {
         applicationId = "com.easyhz.patchnote"
         minSdk = 26
         targetSdk = 35
-        versionCode = 26
+        versionCode = 24
         versionName = "2.3.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
