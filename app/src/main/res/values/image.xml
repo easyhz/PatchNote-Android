@@ -5,6 +5,8 @@
     <string name="image_space">공간</string>
     <string name="image_part">부위</string>
     <string name="image_work_type">공종</string>
-    <string name="image_work_request">접수</string>
-    <string name="image_work_completion">완료</string>
+    <string name="image_work_request">접수일</string>
+    <string name="image_work_completion">완료일</string>
+    <string name="image_before_description">접수 내용</string>
+    <string name="image_after_description">완료 내용</string>
 </resources>
