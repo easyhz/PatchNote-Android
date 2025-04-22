@@ -2,6 +2,7 @@ package com.easyhz.patchnote.ui.screen.image.detail.contract
 
 import com.easyhz.patchnote.core.common.base.UiState
 import com.easyhz.patchnote.core.model.defect.DefectItem
+import com.easyhz.patchnote.core.model.image.DisplayImageType
 
 /**
  * Date: 2025. 4. 9.
@@ -14,7 +15,8 @@ data class ImageDetailState(
     val defectItem: DefectItem?,
     val images: List<String>,
     val currentImage: Int,
-    val isShowTopBar: Boolean
+    val isShowTopBar: Boolean,
+    val settingOption: LinkedHashMap<DisplayImageType, Boolean>
 ) : UiState() {
     companion object {
         fun init(): ImageDetailState = ImageDetailState(
@@ -23,7 +25,8 @@ data class ImageDetailState(
             defectItem = null,
             images = emptyList(),
             currentImage = 0,
-            isShowTopBar = true
+            isShowTopBar = true,
+            settingOption = DisplayImageType.default()
         )
     }
 }

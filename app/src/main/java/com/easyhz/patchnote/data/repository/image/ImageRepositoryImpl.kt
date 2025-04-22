@@ -7,7 +7,9 @@ import com.easyhz.patchnote.core.common.di.dispatcher.Dispatcher
 import com.easyhz.patchnote.core.common.di.dispatcher.PatchNoteDispatchers
 import com.easyhz.patchnote.core.common.util.Generate
 import com.easyhz.patchnote.core.model.image.DefectImage
+import com.easyhz.patchnote.core.model.image.DisplayImageType
 import com.easyhz.patchnote.core.model.image.ImageSize
+import com.easyhz.patchnote.data.datasource.local.image.ImageLocalDataSource
 import com.easyhz.patchnote.data.datasource.remote.image.ImageDataSource
 import com.easyhz.patchnote.data.provider.PatchNoteFileProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -15,6 +17,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
@@ -25,6 +28,7 @@ class ImageRepositoryImpl @Inject constructor(
     @Dispatcher(PatchNoteDispatchers.DEFAULT) private val defaultDispatcher: CoroutineDispatcher,
     @ApplicationContext private val context: Context,
     private val imageDataSource: ImageDataSource,
+    private val imageLocalDataSource: ImageLocalDataSource
 ) : ImageRepository {
 
     override suspend fun getTakePictureUri(): Result<Uri> =
@@ -126,4 +130,16 @@ class ImageRepositoryImpl @Inject constructor(
     override suspend fun saveImageToBitmap(bitmap: Bitmap): Result<Unit> {
         return imageDataSource.saveImage(bitmap)
     }
+
+    override fun getImageSetting(): Flow<LinkedHashMap<DisplayImageType, Boolean>> {
+        return imageLocalDataSource.getImageSetting()
+    }
+
+    override suspend fun setImageSetting(
+        categoryType: DisplayImageType,
+        newValue: Boolean
+    ) = imageLocalDataSource.setImageSetting(
+            categoryType = categoryType,
+            newValue = newValue
+        )
 }

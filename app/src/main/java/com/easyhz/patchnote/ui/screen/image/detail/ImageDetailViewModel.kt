@@ -14,9 +14,11 @@ import com.easyhz.patchnote.core.common.util.toDateString
 import com.easyhz.patchnote.core.model.defect.DefectItem
 import com.easyhz.patchnote.core.model.defect.DefectProgress
 import com.easyhz.patchnote.core.model.image.DisplayImage
+import com.easyhz.patchnote.core.model.image.DisplayImageType
 import com.easyhz.patchnote.domain.usecase.image.CaptureParam
 import com.easyhz.patchnote.domain.usecase.image.DisplayParam
 import com.easyhz.patchnote.domain.usecase.image.GenerateBitmapFromComposableUseCase
+import com.easyhz.patchnote.domain.usecase.image.GetImageSettingUseCase
 import com.easyhz.patchnote.domain.usecase.image.SaveImagesToDisplayInformationUseCase
 import com.easyhz.patchnote.domain.usecase.image.SaveImagesUseCase
 import com.easyhz.patchnote.ui.navigation.image.route.ImageDetailArgs
@@ -28,7 +30,6 @@ import com.easyhz.patchnote.ui.screen.image.detail.contract.ImageDetailSideEffec
 import com.easyhz.patchnote.ui.screen.image.detail.contract.ImageDetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 /**
@@ -45,6 +46,7 @@ class ImageDetailViewModel @Inject constructor(
     private val saveImagesUseCase: SaveImagesUseCase,
     private val saveImagesToDisplayInformationUseCase: SaveImagesToDisplayInformationUseCase,
     private val captureComposableUseCase: GenerateBitmapFromComposableUseCase,
+    private val getImageSettingUseCase: GetImageSettingUseCase,
 ) : BaseViewModel<ImageDetailState, ImageDetailIntent, ImageDetailSideEffect>(
     initialState = ImageDetailState.init()
 ) {
@@ -67,6 +69,7 @@ class ImageDetailViewModel @Inject constructor(
 
     init {
         initData()
+        getImageSetting()
     }
 
     private fun initData() {
@@ -88,6 +91,12 @@ class ImageDetailViewModel @Inject constructor(
                 images = images,
                 currentImage = imageDetail.currentImage,
             )
+        }
+    }
+
+    private fun getImageSetting() = viewModelScope.launch {
+        getImageSettingUseCase.invoke().collect {
+            reduce { copy(settingOption = it) }
         }
     }
 
@@ -179,28 +188,54 @@ class ImageDetailViewModel @Inject constructor(
 
     private fun getDisplayImage(): DisplayImage {
         val defectItem = currentState.defectItem ?: return DisplayImage()
+        val settingOption = currentState.settingOption
         return DisplayImage(
-            site = defectItem.site,
-            buildingUnit = displayBuildingUnit(defectItem.building, defectItem.unit),
-            space = defectItem.space,
-            part = defectItem.part,
-            workType = defectItem.workType,
-            request = displayDate(defectItem.requestDate, defectItem.requesterName),
-            completion = getCompletion(defectItem),
+            site = settingOption.getIfEnabled(DisplayImageType.SITE) { defectItem.site },
+            buildingUnit = settingOption.getIfEnabled(DisplayImageType.BUILDING_UNIT) {
+                displayBuildingUnit(defectItem.building, defectItem.unit)
+            },
+            space = settingOption.getIfEnabled(DisplayImageType.SPACE) { defectItem.space },
+            part = settingOption.getIfEnabled(DisplayImageType.PART) { defectItem.part },
+            workType = settingOption.getIfEnabled(DisplayImageType.WORK_TYPE) { defectItem.workType },
+            request = settingOption.getIfEnabled(DisplayImageType.REQUEST) {
+                defectItem.requestDate.toDateString()
+            },
+            completion = settingOption.getIfEnabled(DisplayImageType.COMPLETION) {
+                getCompletion(defectItem)
+            },
+            beforeDescription = settingOption.getIfEnabled(DisplayImageType.BEFORE_DESCRIPTION) {
+                getDescription(defectItem.beforeDescription)
+            },
+            afterDescription = settingOption.getIfEnabled(DisplayImageType.AFTER_DESCRIPTION) {
+                getAfterDescription(defectItem)
+            },
+
         )
     }
+
+    private inline fun <T> Map<DisplayImageType, Boolean>.getIfEnabled(
+        key: DisplayImageType,
+        block: () -> T
+    ): T? = if (this[key] == true) block() else null
+
 
     private fun displayBuildingUnit(building: String, unit: String): String {
         return resourceHelper.getString(R.string.home_defect_building_unit_format, building, unit)
     }
 
-    private fun displayDate(date: LocalDateTime, userName: String): String {
-        return "${date.toDateString()} $userName"
-    }
-
     private fun getCompletion(defectItem: DefectItem): String? {
         if(defectItem.progress != DefectProgress.DONE) return null
         if (defectItem.completionDate == null || defectItem.workerName == null) return null
-        return displayDate(defectItem.completionDate, defectItem.workerName)
+        return defectItem.completionDate.toDateString()
+    }
+
+    private fun getAfterDescription(defectItem: DefectItem): String? {
+        if(defectItem.progress != DefectProgress.DONE) return null
+        return getDescription(defectItem.afterDescription)
+    }
+
+    private fun getDescription(description: String): String? {
+        if (description.isBlank()) return null
+        return description
     }
 }

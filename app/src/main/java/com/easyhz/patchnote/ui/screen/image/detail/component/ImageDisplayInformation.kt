@@ -72,7 +72,8 @@ private fun InformationRow(
     ) {
         Text(
             modifier = Modifier
-                .width(width = 44.dp)
+                .padding(end = 4.dp)
+                .width(width = 60.dp)
                 .padding(vertical = 2.dp),
             text = title,
             style = SemiBold14,
@@ -106,7 +107,8 @@ private fun ImageDisplayInformationPreview() {
             part = "part",
             workType = "workType",
             request = "2023.01.22 김민수",
-            completion = "completion"
+            completion = "completion",
+            beforeDescription = "beforeDescription",
         )
     )
 }
