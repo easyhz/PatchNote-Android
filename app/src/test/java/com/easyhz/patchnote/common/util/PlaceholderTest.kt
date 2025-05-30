@@ -7,7 +7,7 @@ class PlaceholderTest {
     @Test
     fun `"를" 조사 확인`() {
         // given
-        val word = "부위"
+        val word = "상태"
 
         // when
         val result = getPostposition(word)

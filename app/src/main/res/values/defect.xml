@@ -37,7 +37,7 @@
     <string name="defect_building">동</string>
     <string name="defect_unit">호수</string>
     <string name="defect_space">공간</string>
-    <string name="defect_part">부위</string>
+    <string name="defect_part">유형</string>
     <string name="defect_work_type">공종</string>
     <string name="defect_progress">상태</string>
     <string name="defect_requester_name">접수자</string>

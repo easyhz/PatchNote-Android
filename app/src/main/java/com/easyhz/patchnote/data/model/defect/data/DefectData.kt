@@ -13,7 +13,7 @@ import com.google.firebase.firestore.PropertyName
  * @property building 동
  * @property unit 호수
  * @property space 공간
- * @property part 부위
+ * @property part 유형
  * @property workType 공종
  * @property progress 하자 처리 단계
  * @property thumbnailUrl 썸네일 URL
