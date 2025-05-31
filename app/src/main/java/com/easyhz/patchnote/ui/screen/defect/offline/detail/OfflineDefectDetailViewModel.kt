@@ -55,7 +55,7 @@ class OfflineDefectDetailViewModel @Inject constructor(
         val defectItem = serializableHelper.deserialize(defectItemArgs, DefectItem::class.java) ?: return navigateToUp()
 
         viewModelScope.launch {
-            reduce { copy(defectItem = defectItem) }
+            reduce { copy(defectItem = defectItem.toDecode()) }
         }
     }
 

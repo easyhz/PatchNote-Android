@@ -97,7 +97,7 @@ class DefectCompletionViewModel @Inject constructor(
         val defectItemArgs: String? = savedStateHandle["defectMainItem"]
         val defectMainItem = serializableHelper.deserialize(defectItemArgs, DefectMainItem::class.java) ?: return navigateUp()
 
-        reduce { copy(defectMainItem = defectMainItem) }
+        reduce { copy(defectMainItem = defectMainItem.toDecode()) }
     }
 
     private fun onChangeCompletionContent(newValue: String) {

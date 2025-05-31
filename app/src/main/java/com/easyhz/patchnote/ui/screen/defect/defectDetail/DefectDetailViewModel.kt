@@ -56,7 +56,7 @@ class DefectDetailViewModel @Inject constructor(
 
         viewModelScope.launch {
             getUserIdUseCase.invoke(Unit).onSuccess {
-                reduce { copy(defectItem = defectItem, isOwner = it == defectItem.requesterId) }
+                reduce { copy(defectItem = defectItem.toDecode(), isOwner = it == defectItem.requesterId) }
             }
         }
     }

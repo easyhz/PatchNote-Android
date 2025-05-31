@@ -1,5 +1,6 @@
 package com.easyhz.patchnote.core.model.defect
 
+import com.easyhz.patchnote.core.common.util.urlDecode
 import com.easyhz.patchnote.core.model.image.ImageSize
 import java.time.LocalDateTime
 
@@ -91,4 +92,32 @@ data class DefectItem(
         }
         return defectContentList
     }
+
+    fun toDecode(): DefectItem = DefectItem(
+        id = id,
+        site = site.urlDecode(),
+        building = building.urlDecode(),
+        unit = unit.urlDecode(),
+        space = space.urlDecode(),
+        part = part.urlDecode(),
+        workType = workType.urlDecode(),
+        progress = progress,
+        thumbnailUrl = thumbnailUrl,
+        beforeDescription = beforeDescription.urlDecode(),
+        beforeImageSizes = beforeImageSizes,
+        beforeImageUrls = beforeImageUrls,
+        afterDescription = afterDescription.urlDecode(),
+        afterImageSizes = afterImageSizes,
+        afterImageUrls = afterImageUrls,
+        requesterId = requesterId,
+        requesterName = requesterName.urlDecode(),
+        requesterPhone = requesterPhone.urlDecode(),
+        workerId = workerId,
+        workerName = workerName?.urlDecode(),
+        workerPhone = workerPhone?.urlDecode(),
+        requestDate = requestDate,
+        completionDate = completionDate,
+        search = search.map { it.urlDecode() },
+        teamId = teamId
+    )
 }
