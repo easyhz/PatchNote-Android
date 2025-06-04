@@ -5,6 +5,7 @@ import com.easyhz.patchnote.core.common.base.UiSideEffect
 
 sealed class DefectEntrySideEffect: UiSideEffect() {
     data object ClearFocus: DefectEntrySideEffect()
+    data object ClearFocusDelayed: DefectEntrySideEffect() // 새로 추가
     data object NavigateToGallery: DefectEntrySideEffect()
     data class NavigateToCamera(val uri: Uri): DefectEntrySideEffect()
     data object NavigateToUp: DefectEntrySideEffect()
