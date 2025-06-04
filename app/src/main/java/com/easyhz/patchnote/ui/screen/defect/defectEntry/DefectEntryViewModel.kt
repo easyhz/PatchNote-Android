@@ -73,6 +73,7 @@ class DefectEntryViewModel @Inject constructor(
 
     /* 이미지 바텀시트 클릭 */
     private fun onClickImageBottomSheet(imageBottomSheetType: ImageBottomSheetType) {
+        clearFocus()
         when(imageBottomSheetType) {
             ImageBottomSheetType.GALLERY -> { launchGallery() }
             ImageBottomSheetType.CAMERA -> { launchCamera() }
@@ -105,8 +106,18 @@ class DefectEntryViewModel @Inject constructor(
     /* 찍은 사진 추가 */
     private fun updateTakePicture(isUsed: Boolean) {
         if (!isUsed) return
+        
+        // 포커스를 먼저 해제
+        clearFocus()
+        
+        // 이미지 상태 업데이트
         reduce { updateImages(newImages = listOf(takePictureUri.value).toDefectImages()) }
-        rotateImage(takePictureUri.value)
+        
+        // 이미지 회전을 지연 처리
+        viewModelScope.launch {
+            kotlinx.coroutines.delay(100) // 화면 안정화를 위한 짧은 지연
+            rotateImage(takePictureUri.value)
+        }
     }
 
     /* 이미지 삭제 */

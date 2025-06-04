@@ -36,16 +36,17 @@ import com.easyhz.patchnote.core.designSystem.util.topbar.TopBarType
 import com.easyhz.patchnote.ui.screen.defect.common.DefectViewModel
 import com.easyhz.patchnote.ui.screen.defect.common.contract.DefectIntent
 import com.easyhz.patchnote.ui.screen.defect.common.contract.DefectSideEffect
-import com.easyhz.patchnote.ui.screen.defect.defectEntry.contract.DefectEntryIntent
 import com.easyhz.patchnote.ui.screen.defect.defectEntry.component.DefectCategoryField
 import com.easyhz.patchnote.ui.screen.defect.defectEntry.component.DefectContentField
 import com.easyhz.patchnote.ui.screen.defect.defectEntry.component.DefectImageField
+import com.easyhz.patchnote.ui.screen.defect.defectEntry.contract.DefectEntryIntent
 import com.easyhz.patchnote.ui.screen.defect.defectEntry.contract.DefectEntrySideEffect
 import com.easyhz.patchnote.ui.theme.LocalSnackBarHostState
 import com.easyhz.patchnote.ui.theme.MainBackground
 import com.easyhz.patchnote.ui.theme.MainText
 import com.easyhz.patchnote.ui.theme.Primary
 import com.easyhz.patchnote.ui.theme.SemiBold18
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -197,6 +198,10 @@ fun DefectEntryScreen(
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {
             is DefectEntrySideEffect.ClearFocus -> {
+                focusManager.clearFocus()
+            }
+            is DefectEntrySideEffect.ClearFocusDelayed -> {
+                delay(50)
                 focusManager.clearFocus()
             }
             is DefectEntrySideEffect.NavigateToGallery -> {
