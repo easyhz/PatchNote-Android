@@ -45,7 +45,7 @@ fun HomeFilter(
                 )
             }
         }
-        items(items, key = { it }) {
+        items(items) {
             FilterChip(
                 text = it,
                 style = Medium16.copy(color = MainText),
