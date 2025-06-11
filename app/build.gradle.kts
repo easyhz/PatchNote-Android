@@ -27,8 +27,8 @@ android {
         applicationId = "com.easyhz.patchnote"
         minSdk = 26
         targetSdk = 35
-        versionCode = 27
-        versionName = "2.3.4"
+        versionCode = 28
+        versionName = "2.3.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

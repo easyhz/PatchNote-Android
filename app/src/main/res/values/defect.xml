@@ -51,6 +51,9 @@
     <string name="defect_thumbnail">사진</string>
     <string name="export_defect_list">접수 리스트</string>
 
+    <string name="defect_building_prefix">동</string>
+    <string name="defect_unit_prefix">호</string>
+
 
     <string name="defect_export_title">엑셀 다운로드</string>
     <string name="defect_export_button">다운로드</string>

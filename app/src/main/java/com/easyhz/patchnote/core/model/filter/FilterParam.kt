@@ -46,6 +46,8 @@ data class FilterParam(
     private fun formatField(key: String, value: String, context: Context): String {
         return when (key) {
             "requesterName" -> "$value ${context.getString(R.string.defect_request)}"
+            "building" -> "$value ${context.getString(R.string.defect_building_prefix)}"
+            "unit" -> "$value ${context.getString(R.string.defect_unit_prefix)}"
             else -> value
         }
     }
