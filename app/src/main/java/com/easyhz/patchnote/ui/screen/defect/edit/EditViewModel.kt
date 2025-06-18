@@ -77,9 +77,9 @@ abstract class EditViewModel(
 
     private fun initData() {
         val defectItemArgs: String? = savedStateHandle["defectItem"]
-        val defectItem = serializableHelper.deserialize(defectItemArgs, DefectItem::class.java) ?: return navigateUp()
+        val defectItem = serializableHelper.deserialize(defectItemArgs, DefectItem::class.java)?.toDecode() ?: return navigateUp()
 
-        reduce { copy(defectItem = defectItem.toDecode(), entryContent = defectItem.beforeDescription, entryItem = entryItem) }
+        reduce { copy(defectItem = defectItem, entryContent = defectItem.beforeDescription, entryItem = entryItem) }
         setUp(defectItem)
     }
 
