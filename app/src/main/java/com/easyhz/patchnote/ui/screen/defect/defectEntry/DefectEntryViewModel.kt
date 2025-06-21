@@ -130,7 +130,6 @@ class DefectEntryViewModel @Inject constructor(
         clearFocus()
         if (!isValidDefect(invalidEntry)) return@launch
         if (!isValidImage()) return@launch
-        setLoading(true)
         reduce { copy(entryItem = entryItem, isShowEntryDialog = true) }
     }
 
