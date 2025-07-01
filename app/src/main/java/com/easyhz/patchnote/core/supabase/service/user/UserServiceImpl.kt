@@ -24,38 +24,34 @@ class UserServiceImpl @Inject constructor(
     }
 
     override suspend fun fetchUserWithTeams(userId: String): UserWithTeamDto {
-        try {
-
-            val userWithMap = postgrest.from(Table.Users.tableName)
-                .select(
-                    Columns.raw(
-                        """
-                            ${Table.Users.ID}, ${Table.Users.NAME}, ${Table.Users.PHONE}, ${Table.Users.CREATED_AT},
-                            ${Table.UserTeamMap.tableName}(
-                                ${Table.Teams.DTO_NAME}:${Table.Teams.tableName}(${Table.Teams.ID}, ${Table.Teams.NAME}, ${Table.Teams.INVITE_CODE}, ${Table.Teams.CREATED_AT})
+        val userWithMap = postgrest.from(Table.Users.tableName)
+            .select(
+                Columns.raw(
+                    """
+                        ${Table.Users.ID}, ${Table.Users.NAME}, ${Table.Users.PHONE}, ${Table.Users.CREATED_AT},
+                        ${Table.UserTeamMap.tableName}(
+                            ${Table.Teams.DTO_NAME} : ${Table.Teams.tableName}(
+                                ${Table.Teams.ID}, ${Table.Teams.NAME}, ${Table.Teams.INVITE_CODE}, ${Table.Teams.CREATED_AT}
                             )
-                        """.trimIndent()
-                    ),
-                    request = {
-                        filter {
-                            eq(Table.Users.ID, userId)
-                        }
+                        )
+                    """.trimIndent()
+                ),
+                request = {
+                    filter {
+                        eq(Table.Users.ID, userId)
                     }
-                )
-                .decodeSingle<UserWithUserTeamMapDto>()
-
-            val userWithTeam = UserWithTeamDto(
-                id = userWithMap.id,
-                name = userWithMap.name,
-                phone = userWithMap.phone,
-                createdAt = userWithMap.createdAt,
-                teamList = userWithMap.userTeamMap.map { it.team }
+                }
             )
+            .decodeSingle<UserWithUserTeamMapDto>()
 
-            return userWithTeam
-        } catch (e: Exception) {
-            e.printStackTrace()
-            throw e
-        }
+        val userWithTeam = UserWithTeamDto(
+            id = userWithMap.id,
+            name = userWithMap.name,
+            phone = userWithMap.phone,
+            createdAt = userWithMap.createdAt,
+            teamList = userWithMap.userTeamMap.map { it.team }
+        )
+
+        return userWithTeam
     }
 }
