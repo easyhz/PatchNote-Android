@@ -49,9 +49,13 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "CLARITY_PROJECT_ID", localProperties["clarity.project.id.dev"].toString())
+            buildConfigField("String", "SUPABASE_URL", localProperties["supabase.url.dev"].toString())
+            buildConfigField("String", "SUPABASE_KEY", localProperties["supabase.key.dev"].toString())
         }
         release {
             buildConfigField("String", "CLARITY_PROJECT_ID", localProperties["clarity.project.id.prod"].toString())
+            buildConfigField("String", "SUPABASE_URL", localProperties["supabase.url.prod"].toString())
+            buildConfigField("String", "SUPABASE_KEY", localProperties["supabase.key.prod"].toString())
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
