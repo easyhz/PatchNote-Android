@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.hilt)
@@ -21,7 +22,7 @@ keystoreProperties.load(project.rootProject.file("keystore.properties").inputStr
 
 android {
     namespace = "com.easyhz.patchnote"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.easyhz.patchnote"
@@ -88,12 +89,7 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-    buildFeatures {
         buildConfig = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
     }
     packaging {
         resources {
