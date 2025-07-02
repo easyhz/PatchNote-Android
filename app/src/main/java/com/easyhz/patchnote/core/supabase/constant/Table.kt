@@ -21,6 +21,7 @@ sealed class Table(val tableName: String) {
         const val ID = "id"
         const val USER_ID = "user_id"
         const val TEAM_ID = "team_id"
+        const val ROLE = "role"
         const val CREATED_AT = "created_at"
 
         const val DTO_NAME = "USER_TEAM_MAP"
