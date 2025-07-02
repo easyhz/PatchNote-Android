@@ -7,8 +7,8 @@ import javax.inject.Inject
 
 class FindTeamByCodeUseCase @Inject constructor(
     private val teamRepository: TeamRepository
-): BaseUseCase<String, Team>() {
-    override suspend fun invoke(param: String): Result<Team> {
+): BaseUseCase<String, Team?>() {
+    override suspend fun invoke(param: String): Result<Team?> {
         return teamRepository.findTeamByCode(param)
     }
 }

@@ -14,8 +14,8 @@ class FetchTeamUseCase @Inject constructor(
     override suspend fun invoke(param: Unit): Result<TeamInformation> = runCatching {
         val user = userRepository.getUserFromLocal().getOrThrow()
         val teamId = user.currentTeamId ?: throw AppError.NoTeamDataError
-        val team = teamRepository.findTeamById(teamId).getOrThrow()
-        val admin = userRepository.fetchUser(team.adminId).getOrThrow()
-        TeamInformation(team = team, adminName = admin.name)
+        val team = teamRepository.findTeamById(teamId).getOrThrow() ?: throw AppError.NoTeamDataError
+//        val admin = userRepository.fetchUser(team?.adminId).getOrThrow()
+        TeamInformation(team = team, adminName = "") // TODO 고쳐야됨
     }
 }

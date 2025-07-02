@@ -18,15 +18,13 @@ class FetchTeamMemberUseCase @Inject constructor(
         val user = userRepository.getUserFromLocal().getOrThrow()
         val teamId = user.currentTeamId ?: throw AppError.NoTeamDataError
         coroutineScope {
-            val membersDeferred = async { teamRepository.fetchTeamMembers(teamId) }
-            val teamDeferred = async { teamRepository.findTeamById(teamId) }
+            val members = teamRepository.fetchTeamMembers(teamId).getOrThrow()
 
-            val members = membersDeferred.await().getOrThrow()
-            val team = teamDeferred.await().getOrThrow()
-
-            members.map {
-                it.toTeamUser(it.id == team.adminId)
-            }.sortedWith(compareByDescending<TeamMember> { it.isAdmin }.thenBy { it.name })
+//            members.map {
+//                it.toTeamUser(it.id == team?.adminId)
+//            }.sortedWith(compareByDescending<TeamMember> { it.isAdmin }.thenBy { it.name })
+            // TODO 고쳐야됨
+            emptyList()
         }
     }
 
