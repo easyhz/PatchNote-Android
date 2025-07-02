@@ -7,7 +7,6 @@ import com.google.firebase.auth.PhoneAuthCredential
 
 
 interface SignRepository {
-    suspend fun requestVerificationCode(param: RequestVerificationCodeParam): Result<RequestVerificationCodeResponse>
-    suspend fun getCredentials(verificationId: String, code: String): Result<PhoneAuthCredential>
-    suspend fun signInWithPhone(credential: PhoneAuthCredential): Result<AuthResult>
+    suspend fun signInWithPhone(phoneNumber: String): Result<Unit>
+    suspend fun verifyOTP(phoneNumber: String, otp: String): Result<Unit>
 }
