@@ -28,6 +28,7 @@ class TeamRepositoryImpl @Inject constructor(
     override suspend fun getTeamName(): Flow<String> =
         userLocalDataSource.getTeamName()
 
-    override suspend fun fetchTeamMembers(teamId: String): Result<List<User>> =
-        authDataSource.fetchUsers(teamId).map { it.map { item -> item.toModel(null) } }
+    override suspend fun fetchTeamMembers(teamId: String): Result<List<User>> = runCatching {
+        authDataSource.fetchUsers(teamId).map { item -> item.toModel(null) }
+    }
 }
