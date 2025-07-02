@@ -194,4 +194,8 @@ dependencies {
     implementation(libs.ktor.client.android)
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.utils)
+
+    // uuid v7
+    implementation(libs.uuid.creator)
+
 }
