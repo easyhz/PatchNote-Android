@@ -31,11 +31,11 @@ data class UserWithUserTeamMapDto(
     @SerialName(Table.Users.CREATED_AT)
     val createdAt: Instant,
     @SerialName(Table.UserTeamMap.DTO_NAME)
-    val userTeamMap: List<UserTeamMapDto>
+    val userTeamMap: List<UserTeamMap>
 )
 
 @Serializable
-data class UserTeamMapDto(
+data class UserTeamMap(
     @SerialName(Table.Teams.DTO_NAME)
     val team: TeamDto
 )
