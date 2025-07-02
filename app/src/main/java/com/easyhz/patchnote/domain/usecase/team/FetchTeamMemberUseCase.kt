@@ -36,9 +36,7 @@ class FetchTeamMemberUseCase @Inject constructor(
             name = name,
             phone = phone,
             currentTeamId = currentTeamId,
-            teamIds = teamIds,
-            teamJoinDates = teamJoinDates,
-            creationTime = creationTime,
+            creationTime = createdAt,
             isAdmin = isAdmin
         )
     }
