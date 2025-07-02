@@ -34,7 +34,7 @@ enum class MyPageItem(
         enabledClick = false
     ) {
         override fun getValue(userInformation: UserInformation): String {
-            return userInformation.user.creationTime.toDateString()
+            return userInformation.user.createdAt.toDateString()
         }
     }, LOGOUT(
         titleResId = R.string.setting_my_page_logout,

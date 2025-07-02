@@ -42,8 +42,8 @@ internal enum class UserKey(
         key = "teams"
     ), USER_TEAM_JOIN_DATES(
         key = "teamJoinDates"
-    ), USER_CREATION_TIME(
-        key = "creation"
+    ), USER_CREATED_AT(
+        key = "createdAt"
     ), IS_OFFLINE_FIRST_OPEN(
         key = "isOfflineFirstOpen"
     )
