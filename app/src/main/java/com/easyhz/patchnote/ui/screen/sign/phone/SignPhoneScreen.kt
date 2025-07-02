@@ -1,13 +1,11 @@
 package com.easyhz.patchnote.ui.screen.sign.phone
 
-import android.app.Activity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -30,10 +28,9 @@ fun SignPhoneScreen(
     modifier: Modifier = Modifier,
     viewModel: SignPhoneViewModel = hiltViewModel(),
     navigateToUp: () -> Unit,
-    navigateToVerificationId: (String, String) -> Unit,
+    navigateToVerificationId: (String) -> Unit,
     navigateToSignName: (String, String) -> Unit,
 ) {
-    val activity = LocalContext.current as Activity
     val snackBarHost = LocalSnackBarHostState.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     PatchNoteScaffold(
@@ -59,7 +56,7 @@ fun SignPhoneScreen(
             onValueChange = { viewModel.postIntent(PhoneIntent.ChangePhoneText(it)) },
             enabledButton = uiState.enabledButton,
         ) {
-            viewModel.postIntent(PhoneIntent.RequestVerificationCode(activity = activity))
+            viewModel.postIntent(PhoneIntent.RequestVerificationCode)
         }
 
     }
@@ -71,7 +68,7 @@ fun SignPhoneScreen(
     viewModel.sideEffect.collectInSideEffectWithLifecycle { sideEffect ->
         when(sideEffect) {
             is PhoneSideEffect.NavigateToUp -> navigateToUp()
-            is PhoneSideEffect.NavigateToSignVerification -> { navigateToVerificationId(sideEffect.verificationId, sideEffect.phoneNumber) }
+            is PhoneSideEffect.NavigateToSignVerification -> { navigateToVerificationId(sideEffect.phoneNumber) }
             is PhoneSideEffect.NavigateToSignName -> { navigateToSignName(sideEffect.uid, sideEffect.phoneNumber) }
             is PhoneSideEffect.ShowSnackBar -> {
                 snackBarHost.showSnackbar(

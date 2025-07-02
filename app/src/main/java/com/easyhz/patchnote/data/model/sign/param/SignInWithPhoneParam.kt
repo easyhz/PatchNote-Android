@@ -1,6 +1,6 @@
 package com.easyhz.patchnote.data.model.sign.param
 
 data class SignInWithPhoneParam(
-    val verificationId: String,
+    val phoneNumber: String,
     val code: String
 )

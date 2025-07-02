@@ -26,7 +26,7 @@ class SignPhoneViewModel @Inject constructor(
         when(intent) {
             is PhoneIntent.ChangePhoneText -> { changePhoneText(intent.text) }
             is PhoneIntent.NavigateToUp -> { navigateToUp() }
-            is PhoneIntent.RequestVerificationCode -> { requestVerificationCode(intent.activity) }
+            is PhoneIntent.RequestVerificationCode -> { requestVerificationCode() }
         }
     }
 
@@ -38,18 +38,11 @@ class SignPhoneViewModel @Inject constructor(
         postSideEffect { PhoneSideEffect.NavigateToUp }
     }
 
-    private fun requestVerificationCode(activity: Activity) = viewModelScope.launch {
+    private fun requestVerificationCode() = viewModelScope.launch {
         setLoading(true)
-        val param = RequestVerificationCodeParam(currentState.phoneText, activity)
+        val param = RequestVerificationCodeParam(currentState.phoneText)
         requestVerificationCodeUseCase(param).onSuccess { response ->
-            when(response) {
-                is RequestVerificationCodeResponse.ReturnUid -> {
-                    postSideEffect { PhoneSideEffect.NavigateToSignName(response.uid, response.phoneNumber) }
-                }
-                is RequestVerificationCodeResponse.ReturnCodeSent -> {
-                    postSideEffect { PhoneSideEffect.NavigateToSignVerification(response.verificationId, response.phoneNumber) }
-                }
-            }
+            postSideEffect { PhoneSideEffect.NavigateToSignVerification(phoneNumber = response, ) }
         }.onFailure { e ->
             showSnackBar(resourceHelper, e.handleError()) {
                 PhoneSideEffect.ShowSnackBar(it)

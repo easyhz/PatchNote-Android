@@ -12,7 +12,6 @@ internal object Sign: Parcelable {
 
     @Serializable
     data class Verification(
-        val verificationId: String,
         val phoneNumber: String
     )
 

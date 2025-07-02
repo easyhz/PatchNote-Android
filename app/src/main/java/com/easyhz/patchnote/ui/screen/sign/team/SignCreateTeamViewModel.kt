@@ -61,9 +61,10 @@ class SignCreateTeamViewModel @Inject constructor(
         viewModelScope.launch {
             setLoading(true)
             val teamId = Generate.randomUUID()
+            val team = getTeam(teamId)
             val param = CreateTeamParam(
-                user = getUser(teamId),
-                team = getTeam(teamId)
+                user = getUser(team),
+                team = team
             )
             createTeamUseCase.invoke(param).onSuccess {
                 updateTeamNameUseCase.invoke(currentState.teamNameText)
@@ -78,10 +79,9 @@ class SignCreateTeamViewModel @Inject constructor(
         }
     }
 
-    private fun getUser(teamId: String): User {
+    private fun getUser(team: Team): User {
         return currentState.user.copy(
-            teamIds = currentState.user.teamIds + teamId,
-            teamJoinDates = currentState.user.teamJoinDates + TeamJoinDate.create(teamId = teamId)
+            teams = currentState.user.teams + team,
         )
     }
 

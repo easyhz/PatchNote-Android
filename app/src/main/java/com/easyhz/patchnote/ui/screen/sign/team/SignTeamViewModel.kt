@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.easyhz.patchnote.core.common.base.BaseViewModel
 import com.easyhz.patchnote.core.common.error.handleError
 import com.easyhz.patchnote.core.common.util.resource.ResourceHelper
-import com.easyhz.patchnote.core.model.user.TeamJoinDate
 import com.easyhz.patchnote.domain.usecase.sign.SaveUserUseCase
 import com.easyhz.patchnote.domain.usecase.team.FindTeamByCodeUseCase
 import com.easyhz.patchnote.domain.usecase.user.GetUserUseCase
@@ -75,8 +74,9 @@ class SignTeamViewModel @Inject constructor(
         setLoading(true)
         val teamId = currentState.teamId
         val userRequest = currentState.user.copy(
-            teamIds = currentState.user.teamIds + teamId,
-            teamJoinDates = currentState.user.teamJoinDates + TeamJoinDate.create(teamId = teamId)
+            // TODO 고치세요
+//            teamIds = currentState.user.teamIds + teamId,
+//            teamJoinDates = currentState.user.teamJoinDates + TeamJoinDate.create(teamId = teamId)
         )
         saveUserUseCase.invoke(userRequest).onSuccess {
             navigateToTeamSelection()

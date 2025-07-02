@@ -58,9 +58,8 @@ class SignNameViewModel @Inject constructor(
                 phone = currentState.phoneNumber,
                 name = currentState.nameText,
                 currentTeamId = null,
-                teamIds = emptyList(),
-                teamJoinDates = emptyList(),
-                creationTime = LocalDateTime.now()
+                teams = emptyList(),
+                createdAt = LocalDateTime.now(),
             )
             saveUserUseCase.invoke(userRequest).onSuccess {
                 navigateToTeam()

@@ -27,7 +27,7 @@ class SignVerificationViewModel @Inject constructor(
         when(intent) {
             is VerificationIntent.ChangeVerificationCodeText -> { changeVerificationCodeText(intent.text) }
             is VerificationIntent.NavigateToUp -> { navigateToUp() }
-            is VerificationIntent.RequestVerification -> { requestVerification(intent.verificationId, intent.phoneNumber) }
+            is VerificationIntent.RequestVerification -> { requestVerification(intent.phoneNumber) }
         }
     }
 
@@ -39,15 +39,17 @@ class SignVerificationViewModel @Inject constructor(
         postSideEffect { VerificationSideEffect.NavigateToUp }
     }
 
-    private fun requestVerification(verificationId: String, phoneNumber: String) = viewModelScope.launch {
+    private fun requestVerification(phoneNumber: String) = viewModelScope.launch {
         setLoading(true)
-        val param = SignInWithPhoneParam(verificationId, currentState.codeText)
+        val param = SignInWithPhoneParam(phoneNumber = phoneNumber, code = currentState.codeText)
         signInWithPhoneUseCase.invoke(param).onSuccess {
             checkAlreadyUser(it, phoneNumber)
         }.onFailure { e ->
             showSnackBar(resourceHelper, e.handleError()) {
                 VerificationSideEffect.ShowSnackBar(it)
             }
+        }.also {
+            setLoading(false)
         }
     }
 

@@ -1,10 +1,7 @@
 package com.easyhz.patchnote.data.model.sign.param
 
-import android.app.Activity
-
 data class RequestVerificationCodeParam(
     val phoneNumber: String,
-    val activity: Activity,
 ) {
     companion object {
         fun RequestVerificationCodeParam.phoneNumberToCountryCode(): Result<String> {

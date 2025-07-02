@@ -33,7 +33,6 @@ internal fun NavGraphBuilder.signGraph(
                 popUpTo(navController.graph.id) { inclusive = true }
             }
             SignVerificationScreen(
-                verificationId = args.verificationId,
                 phoneNumber = args.phoneNumber,
                 navigateToUp = navController::navigateUp,
                 navigateToName = navController::navigateToName,
@@ -76,8 +75,8 @@ fun NavController.navigateToSign() {
     navigate(Sign.Phone)
 }
 
-fun NavController.navigateToVerification(verificationId: String, phoneNumber: String) {
-    navigate(Sign.Verification(verificationId = verificationId, phoneNumber = phoneNumber))
+fun NavController.navigateToVerification(phoneNumber: String) {
+    navigate(Sign.Verification(phoneNumber = phoneNumber))
 }
 
 fun NavController.navigateToName(uid: String, phoneNumber: String) {

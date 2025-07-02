@@ -27,7 +27,6 @@ import com.easyhz.patchnote.ui.theme.MainText
 fun SignVerificationScreen(
     modifier: Modifier = Modifier,
     viewModel: SignVerificationViewModel = hiltViewModel(),
-    verificationId: String,
     phoneNumber: String,
     navigateToUp: () -> Unit,
     navigateToName: (uid: String, phoneNumber: String) -> Unit,
@@ -59,7 +58,7 @@ fun SignVerificationScreen(
             onValueChange = { viewModel.postIntent(VerificationIntent.ChangeVerificationCodeText(it)) },
             enabledButton = uiState.enabledButton,
         ) {
-            viewModel.postIntent(VerificationIntent.RequestVerification(verificationId, phoneNumber))
+            viewModel.postIntent(VerificationIntent.RequestVerification(phoneNumber))
         }
     }
 
