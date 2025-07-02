@@ -1,5 +1,6 @@
 package com.easyhz.patchnote.core.model.user
 
+import com.easyhz.patchnote.core.model.team.Team
 import java.time.LocalDateTime
 
 data class User(
@@ -7,9 +8,8 @@ data class User(
     val name: String,
     val phone: String,
     val currentTeamId: String?,
-    val teamIds: List<String>,
-    val teamJoinDates: List<TeamJoinDate>,
-    val creationTime: LocalDateTime
+    val createdAt: LocalDateTime,
+    val teams: List<Team>,
 ) {
     companion object {
         val Empty = User(
@@ -17,9 +17,8 @@ data class User(
             name = "",
             phone = "",
             currentTeamId = "",
-            teamIds = emptyList(),
-            teamJoinDates = emptyList(),
-            creationTime = LocalDateTime.now()
+            teams = emptyList(),
+            createdAt = LocalDateTime.now()
         )
     }
 }
