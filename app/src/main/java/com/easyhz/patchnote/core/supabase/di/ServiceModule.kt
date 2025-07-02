@@ -2,6 +2,8 @@ package com.easyhz.patchnote.core.supabase.di
 
 import com.easyhz.patchnote.core.supabase.service.auth.AuthService
 import com.easyhz.patchnote.core.supabase.service.auth.AuthServiceImpl
+import com.easyhz.patchnote.core.supabase.service.team.TeamService
+import com.easyhz.patchnote.core.supabase.service.team.TeamServiceImpl
 import com.easyhz.patchnote.core.supabase.service.user.UserService
 import com.easyhz.patchnote.core.supabase.service.user.UserServiceImpl
 import dagger.Binds
@@ -22,5 +24,10 @@ interface ServiceModule {
     fun bindUserService(
         userServiceImpl: UserServiceImpl
     ): UserService
+
+    @Binds
+    fun bindTeamService(
+        teamServiceImpl: TeamServiceImpl
+    ): TeamService
 
 }
