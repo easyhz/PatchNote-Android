@@ -89,8 +89,7 @@ object DateFormatUtil {
     }
 
     fun convertStringToDateTime(string: String): LocalDateTime {
-        val localDate = LocalDateTime.parse(string, dateTimeFormatter)
-        return localDate
+        return LocalDateTime.parse(string)
     }
 
     fun convertStringToIsoDateTime(string: String): LocalDateTime {
