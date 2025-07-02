@@ -5,7 +5,7 @@ import com.easyhz.patchnote.data.datasource.remote.auth.AuthDataSource
 import com.easyhz.patchnote.data.datasource.local.user.UserLocalDataSource
 import com.easyhz.patchnote.data.datasource.remote.team.TeamRemoteDateSource
 import com.easyhz.patchnote.data.mapper.sign.toModel
-import com.easyhz.patchnote.data.mapper.sign.toRequest
+import com.easyhz.patchnote.data.mapper.sign.toDto
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -21,12 +21,12 @@ class UserRepositoryImpl @Inject constructor(
         return authDataSource.getUserId()
     }
 
-    override fun logOut() {
+    override suspend fun logOut() {
         authDataSource.logOut()
     }
 
-    override suspend fun saveUser(user: User): Result<Unit> {
-        return authDataSource.saveUser(user.toRequest())
+    override suspend fun saveUser(user: User): Result<Unit> = runCatching {
+        authDataSource.saveUser(user.toDto())
     }
 
     override suspend fun getUserFromLocal(): Result<User> {
@@ -37,23 +37,25 @@ class UserRepositoryImpl @Inject constructor(
         userLocalDataSource.updateUser(user)
     }
 
-    override suspend fun getUserFromRemote(uid: String): Result<User> {
-        return authDataSource.getUser(uid).map { it.toModel(null) }
+    override suspend fun getUserFromRemote(uid: String): Result<User?> = runCatching {
+        authDataSource.getUserWithTeams(uid)?.toModel(null)
     }
 
     override suspend fun deleteUserFromLocal() {
         userLocalDataSource.deleteUser()
     }
 
-    override suspend fun deleteUserFromRemote(uid: String): Result<Unit> {
-        return authDataSource.deleteUser(uid)
+    override suspend fun deleteUserFromRemote(uid: String): Result<Unit> = runCatching {
+        authDataSource.deleteUser(uid)
     }
 
     override suspend fun updateUserFromRemote(): Result<Unit> = runCatching {
         val uid = authDataSource.getUserId() ?: return Result.failure(Exception("User not found"))
+        println("uid : $uid")
         val currentTeamId = userLocalDataSource.getCurrentTeamId().getOrNull()
-        val user = authDataSource.getUser(uid).getOrThrow()
-        val teamId = if(!currentTeamId.isNullOrBlank() && currentTeamId in user.teamIds) {
+        val user = authDataSource.getUserWithTeams(uid) ?: return Result.failure(Exception("User not found"))
+        println("user : $user")
+        val teamId = if(!currentTeamId.isNullOrBlank() && user.teamList.any { it.id == currentTeamId }) {
             val teamName = teamRemoteDateSource.findTeamById(currentTeamId).getOrThrow()
             userLocalDataSource.updateTeamName(teamName.name)
             currentTeamId
@@ -95,7 +97,7 @@ class UserRepositoryImpl @Inject constructor(
         userLocalDataSource.updateTeamName(teamName)
     }
 
-    override suspend fun fetchUser(uid: String): Result<User> {
-        return authDataSource.getUser(uid).map { it.toModel(null) }
+    override suspend fun fetchUser(uid: String): Result<User> = runCatching {
+        authDataSource.getUser(uid)?.toModel(null) ?: throw Exception("User not found")
     }
 }
