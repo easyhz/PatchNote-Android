@@ -11,7 +11,7 @@ class FetchTeamsUseCase @Inject constructor(
 ): BaseUseCase<Unit, List<Team>>() {
     override suspend fun invoke(param: Unit): Result<List<Team>> = runCatching {
         val uid = userRepository.getUserId() ?: throw AppError.NoUserDataError
-        val user = userRepository.getUserFromRemote(uid).getOrThrow()
+        val user = userRepository.getUserFromRemote(uid).getOrThrow() // TODO 고칠 수 있으면 고치기
         return@runCatching user?.teams ?: emptyList()
     }
 }
