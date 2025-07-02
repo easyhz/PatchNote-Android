@@ -1,22 +1,18 @@
 package com.easyhz.patchnote.data.datasource.remote.auth
 
-import android.app.Activity
-import com.easyhz.patchnote.data.model.sign.request.SaveUserRequest
-import com.easyhz.patchnote.data.model.sign.response.UserResponse
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.PhoneAuthProvider.OnVerificationStateChangedCallbacks
+import com.easyhz.patchnote.core.supabase.model.user.UserDto
+import com.easyhz.patchnote.core.supabase.model.user.UserWithTeamDto
 
 interface AuthDataSource {
     fun isLogin(): Boolean
     fun getUserId(): String?
-    fun logOut()
-    fun verifyPhoneNumber(phoneNumber: String, activity: Activity, callbacks: OnVerificationStateChangedCallbacks): Result<Unit>
-    suspend fun getCredentials(verificationId: String, code: String): Result<PhoneAuthCredential>
-    suspend fun signInWithPhone(credential: PhoneAuthCredential): Result<AuthResult>
-    suspend fun saveUser(saveUserRequest: SaveUserRequest): Result<Unit>
-    suspend fun getUser(uid: String): Result<UserResponse>
-    suspend fun deleteUser(uid: String): Result<Unit>
-    suspend fun leaveTeam(uid: String, teamId: String): Result<Unit>
-    suspend fun fetchUsers(teamId: String): Result<List<UserResponse>>
+    suspend fun logOut()
+    suspend fun signInWithPhone(phoneNumber: String): Result<Unit>
+    suspend fun verifyOTP(phoneNumber: String, otp: String): Result<Unit>
+    suspend fun saveUser(userDto: UserDto): Unit
+    suspend fun getUser(uid: String): UserDto?
+    suspend fun getUserWithTeams(uid: String): UserWithTeamDto?
+    suspend fun deleteUser(uid: String): Unit
+    suspend fun leaveTeam(uid: String, teamId: String): Unit
+    suspend fun fetchUsers(teamId: String): List<UserDto>
 }
