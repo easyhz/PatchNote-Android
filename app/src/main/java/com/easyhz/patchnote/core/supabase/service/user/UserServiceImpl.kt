@@ -26,7 +26,7 @@ class UserServiceImpl @Inject constructor(
     override suspend fun fetchUserWithTeams(userId: String): UserWithTeamDto {
         val userWithMap = postgrest.from(Table.Users.tableName)
             .select(
-                Columns.raw(
+                columns = Columns.raw(
                     """
                         ${Table.Users.ID}, ${Table.Users.NAME}, ${Table.Users.PHONE}, ${Table.Users.CREATED_AT},
                         ${Table.UserTeamMap.tableName}(
